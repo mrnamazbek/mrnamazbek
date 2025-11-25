@@ -35,7 +35,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![PL/SQL](https://img.shields.io/badge/PL--SQL-30302F?style=for-the-badge&logo=oracle&logoColor=white)
 ![Oracle](https://img.shields.io/badge/Oracle_SQL-F80000?style=for-the-badge&logo=oracle&logoColor=white)
-
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![Microsoft SQL Server](https://img.shields.io/badge/Microsoft_SQL_Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 
 ### Web & API
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
@@ -45,6 +46,11 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
+### IDE
+![DataGrip](https://img.shields.io/badge/DataGrip-1C1C1C?style=for-the-badge&logo=datagrip&logoColor=white)
+![PyCharm](https://img.shields.io/badge/PyCharm-1C1C1C?style=for-the-badge&logo=pycharm&logoColor=white)
+![DBeaverEE](https://img.shields.io/badge/DBeaverEE-1C1C1C?style=for-the-badge&logo=dbeaver&logoColor=white)
+![DataSpell](https://img.shields.io/badge/DataSpell-1C1C1C?style=for-the-badge&logo=datascience&logoColor=white)
 
 ---
 
