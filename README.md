@@ -47,10 +47,11 @@
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
 ### IDE
-![DataGrip](https://img.shields.io/badge/DataGrip-1C1C1C?style=for-the-badge&logo=datagrip&logoColor=white)
-![PyCharm](https://img.shields.io/badge/PyCharm-1C1C1C?style=for-the-badge&logo=pycharm&logoColor=white)
-![DBeaverEE](https://img.shields.io/badge/DBeaverEE-1C1C1C?style=for-the-badge&logo=dbeaver&logoColor=white)
-![DataSpell](https://img.shields.io/badge/DataSpell-1C1C1C?style=for-the-badge&logo=datascience&logoColor=white)
+![DataGrip](https://img.shields.io/badge/DataGrip-DB3BDA?style=for-the-badge&logo=datagrip&logoColor=white)
+![PyCharm](https://img.shields.io/badge/PyCharm-21D789?style=for-the-badge&logo=pycharm&logoColor=white)
+![DBeaverEE](https://img.shields.io/badge/DBeaverEE-372923?style=for-the-badge&logo=dbeaver&logoColor=white)
+![DataSpell](https://img.shields.io/badge/DataSpell-9775FA?style=for-the-badge&logo=datascience&logoColor=white)
+
 
 ---
 
