@@ -6,7 +6,7 @@
 
 ## 👨‍💻 About Me
 - 🎓 MSc @ KBTU (2025–2027), Alumnus @ SDU (2021–2025)
-- 💻 Software Engineer @ Bank CenterCredit
+- 💻 Data Engineer @ Freedom Finance Insurance
 - 🔥 Interests: Big Data, AI, Data Engineering
 - ⚽ Football team captain, passionate about sports and code
 
