@@ -423,92 +423,27 @@ Extract  Stream  Orchestrate Load
 
 <br/>
 
-## 🤝 Let's Connect!
+## 🤝 Connect With Me
 
 <div align="center">
 
-<table>
-<tr>
-<td align="center" width="33%">
-
-### 💼 Professional
-
-<a href="https://www.linkedin.com/in/namazbek-bekzhanov/">
-<img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" height="35"/>
-</a>
-
-**Connect & Network**
-
-</td>
-<td align="center" width="33%">
-
-### 📧 Direct Contact
-
-<a href="mailto:namazbekzhan@gmail.com">
-<img src="https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white" height="35"/>
-</a>
-
-**Email Me Anytime**
-
-</td>
-<td align="center" width="33%">
-
-### 📱 Social
-
-<a href="https://instagram.com/namazbekzhan">
-<img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" height="35"/>
-</a>
-
-**Follow My Journey**
-
-</td>
-</tr>
-</table>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/namazbek-bekzhanov/)
+[![Email](https://img.shields.io/badge/Gmail-Contact_Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:namazbekzhan@gmail.com)
+[![Instagram](https://img.shields.io/badge/Instagram-Follow-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/namazbekzhan)
 
 <br/>
 
-### 💭 Daily Inspiration
+### 💭 Quote of the Moment
+<img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight" />
 
-<img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=algolia&border=true" width="600"/>
+<br/>
 
-<br/><br/>
-
-<img src="https://komarev.com/ghpvc/?username=mrnamazbek&label=Profile%20Visitors&color=00F7F7&style=for-the-badge" alt="Profile views" />
+**Profile Views** 👁️  
+<img src="https://komarev.com/ghpvc/?username=mrnamazbek&label=Visitors&color=0e75b6&style=flat" alt="Profile views" />
 
 </div>
 
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-<br/>
-
-<!-- Philosophy Section -->
-<div align="center">
-
-## 🎯 My Engineering Mantra
-
-<table>
-<tr>
-<td align="center">
-
-```ascii
-┌────────────────────────────────────────────────┐
-│  "Code is poetry. Data tells stories.          │
-│   I write both with precision and passion."    │
-│                                                │
-│   ⚙️  Code • ⚽ Captain • 🚀 Innovate           │
-└────────────────────────────────────────────────┘
-```
-
-<br/>
-
-</td>
-</tr>
-</table>
 <sub>Engineer of my own destiny. Built different. Chasing greatness.</sub>
-</div>
 
 
 <br/><br/>
