@@ -372,11 +372,9 @@ Extract  Stream  Orchestrate Load
 
 **Topics Covered:**
 ```
-• Linear/Logistic Regression
-• K-Nearest Neighbors (KNN)
-• Random Forest & SVM
-• Feature Engineering
-• Custom Transformers
+- Linear/Logistic Regression
+- K-Nearest Neighbors (KNN), Random Forest & SVM
+- Feature Engineering, Custom Transformers
 ```
 
 **Tech Stack:**  
