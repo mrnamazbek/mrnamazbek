@@ -4,20 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namazbek Bekzhanov | Data Engineer</title>
-    <meta name="description" content="Portfolio of Namazbek Bekzhanov - Data Engineer & Backend Developer.">
+    <title>Namazbek Bekzhanov | Data Engineer & Creative Developer</title>
+    <meta name="description"
+        content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
 
-    <!-- Fonts -->
+    <!-- Fonts from example.html -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Devicon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
-    <!-- Tailwind -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,623 +26,532 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        mono: ['Space Grotesk', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Sora', 'sans-serif'],
                     },
                     colors: {
-                        brand: {
-                            dark: '#050505',
-                            accent: '#00f2fe',
-                            purple: '#4facfe'
+                        glass: {
+                            100: 'rgba(255, 255, 255, 0.1)',
+                            border: 'rgba(255, 255, 255, 0.2)',
+                            surface: 'rgba(0, 0, 0, 0.4)'
                         }
-                    },
-                    backgroundImage: {
-                        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
                     }
                 }
             }
         }
     </script>
 
-    <!-- Libraries -->
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        /* CORE VARIABLES */
-        :root {
-            --glass-blur: 20px;
-            --glass-surface: rgba(20, 20, 25, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            cursor: none;
-            /* Custom cursor */
-            overflow-x: hidden;
-        }
-
-        /* PHYSICS CANVAS */
-        #physics-world {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: auto;
-            /* Allow dragging logos */
-            /* Deep Space Gradient */
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
-        }
-
-        /* CUSTOM CURSOR */
-        #cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: #fff;
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
-
-        #cursor-circle {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-        }
-
-        body.hovering #cursor-circle {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(2px);
-            border-color: transparent;
-        }
-
-        /* LIQUID GLASS CARD */
-        .glass-panel {
-            background: var(--glass-surface);
-            backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Animated Specular Highlight */
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.0) 55%, transparent 100%);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
         /* SCROLLBAR */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #000;
+            background: #0a0a0a;
         }
 
         ::-webkit-scrollbar-thumb {
             background: #333;
-            border-radius: 3px;
+            border-radius: 4px;
         }
 
-        /* MOBILE FALLBACK */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* === STYLE FROM example.html === */
+        :root {
+            --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(20, 20, 25, 0.4);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: auto;
+            /* We will add trail, but keep default cursor for usability */
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Particle Canvas from example2.html */
+        #fx-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--glass-shadow);
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+            transition: left 0.7s;
+        }
+
+        /* Hover Trigger Class */
+        .hover-trigger:hover {
+            /* Logic handled in JS or CSS */
+        }
+
+        /* Chip Style */
+        .tech-chip {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            transition: background 0.2s;
+        }
+
+        .tech-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         @media (max-width: 768px) {
-            body {
-                cursor: auto;
+            #webgl-canvas {
+                opacity: 0.5;
             }
 
-            #cursor-dot,
-            #cursor-circle {
-                display: none;
+            .glass-card {
+                backdrop-filter: blur(10px);
             }
-
-            #physics-world {
-                opacity: 0.3;
-                pointer-events: none;
-            }
-
-            /* Dim physics on mobile */
         }
     </style>
 </head>
 
-<body>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- PHYSICS LAYER -->
-    <div id="physics-world"></div>
+    <!-- 1. Background Shader (example.html) -->
+    <canvas id="webgl-canvas"></canvas>
 
-    <!-- CURSOR -->
-    <div id="cursor-dot"></div>
-    <div id="cursor-circle"></div>
+    <!-- 2. Particle Effects (example2.html) -->
+    <canvas id="fx-canvas"></canvas>
 
-    <!-- MAIN CONTENT -->
-    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+    <!-- Main Content -->
+    <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
 
-        <!-- NAV -->
-        <nav class="glass-panel px-6 py-4 flex justify-between items-center sticky top-4 z-50">
+        <!-- Navigation -->
+        <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
             <div
-                class="font-mono font-bold text-xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                NB.DEV</div>
-            <div class="flex gap-6 text-sm font-medium text-gray-300">
-                <a href="#projects" class="hover:text-white transition hover-trigger">Projects</a>
-                <a href="#library" class="hover:text-white transition hover-trigger">Library</a>
-                <a href="#contact" class="hover:text-white transition hover-trigger">Contact</a>
+                class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+                NB.</div>
+            <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
+                <a href="#projects" class="hover:text-white transition">Projects</a>
+                <a href="#library" class="hover:text-white transition">Library</a>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
+                        class="devicon-github-original text-xl text-white"></i></a>
+                <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
+                    class="hover:scale-110 transition"><i class="devicon-linkedin-plain text-xl text-blue-400"></i></a>
             </div>
         </nav>
 
-        <!-- HERO -->
-        <section class="min-h-[70vh] flex flex-col justify-center items-start relative pointer-events-none">
-            <!-- Content is interactive -->
-            <div class="pointer-events-auto max-w-3xl space-y-8">
+        <!-- Hero Section (example.html style) -->
+        <section id="about" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="flex-1 space-y-8">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/40 border border-cyan-500/30 text-cyan-300 text-xs font-mono glass-panel">
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                    Available for New Opportunities
+                    <span class="text-xs font-medium text-cyan-200">Open to Work</span>
                 </div>
 
-                <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none">
-                    Data Engineering<br>
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Reimagined.</span>
+                <h1
+                    class="text-5xl md:text-7xl font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
+                    Building Resilient <br> Data Systems.
                 </h1>
 
-                <p class="text-xl text-gray-400 max-w-xl leading-relaxed text-shadow-sm">
-                    I build resilient ETL pipelines, scalable data warehouses, and backend systems that turn chaos into
-                    clarity.
-                    <span class="text-white">Backend Developer & Middle Data Engineer</span> based in Almaty.
+                <p class="text-xl text-gray-300 max-w-lg leading-relaxed">
+                    I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft
+                    high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
                 </p>
 
                 <div class="flex gap-4 pt-4">
-                    <a href="https://github.com/mrnamazbek" target="_blank"
-                        class="glass-panel px-8 py-3 bg-white/5 hover:bg-white/10 transition hover-trigger flex items-center gap-3">
-                        <i class="devicon-github-original text-xl"></i> GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
-                        class="glass-panel px-8 py-3 bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30 transition hover-trigger flex items-center gap-3">
-                        <i class="devicon-linkedin-plain text-xl text-blue-400"></i> LinkedIn
-                    </a>
+                    <a href="#projects"
+                        class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform">View
+                        Projects</a>
+                    <a href="#contact"
+                        class="px-8 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition">Contact Me</a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div id="hero-card"
+                class="w-full max-w-sm glass-card p-8 flex flex-col items-center text-center transform transition-transform duration-200 hover:shadow-2xl hover:shadow-cyan-500/20">
+                <div
+                    class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-2xl mb-6 relative group">
+                    <div
+                        class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold">
+                        NB</div>
+                </div>
+                <h2 class="text-2xl font-bold font-display">Namazbek Bekzhanov</h2>
+                <p class="text-indigo-200 mb-6 font-mono text-sm">Almaty, Kazakhstan</p>
+
+                <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
+                    <div>
+                        <div class="text-2xl font-bold font-mono" id="stats-repos">-</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Repos</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-mono">3+</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Years</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-mono">5+</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Certs</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        </div>
-        </section>
-
-        <!-- TECHNOLOGY ARSENAL -->
-        <section id="arsenal" class="space-y-12 pointer-events-auto">
+        <!-- TECHNOLOGY ARSENAL (Restyled to glass-card) -->
+        <section id="arsenal" class="space-y-12">
             <div>
-                <h2 class="text-4xl font-bold mb-2">Technology Arsenal</h2>
+                <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
                 <p class="text-gray-400">The tools I use to build the future.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <!-- 1. ML & AI -->
-                <div class="glass-panel p-6 hover-trigger hover:border-cyan-500/30 transition duration-300">
+                <!-- ML -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i
                                 class="devicon-python-plain"></i></span>
                         <h3 class="text-xl font-bold">Machine Learning & AI</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Scikit-learn</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">TensorFlow</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">PyTorch</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Keras</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">NumPy</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Pandas</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">Scikit-learn</span><span class="tech-chip">TensorFlow</span>
+                        <span class="tech-chip">PyTorch</span><span class="tech-chip">Keras</span>
+                        <span class="tech-chip">NumPy</span><span class="tech-chip">Pandas</span>
                     </div>
                 </div>
 
-                <!-- 2. Big Data -->
-                <div class="glass-panel p-6 hover-trigger hover:border-blue-500/30 transition duration-300">
+                <!-- Big Data -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
                                 class="devicon-apachespark-original"></i></span>
-                        <h3 class="text-xl font-bold">Big Data & Orchestration</h3>
+                        <h3 class="text-xl font-bold">Big Data</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Apache
-                            Spark</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Hadoop</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Airflow</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Kafka</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">Spark</span><span class="tech-chip">Hadoop</span>
+                        <span class="tech-chip">Airflow</span><span class="tech-chip">Kafka</span>
                     </div>
                 </div>
 
-                <!-- 3. Languages -->
-                <div class="glass-panel p-6 hover-trigger hover:border-yellow-500/30 transition duration-300">
+                <!-- Languages -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i
                                 class="devicon-bash-plain"></i></span>
-                        <h3 class="text-xl font-bold">Programming Languages</h3>
+                        <h3 class="text-xl font-bold">Languages</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Python</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Go</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Java</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">SQL</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Bash</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">Python</span><span class="tech-chip">Go</span>
+                        <span class="tech-chip">Java</span><span class="tech-chip">SQL</span><span
+                            class="tech-chip">Bash</span>
                     </div>
                 </div>
 
-                <!-- 4. Databases -->
-                <div class="glass-panel p-6 hover-trigger hover:border-purple-500/30 transition duration-300">
+                <!-- DBs -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i
                                 class="devicon-postgresql-plain"></i></span>
                         <h3 class="text-xl font-bold">Databases</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Postgres</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Oracle</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">MySQL</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">MSSQL</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">Postgres</span><span class="tech-chip">Oracle</span>
+                        <span class="tech-chip">MySQL</span><span class="tech-chip">MSSQL</span>
                     </div>
                 </div>
 
-                <!-- 5. DevOps -->
-                <div class="glass-panel p-6 hover-trigger hover:border-green-500/30 transition duration-300">
+                <!-- DevOps -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i
                                 class="devicon-docker-plain"></i></span>
-                        <h3 class="text-xl font-bold">DevOps & Tools</h3>
+                        <h3 class="text-xl font-bold">DevOps</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Docker</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Git</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Linux</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">FastAPI</span>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">Docker</span><span class="tech-chip">Git</span>
+                        <span class="tech-chip">Linux</span><span class="tech-chip">FastAPI</span>
                     </div>
                 </div>
 
-                <!-- 6. Details (IDEs) -->
-                <div class="glass-panel p-6 hover-trigger hover:border-pink-500/30 transition duration-300">
+                <!-- IDEs -->
+                <div class="glass-card p-6">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i
                                 class="devicon-vscode-plain"></i></span>
-                        <h3 class="text-xl font-bold">IDE & Environment</h3>
+                        <h3 class="text-xl font-bold">Environment</h3>
                     </div>
-                    <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip">PyCharm</span><span class="tech-chip">DataGrip</span>
+                        <span class="tech-chip">DataSpell</span><span class="tech-chip">DBeaver</span>
                         <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">PyCharm</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">DataGrip</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">DataSpell</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">DBeaver</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">Cursor</span>
-                        <span
-                            class="px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border border-white/10 text-sm font-bold shadow-lg hover:shadow-cyan-500/50 transition">Antigravity</span>
+                            class="tech-chip bg-gradient-to-r from-blue-500/50 to-purple-500/50 border-blue-400/50 font-bold">Antigravity</span>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <!-- PROJECTS -->
-        <section id="projects" class="space-y-12 pointer-events-auto">
-            <div class="flex items-end justify-between">
-                <div>
-                    <h2 class="text-4xl font-bold mb-2">Selected Works</h2>
-                    <p class="text-gray-400">Engineering scalable solutions.</p>
-                </div>
-                <div class="text-xs font-mono text-cyan-400">LIVE GITHUB DATA</div>
-            </div>
-
-            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Data injection -->
+        <section id="projects" class="space-y-8">
+            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
             </div>
         </section>
 
         <!-- LIBRARY -->
-        <section id="library" class="space-y-12 pointer-events-auto">
-            <div>
-                <h2 class="text-4xl font-bold mb-2">The Library</h2>
-                <p class="text-gray-400">Books that shaped my engineering philosophy.</p>
-            </div>
-
-            <div class="glass-panel p-8">
-                <div id="books-container" class="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory">
-                    <!-- Books injection -->
-                </div>
+        <section id="library" class="glass-card p-8 rounded-2xl">
+            <h3 class="text-3xl font-display font-bold mb-8">The Library</h3>
+            <div id="books-container" class="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory">
+                <!-- Injected via JS -->
             </div>
         </section>
 
         <!-- FOOTER -->
-        <footer id="contact" class="text-center py-24 pointer-events-auto">
-            <h3 class="text-2xl font-bold mb-6">Let's build something scalable.</h3>
-            <a href="mailto:namazbek.bekzhanov@gmail.com"
-                class="text-cyan-400 hover:text-cyan-300 transition text-lg font-mono">namazbek.bekzhanov@gmail.com</a>
-            <p class="text-gray-600 text-sm mt-12 font-mono">
-                &copy; 2026 Namazbek Bekzhanov.<br>
-                Engineered with Matter.js, GSAP & Liquid Glass.
-            </p>
+        <footer id="contact" class="text-center py-20">
+            <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="mailto:namazbek.bekzhanov@gmail.com"
+                    class="px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
+                    Me</a>
+            </div>
+            <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
         </footer>
 
     </main>
 
     <!-- LOGIC -->
     <script>
-        // === 1. CONFIGURATION ===
-        const CONFIG = {
-            mobile: window.innerWidth < 768,
-            marketing: [
-                "python", "fastapi", "postgresql", "apacheairflow", "apachekafka",
-                "apachespark", "docker", "kubernetes", "grafana", "dbt", "clickhouse",
-                "git", "linux", "googlecloud"
-            ]
-        };
+        // === 1. SHADER BACKGROUND (example.html) ===
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
+        `;
+        const fragmentShader = `
+            uniform float time;
+            varying vec2 vUv;
+            // Simplex noise (simplified)
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+            float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v - i + dot(i, C.xx);
+                vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m ;
+                return 42.0 * dot( m*m, vec3( dot(p.x,x0), dot(p.y,x12.xy), dot(p.z,x12.zw) ) );
+            }
+            void main() {
+                vec2 uv = vUv;
+                float t = time * 0.15;
+                float noise1 = snoise(uv * 1.5 + vec2(t, t * 0.5));
+                float noise2 = snoise(uv * 2.0 - vec2(t * 0.3, t));
+                vec3 color1 = vec3(0.05, 0.05, 0.15); // Deep Dark
+                vec3 color2 = vec3(0.1, 0.1, 0.3); // Purple Tint
+                vec3 color3 = vec3(0.0, 0.2, 0.3); // Cyan Tint
+                vec3 finalColor = mix(color1, color2, noise1 * 0.5 + 0.5);
+                finalColor = mix(finalColor, color3, noise2 * 0.5 + 0.5);
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
 
-        // === 2. PHYSICS ENGINE (Matter.js) ===
-        function initPhysics() {
-            if (CONFIG.mobile) return; // Disable heavy physics on mobile
+        function initShader() {
+            if (window.innerWidth < 768) return;
+            const canvas = document.getElementById('webgl-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const material = new THREE.ShaderMaterial({
+                uniforms: { time: { value: 0 } },
+                vertexShader, fragmentShader
+            });
+            scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
 
-            const Engine = Matter.Engine,
-                Render = Matter.Render,
-                Runner = Matter.Runner,
-                Bodies = Matter.Bodies,
-                Composite = Matter.Composite,
-                Mouse = Matter.Mouse,
-                MouseConstraint = Matter.MouseConstraint,
-                Events = Matter.Events;
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                material.uniforms.time.value = clock.getElapsedTime();
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
+        }
 
-            const engine = Engine.create();
-            engine.gravity.y = 0.05; // Very low gravity for "floating" feel
+        // === 2. PARTICLE CURSOR EFFECTS (Adapted from example2.html) ===
+        function initParticles() {
+            const canvas = document.getElementById('fx-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+            resize(); window.addEventListener('resize', resize);
 
-            const render = Render.create({
-                element: document.getElementById('physics-world'),
-                engine: engine,
-                options: {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    wireframes: false,
-                    background: 'transparent',
-                    pixelRatio: window.devicePixelRatio
+            const particles = [];
+
+            // Mouse Trail
+            document.addEventListener('mousemove', (e) => {
+                // Spawn particles on move
+                for (let i = 0; i < 2; i++) {
+                    particles.push({
+                        x: e.clientX, y: e.clientY,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        life: 1.0,
+                        color: Math.random() > 0.5 ? '#00d4ff' : '#00e6a0', // Cyan or Neon Green
+                        size: Math.random() * 3 + 1
+                    });
                 }
             });
 
-            // Create Boundaries
-            const wallOptions = { isStatic: true, render: { visible: false } };
-            const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 50, window.innerWidth, 100, wallOptions);
-            const leftWall = Bodies.rectangle(-50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
-            const rightWall = Bodies.rectangle(window.innerWidth + 50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
-            Composite.add(engine.world, [ground, leftWall, rightWall]);
-
-            // Create Tech Icon Bodies
-            const icons = CONFIG.marketing.map((name) => {
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * (window.innerHeight / 2); // Start top half
-                const size = 60; // Size of physics body
-
-                // We use a circle body
-                const body = Bodies.circle(x, y, size / 2, {
-                    restitution: 0.9, // Bouncy
-                    frictionAir: 0.02, // Float resistance
-                    render: {
-                        sprite: {
-                            // Using Devicon SVGs via CDN is tricky in Matter.js canvas
-                            // So we create a custom render hook or just emojis/simple shapes?
-                            // Wait, the user requested inline SVGs. 
-                            // To keep it robust and performant, we'll overlay DOM elements 
-                            // ON TOP of invisible physics bodies. This is the "Hybrid" approach.
-                            visible: false
-                        }
+            function loop() {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    let p = particles[i];
+                    p.x += p.vx; p.y += p.vy;
+                    p.life -= 0.02;
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                        continue;
                     }
-                });
-
-                body.plugin = { iconName: name }; // Tag body
-                return body;
-            });
-
-            Composite.add(engine.world, icons);
-
-            // DOM Overlay Logic
-            const physicsContainer = document.getElementById('physics-world');
-            const iconElements = icons.map(body => {
-                const el = document.createElement('div');
-                el.className = 'absolute top-0 left-0 flex items-center justify-center pointer-events-none text-4xl text-white/20 transition-colors duration-300';
-                el.style.width = '60px';
-                el.style.height = '60px';
-                // Use Devicon font inside
-                el.innerHTML = `<i class="devicon-${body.plugin.iconName}-plain"></i>`;
-                physicsContainer.appendChild(el);
-                return { body, el };
-            });
-
-            // Mouse Control
-            const mouse = Mouse.create(render.canvas);
-            const mouseConstraint = MouseConstraint.create(engine, {
-                mouse: mouse,
-                constraint: { stiffness: 0.2, render: { visible: false } }
-            });
-            Composite.add(engine.world, mouseConstraint);
-
-            // Sync Loop
-            Events.on(engine, 'afterUpdate', () => {
-                iconElements.forEach(({ body, el }) => {
-                    const { x, y } = body.position;
-                    // Hover Effect logic
-                    const dx = mouse.position.x - x;
-                    const dy = mouse.position.y - y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 100) {
-                        el.classList.remove('text-white/20');
-                        el.classList.add('text-white', 'scale-110'); // Highlight
-                        // Repulse Force
-                        Matter.Body.applyForce(body, body.position, {
-                            x: -dx * 0.00005,
-                            y: -dy * 0.00005
-                        });
-                    } else {
-                        el.classList.remove('text-white', 'scale-110');
-                        el.classList.add('text-white/20');
-                    }
-
-                    el.style.transform = `translate(${x - 30}px, ${y - 30}px) rotate(${body.angle}rad)`;
-                });
-            });
-
-            Runner.run(Runner.create(), engine);
-            Render.run(render);
-
-            // Resize handler
-            window.addEventListener('resize', () => {
-                render.canvas.width = window.innerWidth;
-                render.canvas.height = window.innerHeight;
-                Matter.Body.setPosition(ground, { x: window.innerWidth / 2, y: window.innerHeight + 50 });
-                Matter.Body.setPosition(rightWall, { x: window.innerWidth + 50, y: window.innerHeight / 2 });
-            });
+                    ctx.globalAlpha = p.life;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(loop);
+            }
+            loop();
         }
 
-        // === 3. CUSTOM CURSOR ===
-        function initCursor() {
-            if (CONFIG.mobile) return;
-            const dot = document.getElementById('cursor-dot');
-            const circle = document.getElementById('cursor-circle');
-
-            window.addEventListener('mousemove', (e) => {
-                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
-                gsap.to(circle, { x: e.clientX, y: e.clientY, duration: 0.15 });
-            });
-
-            document.querySelectorAll('.hover-trigger').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-            });
-        }
-
-        // === 4. DATA LOADING ===
+        // === 3. DATA LOADING ===
         async function loadContent() {
             // Books
             try {
                 const res = await fetch('assets/books.json');
                 const books = await res.json();
                 const container = document.getElementById('books-container');
-
                 books.forEach(book => {
                     const div = document.createElement('div');
-                    div.className = "flex-none w-[220px] group cursor-pointer hover-trigger";
+                    div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300";
                     div.innerHTML = `
-                        <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-4 shadow-lg transition duration-500 group-hover:-translate-y-2">
+                        <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 shadow-lg">
                              <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}">
-                             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition duration-300">
-                                <span class="text-xs font-mono text-cyan-400">Recommended</span>
-                             </div>
                         </div>
-                        <h4 class="font-bold leading-tight text-white mb-1 group-hover:text-cyan-300 transition">${book.title}</h4>
-                        <p class="text-sm text-gray-400">${book.author}</p>
+                        <h4 class="font-bold leading-tight text-white/90 text-sm">${book.title}</h4>
+                        <p class="text-xs text-gray-500">${book.author}</p>
                     `;
                     container.appendChild(div);
                 });
-            } catch (e) { console.error("Books load error", e); }
+            } catch (e) {
+                console.log("Books skipped");
+            }
 
-            // Projects (GitHub)
+            // GitHub
+            const grid = document.getElementById('projects-grid');
             try {
                 const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
                 const repos = await res.json();
-                const grid = document.getElementById('projects-grid');
-                if (Array.isArray(repos)) {
-                    grid.innerHTML = '';
-                    repos.forEach(repo => {
-                        const card = document.createElement('a');
-                        card.href = repo.html_url;
-                        card.target = "_blank";
-                        card.className = "glass-panel p-6 flex flex-col justify-between h-[280px] hover:border-cyan-500/50 transition duration-300 hover-trigger group";
-                        card.innerHTML = `
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="text-cyan-400 font-mono text-xs border border-cyan-500/30 px-2 py-1 rounded">${repo.language || 'Code'}</span>
-                                    <i class="devicon-github-original text-2xl opacity-50 group-hover:text-white transition"></i>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-3 group-hover:text-cyan-300 transition">${repo.name}</h3>
-                                <p class="text-gray-400 text-sm line-clamp-3 leading-relaxed">${repo.description || "Scalable data solution."}</p>
+                if (repos.length) document.getElementById('stats-repos').innerText = repos.length + "+";
+
+                repos.forEach(repo => {
+                    const card = document.createElement('a');
+                    card.href = repo.html_url; card.target = "_blank";
+                    card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
+                    card.innerHTML = `
+                        <div>
+                             <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}
                             </div>
-                            <div class="flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-cyan-400 transition">
-                                <span>VIEW SOURCE</span>
-                                <span>→</span>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                }
-            } catch (e) { console.error("GitHub load error", e); }
+                            <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
+                            <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'No description.'}</p>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<div class="text-gray-500">GitHub API Limit Reached.</div>';
+            }
         }
 
-        // === INIT ===
+        // INIT
         window.addEventListener('DOMContentLoaded', () => {
-            initPhysics();
-            initCursor();
+            initShader();
+            initParticles();
             loadContent();
+
+            // Hero Parallax (example.html feature)
+            const heroCard = document.getElementById('hero-card');
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth - e.pageX * 2) / 100;
+                const y = (window.innerHeight - e.pageY * 2) / 100;
+                if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;
+            });
         });
 
     </script>
-
-    <!-- QA CHECKLIST -->
-    <!--
-     [x] index.html provided and runnable.
-     [x] Matter.js physics engine integrated for floating logos.
-     [x] Hybrid approach (DOM elements overlaid on Physics bodies).
-     [x] Liquid Glass UI with backdrop-filter & edge lighting.
-     [x] Books JSON fetched with covers.
-     [x] GitHub API integration.
-     [x] Mobile guards (physics disabled on small screens).
-    -->
-
 </body>
 
 </html>
