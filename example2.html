@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namazbek Bekzhanov | Data Engineer & Creative Developer</title>
+    <title>Namazbek Bekzhanov | Middle Data Engineer</title>
     <meta name="description" content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,15 +43,11 @@
             cursor: none; /* Hide default cursor */
         }
 
-        /* 1. Custom Mouse Cursor */
+        /* Custom Magnetic Cursor */
         #custom-cursor {
-            position: fixed;
-            top: 0; left: 0;
-            width: 24px; height: 24px;
-            border: 2px solid #00d4ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
+            position: fixed; top: 0; left: 0; width: 24px; height: 24px;
+            border: 2px solid #00d4ff; border-radius: 50%;
+            pointer-events: none; z-index: 10000;
             transform: translate(-50%, -50%);
             transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
             mix-blend-mode: difference;
@@ -65,11 +62,11 @@
         #anti-gravity-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -2; pointer-events: none; overflow: hidden; }
         #fx-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 9999; pointer-events: none; }
 
-        /* Floating Logos */
+        /* Floating Logos (Colorful & Subtle) */
         .floating-logo {
             position: absolute;
-            color: rgba(255, 255, 255, 0.15); /* Subtle glass look */
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            opacity: 0.25; /* Let original colors shine through, but softly */
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
             will-change: transform;
         }
 
@@ -91,18 +88,24 @@
             box-shadow: 0 8px 40px rgba(0, 212, 255, 0.15);
             transform: translateY(-4px);
         }
-        .glass-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s; pointer-events: none;
-        }
-        .glass-card:hover::before { left: 100%; transition: left 0.7s; }
 
+        /* Updated Tech Chip for Logos */
         .tech-chip {
-            padding: 4px 12px; border-radius: 9999px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.75rem; transition: background 0.2s;
+            display: inline-flex;
+            items-center;
+            gap: 0.5rem; /* 8px */
+            padding: 6px 14px; 
+            border-radius: 9999px; 
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            font-size: 0.8rem; 
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
         }
-        .tech-chip:hover { background: rgba(255, 255, 255, 0.15); }
+        .tech-chip:hover { 
+            background: rgba(255, 255, 255, 0.15); 
+            transform: scale(1.05);
+        }
 
         @media (max-width: 768px) {
             body { cursor: auto; }
@@ -122,9 +125,9 @@
     <canvas id="fx-canvas"></canvas>
 
     <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
+        
         <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
-            <div class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-                NB.</div>
+            <div class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">NB.</div>
             <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
                 <a href="#about" class="hover:text-white hover-target transition">About</a>
                 <a href="#arsenal" class="hover:text-white hover-target transition">Arsenal</a>
@@ -176,37 +179,89 @@
         <section id="arsenal" class="space-y-12">
             <div>
                 <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
-                <p class="text-gray-400">The tools floating in my anti-gravity workspace.</p>
+                <p class="text-gray-400">The tools I use to build the future.</p>
             </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="glass-card p-6 gs-reveal hover-target">
                     <div class="flex items-center gap-3 mb-6">
-                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i class="devicon-apachespark-original"></i></span>
-                        <h3 class="text-xl font-bold">Data Engineering</h3>
+                        <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i class="devicon-pytorch-original text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Machine Learning & AI</h3>
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Apache Airflow</span><span class="tech-chip">dbt</span>
-                        <span class="tech-chip">Spark</span><span class="tech-chip">Kafka</span>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-scikitlearn-plain colored"></i> Scikit-learn</span>
+                        <span class="tech-chip"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span>
+                        <span class="tech-chip"><i class="devicon-pytorch-original colored"></i> PyTorch</span>
+                        <span class="tech-chip"><i class="devicon-keras-plain colored"></i> Keras</span>
+                        <span class="tech-chip"><i class="devicon-numpy-plain colored"></i> NumPy</span>
+                        <span class="tech-chip"><i class="devicon-pandas-plain colored"></i> Pandas</span>
                     </div>
                 </div>
+
                 <div class="glass-card p-6 gs-reveal hover-target">
                     <div class="flex items-center gap-3 mb-6">
-                        <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i class="devicon-python-plain"></i></span>
+                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i class="devicon-apachespark-original text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Big Data</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-apachespark-original colored"></i> Spark</span>
+                        <span class="tech-chip"><i class="devicon-hadoop-plain colored"></i> Hadoop</span>
+                        <span class="tech-chip"><i class="devicon-apacheairflow-plain colored"></i> Airflow</span>
+                        <span class="tech-chip"><i class="devicon-apachekafka-original colored"></i> Kafka</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i class="devicon-python-plain text-xl"></i></span>
                         <h3 class="text-xl font-bold">Languages</h3>
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Python</span><span class="tech-chip">SQL</span>
-                        <span class="tech-chip">Java</span><span class="tech-chip">Go</span>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-python-plain colored"></i> Python</span>
+                        <span class="tech-chip"><i class="devicon-go-original-wordmark colored"></i> Go</span>
+                        <span class="tech-chip"><i class="devicon-java-plain colored"></i> Java</span>
+                        <span class="tech-chip"><i class="devicon-azuresqldatabase-plain colored"></i> SQL</span>
+                        <span class="tech-chip"><i class="devicon-bash-plain text-white"></i> Bash</span>
                     </div>
                 </div>
+
                 <div class="glass-card p-6 gs-reveal hover-target">
                     <div class="flex items-center gap-3 mb-6">
-                        <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i class="devicon-postgresql-plain"></i></span>
-                        <h3 class="text-xl font-bold">Databases & DWH</h3>
+                        <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i class="devicon-postgresql-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Databases</h3>
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">PostgreSQL</span><span class="tech-chip">Oracle</span>
-                        <span class="tech-chip">ClickHouse</span><span class="tech-chip">MS SQL</span>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-postgresql-plain colored"></i> Postgres</span>
+                        <span class="tech-chip"><i class="devicon-oracle-original colored"></i> Oracle</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+                        <span class="tech-chip"><i class="devicon-microsoftsqlserver-plain colored"></i> MSSQL</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i class="devicon-docker-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">DevOps</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-docker-plain colored"></i> Docker</span>
+                        <span class="tech-chip"><i class="devicon-git-plain colored"></i> Git</span>
+                        <span class="tech-chip"><i class="devicon-linux-plain text-white"></i> Linux</span>
+                        <span class="tech-chip"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i class="devicon-pycharm-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Environment</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-pycharm-plain colored"></i> PyCharm</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain colored"></i> DataGrip</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain text-white"></i> DataSpell</span>
+                        <span class="tech-chip"><i class="devicon-dbeaver-plain text-white"></i> DBeaver</span>
+                        <span class="tech-chip bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-cyan-400/50">🚀 Antigravity</span>
                     </div>
                 </div>
             </div>
@@ -227,7 +282,7 @@
         <footer id="contact" class="text-center py-20 gs-reveal">
             <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
             <div class="flex justify-center gap-6 mb-8">
-                <a href="mailto:namazbek.bekzhanov@gmail.com" class="hover-target px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email Me</a>
+                <a href="mailto:namazbek.bekzhanov@gmail.com" class="hover-target px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-black font-bold transition">Email Me</a>
             </div>
             <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
         </footer>
@@ -237,70 +292,64 @@
     <script>
         // === GLOBAL MOUSE TRACKING ===
         let mouseX = 0; let mouseY = 0;
-        let targetX = 0; let targetY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
 
         // === 1. CUSTOM MAGNETIC CURSOR ===
         const cursor = document.getElementById('custom-cursor');
         function initCursor() {
-            if (window.innerWidth < 768) return; // Disable on mobile
-            
-            // GSAP quickTo for ultra-smooth trailing
+            if (window.innerWidth < 768) return; 
             const xTo = gsap.quickTo(cursor, "x", {duration: 0.15, ease: "power3"});
             const yTo = gsap.quickTo(cursor, "y", {duration: 0.15, ease: "power3"});
             
-            gsap.ticker.add(() => {
-                xTo(mouseX);
-                yTo(mouseY);
-            });
+            gsap.ticker.add(() => { xTo(mouseX); yTo(mouseY); });
 
-            // Magnetic Hover States
-            const hoverTargets = document.querySelectorAll('.hover-target, .glass-card, a');
-            hoverTargets.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-            });
+            // Ensure hover state works on newly injected elements (event delegation setup via CSS classes is better, but here we attach dynamically where needed)
+            const addHover = () => {
+                document.querySelectorAll('.hover-target, .glass-card, a').forEach(el => {
+                    if(!el.dataset.hoverBound) {
+                        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+                        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+                        el.dataset.hoverBound = "true";
+                    }
+                });
+            };
+            addHover();
+            // Call again after fetch completes
+            setTimeout(addHover, 2000); 
         }
 
-        // === 2. JETBRAINS ANTI-GRAVITY LOGOS ===
+        // === 2. COLORFUL ANTI-GRAVITY LOGOS ===
         const techIcons = [
-            'devicon-python-plain', 'devicon-postgresql-plain', 'devicon-docker-plain', 
-            'devicon-kubernetes-plain', 'devicon-apachekafka-original', 'devicon-apachespark-original',
-            'devicon-go-original-wordmark', 'devicon-java-plain', 'devicon-linux-plain'
+            'devicon-python-plain colored', 'devicon-postgresql-plain colored', 'devicon-docker-plain colored', 
+            'devicon-kubernetes-plain colored', 'devicon-apachekafka-original colored', 'devicon-apachespark-original colored',
+            'devicon-fastapi-plain colored', 'devicon-java-plain colored', 'devicon-mysql-plain colored',
+            'devicon-apacheairflow-plain colored', 'devicon-oracle-original colored', 'devicon-redis-plain colored'
         ];
         const floatingElements = [];
 
         function initAntiGravity() {
             if (window.innerWidth < 768) return;
             const container = document.getElementById('anti-gravity-container');
-            const numLogos = 15;
+            const numLogos = 18;
 
             for(let i=0; i<numLogos; i++) {
                 let iconClass = techIcons[Math.floor(Math.random() * techIcons.length)];
                 let el = document.createElement('i');
                 el.className = `${iconClass} floating-logo`;
                 
-                // Random starting properties
-                let size = Math.random() * 40 + 30; // 30px to 70px
+                let size = Math.random() * 50 + 40; // 40px to 90px
                 el.style.fontSize = `${size}px`;
                 el.style.left = `${Math.random() * 100}vw`;
                 el.style.top = `${Math.random() * 100}vh`;
 
-                // Physics state
                 let physics = {
-                    el: el,
-                    x: 0, y: 0,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
+                    el: el, x: 0, y: 0,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
                     rot: Math.random() * 360,
-                    vRot: (Math.random() - 0.5) * 1,
-                    depth: Math.random() * 0.5 + 0.1 // For parallax calculation
+                    vRot: (Math.random() - 0.5) * 0.5,
+                    depth: Math.random() * 0.6 + 0.1 
                 };
-
                 floatingElements.push(physics);
                 container.appendChild(el);
             }
@@ -308,26 +357,20 @@
         }
 
         function renderAntiGravity() {
-            // Calculate mouse offset from center for Parallax
-            let centerX = window.innerWidth / 2;
-            let centerY = window.innerHeight / 2;
+            let centerX = window.innerWidth / 2; let centerY = window.innerHeight / 2;
             let mouseOffsetX = (mouseX - centerX) * 0.05;
             let mouseOffsetY = (mouseY - centerY) * 0.05;
 
             floatingElements.forEach(p => {
-                // Apply constant drift
-                p.x += p.vx;
-                p.y += p.vy;
-                p.rot += p.vRot;
+                p.x += p.vx; p.y += p.vy; p.rot += p.vRot;
 
-                // Screen wrap-around logic
-                let rect = p.el.getBoundingClientRect();
-                if(p.x > window.innerWidth) p.x = -100;
-                if(p.x < -100) p.x = window.innerWidth;
-                if(p.y > window.innerHeight) p.y = -100;
-                if(p.y < -100) p.y = window.innerHeight;
+                // Screen Wrap
+                if(p.x > window.innerWidth + 100) p.x = -100;
+                if(p.x < -100) p.x = window.innerWidth + 100;
+                if(p.y > window.innerHeight + 100) p.y = -100;
+                if(p.y < -100) p.y = window.innerHeight + 100;
 
-                // Apply transforms (Base drift + Mouse Parallax based on depth)
+                // Apply transforms (Base drift + Mouse Parallax)
                 let finalX = p.x - (mouseOffsetX * p.depth);
                 let finalY = p.y - (mouseOffsetY * p.depth);
 
@@ -336,7 +379,7 @@
             requestAnimationFrame(renderAntiGravity);
         }
 
-        // === 3. WEBGL SHADER (Unchanged from original) ===
+        // === 3. WEBGL SHADER BACKGROUND ===
         function initShader() {
             if (window.innerWidth < 768) return;
             const canvas = document.getElementById('webgl-canvas');
@@ -379,7 +422,7 @@
             window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
         }
 
-        // === 4. PARTICLE TRAIL (Unchanged) ===
+        // === 4. PARTICLE TRAIL ===
         function initParticles() {
             const ctx = document.getElementById('fx-canvas').getContext('2d');
             let w = window.innerWidth, h = window.innerHeight;
@@ -400,9 +443,9 @@
             loop();
         }
 
-        // === 5. DATA INJECTION & SCROLL ANIMATIONS ===
+        // === 5. DATA INJECTION & DYNAMIC PROJECT LOGOS ===
         async function loadContent() {
-            // Embedded Books JSON (Fixes local CORS issue)
+            // Embedded Books JSON
             const books = [
                 { title: "Clean Code", author: "Robert C. Martin", cover: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=300&q=80" },
                 { title: "Designing Data-Intensive Applications", author: "Martin Kleppmann", cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=300&q=80" },
@@ -425,32 +468,47 @@
                 bookContainer.appendChild(div);
             });
 
-            // Fetch GitHub Repos
+            // Specific mapping of Repositories to relevant Data Engineering logos
+            const repoTechMap = {
+                'KBTU_advanced_software_paradigms': ['devicon-python-plain colored', 'devicon-docker-plain colored', 'devicon-fastapi-plain colored', 'devicon-postgresql-plain colored'],
+                'KBTU_ML_Assignments': ['devicon-pytorch-original colored', 'devicon-tensorflow-original colored', 'devicon-numpy-plain colored', 'devicon-python-plain colored'],
+                'DataMining_SIS1_Project': ['devicon-jupyter-plain colored', 'devicon-pandas-plain colored', 'devicon-python-plain colored'],
+                'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-amazonwebservices-original colored'],
+                'default': ['devicon-python-plain colored', 'devicon-apacheairflow-plain colored', 'devicon-docker-plain colored', 'devicon-postgresql-plain colored']
+            };
+
             const grid = document.getElementById('projects-grid');
             try {
                 const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
                 const repos = await res.json();
                 if (repos.length) document.getElementById('stats-repos').innerText = repos.length + "+";
+                
                 repos.forEach(repo => {
+                    // Determine which logos to show based on mapping dictionary
+                    let techStackArray = repoTechMap[repo.name] || repoTechMap['default'];
+                    let techHtml = techStackArray.map(iconClass => `<i class="${iconClass} text-2xl hover:scale-125 transition drop-shadow-md cursor-help" title="${iconClass.split('-')[1]}"></i>`).join('');
+
                     const card = document.createElement('a');
                     card.href = repo.html_url; card.target = "_blank";
-                    card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group hover-target gs-reveal";
+                    card.className = "glass-card p-6 flex flex-col h-[280px] group hover-target gs-reveal";
                     card.innerHTML = `
-                        <div>
-                            <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}
-                            </div>
-                            <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
-                            <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'Enterprise grade solution.'}</p>
+                        <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}
+                        </div>
+                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition line-clamp-2">${repo.name}</h3>
+                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'Enterprise grade solution.'}</p>
+                        
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center gap-4">
+                            ${techHtml}
                         </div>
                     `;
                     grid.appendChild(card);
                 });
             } catch (e) {
-                grid.innerHTML = '<div class="text-gray-500">GitHub API Limit Reached. Check GitHub directly.</div>';
+                grid.innerHTML = '<div class="text-gray-500 col-span-3 text-center py-10">GitHub API Limit Reached. Check GitHub directly.</div>';
             }
 
-            // Initialize GSAP ScrollTrigger after elements are loaded
+            // Init ScrollTrigger
             gsap.registerPlugin(ScrollTrigger);
             gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
                 gsap.from(elem, {
@@ -468,7 +526,7 @@
             initAntiGravity();
             loadContent();
 
-            // Hero Parallax (Micro-interaction)
+            // Hero Parallax
             const heroCard = document.getElementById('hero-card');
             document.addEventListener('mousemove', (e) => {
                 if(window.innerWidth < 768) return;
