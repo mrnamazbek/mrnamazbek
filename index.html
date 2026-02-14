@@ -123,8 +123,9 @@
 
         .floating-logo {
             position: absolute;
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 2rem;
+            /* REMOVED color override to allow 'colored' class to work */
+            opacity: 0.25;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
             will-change: transform;
         }
 
@@ -194,6 +195,10 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 0.75rem;
             transition: background 0.2s;
+            /* NEW: Flexbox for icons */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .tech-chip:hover {
@@ -332,9 +337,12 @@
                         <h3 class="text-xl font-bold">Machine Learning & AI</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Scikit-learn</span><span class="tech-chip">TensorFlow</span>
-                        <span class="tech-chip">PyTorch</span><span class="tech-chip">Keras</span>
-                        <span class="tech-chip">NumPy</span><span class="tech-chip">Pandas</span>
+                        <span class="tech-chip"><i class="devicon-scikitlearn-plain colored"></i> Scikit-learn</span>
+                        <span class="tech-chip"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span>
+                        <span class="tech-chip"><i class="devicon-pytorch-original colored"></i> PyTorch</span>
+                        <span class="tech-chip"><i class="devicon-keras-plain colored"></i> Keras</span>
+                        <span class="tech-chip"><i class="devicon-numpy-plain colored"></i> NumPy</span>
+                        <span class="tech-chip"><i class="devicon-pandas-plain colored"></i> Pandas</span>
                     </div>
                 </div>
 
@@ -346,8 +354,10 @@
                         <h3 class="text-xl font-bold">Big Data</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Spark</span><span class="tech-chip">Hadoop</span>
-                        <span class="tech-chip">Airflow</span><span class="tech-chip">Kafka</span>
+                        <span class="tech-chip"><i class="devicon-apachespark-original colored"></i> Spark</span>
+                        <span class="tech-chip"><i class="devicon-hadoop-plain colored"></i> Hadoop</span>
+                        <span class="tech-chip"><i class="devicon-apacheairflow-plain colored"></i> Airflow</span>
+                        <span class="tech-chip"><i class="devicon-apachekafka-original colored"></i> Kafka</span>
                     </div>
                 </div>
 
@@ -359,9 +369,11 @@
                         <h3 class="text-xl font-bold">Languages</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Python</span><span class="tech-chip">Go</span>
-                        <span class="tech-chip">Java</span><span class="tech-chip">SQL</span><span
-                            class="tech-chip">Bash</span>
+                        <span class="tech-chip"><i class="devicon-python-plain colored"></i> Python</span>
+                        <span class="tech-chip"><i class="devicon-go-original-wordmark colored"></i> Go</span>
+                        <span class="tech-chip"><i class="devicon-java-plain colored"></i> Java</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> SQL</span>
+                        <span class="tech-chip"><i class="devicon-bash-plain colored"></i> Bash</span>
                     </div>
                 </div>
 
@@ -373,8 +385,10 @@
                         <h3 class="text-xl font-bold">Databases</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Postgres</span><span class="tech-chip">Oracle</span>
-                        <span class="tech-chip">MySQL</span><span class="tech-chip">MSSQL</span>
+                        <span class="tech-chip"><i class="devicon-postgresql-plain colored"></i> Postgres</span>
+                        <span class="tech-chip"><i class="devicon-oracle-original colored"></i> Oracle</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+                        <span class="tech-chip"><i class="devicon-microsoftsqlserver-plain colored"></i> MSSQL</span>
                     </div>
                 </div>
 
@@ -386,8 +400,10 @@
                         <h3 class="text-xl font-bold">DevOps</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">Docker</span><span class="tech-chip">Git</span>
-                        <span class="tech-chip">Linux</span><span class="tech-chip">FastAPI</span>
+                        <span class="tech-chip"><i class="devicon-docker-plain colored"></i> Docker</span>
+                        <span class="tech-chip"><i class="devicon-git-plain colored"></i> Git</span>
+                        <span class="tech-chip"><i class="devicon-linux-plain colored"></i> Linux</span>
+                        <span class="tech-chip"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
                     </div>
                 </div>
 
@@ -399,8 +415,10 @@
                         <h3 class="text-xl font-bold">Environment</h3>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="tech-chip">PyCharm</span><span class="tech-chip">DataGrip</span>
-                        <span class="tech-chip">DataSpell</span><span class="tech-chip">DBeaver</span>
+                        <span class="tech-chip"><i class="devicon-pycharm-plain colored"></i> PyCharm</span>
+                        <span class="tech-chip"><i class="devicon-datagrip-plain colored"></i> DataGrip</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain colored"></i> DataSpell</span>
+                        <span class="tech-chip"><i class="devicon-dbeaver-plain colored"></i> DBeaver</span>
                         <span
                             class="tech-chip bg-gradient-to-r from-blue-500/50 to-purple-500/50 border-blue-400/50 font-bold">Antigravity</span>
                     </div>
@@ -572,10 +590,10 @@
         function initAntiGravityLogos() {
             const container = document.getElementById('anti-gravity-container');
             const icons = [
-                'devicon-python-plain', 'devicon-java-plain', 'devicon-javascript-plain',
-                'devicon-docker-plain', 'devicon-kubernetes-plain', 'devicon-apachekafka-original',
-                'devicon-postgresql-plain', 'devicon-react-original', 'devicon-linux-plain',
-                'devicon-git-plain', 'devicon-bash-plain', 'devicon-amazonwebservices-plain-wordmark'
+                'devicon-python-plain colored', 'devicon-java-plain colored', 'devicon-javascript-plain colored',
+                'devicon-docker-plain colored', 'devicon-kubernetes-plain colored', 'devicon-apachekafka-original colored',
+                'devicon-postgresql-plain colored', 'devicon-react-original colored', 'devicon-linux-plain colored',
+                'devicon-git-plain colored', 'devicon-bash-plain colored', 'devicon-amazonwebservices-plain-wordmark colored'
             ];
 
             const logos = [];
@@ -728,6 +746,15 @@
                 });
             }
 
+            // Repo Tech Mapping
+            const repoTechMap = {
+                'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
+                'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
+                'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
+                // Defaults for unknown repos
+                'default': ['devicon-git-plain colored', 'devicon-vscode-plain colored']
+            };
+
             // GitHub
             const grid = document.getElementById('projects-grid');
             try {
@@ -740,6 +767,10 @@
                     const card = document.createElement('a');
                     card.href = repo.html_url; card.target = "_blank";
                     card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
+
+                    const techIcons = repoTechMap[repo.name] || repoTechMap['default'];
+                    const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
+
                     card.innerHTML = `
                         <div>
                              <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
@@ -747,6 +778,11 @@
                             </div>
                             <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
                             <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'No description.'}</p>
+                        </div>
+                        
+                        <!-- Dynamic Tech Icons -->
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center gap-4 opacity-80 group-hover:opacity-100 transition">
+                             ${iconsHtml}
                         </div>
                     `;
                     grid.appendChild(card);
