@@ -670,8 +670,8 @@
         function initScrollAnimations() {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Animate headers and sections
-            const cards = gsap.utils.toArray('.glass-card');
+            // Animate only section cards (exclude nav)
+            const cards = gsap.utils.toArray('section .glass-card, #projects-grid .glass-card');
             cards.forEach((card, i) => {
                 gsap.from(card, {
                     scrollTrigger: {
@@ -683,7 +683,7 @@
                     opacity: 0,
                     duration: 0.8,
                     ease: "power2.out",
-                    delay: i % 3 * 0.1 // Stagger grid items slightly
+                    delay: i % 3 * 0.1
                 });
             });
 
@@ -734,9 +734,10 @@
                 container.innerHTML = '';
                 books.forEach(book => {
                     const div = document.createElement('div');
+                    // Ensure consistent rounding (rounded-2xl matches glass-card radius)
                     div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300";
                     div.innerHTML = `
-                        <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 shadow-lg">
+                        <div class="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 shadow-lg border border-white/10">
                              <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}">
                         </div>
                         <h4 class="font-bold leading-tight text-white/90 text-sm">${book.title}</h4>
@@ -746,14 +747,31 @@
                 });
             }
 
-            // Repo Tech Mapping
+            // Repo Tech Mapping (Extend with logic)
             const repoTechMap = {
                 'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
                 'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
                 'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
-                // Defaults for unknown repos
-                'default': ['devicon-git-plain colored', 'devicon-vscode-plain colored']
+                'mrnamazbek': ['devicon-github-original colored', 'devicon-markdown-original colored']
             };
+
+            function getTechIcons(repo) {
+                // 1. Check direct map
+                if (repoTechMap[repo.name]) return repoTechMap[repo.name];
+
+                // 2. Infer from Language
+                const lang = (repo.language || '').toLowerCase();
+                if (lang === 'python') return ['devicon-python-plain colored', 'devicon-pandas-plain colored', 'devicon-numpy-plain colored'];
+                if (lang === 'java') return ['devicon-java-plain colored', 'devicon-spring-plain colored'];
+                if (lang === 'javascript') return ['devicon-javascript-plain colored', 'devicon-nodejs-plain colored'];
+                if (lang === 'typescript') return ['devicon-typescript-plain colored', 'devicon-react-original colored'];
+                if (lang === 'go') return ['devicon-go-original-wordmark colored', 'devicon-kubernetes-plain colored'];
+                if (lang === 'jupyter notebook') return ['devicon-jupyter-plain colored', 'devicon-python-plain colored'];
+                if (lang === 'html') return ['devicon-html5-plain colored', 'devicon-css3-plain colored'];
+
+                // 3. Default
+                return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+            }
 
             // GitHub
             const grid = document.getElementById('projects-grid');
@@ -766,9 +784,10 @@
                 repos.forEach(repo => {
                     const card = document.createElement('a');
                     card.href = repo.html_url; card.target = "_blank";
+                    // Consistent rounding (rounded-2xl defined in CSS for glass-card is 16px, matching books now)
                     card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
 
-                    const techIcons = repoTechMap[repo.name] || repoTechMap['default'];
+                    const techIcons = getTechIcons(repo);
                     const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
 
                     card.innerHTML = `
