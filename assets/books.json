@@ -1,0 +1,146 @@
+[
+    {
+        "title": "Designing Data-Intensive Applications",
+        "author": "Martin Kleppmann",
+        "short_blurb": "The definitive guide to the internal architecture of data systems.",
+        "why_it_matters": "Essential for understanding distributed systems trade-offs.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg",
+        "alt_text": "Cover of Designing Data-Intensive Applications",
+        "category": "Architecture"
+    },
+    {
+        "title": "Fundamentals of Data Engineering",
+        "author": "Joe Reis & Matt Housley",
+        "short_blurb": "A modern overview of the data engineering lifecycle.",
+        "why_it_matters": "It defines the modern role of a Data Engineer.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781098108304-L.jpg",
+        "alt_text": "Cover of Fundamentals of Data Engineering",
+        "category": "Core"
+    },
+    {
+        "title": "The Data Warehouse Toolkit",
+        "author": "Ralph Kimball",
+        "short_blurb": "The definitive guide to dimensional modeling.",
+        "why_it_matters": "Star schemas are still the bedrock of analytics.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781118530801-L.jpg",
+        "alt_text": "Cover of The Data Warehouse Toolkit",
+        "category": "Modeling"
+    },
+    {
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "short_blurb": "A handbook of agile software craftsmanship.",
+        "why_it_matters": "Readable code is maintainable pipeline code.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg",
+        "alt_text": "Cover of Clean Code",
+        "category": "Coding"
+    },
+    {
+        "title": "Spark: The Definitive Guide",
+        "author": "Bill Chambers & Matei Zaharia",
+        "short_blurb": "Big data processing with Spark.",
+        "why_it_matters": "Mastering the engine behind most data lakes.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781491912218-L.jpg",
+        "alt_text": "Cover of Spark: The Definitive Guide",
+        "category": "Tools"
+    },
+    {
+        "title": "Kafka: The Definitive Guide",
+        "author": "Gwen Shapira",
+        "short_blurb": "Real-time data and stream processing at scale.",
+        "why_it_matters": "The standard for event-driven architectures.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781491936160-L.jpg",
+        "alt_text": "Cover of Kafka: The Definitive Guide",
+        "category": "Streaming"
+    },
+    {
+        "title": "Streaming Systems",
+        "author": "Tyler Akidau",
+        "short_blurb": "The what, where, when, and how of large-scale data processing.",
+        "why_it_matters": "Deep theoretical understanding of time and watermarks.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781491983874-L.jpg",
+        "alt_text": "Cover of Streaming Systems",
+        "category": "Streaming"
+    },
+    {
+        "title": "Database Internals",
+        "author": "Alex Petrov",
+        "short_blurb": "Deep dive into storage engines and distributed systems.",
+        "why_it_matters": "Understand B-Trees and LSM Trees to optimize storage.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781492040347-L.jpg",
+        "alt_text": "Cover of Database Internals",
+        "category": "Internals"
+    },
+    {
+        "title": "Data Engineering with Python",
+        "author": "Paul Crickard",
+        "short_blurb": "Practitioner's guide to the stack.",
+        "why_it_matters": "Practical implementation details for Python pipelines.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781839214189-L.jpg",
+        "alt_text": "Cover of Data Engineering with Python",
+        "category": "Coding"
+    },
+    {
+        "title": "Data Mesh",
+        "author": "Zhamak Dehghani",
+        "short_blurb": "Delivering data-driven value at scale.",
+        "why_it_matters": "The paradigm shift for large organizational data.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781492092391-L.jpg",
+        "alt_text": "Cover of Data Mesh",
+        "category": "Architecture"
+    },
+    {
+        "title": "Building Secure and Reliable Systems",
+        "author": "Heather Adkins",
+        "short_blurb": "Best practices for designing scalable systems.",
+        "why_it_matters": "Security and reliability are not afterthoughts.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781492083122-L.jpg",
+        "alt_text": "Cover of Building Secure and Reliable Systems",
+        "category": "SRE"
+    },
+    {
+        "title": "The Pragmatic Programmer",
+        "author": "Andrew Hunt",
+        "short_blurb": "Your journey to mastery.",
+        "why_it_matters": "Timeless advice for a career in engineering.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9780201616224-L.jpg",
+        "alt_text": "Cover of The Pragmatic Programmer",
+        "category": "Career"
+    },
+    {
+        "title": "Refactoring",
+        "author": "Martin Fowler",
+        "short_blurb": "Improving the design of existing code.",
+        "why_it_matters": "How to keep legacy pipelines from rotting.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9780201485677-L.jpg",
+        "alt_text": "Cover of Refactoring",
+        "category": "Coding"
+    },
+    {
+        "title": "Data Pipelines Pocket Reference",
+        "author": "James Densmore",
+        "short_blurb": "Moving and processing data for analytics.",
+        "why_it_matters": "Quick reference for common patterns.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781492087830-L.jpg",
+        "alt_text": "Cover of Data Pipelines Pocket Reference",
+        "category": "Reference"
+    },
+    {
+        "title": "Learning Spark",
+        "author": "Jules S. Damji",
+        "short_blurb": "Lightning-fast big data analysis.",
+        "why_it_matters": "The 'Second Definitive' book for Spark 3.0.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9781492050049-L.jpg",
+        "alt_text": "Cover of Learning Spark",
+        "category": "Tools"
+    },
+    {
+        "title": "System Design Interview",
+        "author": "Alex Xu",
+        "short_blurb": "An insider's guide.",
+        "why_it_matters": "Crucial for passing Senior DE interviews.",
+        "cover_url": "https://covers.openlibrary.org/b/isbn/9798691592868-L.jpg",
+        "alt_text": "Cover of System Design Interview",
+        "category": "Career"
+    }
+]

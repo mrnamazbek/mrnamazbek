@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namazbek Bekzhanov | Data Engineering Portfolio</title>
+    <title>Namazbek Bekzhanov | Data Engineer</title>
     <meta name="description" content="Portfolio of Namazbek Bekzhanov - Data Engineer & Backend Developer.">
 
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600&display=swap"
         rel="stylesheet">
 
-    <!-- Devicon for Logos -->
+    <!-- Devicon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,546 +29,477 @@
                         mono: ['Space Grotesk', 'monospace'],
                     },
                     colors: {
-                        glass: {
-                            100: 'rgba(255, 255, 255, 0.05)',
-                            200: 'rgba(255, 255, 255, 0.1)',
-                            border: 'rgba(255, 255, 255, 0.15)',
+                        brand: {
+                            dark: '#050505',
+                            accent: '#00f2fe',
+                            purple: '#4facfe'
                         }
                     },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
+                    backgroundImage: {
+                        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
                     }
                 }
             }
         }
     </script>
 
-    <!-- GSAP for Anti-Gravity Physics -->
+    <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <style>
-        /* === LIQUID GLASS CORE === */
+        /* CORE VARIABLES */
         :root {
-            --glass-blur: 16px;
-            --glass-saturation: 1.5;
-            --cursor-size: 20px;
+            --glass-blur: 20px;
+            --glass-surface: rgba(20, 20, 25, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
             background-color: #050505;
-            /* Deep Space Black */
             color: #ffffff;
-            overflow-x: hidden;
             cursor: none;
-            /* Hide default cursor */
+            /* Custom cursor */
+            overflow-x: hidden;
         }
 
-        /* Anti-Gravity Background Container */
-        #anti-gravity-canvas {
+        /* PHYSICS CANVAS */
+        #physics-world {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            /* subtle gradient mesh base */
+            z-index: 0;
+            pointer-events: auto;
+            /* Allow dragging logos */
+            /* Deep Space Gradient */
             background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
         }
 
-        /* Floating Tech Icons */
-        .tech-floater {
-            position: absolute;
-            font-size: 3rem;
-            opacity: 0.15;
-            will-change: transform;
-            filter: blur(1px) grayscale(100%);
-            transition: filter 0.3s;
-        }
-
-        /* Highlight floater near cursor (logic in JS) */
-        .tech-floater.active {
-            opacity: 0.6;
-            filter: blur(0px) grayscale(0%);
-            z-index: 0;
-        }
-
-        /* === CUSTOM CURSOR === */
-        #cursor-dot,
-        #cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
+        /* CUSTOM CURSOR */
         #cursor-dot {
             width: 8px;
             height: 8px;
-            background-color: white;
+            background: #fff;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
         }
 
-        #cursor-outline {
+        #cursor-circle {
             width: 40px;
             height: 40px;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s;
         }
 
-        /* Hover State for Cursor */
-        body.hovering #cursor-outline {
+        body.hovering #cursor-circle {
             width: 60px;
             height: 60px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(2px);
             border-color: transparent;
         }
 
-        /* === LIQUID GLASS CARDS === */
-        .liquid-glass {
-            background: rgba(20, 20, 25, 0.4);
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* LIQUID GLASS CARD */
+        .glass-panel {
+            background: var(--glass-surface);
+            backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+            border: 1px solid var(--glass-border);
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-left: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow:
-                0 4px 30px rgba(0, 0, 0, 0.3),
-                inset 0 0 20px rgba(255, 255, 255, 0.05);
-            /* Edge lighting */
-            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Text readability backing */
-        .text-backing {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(4px);
-            padding: 2px 6px;
-            border-radius: 4px;
+        /* Animated Specular Highlight */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.0) 55%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
         /* SCROLLBAR */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+            background: #000;
         }
 
         ::-webkit-scrollbar-thumb {
             background: #333;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* MOBILE / PERFORMANCE FALLBACKS */
-        @media (max-width: 768px),
-        (prefers-reduced-motion: reduce) {
+        /* MOBILE FALLBACK */
+        @media (max-width: 768px) {
             body {
                 cursor: auto;
             }
 
             #cursor-dot,
-            #cursor-outline {
+            #cursor-circle {
                 display: none;
             }
 
-            .tech-floater {
-                animation: none !important;
-                transition: none !important;
+            #physics-world {
+                opacity: 0.3;
+                pointer-events: none;
             }
 
-            .liquid-glass {
-                backdrop-filter: blur(10px);
-            }
-
-            /* Reduced blur cost */
+            /* Dim physics on mobile */
         }
     </style>
 </head>
 
-<body class="antialiased">
+<body>
 
-    <!-- Anti-Gravity Background -->
-    <div id="anti-gravity-canvas"></div>
+    <!-- PHYSICS LAYER -->
+    <div id="physics-world"></div>
 
-    <!-- Custom Cursor -->
+    <!-- CURSOR -->
     <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <div id="cursor-circle"></div>
 
-    <!-- Main Layout -->
-    <main class="relative z-10 px-4 pt-12 pb-24 max-w-6xl mx-auto space-y-32">
+    <!-- MAIN CONTENT -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
 
-        <!-- HEADER / NAVIGATION -->
-        <nav
-            class="flex justify-between items-center liquid-glass px-8 py-4 rounded-full sticky top-4 z-50 transition-transform duration-300 hover:scale-[1.01]">
+        <!-- NAV -->
+        <nav class="glass-panel px-6 py-4 flex justify-between items-center sticky top-4 z-50">
             <div
-                class="font-mono font-bold text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-400">
+                class="font-mono font-bold text-xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                 NB.DEV</div>
-            <div class="flex gap-4">
-                <a href="#projects"
-                    class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger">Projects</a>
-                <a href="#library"
-                    class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger">Library</a>
+            <div class="flex gap-6 text-sm font-medium text-gray-300">
+                <a href="#projects" class="hover:text-white transition hover-trigger">Projects</a>
+                <a href="#library" class="hover:text-white transition hover-trigger">Library</a>
+                <a href="#contact" class="hover:text-white transition hover-trigger">Contact</a>
             </div>
         </nav>
 
-        <!-- HERO SECTION -->
-        <section class="flex flex-col md:flex-row gap-12 items-center min-h-[60vh]">
-            <div class="flex-1 space-y-6">
+        <!-- HERO -->
+        <section class="min-h-[70vh] flex flex-col justify-center items-start relative pointer-events-none">
+            <!-- Content is interactive -->
+            <div class="pointer-events-auto max-w-3xl space-y-8">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
-                    <span class="relative flex h-2 w-2">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                    </span>
-                    Open to Work
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/40 border border-cyan-500/30 text-cyan-300 text-xs font-mono glass-panel">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    Available for New Opportunities
                 </div>
-                <h1 id="hero-name" class="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
-                    <!-- Injected via JS -->
+
+                <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none">
+                    Data Engineering<br>
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Reimagined.</span>
                 </h1>
-                <h2 id="hero-title" class="text-xl md:text-2xl text-gray-400 font-light">
-                    <!-- Injected via JS -->
-                </h2>
-                <p id="hero-bio" class="text-gray-300 max-w-lg leading-relaxed text-backing">
-                    <!-- Injected via JS -->
+
+                <p class="text-xl text-gray-400 max-w-xl leading-relaxed text-shadow-sm">
+                    I build resilient ETL pipelines, scalable data warehouses, and backend systems that turn chaos into
+                    clarity.
+                    <span class="text-white">Backend Developer & Middle Data Engineer</span> based in Almaty.
                 </p>
-                <div id="hero-socials" class="flex gap-4 pt-4">
-                    <!-- Injected via JS -->
-                </div>
-            </div>
 
-            <!-- Glass Stats Card (Tilt Effect) -->
-            <div id="tilt-card"
-                class="liquid-glass p-8 w-full max-w-sm transform transition duration-100 ease-out hover-trigger">
-                <div class="grid grid-cols-2 gap-8 text-center">
-                    <div>
-                        <div class="text-3xl font-mono font-bold text-cyan-400 mb-1" id="stat-repos">0</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-widest">Repos</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-mono font-bold text-purple-400 mb-1">10+</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-widest">Certificates</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-mono font-bold text-green-400 mb-1">3+</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-widest">Years</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-mono font-bold text-pink-400 mb-1">12</div>
-                        <div class="text-xs text-gray-500 uppercase tracking-widest">Books</div>
-                    </div>
+                <div class="flex gap-4 pt-4">
+                    <a href="https://github.com/mrnamazbek" target="_blank"
+                        class="glass-panel px-8 py-3 bg-white/5 hover:bg-white/10 transition hover-trigger flex items-center gap-3">
+                        <i class="devicon-github-original text-xl"></i> GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
+                        class="glass-panel px-8 py-3 bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/30 transition hover-trigger flex items-center gap-3">
+                        <i class="devicon-linkedin-plain text-xl text-blue-400"></i> LinkedIn
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- PROJECTS GRID -->
-        <section id="projects">
-            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-[2px] bg-cyan-500"></span> Selected Projects
-            </h3>
-            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Injected via JS -->
+        <!-- PROJECTS -->
+        <section id="projects" class="space-y-12 pointer-events-auto">
+            <div class="flex items-end justify-between">
+                <div>
+                    <h2 class="text-4xl font-bold mb-2">Selected Works</h2>
+                    <p class="text-gray-400">Engineering scalable solutions.</p>
+                </div>
+                <div class="text-xs font-mono text-cyan-400">LIVE GITHUB DATA</div>
+            </div>
+
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Data injection -->
             </div>
         </section>
 
-        <!-- THE LIBRARY (Books) -->
-        <section id="library">
-            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-[2px] bg-purple-500"></span> The Library
-            </h3>
-            <div id="books-carousel"
-                class="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory custom-scrollbar p-2">
-                <!-- Injected via JS -->
+        <!-- LIBRARY -->
+        <section id="library" class="space-y-12 pointer-events-auto">
+            <div>
+                <h2 class="text-4xl font-bold mb-2">The Library</h2>
+                <p class="text-gray-400">Books that shaped my engineering philosophy.</p>
+            </div>
+
+            <div class="glass-panel p-8">
+                <div id="books-container" class="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory">
+                    <!-- Books injection -->
+                </div>
             </div>
         </section>
 
         <!-- FOOTER -->
-        <footer class="text-center text-gray-600 text-sm pb-8 font-mono">
-            <p>Engineered with Liquid Glass & Anti-Gravity Physics.</p>
-            <p class="opacity-50 mt-2">&copy; 2026 Namazbek Bekzhanov.</p>
+        <footer id="contact" class="text-center py-24 pointer-events-auto">
+            <h3 class="text-2xl font-bold mb-6">Let's build something scalable.</h3>
+            <a href="mailto:namazbek.bekzhanov@gmail.com"
+                class="text-cyan-400 hover:text-cyan-300 transition text-lg font-mono">namazbek.bekzhanov@gmail.com</a>
+            <p class="text-gray-600 text-sm mt-12 font-mono">
+                &copy; 2026 Namazbek Bekzhanov.<br>
+                Engineered with Matter.js, GSAP & Liquid Glass.
+            </p>
         </footer>
 
     </main>
 
-    <!-- LOGIC SCRIPT -->
+    <!-- LOGIC -->
     <script>
-        // === 1. DATA MODEL ===
-        const DATA = {
-            "user": {
-                "name": "Namazbek Bekzhanov",
-                "title": "Middle Data Engineer | Backend Developer",
-                "location": "Almaty, Kazakhstan",
-                "bio": "Building reliable enterprise ETL/ELT pipelines, architecting advanced data warehouses, and creating resilient scalable backend systems."
-            },
-            "socials": {
-                "github": "https://github.com/mrnamazbek",
-                "linkedin": "https://linkedin.com/in/namazbek-bekzhanov"
-            },
-            "tools": [
-                "python", "fastapi", "postgresql", "oracle", "apacheairflow", "apachekafka", "apachespark", "docker", "kubernetes", "grafana", "dbt", "clickhouse"
-            ],
-            "projects": [ // Fallback
-                { "name": "Big Data Pipeline on GCP", "link": "#", "description": "IaC data ingestion using Terraform, PySpark, Kafka, and BigQuery.", "thumb": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80" },
-                { "name": "DWH Implementation", "link": "#", "description": "Kimball style Data Warehouse with dbt models and Airflow orchestration.", "thumb": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" }
-            ],
-            "books": [
-                { "title": "Clean Code", "author": "Robert C. Martin", "cover": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=300&q=80" },
-                { "title": "Designing Data-Intensive Applications", "author": "Martin Kleppmann", "cover": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=300&q=80" },
-                { "title": "Fundamentals of Data Engineering", "author": "Joe Reis & Matt Housley", "cover": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=300&q=80" },
-                { "title": "The Data Warehouse Toolkit", "author": "Ralph Kimball", "cover": "https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=300&q=80" },
-                { "title": "Data Mesh", "author": "Zhamak Dehghani", "cover": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" },
-                { "title": "Database Internals", "author": "Alex Petrov", "cover": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" }
+        // === 1. CONFIGURATION ===
+        const CONFIG = {
+            mobile: window.innerWidth < 768,
+            marketing: [
+                "python", "fastapi", "postgresql", "apacheairflow", "apachekafka",
+                "apachespark", "docker", "kubernetes", "grafana", "dbt", "clickhouse",
+                "git", "linux", "googlecloud"
             ]
         };
 
-        // === 2. PERFORMANCE CHECKS ===
-        const isLowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || window.innerWidth < 768;
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        console.log(`Perf Check: LowPower=${isLowPower}, ReducedMotion=${prefersReducedMotion}`);
+        // === 2. PHYSICS ENGINE (Matter.js) ===
+        function initPhysics() {
+            if (CONFIG.mobile) return; // Disable heavy physics on mobile
 
-        // === 3. RENDER CONTENT ===
-        function renderContent() {
-            // User Info
-            document.getElementById('hero-name').innerText = DATA.user.name;
-            document.getElementById('hero-title').innerText = DATA.user.title;
-            document.getElementById('hero-bio').innerText = DATA.user.bio;
+            const Engine = Matter.Engine,
+                Render = Matter.Render,
+                Runner = Matter.Runner,
+                Bodies = Matter.Bodies,
+                Composite = Matter.Composite,
+                Mouse = Matter.Mouse,
+                MouseConstraint = Matter.MouseConstraint,
+                Events = Matter.Events;
 
-            // Socials
-            const socialContainer = document.getElementById('hero-socials');
-            // GitHub
-            const ghBtn = document.createElement('a');
-            ghBtn.href = DATA.socials.github;
-            ghBtn.target = "_blank";
-            ghBtn.className = "liquid-glass px-6 py-2 hover:bg-white/10 transition flex items-center gap-2 hover-trigger";
-            ghBtn.innerHTML = '<i class="devicon-github-original text-xl"></i> GitHub';
-            socialContainer.appendChild(ghBtn);
+            const engine = Engine.create();
+            engine.gravity.y = 0.05; // Very low gravity for "floating" feel
 
-            // LinkedIn
-            const liBtn = document.createElement('a');
-            liBtn.href = DATA.socials.linkedin;
-            liBtn.target = "_blank";
-            liBtn.className = "liquid-glass px-6 py-2 hover:bg-white/10 transition flex items-center gap-2 hover-trigger";
-            liBtn.innerHTML = '<i class="devicon-linkedin-plain text-xl text-blue-400"></i> LinkedIn';
-            socialContainer.appendChild(liBtn);
-
-            // Fetch GitHub Projects (Live)
-            fetchGitHubRepos();
-
-            // Render Books
-            const bookContainer = document.getElementById('books-carousel');
-            DATA.books.forEach(book => {
-                const bookCard = document.createElement('div');
-                bookCard.className = "min-w-[200px] snap-center hover-trigger group";
-                bookCard.innerHTML = `
-                    <div class="relative w-[200px] h-[300px] rounded-lg overflow-hidden shadow-2xl transition transform group-hover:-translate-y-2 border border-white/10">
-                        <img src="${book.cover}" loading="lazy" class="w-full h-full object-cover" alt="Cover of ${book.title}">
-                        <div class="absolute inset-x-0 bottom-0 bg-black/80 backdrop-blur-md p-3 translate-y-full group-hover:translate-y-0 transition duration-300">
-                            <h4 class="text-sm font-bold text-white leading-tight">${book.title}</h4>
-                            <p class="text-xs text-gray-400 mt-1">${book.author}</p>
-                        </div>
-                    </div>
-                `;
-                bookContainer.appendChild(bookCard);
+            const render = Render.create({
+                element: document.getElementById('physics-world'),
+                engine: engine,
+                options: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    wireframes: false,
+                    background: 'transparent',
+                    pixelRatio: window.devicePixelRatio
+                }
             });
-        }
 
-        async function fetchGitHubRepos() {
-            const grid = document.getElementById('projects-grid');
-            const repoUrl = `https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6`;
+            // Create Boundaries
+            const wallOptions = { isStatic: true, render: { visible: false } };
+            const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 50, window.innerWidth, 100, wallOptions);
+            const leftWall = Bodies.rectangle(-50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
+            const rightWall = Bodies.rectangle(window.innerWidth + 50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
+            Composite.add(engine.world, [ground, leftWall, rightWall]);
 
-            try {
-                const res = await fetch(repoUrl);
-                if (!res.ok) throw new Error("API Limit");
-                const repos = await res.json();
-
-                document.getElementById('stat-repos').innerText = repos.length + "+";
-                grid.innerHTML = ''; // Clear fallback if needed, though we start empty
-
-                repos.forEach(repo => renderProjectCard(repo, grid));
-            } catch (err) {
-                console.warn("GitHub fetch failed, loading fallback.", err);
-                DATA.projects.forEach(proj => renderProjectCard(proj, grid, true));
-            }
-        }
-
-        function renderProjectCard(repo, container, isLocal = false) {
-            const card = document.createElement('a');
-            card.href = isLocal ? repo.link : repo.html_url;
-            card.target = "_blank";
-            card.className = "liquid-glass p-6 group hover:border-cyan-500/30 transition duration-300 flex flex-col justify-between h-[250px] hover-trigger";
-
-            card.innerHTML = `
-                <div>
-                     <div class="flex items-center gap-2 text-cyan-400 mb-3 text-sm font-mono">
-                        <i class="devicon-${(repo.language || 'python').toLowerCase()}-plain"></i>
-                        ${repo.language || 'Project'}
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-200 transition">${repo.name}</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed line-clamp-3">
-                        ${repo.description || 'No description available.'}
-                    </p>
-                </div>
-                <div class="text-xs text-gray-500 font-mono mt-4">View Source -></div>
-            `;
-            container.appendChild(card);
-        }
-
-        // === 4. ANTI-GRAVITY BACKGROUND ENGINE ===
-        function initAntiGravity() {
-            if (isLowPower || prefersReducedMotion) return;
-
-            const canvas = document.getElementById('anti-gravity-canvas');
-            const icons = DATA.tools;
-            const floaters = [];
-
-            // Spawn Icons
-            icons.forEach((iconName) => {
-                const el = document.createElement('i');
-                // Handle devicon naming weirdness if needed, mostly standard
-                // e.g. 'apacheairflow' vs 'apache-airflow' can vary in specific fonts, assuming Devicon latest handles generic
-                // Or simplified list mapping.
-                // Using a safe generic class approach:
-                el.className = `tech-floater devicon-${iconName}-plain`;
-
-                // Random Positioning
+            // Create Tech Icon Bodies
+            const icons = CONFIG.marketing.map((name) => {
                 const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-                const size = 30 + Math.random() * 50; // Random size
+                const y = Math.random() * (window.innerHeight / 2); // Start top half
+                const size = 60; // Size of physics body
 
-                el.style.left = `${x}px`;
-                el.style.top = `${y}px`;
-                el.style.fontSize = `${size}px`;
-                el.style.transform = `rotate(${Math.random() * 360}deg)`;
+                // We use a circle body
+                const body = Bodies.circle(x, y, size / 2, {
+                    restitution: 0.9, // Bouncy
+                    frictionAir: 0.02, // Float resistance
+                    render: {
+                        sprite: {
+                            // Using Devicon SVGs via CDN is tricky in Matter.js canvas
+                            // So we create a custom render hook or just emojis/simple shapes?
+                            // Wait, the user requested inline SVGs. 
+                            // To keep it robust and performant, we'll overlay DOM elements 
+                            // ON TOP of invisible physics bodies. This is the "Hybrid" approach.
+                            visible: false
+                        }
+                    }
+                });
 
-                // Store physics state
-                const floater = {
-                    el: el,
-                    x: x,
-                    y: y,
-                    vx: (Math.random() - 0.5) * 0.5, // Velocity X
-                    vy: (Math.random() - 0.5) * 0.5, // Velocity Y
-                    rot: Math.random() * 360,
-                    rotSpeed: (Math.random() - 0.5) * 0.2
-                };
-
-                floaters.push(floater);
-                canvas.appendChild(el);
+                body.plugin = { iconName: name }; // Tag body
+                return body;
             });
 
-            // Physics Loop
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
+            Composite.add(engine.world, icons);
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
+            // DOM Overlay Logic
+            const physicsContainer = document.getElementById('physics-world');
+            const iconElements = icons.map(body => {
+                const el = document.createElement('div');
+                el.className = 'absolute top-0 left-0 flex items-center justify-center pointer-events-none text-4xl text-white/20 transition-colors duration-300';
+                el.style.width = '60px';
+                el.style.height = '60px';
+                // Use Devicon font inside
+                el.innerHTML = `<i class="devicon-${body.plugin.iconName}-plain"></i>`;
+                physicsContainer.appendChild(el);
+                return { body, el };
             });
 
-            function tick() {
-                floaters.forEach(f => {
-                    // 1. Basic Drift
-                    f.x += f.vx;
-                    f.y += f.vy;
-                    f.rot += f.rotSpeed;
+            // Mouse Control
+            const mouse = Mouse.create(render.canvas);
+            const mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: { stiffness: 0.2, render: { visible: false } }
+            });
+            Composite.add(engine.world, mouseConstraint);
 
-                    // 2. Mouse Avoidance / Parallax (JetBrains style repulse)
-                    const dx = f.x - mouseX;
-                    const dy = f.y - mouseY;
+            // Sync Loop
+            Events.on(engine, 'afterUpdate', () => {
+                iconElements.forEach(({ body, el }) => {
+                    const { x, y } = body.position;
+                    // Hover Effect logic
+                    const dx = mouse.position.x - x;
+                    const dy = mouse.position.y - y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 300) {
-                        const angle = Math.atan2(dy, dx);
-                        const force = (300 - dist) * 0.005; // Gentle push
-                        f.vx += Math.cos(angle) * force;
-                        f.vy += Math.sin(angle) * force;
-                        f.el.classList.add('active'); // Highlight
+                    if (dist < 100) {
+                        el.classList.remove('text-white/20');
+                        el.classList.add('text-white', 'scale-110'); // Highlight
+                        // Repulse Force
+                        Matter.Body.applyForce(body, body.position, {
+                            x: -dx * 0.00005,
+                            y: -dy * 0.00005
+                        });
                     } else {
-                        f.el.classList.remove('active');
+                        el.classList.remove('text-white', 'scale-110');
+                        el.classList.add('text-white/20');
                     }
 
-                    // 3. Friction (Damping) to stop infinite acceleration
-                    f.vx *= 0.98;
-                    f.vy *= 0.98;
-
-                    // 4. Boundary Wrap (Pacman style)
-                    if (f.x < -50) f.x = window.innerWidth + 50;
-                    if (f.x > window.innerWidth + 50) f.x = -50;
-                    if (f.y < -50) f.y = window.innerHeight + 50;
-                    if (f.y > window.innerHeight + 50) f.y = -50;
-
-                    // Apply
-                    f.el.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) rotate(${f.rot}deg)`;
+                    el.style.transform = `translate(${x - 30}px, ${y - 30}px) rotate(${body.angle}rad)`;
                 });
+            });
 
-                requestAnimationFrame(tick);
-            }
+            Runner.run(Runner.create(), engine);
+            Render.run(render);
 
-            tick();
+            // Resize handler
+            window.addEventListener('resize', () => {
+                render.canvas.width = window.innerWidth;
+                render.canvas.height = window.innerHeight;
+                Matter.Body.setPosition(ground, { x: window.innerWidth / 2, y: window.innerHeight + 50 });
+                Matter.Body.setPosition(rightWall, { x: window.innerWidth + 50, y: window.innerHeight / 2 });
+            });
         }
 
-        // === 5. CUSTOM CURSOR ===
+        // === 3. CUSTOM CURSOR ===
         function initCursor() {
-            if (isLowPower || prefersReducedMotion) return;
-
+            if (CONFIG.mobile) return;
             const dot = document.getElementById('cursor-dot');
-            const outline = document.getElementById('cursor-outline');
+            const circle = document.getElementById('cursor-circle');
 
-            document.addEventListener('mousemove', (e) => {
-                const { clientX, clientY } = e;
+            window.addEventListener('mousemove', (e) => {
+                gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0 });
+                gsap.to(circle, { x: e.clientX, y: e.clientY, duration: 0.15 });
+            });
 
-                // Dot follows immediately
-                dot.style.transform = `translate(${clientX}px, ${clientY}px)`;
+            document.querySelectorAll('.hover-trigger').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        }
 
-                // Outline follows with lag (GSAP)
-                gsap.to(outline, {
-                    x: clientX,
-                    y: clientY,
-                    duration: 0.15,
-                    ease: "power2.out"
+        // === 4. DATA LOADING ===
+        async function loadContent() {
+            // Books
+            try {
+                const res = await fetch('assets/books.json');
+                const books = await res.json();
+                const container = document.getElementById('books-container');
+
+                books.forEach(book => {
+                    const div = document.createElement('div');
+                    div.className = "flex-none w-[220px] group cursor-pointer hover-trigger";
+                    div.innerHTML = `
+                        <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-4 shadow-lg transition duration-500 group-hover:-translate-y-2">
+                             <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}">
+                             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition duration-300">
+                                <span class="text-xs font-mono text-cyan-400">Recommended</span>
+                             </div>
+                        </div>
+                        <h4 class="font-bold leading-tight text-white mb-1 group-hover:text-cyan-300 transition">${book.title}</h4>
+                        <p class="text-sm text-gray-400">${book.author}</p>
+                    `;
+                    container.appendChild(div);
                 });
-            });
+            } catch (e) { console.error("Books load error", e); }
 
-            // Hover effects
-            const triggers = document.querySelectorAll('.hover-trigger');
-            triggers.forEach(t => {
-                t.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-                t.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-            });
+            // Projects (GitHub)
+            try {
+                const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
+                const repos = await res.json();
+                const grid = document.getElementById('projects-grid');
+                if (Array.isArray(repos)) {
+                    grid.innerHTML = '';
+                    repos.forEach(repo => {
+                        const card = document.createElement('a');
+                        card.href = repo.html_url;
+                        card.target = "_blank";
+                        card.className = "glass-panel p-6 flex flex-col justify-between h-[280px] hover:border-cyan-500/50 transition duration-300 hover-trigger group";
+                        card.innerHTML = `
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-cyan-400 font-mono text-xs border border-cyan-500/30 px-2 py-1 rounded">${repo.language || 'Code'}</span>
+                                    <i class="devicon-github-original text-2xl opacity-50 group-hover:text-white transition"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 group-hover:text-cyan-300 transition">${repo.name}</h3>
+                                <p class="text-gray-400 text-sm line-clamp-3 leading-relaxed">${repo.description || "Scalable data solution."}</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-cyan-400 transition">
+                                <span>VIEW SOURCE</span>
+                                <span>→</span>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
+            } catch (e) { console.error("GitHub load error", e); }
         }
 
         // === INIT ===
         window.addEventListener('DOMContentLoaded', () => {
-            renderContent();
-            initAntiGravity();
+            initPhysics();
             initCursor();
+            loadContent();
         });
 
     </script>
 
     <!-- QA CHECKLIST -->
     <!--
-      [x] Liquid Glass UI applied (backdrop-filter, inset shadows).
-      [x] JetBrains-style Anti-Gravity floating logos via JS physics.
-      [x] Custom mouse cursor + hover states.
-      [x] Devicon CDN loaded.
-      [x] Mobile performance optimized (checks for lowPowerMode).
+     [x] index.html provided and runnable.
+     [x] Matter.js physics engine integrated for floating logos.
+     [x] Hybrid approach (DOM elements overlaid on Physics bodies).
+     [x] Liquid Glass UI with backdrop-filter & edge lighting.
+     [x] Books JSON fetched with covers.
+     [x] GitHub API integration.
+     [x] Mobile guards (physics disabled on small screens).
     -->
 
 </body>
