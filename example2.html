@@ -1,1426 +1,540 @@
-<!doctype html>
-<html lang="ru">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Будешь моим Валентином? 💙💚 | Ultimate Glass Edition</title>
-    <!--
-  CUSTOMIZATION:
-  1. GIF URLs     → YES_GIF_URL / NO_GIF_URL in <script>
-  2. Palette      → CSS variables in :root / [data-theme="neon"]
-  3. Content      → REASONS, NO_TEXTS, ROMANTIC_MSGS arrays
-  4. Particles    → PARTICLE_COUNT, CONFETTI_COUNT
-  5. Easter Egg   → Type "LOVE" on keyboard for secret card
-  6. Mini-game    → Catch 5 floating hearts for bonus message
-  7. Theme toggle → Button in top-right corner
-  8. Audio        → Plays only on YES click (Web Audio API, no files)
--->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namazbek Bekzhanov | Middle Data Engineer</title>
+    <meta name="description" content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Sora', 'sans-serif'] },
+                    colors: { glass: { bg: 'rgba(20, 20, 25, 0.4)', border: 'rgba(255, 255, 255, 0.15)' } }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <style>
-        /* ============================== CSS VARIABLES ============================== */
-        :root {
-            --bg1: #031026;
-            --bg2: #04323a;
-            --bg3: #021a1e;
-            --accent: #2bb7ff;
-            --accent2: #00e6a0;
-            --accent3: #00d4ff;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-b: rgba(255, 255, 255, 0.08);
-            --glass-blur: 18px;
-            --text: #e8f4ff;
-            --text-dim: rgba(232, 244, 255, 0.6);
-            --radius: 24px;
-            --ease: cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        /* Neon Love Night theme */
-        [data-theme="neon"] {
-            --bg1: #0a0015;
-            --bg2: #1a0028;
-            --bg3: #12001f;
-            --accent: #ff2d7b;
-            --accent2: #ff6ec7;
-            --accent3: #c792ea;
-            --glass: rgba(255, 100, 200, 0.06);
-            --glass-b: rgba(255, 100, 200, 0.12);
-        }
-
-        /* ============================== RESET ============================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0
-        }
-
-        html,
-        body {
-            height: 100%
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         body {
-            font-family: Inter, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(175deg, var(--bg1), var(--bg2) 55%, var(--bg3));
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
+            background-color: #0a0a0a;
+            color: #ffffff;
             overflow-x: hidden;
-            overflow-y: auto;
-            transition: background .6s;
+            cursor: none; /* Hide default cursor */
         }
 
-        /* ============================== BACKGROUND LAYERS ============================== */
-        .bg-layer {
-            position: fixed;
-            inset: 0;
-            pointer-events: none
+        /* Custom Magnetic Cursor */
+        #custom-cursor {
+            position: fixed; top: 0; left: 0; width: 24px; height: 24px;
+            border: 2px solid #00d4ff; border-radius: 50%;
+            pointer-events: none; z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            mix-blend-mode: difference;
+        }
+        #custom-cursor.hovering {
+            width: 48px; height: 48px;
+            background-color: rgba(0, 212, 255, 0.2);
         }
 
-        .bg-grad {
-            z-index: 0;
-            background: radial-gradient(ellipse 1400px 700px at 8% 15%, rgba(11, 60, 95, 0.4), transparent);
-            mix-blend-mode: overlay;
-            animation: shiftBg 22s linear infinite
+        /* Background Layers */
+        #webgl-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -3; pointer-events: none; }
+        #anti-gravity-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -2; pointer-events: none; overflow: hidden; }
+        #fx-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 9999; pointer-events: none; }
+
+        /* Floating Logos (Colorful & Subtle) */
+        .floating-logo {
+            position: absolute;
+            opacity: 0.25; /* Let original colors shine through, but softly */
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
+            will-change: transform;
         }
 
-        @keyframes shiftBg {
-            0% {
-                transform: translateX(-8%)
-            }
-
-            50% {
-                transform: translateX(8%)
-            }
-
-            100% {
-                transform: translateX(-8%)
-            }
-        }
-
-        canvas#bgCanvas {
-            z-index: 1
-        }
-
-        canvas#fxCanvas {
-            z-index: 2
-        }
-
-        /* ============================== THEME TOGGLE ============================== */
-        .theme-toggle {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            z-index: 999;
-            background: var(--glass);
-            border: 1px solid var(--glass-b);
-            backdrop-filter: blur(12px);
-            border-radius: 50px;
-            padding: 8px 16px;
-            color: var(--text);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all .3s;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05)
-        }
-
-        /* ============================== LOVE COUNTER ============================== */
-        .love-counter {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 999;
-            background: var(--glass);
-            border: 1px solid var(--glass-b);
-            backdrop-filter: blur(12px);
-            border-radius: 50px;
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all .3s;
-        }
-
-        .love-counter .heart-icon {
-            display: inline-block;
-            animation: pulse 1s infinite;
-            color: #ff4d6d;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1)
-            }
-
-            50% {
-                transform: scale(1.25)
-            }
-        }
-
-        /* ============================== LAYOUT ============================== */
-        .page-wrap {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 30px 16px;
-        }
-
-        /* ============================== GLASS CARD ============================== */
+        /* Glassmorphism */
         .glass-card {
-            position: relative;
-            width: min(980px, 96vw);
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 24px;
-            padding: 40px;
-            border-radius: var(--radius);
-            background: var(--glass);
-            border: 1px solid var(--glass-b);
-            backdrop-filter: blur(var(--glass-blur));
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .55), 0 0 60px rgba(0, 230, 160, .04);
-            animation: cardEntry .8s var(--ease) both .3s;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transition: transform .15s ease-out, box-shadow .3s;
-        }
-
-        @keyframes cardEntry {
-            from {
-                opacity: 0;
-                transform: translateY(20px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        /* Shimmer border */
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: var(--radius);
-            background: conic-gradient(from 0deg, transparent 60%, var(--accent), transparent 80%);
-            z-index: -1;
-            animation: shimmer 6s linear infinite;
-            opacity: .18;
-        }
-
-        @keyframes shimmer {
-            to {
-                transform: rotate(360deg)
-            }
-        }
-
-        /* Hover glow on card */
-        .glass-card:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .55), 0 0 80px rgba(0, 230, 160, .08);
-        }
-
-        @media(max-width:880px) {
-            .glass-card {
-                grid-template-columns: 1fr;
-                padding: 24px
-            }
-        }
-
-        /* ============================== TYPOGRAPHY ============================== */
-        .left h1 {
-            font-size: clamp(22px, 3.8vw, 36px);
-            letter-spacing: -.5px;
-            line-height: 1.25;
-            margin-bottom: 12px
-        }
-
-        .typewriter-cursor {
-            animation: blink .7s step-end infinite;
-            color: var(--accent)
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: 0
-            }
-        }
-
-        .lead {
-            color: var(--text-dim);
-            font-size: clamp(14px, 1.6vw, 16px);
-            line-height: 1.55;
-            margin-bottom: 14px
-        }
-
-        /* Rotating romantic message */
-        .romantic-msg {
-            font-size: 13px;
-            color: var(--accent2);
-            margin-bottom: 20px;
-            min-height: 20px;
-            transition: opacity .4s;
-            font-style: italic;
-        }
-
-        /* ============================== BUTTONS ============================== */
-        .actions {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            position: relative;
-            min-height: 60px
-        }
-
-        .btn {
-            font-family: inherit;
-            font-weight: 700;
-            border-radius: 14px;
-            border: none;
-            cursor: pointer;
-            transition: all .35s var(--ease);
-            outline: none;
-        }
-
-        .btn:focus-visible {
-            outline: 3px solid rgba(43, 183, 255, .5);
-            outline-offset: 2px
-        }
-
-        .btn-yes {
-            padding: 15px 34px;
-            font-size: 15px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #002129;
-            box-shadow: 0 8px 24px rgba(0, 230, 160, .18);
-            /* magnetic button needs transform from JS */
-        }
-
-        .btn-yes:hover {
-            box-shadow: 0 12px 32px rgba(0, 230, 160, .3)
-        }
-
-        .btn-yes:active {
-            transform: scale(.97) !important
-        }
-
-        .btn-no {
-            padding: 13px 24px;
-            font-size: 14px;
-            background: transparent;
-            border: 1px solid var(--glass-b);
-            color: var(--text);
-            transition: all .35s cubic-bezier(.175, .885, .32, 1.275);
-        }
-
-        /* ============================== HINT CARDS ============================== */
-        .hint-cards {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 18px
-        }
-
-        .hint-card {
-            flex: 1 1 130px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, .025);
-            border: 1px solid rgba(255, 255, 255, .04);
-            font-size: 13px;
-            text-align: center;
-            transition: all .4s var(--ease);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hint-card:hover {
-            background: rgba(255, 255, 255, .06);
-            border-color: rgba(0, 230, 160, .15);
-            transform: translateY(-3px);
-        }
-
-        /* Shimmer on hover for hint cards */
-        .hint-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .06), transparent);
-            transition: left .6s;
-        }
-
-        .hint-card:hover::after {
-            left: 100%
-        }
-
-        /* ============================== ASIDE MINI CARDS ============================== */
-        .right {
-            display: flex;
-            flex-direction: column;
-            gap: 16px
-        }
-
-        .mini {
-            padding: 16px;
+            background: rgba(20, 20, 25, 0.4);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             border-radius: 16px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, .008));
-            border: 1px solid rgba(255, 255, 255, .04);
-            backdrop-filter: blur(8px);
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-dim);
-            transition: all .4s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-
-        .mini strong {
-            color: var(--accent2);
-            display: block;
-            margin-bottom: 4px
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 212, 255, 0.15);
+            transform: translateY(-4px);
         }
 
-        .mini:hover {
-            border-color: rgba(255, 255, 255, .1);
-            background: rgba(255, 255, 255, .04)
-        }
-
-        /* ============================== MODALS ============================== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, .7);
-            backdrop-filter: blur(10px);
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity .35s, visibility .35s;
-            padding: 20px;
-        }
-
-        .modal-overlay.open {
-            visibility: visible;
-            opacity: 1
-        }
-
-        .modal-dialog {
-            width: min(540px, 92vw);
-            max-height: 88vh;
-            overflow-y: auto;
-            background: linear-gradient(180deg, rgba(10, 20, 40, .96), rgba(4, 50, 58, .93));
-            border: 1px solid var(--glass-b);
-            backdrop-filter: blur(20px);
-            border-radius: 22px;
-            padding: 30px;
-            transform: scale(.9);
-            opacity: 0;
-            transition: all .5s var(--ease);
-        }
-
-        .modal-overlay.open .modal-dialog {
-            transform: scale(1);
-            opacity: 1
-        }
-
-        .modal-gif {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 14px;
-            display: block;
-            margin: 18px auto
-        }
-
-        /* GIF fallback placeholder — animated pulsing heart */
-        .gif-fallback {
-            width: 100%;
-            max-width: 400px;
-            height: 220px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 18px auto;
-            background: linear-gradient(135deg, rgba(255, 107, 159, .12), rgba(0, 230, 160, .08));
-            border: 1px dashed rgba(255, 255, 255, .12);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gif-fallback::before {
-            content: '💖';
-            font-size: 64px;
-            animation: fbPulse 1.8s ease-in-out infinite;
-        }
-
-        .gif-fallback::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 107, 159, .15), transparent 65%);
-            animation: fbGlow 2.4s ease-in-out infinite alternate;
-        }
-
-        @keyframes fbPulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: .7
-            }
-
-            50% {
-                transform: scale(1.25);
-                opacity: 1
-            }
-        }
-
-        @keyframes fbGlow {
-            0% {
-                opacity: .3
-            }
-
-            100% {
-                opacity: .8
-            }
-        }
-
-        /* ============================== YES REVEAL SEQUENCE ============================== */
-        .reveal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 900;
-            background: rgba(0, 0, 0, 0);
-            pointer-events: none;
-            transition: background 1s;
-        }
-
-        .reveal-overlay.active {
-            background: rgba(0, 0, 0, .5);
-            pointer-events: all
-        }
-
-        .glass-heart {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 160px;
-            opacity: 0;
-            z-index: 901;
-            filter: drop-shadow(0 0 60px var(--accent2));
-            transition: all 1.2s var(--ease);
-            pointer-events: none;
-        }
-
-        .glass-heart.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1
-        }
-
-        .glass-heart.burst {
-            transform: translate(-50%, -50%) scale(2);
-            opacity: 0
-        }
-
-        /* ============================== REASONS CAROUSEL ============================== */
-        .reasons-wrap {
-            margin-top: 18px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding-bottom: 8px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .reasons-wrap::-webkit-scrollbar {
-            height: 5px
-        }
-
-        .reasons-wrap::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, .1);
-            border-radius: 10px
-        }
-
-        .reason-item {
-            flex: 0 0 240px;
-            padding: 14px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, .03);
-            border: 1px solid rgba(255, 255, 255, .05);
-            border-left: 3px solid var(--accent2);
-            font-size: 13px;
-            line-height: 1.45;
-        }
-
-        /* ============================== TOAST ============================== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(80px);
-            background: var(--accent2);
-            color: #002129;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 14px;
-            z-index: 2000;
-            opacity: 0;
-            transition: all .4s;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1
-        }
-
-        /* ============================== SHARE ============================== */
-        .share-btn {
-            margin-top: 14px;
-            background: none;
-            border: none;
-            color: var(--accent);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
+        /* Updated Tech Chip for Logos */
+        .tech-chip {
             display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            opacity: .7;
-            transition: .3s;
+            items-center;
+            gap: 0.5rem; /* 8px */
+            padding: 6px 14px; 
+            border-radius: 9999px; 
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            font-size: 0.8rem; 
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .tech-chip:hover { 
+            background: rgba(255, 255, 255, 0.15); 
+            transform: scale(1.05);
         }
 
-        .share-btn:hover {
-            opacity: 1;
-            text-decoration: underline
-        }
-
-        /* ============================== EASTER EGG CARD ============================== */
-        .easter-egg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 1100;
-            background: var(--glass);
-            border: 2px solid var(--accent2);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            text-align: center;
-            max-width: 400px;
-            transition: all .6s var(--ease);
-            box-shadow: 0 0 80px rgba(0, 230, 160, .2);
-        }
-
-        .easter-egg.show {
-            transform: translate(-50%, -50%) scale(1)
-        }
-
-        .easter-egg h2 {
-            color: var(--accent2);
-            margin-bottom: 12px
-        }
-
-        .easter-egg .close-ee {
-            margin-top: 16px;
-            background: var(--accent2);
-            color: #000;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-        }
-
-        /* ============================== MINI-GAME CATCH HEARTS ============================== */
-        .catch-heart {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 800;
-            transition: transform .2s;
-            user-select: none;
-            animation: floatDown linear forwards;
-        }
-
-        @keyframes floatDown {
-            0% {
-                transform: translateY(0) rotate(0)
-            }
-
-            100% {
-                transform: translateY(110vh) rotate(360deg)
-            }
-        }
-
-        /* ============================== CURSOR TRAIL ============================== */
-        .cursor-heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            font-size: 14px;
-            opacity: 1;
-            transition: all .6s ease-out;
-        }
-
-        /* ============================== RESPONSIVE ============================== */
-        @media(max-width:500px) {
-            .actions {
-                flex-direction: column;
-                align-items: stretch
-            }
-
-            .btn-yes,
-            .btn-no {
-                width: 100%;
-                text-align: center
-            }
-
-            .glass-heart {
-                font-size: 100px !important
-            }
-        }
-
-        /* ============================== REDUCED MOTION ============================== */
-        @media(prefers-reduced-motion:reduce) {
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .01ms !important;
-            }
+        @media (max-width: 768px) {
+            body { cursor: auto; }
+            #custom-cursor { display: none; }
+            #webgl-canvas { opacity: 0.5; }
+            .glass-card { backdrop-filter: blur(10px); }
         }
     </style>
 </head>
 
-<body>
-    <!-- Background layers -->
-    <div class="bg-layer bg-grad" aria-hidden="true"></div>
-    <canvas id="bgCanvas" class="bg-layer" aria-hidden="true"></canvas>
-    <canvas id="fxCanvas" class="bg-layer" aria-hidden="true"></canvas>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- Theme toggle -->
-    <button class="theme-toggle" id="themeBtn" aria-label="Сменить тему">🎨 Deep Blue</button>
+    <div id="custom-cursor"></div>
 
-    <!-- Love counter -->
-    <div class="love-counter" id="loveCounter">
-        <span class="heart-icon">❤️</span>
-        <span id="loveCount">0</span>
-    </div>
+    <canvas id="webgl-canvas"></canvas>
+    <div id="anti-gravity-container"></div>
+    <canvas id="fx-canvas"></canvas>
 
-    <!-- A11y live region -->
-    <div id="liveRegion" aria-live="polite"
-        style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)"></div>
+    <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
+        
+        <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
+            <div class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">NB.</div>
+            <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-white hover-target transition">About</a>
+                <a href="#arsenal" class="hover:text-white hover-target transition">Arsenal</a>
+                <a href="#projects" class="hover:text-white hover-target transition">Projects</a>
+                <a href="#library" class="hover:text-white hover-target transition">Library</a>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://github.com/mrnamazbek" target="_blank" class="hover-target hover:scale-110 transition"><i class="devicon-github-original text-xl text-white"></i></a>
+                <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank" class="hover-target hover:scale-110 transition"><i class="devicon-linkedin-plain text-xl text-blue-400"></i></a>
+            </div>
+        </nav>
 
-    <!-- Reveal sequence overlay -->
-    <div class="reveal-overlay" id="revealOverlay" aria-hidden="true"></div>
-    <div class="glass-heart" id="glassHeart" aria-hidden="true">💎</div>
+        <section id="about" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-12 pt-10">
+            <div class="flex-1 space-y-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span class="text-xs font-medium text-cyan-200">Open to Work</span>
+                </div>
 
-    <!-- Easter Egg -->
-    <div class="easter-egg" id="easterEgg" role="dialog" aria-modal="true">
-        <h2>💌 Секретное послание!</h2>
-        <p style="color:var(--text-dim)">Ты нашла секрет! Ты — мой код без багов, мой merge без конфликтов, мой деплой
-            без даунтайма.</p>
-        <p style="margin-top:12px;font-size:24px">🫶💙💚✨💎🥰</p>
-        <button class="close-ee" id="closeEE">Закрыть 💖</button>
-    </div>
+                <h1 class="text-5xl md:text-7xl font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
+                    Building Resilient <br> Data Systems.
+                </h1>
 
-    <div class="page-wrap">
-        <div class="glass-card" id="mainCard" role="main" aria-labelledby="mainQ">
-
-            <!-- LEFT -->
-            <div class="left">
-                <h1 id="mainQ"><span id="typewriterText"></span><span class="typewriter-cursor">|</span></h1>
-                <p class="lead">
-                    Скажи «Да» — и сердца полетят, конфетти взорвется, а мир станет немного волшебнее.<br>
-                    Или попробуй нажать «Нет»... если сможешь 😉
+                <p class="text-xl text-gray-300 max-w-lg leading-relaxed">
+                    I'm <strong class="text-white">Namazbek</strong>, a Middle Data Engineer & Backend Developer. I craft high-performance pipelines, architect data warehouses, and build reliable digital infrastructure.
                 </p>
 
-                <!-- Rotating romantic message -->
-                <div class="romantic-msg" id="romanticMsg" aria-live="polite"></div>
-
-                <!-- Buttons -->
-                <div class="actions" id="actionsArea">
-                    <button class="btn btn-yes" id="yesBtn" aria-haspopup="dialog">Да — конечно! 💖</button>
-                    <button class="btn btn-no" id="noBtn" aria-haspopup="dialog">Нет... 😬</button>
-                </div>
-
-                <!-- Hint cards -->
-                <div class="hint-cards">
-                    <div class="hint-card">Будешь моей? 💙</div>
-                    <div class="hint-card">Украду сердце? 💫</div>
-                    <div class="hint-card">∞ объятий? 🤍</div>
-                    <div class="hint-card">Судьба? 💌</div>
-                    <div class="hint-card">Нажми Да ✨</div>
+                <div class="flex gap-4 pt-4">
+                    <a href="#projects" class="hover-target px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform">View Projects</a>
+                    <a href="#contact" class="hover-target px-8 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition">Contact Me</a>
                 </div>
             </div>
 
-            <!-- RIGHT -->
-            <aside class="right">
-                <div class="mini">
-                    <strong>💎 Design</strong>
-                    Glassmorphism + Parallax Hearts.<br>
-                    3D Tilt + Shimmer Borders.
+            <div id="hero-card" class="w-full max-w-sm glass-card p-8 flex flex-col items-center text-center transform transition-transform duration-200">
+                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-2xl mb-6 relative group">
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold">NB</div>
                 </div>
-                <div class="mini">
-                    <strong>🎮 Mini-game</strong>
-                    Лови сердечки мышкой!<br>
-                    <span id="caughtDisplay">Поймано: 0 / 5</span>
-                </div>
-                <div class="mini" id="statusCard" aria-live="polite" style="min-height:40px">
-                    <strong>📡 Status</strong>
-                    Ожидание ответа...
-                </div>
-            </aside>
-        </div>
-    </div>
+                <h2 class="text-2xl font-bold font-display">Namazbek Bekzhanov</h2>
+                <p class="text-indigo-200 mb-6 font-mono text-sm">Almaty, Kazakhstan</p>
 
-    <!-- YES Modal -->
-    <div class="modal-overlay" id="yesModal" role="dialog" aria-modal="true" aria-labelledby="yesTitle">
-        <div class="modal-dialog" id="yesDialog" tabindex="-1">
-            <h2 id="yesTitle" style="color:var(--accent2)">Ура! 🎉 Ты сделала мой день!</h2>
-            <p style="color:var(--text-dim);margin:8px 0 0 0">Смотри, что я подготовил:</p>
-            <img class="modal-gif" id="yesGifImg" src="" alt="Romantic celebration GIF" loading="lazy">
-            <h3 style="margin-top:18px;color:var(--accent2);font-size:15px">10 причин, почему я тебя люблю:</h3>
-            <div class="reasons-wrap" id="reasonsList"></div>
-            <button class="share-btn" id="shareBtnModal" type="button">🔗 Копировать ссылку</button>
-            <div style="margin-top:14px;text-align:right">
-                <button class="btn btn-no" id="closeYesModal" type="button">Закрыть 💙</button>
+                <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
+                    <div><div class="text-2xl font-bold font-mono" id="stats-repos">-</div><div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Repos</div></div>
+                    <div><div class="text-2xl font-bold font-mono">3+</div><div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Years</div></div>
+                    <div><div class="text-2xl font-bold font-mono">5+</div><div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Certs</div></div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- NO Modal -->
-    <div class="modal-overlay" id="noModal" role="dialog" aria-modal="true" aria-labelledby="noTitle">
-        <div class="modal-dialog" id="noDialog" tabindex="-1">
-            <h2 id="noTitle" style="color:#ff6b6b">Ошибка 404: Отказ не найден! 😅</h2>
-            <p style="color:var(--text-dim);margin:8px 0 0 0">Даже кнопка не хотела... Вот мем!</p>
-            <img class="modal-gif" id="noGifImg" src="" alt="Funny GIF" loading="lazy">
-            <div style="margin-top:14px;text-align:right">
-                <button class="btn btn-no" id="closeNoModal" type="button">Попробовать снова 😉</button>
+        <section id="arsenal" class="space-y-12">
+            <div>
+                <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
+                <p class="text-gray-400">The tools I use to build the future.</p>
             </div>
-        </div>
-    </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i class="devicon-pytorch-original text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Machine Learning & AI</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-scikitlearn-plain colored"></i> Scikit-learn</span>
+                        <span class="tech-chip"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span>
+                        <span class="tech-chip"><i class="devicon-pytorch-original colored"></i> PyTorch</span>
+                        <span class="tech-chip"><i class="devicon-keras-plain colored"></i> Keras</span>
+                        <span class="tech-chip"><i class="devicon-numpy-plain colored"></i> NumPy</span>
+                        <span class="tech-chip"><i class="devicon-pandas-plain colored"></i> Pandas</span>
+                    </div>
+                </div>
 
-    <div class="toast" id="toast">Ссылка скопирована! 🔗</div>
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i class="devicon-apachespark-original text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Big Data</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-apachespark-original colored"></i> Spark</span>
+                        <span class="tech-chip"><i class="devicon-hadoop-plain colored"></i> Hadoop</span>
+                        <span class="tech-chip"><i class="devicon-apacheairflow-plain colored"></i> Airflow</span>
+                        <span class="tech-chip"><i class="devicon-apachekafka-original colored"></i> Kafka</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i class="devicon-python-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Languages</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-python-plain colored"></i> Python</span>
+                        <span class="tech-chip"><i class="devicon-go-original-wordmark colored"></i> Go</span>
+                        <span class="tech-chip"><i class="devicon-java-plain colored"></i> Java</span>
+                        <span class="tech-chip"><i class="devicon-azuresqldatabase-plain colored"></i> SQL</span>
+                        <span class="tech-chip"><i class="devicon-bash-plain text-white"></i> Bash</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i class="devicon-postgresql-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Databases</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-postgresql-plain colored"></i> Postgres</span>
+                        <span class="tech-chip"><i class="devicon-oracle-original colored"></i> Oracle</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+                        <span class="tech-chip"><i class="devicon-microsoftsqlserver-plain colored"></i> MSSQL</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i class="devicon-docker-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">DevOps</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-docker-plain colored"></i> Docker</span>
+                        <span class="tech-chip"><i class="devicon-git-plain colored"></i> Git</span>
+                        <span class="tech-chip"><i class="devicon-linux-plain text-white"></i> Linux</span>
+                        <span class="tech-chip"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 gs-reveal hover-target">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i class="devicon-pycharm-plain text-xl"></i></span>
+                        <h3 class="text-xl font-bold">Environment</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="tech-chip"><i class="devicon-pycharm-plain colored"></i> PyCharm</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain colored"></i> DataGrip</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain text-white"></i> DataSpell</span>
+                        <span class="tech-chip"><i class="devicon-dbeaver-plain text-white"></i> DBeaver</span>
+                        <span class="tech-chip bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-cyan-400/50">🚀 Antigravity</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="space-y-8">
+            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </section>
+
+        <section id="library" class="glass-card p-8 rounded-2xl gs-reveal">
+            <h3 class="text-3xl font-display font-bold mb-8">The Engineering Library</h3>
+            <div id="books-container" class="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory">
+                </div>
+        </section>
+
+        <footer id="contact" class="text-center py-20 gs-reveal">
+            <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="mailto:namazbek.bekzhanov@gmail.com" class="hover-target px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-black font-bold transition">Email Me</a>
+            </div>
+            <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
+        </footer>
+
+    </main>
 
     <script>
-        /* ================================================================
-           CONFIG
-           ================================================================ */
-        /* GIF URLs with fallback cascades (verified working IDs) */
-        const YES_GIF_URLS = [
-            'https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif',
-            'https://media1.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif',
-            'https://media.giphy.com/media/M90mJvfWfd5mbUuULX/giphy.gif',
-            'https://media.giphy.com/media/xT0GqssRweIhlz209i/giphy.gif',
-            'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
-            'https://media1.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
-        ];
-        const NO_GIF_URLS = [
-            'https://media.giphy.com/media/3oEjHAUOqG3lSS0f1C/giphy.gif',
-            'https://media1.giphy.com/media/3oEjHAUOqG3lSS0f1C/giphy.gif',
-            'https://media.giphy.com/media/JfLdIahamXQI0/giphy.gif',
-            'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif',
-            'https://media1.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif',
-            'https://media.giphy.com/media/xT0GqssRweIhlz209i/giphy.gif',
-        ];
-        const PARTICLE_COUNT = 35;
-        const CONFETTI_COUNT = 100;
-        const REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+        // === GLOBAL MOUSE TRACKING ===
+        let mouseX = 0; let mouseY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
 
-        const REASONS = [
-            'Твоя улыбка освещает день ☀️', 'У тебя самое доброе сердце 🤍',
-            'Ты понимаешь без слов 🧩', 'С тобой не бывает скучно 🎢',
-            'Твоя поддержка — сила 🛡️', 'Ты делаешь лучше 🌱',
-            'Наши разговоры бесценны 🌌', 'Твой юмор — лучший 😂',
-            'Твои глаза — океан 🌊', 'Ты — это ТЫ ♾️'
-        ];
-        const NO_TEXTS = [
-            'Ты уверена? 😢', 'Подумай ещё 😄', 'Ошибка! Неверный выбор 💫',
-            'Промахнулась? 😉', 'Нет опции «Нет» 🚫', 'Серьёзно?! 🥺', 'Ещё раз 🔄'
-        ];
-        const ROMANTIC_MSGS = [
-            'Ты — моё нежное утро 🌅', 'Хочу держать руку всегда 🤝',
-            'Ты — лучший сюрприз 🎁', 'Моё сердце бьётся для тебя 💓',
-            'С тобой мир светлее ☀️', 'Ты — моя вселенная 🌌',
-            'Каждый день с тобой — подарок 🎀', 'Ты делаешь жизнь волшебной ✨'
-        ];
-        const TYPEWRITER_TEXT = 'Будешь ли ты моим валентином? 💙💚✨';
+        // === 1. CUSTOM MAGNETIC CURSOR ===
+        const cursor = document.getElementById('custom-cursor');
+        function initCursor() {
+            if (window.innerWidth < 768) return; 
+            const xTo = gsap.quickTo(cursor, "x", {duration: 0.15, ease: "power3"});
+            const yTo = gsap.quickTo(cursor, "y", {duration: 0.15, ease: "power3"});
+            
+            gsap.ticker.add(() => { xTo(mouseX); yTo(mouseY); });
 
-        /* ================================================================
-           1. MULTI-LAYER PARALLAX CANVAS (background hearts, stars, bubbles)
-           ================================================================ */
-        const bgCanvas = document.getElementById('bgCanvas');
-        const bgCtx = bgCanvas.getContext('2d');
-        const fxCanvas = document.getElementById('fxCanvas');
-        const fxCtx = fxCanvas.getContext('2d');
-        let W, H;
-
-        function resize() {
-            W = window.innerWidth; H = window.innerHeight;
-            bgCanvas.width = fxCanvas.width = W;
-            bgCanvas.height = fxCanvas.height = H;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-
-        /* Draw heart shape */
-        function heartPath(ctx, x, y, s, a, c, al) {
-            ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(s / 40, s / 40);
-            ctx.globalAlpha = al; ctx.fillStyle = c;
-            ctx.beginPath(); ctx.moveTo(0, 0);
-            ctx.bezierCurveTo(0, -12, -20, -12, -20, 5);
-            ctx.bezierCurveTo(-20, 25, 0, 35, 0, 50);
-            ctx.bezierCurveTo(0, 35, 20, 25, 20, 5);
-            ctx.bezierCurveTo(20, -12, 0, -12, 0, 0);
-            ctx.fill(); ctx.restore();
-        }
-
-        /* Draw star shape */
-        function starPath(ctx, x, y, s, a, c, al) {
-            ctx.save(); ctx.translate(x, y); ctx.rotate(a);
-            ctx.globalAlpha = al; ctx.fillStyle = c;
-            ctx.beginPath();
-            for (let i = 0; i < 5; i++) {
-                ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * s, Math.sin((18 + i * 72) * Math.PI / 180) * s);
-                ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * s * .4, Math.sin((54 + i * 72) * Math.PI / 180) * s * .4);
-            }
-            ctx.closePath(); ctx.fill(); ctx.restore();
-        }
-
-        /* Draw diamond/sparkle */
-        function sparklePath(ctx, x, y, s, al) {
-            ctx.save(); ctx.translate(x, y); ctx.globalAlpha = al;
-            ctx.fillStyle = '#fff';
-            ctx.beginPath();
-            ctx.moveTo(0, -s); ctx.lineTo(s * .3, 0);
-            ctx.lineTo(0, s); ctx.lineTo(-s * .3, 0);
-            ctx.closePath(); ctx.fill(); ctx.restore();
-        }
-
-        /* Parallax particle class — 3 speed layers */
-        class BgParticle {
-            constructor(layer) {
-                this.layer = layer; // 0=slow,1=mid,2=fast
-                this.type = ['heart', 'star', 'bubble', 'sparkle', 'ring', 'letter'][Math.floor(Math.random() * 6)];
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * W;
-                this.y = H + 50 + Math.random() * 200;
-                const speeds = [.3, .6, 1.2];
-                this.vy = -(speeds[this.layer] + Math.random() * .3);
-                this.vx = (Math.random() - .5) * .4;
-                this.size = 4 + Math.random() * 14;
-                this.angle = Math.random() * Math.PI * 2;
-                this.spin = (Math.random() - .5) * .02;
-                this.alpha = (.1 + Math.random() * .3) * (this.layer === 0 ? .5 : this.layer === 1 ? .7 : 1);
-                const pal = document.documentElement.dataset.theme === 'neon'
-                    ? ['rgba(255,45,123,1)', 'rgba(255,110,199,1)', 'rgba(199,146,234,1)']
-                    : ['rgba(43,183,255,1)', 'rgba(0,230,160,1)', 'rgba(0,212,255,1)'];
-                this.color = pal[Math.floor(Math.random() * pal.length)];
-                this.emoji = ['💌', '💍', '✨', '🌸', '⭐'][Math.floor(Math.random() * 5)];
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy; this.angle += this.spin;
-                if (this.y < -80 || this.x < -80 || this.x > W + 80) this.reset();
-            }
-            draw(ctx) {
-                if (this.type === 'heart') heartPath(ctx, this.x, this.y, this.size, this.angle, this.color, this.alpha);
-                else if (this.type === 'star') starPath(ctx, this.x, this.y, this.size * .6, this.angle, this.color, this.alpha);
-                else if (this.type === 'sparkle') sparklePath(ctx, this.x, this.y, this.size * .5, this.alpha);
-                else if (this.type === 'bubble') {
-                    ctx.save(); ctx.globalAlpha = this.alpha * .5;
-                    ctx.strokeStyle = this.color; ctx.lineWidth = 1;
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.stroke(); ctx.restore();
-                } else {
-                    ctx.save(); ctx.globalAlpha = this.alpha;
-                    ctx.font = `${this.size * 1.5}px serif`; ctx.textAlign = 'center';
-                    ctx.fillText(this.emoji, this.x, this.y); ctx.restore();
-                }
-            }
-        }
-
-        const bgParticles = [];
-        const count = REDUCED ? 8 : (W < 600 ? 15 : PARTICLE_COUNT);
-        for (let l = 0; l < 3; l++)for (let i = 0; i < Math.floor(count / 3); i++) {
-            const p = new BgParticle(l); p.y = Math.random() * H; // start scattered
-            bgParticles.push(p);
-        }
-
-        /* ================================================================
-           2. FX PARTICLES (burst hearts, confetti) — drawn on fxCanvas
-           ================================================================ */
-        const fxParticles = [];
-
-        class FxParticle {
-            constructor(x, y, type) {
-                this.x = x; this.y = y; this.type = type;
-                this.vx = (Math.random() - .5) * (type === 'confetti' ? 9 : 10);
-                this.vy = (Math.random() - .8) * (type === 'confetti' ? 7 : 8);
-                this.life = 60 + Math.random() * 40; this.maxLife = this.life;
-                this.size = type === 'confetti' ? 3 + Math.random() * 6 : 6 + Math.random() * 16;
-                this.rot = Math.random() * 360; this.spin = (Math.random() - .5) * .04;
-                const cols = ['#ff6b9f', '#ffcf66', '#ff7b7b', '#00e6a0', '#2bb7ff', '#c792ea'];
-                this.color = cols[Math.floor(Math.random() * cols.length)];
-                this.angle = Math.random() * Math.PI * 2;
-            }
-            update() {
-                this.vy += .15; this.x += this.vx; this.y += this.vy;
-                this.rot += 5; this.angle += this.spin; this.life--;
-            }
-            draw(ctx) {
-                const al = Math.max(0, this.life / this.maxLife);
-                if (this.type === 'heart') {
-                    heartPath(ctx, this.x, this.y, this.size, this.angle, this.color, al);
-                } else {
-                    ctx.save(); ctx.translate(this.x, this.y);
-                    ctx.rotate(this.rot * Math.PI / 180);
-                    ctx.fillStyle = this.color; ctx.globalAlpha = al;
-                    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 1.6);
-                    ctx.restore();
-                }
-            }
-            isDead() { return this.life <= 0 }
-        }
-
-        function burstHearts(x, y, n) {
-            const c = W < 600 ? Math.min(n, 20) : n;
-            for (let i = 0; i < c; i++)fxParticles.push(new FxParticle(x, y, 'heart'));
-        }
-        function spawnConfetti(x, y, n) {
-            const c = W < 600 ? Math.min(n, 40) : n;
-            for (let i = 0; i < c; i++)fxParticles.push(new FxParticle(x, y, 'confetti'));
-        }
-
-        /* ================================================================
-           MAIN ANIMATION LOOP
-           ================================================================ */
-        function mainLoop() {
-            // Background layer
-            bgCtx.clearRect(0, 0, W, H);
-            for (const p of bgParticles) { p.update(); p.draw(bgCtx); }
-
-            // FX layer
-            fxCtx.clearRect(0, 0, W, H);
-            for (let i = fxParticles.length - 1; i >= 0; i--) {
-                fxParticles[i].update(); fxParticles[i].draw(fxCtx);
-                if (fxParticles[i].isDead()) fxParticles.splice(i, 1);
-            }
-            requestAnimationFrame(mainLoop);
-        }
-        if (!REDUCED) mainLoop();
-
-        /* Prune excess particles */
-        setInterval(() => { if (fxParticles.length > 400) fxParticles.splice(0, 150) }, 4000);
-
-        /* ================================================================
-           3. EMOJI BURST (DOM-based)
-           ================================================================ */
-        function emojiBurst(cx, cy) {
-            const emojis = ['💙', '💚', '✨', '🥰', '💎', '🎉', '🫶', '💖'];
-            for (let i = 0; i < 18; i++) {
-                const el = document.createElement('span');
-                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                el.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;pointer-events:none;z-index:9999;font-size:${16 + Math.random() * 16}px;transition:all ${.7 + Math.random() * .5}s cubic-bezier(.1,.8,.3,1)`;
-                document.body.appendChild(el);
-                const a = Math.random() * Math.PI * 2, d = 100 + Math.random() * 250;
-                requestAnimationFrame(() => {
-                    el.style.transform = `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px) scale(0) rotate(${Math.random() * 360}deg)`;
-                    el.style.opacity = '0';
-                });
-                setTimeout(() => el.remove(), 1400);
-            }
-        }
-
-        /* ================================================================
-           4. TYPEWRITER EFFECT
-           ================================================================ */
-        const twEl = document.getElementById('typewriterText');
-        let twIdx = 0;
-        function typewrite() {
-            if (twIdx <= TYPEWRITER_TEXT.length) {
-                twEl.textContent = TYPEWRITER_TEXT.slice(0, twIdx);
-                twIdx++;
-                setTimeout(typewrite, REDUCED ? 5 : 55);
-            }
-        }
-        typewrite();
-
-        /* ================================================================
-           5. ROTATING ROMANTIC MESSAGES
-           ================================================================ */
-        const rmEl = document.getElementById('romanticMsg');
-        let rmIdx = 0;
-        function rotateMsg() {
-            rmEl.style.opacity = '0';
-            setTimeout(() => {
-                rmEl.textContent = ROMANTIC_MSGS[rmIdx % ROMANTIC_MSGS.length];
-                rmEl.style.opacity = '1'; rmIdx++;
-            }, 400);
-        }
-        rotateMsg();
-        setInterval(rotateMsg, 5000);
-
-        /* ================================================================
-           6. CURSOR HEART TRAIL
-           ================================================================ */
-        if (!REDUCED) {
-            let lastTrail = 0;
-            document.addEventListener('mousemove', e => {
-                if (Date.now() - lastTrail < 80) return; lastTrail = Date.now();
-                const h = document.createElement('span');
-                h.className = 'cursor-heart';
-                h.textContent = ['❤️', '💙', '💚', '✨'][Math.floor(Math.random() * 4)];
-                h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
-                document.body.appendChild(h);
-                requestAnimationFrame(() => {
-                    h.style.transform = `translate(${(Math.random() - .5) * 40}px,${-30 - Math.random() * 30}px) scale(0)`;
-                    h.style.opacity = '0';
-                });
-                setTimeout(() => h.remove(), 700);
-            });
-        }
-
-        /* ================================================================
-           7. 3D TILT EFFECT on glass card
-           ================================================================ */
-        const mainCard = document.getElementById('mainCard');
-        if (!REDUCED) {
-            mainCard.addEventListener('mousemove', e => {
-                const r = mainCard.getBoundingClientRect();
-                const x = (e.clientX - r.left) / r.width - .5;
-                const y = (e.clientY - r.top) / r.height - .5;
-                mainCard.style.transform = `perspective(1000px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
-            });
-            mainCard.addEventListener('mouseleave', () => {
-                mainCard.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
-            });
-        }
-
-        /* ================================================================
-           8. MAGNETIC YES BUTTON
-           ================================================================ */
-        const yesBtn = document.getElementById('yesBtn');
-        if (!REDUCED) {
-            yesBtn.addEventListener('mousemove', e => {
-                const r = yesBtn.getBoundingClientRect();
-                const dx = e.clientX - (r.left + r.width / 2);
-                const dy = e.clientY - (r.top + r.height / 2);
-                yesBtn.style.transform = `translate(${dx * .25}px,${dy * .25}px)`;
-            });
-            yesBtn.addEventListener('mouseleave', () => { yesBtn.style.transform = '' });
-        }
-
-        /* ================================================================
-           9. LOVE COUNTER
-           ================================================================ */
-        let loveCount = 0;
-        const loveCountEl = document.getElementById('loveCount');
-        function addLove(n = 1) {
-            loveCount += n; loveCountEl.textContent = loveCount;
-            loveCountEl.animate([{ transform: 'scale(1.4)' }, { transform: 'scale(1)' }], { duration: 300 });
-        }
-        document.body.addEventListener('click', () => addLove(1));
-
-        /* ================================================================
-           10. THEME TOGGLE
-           ================================================================ */
-        const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', () => {
-            const isNeon = document.documentElement.dataset.theme === 'neon';
-            document.documentElement.dataset.theme = isNeon ? '' : 'neon';
-            themeBtn.textContent = isNeon ? '🎨 Deep Blue' : '🌙 Neon Love';
-            // Re-color existing particles
-            bgParticles.forEach(p => {
-                const pal = isNeon
-                    ? ['rgba(43,183,255,1)', 'rgba(0,230,160,1)', 'rgba(0,212,255,1)']
-                    : ['rgba(255,45,123,1)', 'rgba(255,110,199,1)', 'rgba(199,146,234,1)'];
-                p.color = pal[Math.floor(Math.random() * pal.length)];
-            });
-        });
-
-        /* ================================================================
-           11. WEB AUDIO API — romantic chord on YES
-           ================================================================ */
-        function playLoveChord() {
-            try {
-                const ac = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [261.63, 329.63, 392.00, 523.25]; // C4 E4 G4 C5
-                notes.forEach((freq, i) => {
-                    const osc = ac.createOscillator();
-                    const gain = ac.createGain();
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(.08, ac.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(.001, ac.currentTime + 2);
-                    osc.connect(gain); gain.connect(ac.destination);
-                    osc.start(ac.currentTime + i * .08);
-                    osc.stop(ac.currentTime + 2.2);
-                });
-            } catch (e) { }
-        }
-
-        /* ================================================================
-           12. YES BUTTON — MULTI-STEP REVEAL SEQUENCE
-           ================================================================ */
-        const noBtn = document.getElementById('noBtn');
-        const yesModal = document.getElementById('yesModal');
-        const noModal = document.getElementById('noModal');
-        const statusCard = document.getElementById('statusCard');
-        const liveRegion = document.getElementById('liveRegion');
-        const revealOverlay = document.getElementById('revealOverlay');
-        const glassHeart = document.getElementById('glassHeart');
-
-        function openModal(m) { m.classList.add('open'); const d = m.querySelector('.modal-dialog'); if (d) d.focus(); document.body.style.overflow = 'hidden' }
-        function closeModal(m) { m.classList.remove('open'); document.body.style.overflow = '' }
-        /* Cascading GIF loader: tries each URL, detects Giphy "not available" placeholder */
-        function loadGifWithFallback(img, urls) {
-            if (!img || !urls || !urls.length) return;
-            if (img.dataset.loaded === 'true') return;
-            let idx = 0;
-            function tryNext() {
-                if (idx >= urls.length) {
-                    // All URLs failed — show CSS animated fallback
-                    img.style.display = 'none';
-                    if (!img.parentNode.querySelector('.gif-fallback')) {
-                        const fb = document.createElement('div');
-                        fb.className = 'gif-fallback';
-                        fb.setAttribute('role', 'img');
-                        fb.setAttribute('aria-label', img.alt || 'Animated heart');
-                        img.parentNode.insertBefore(fb, img.nextSibling);
+            // Ensure hover state works on newly injected elements (event delegation setup via CSS classes is better, but here we attach dynamically where needed)
+            const addHover = () => {
+                document.querySelectorAll('.hover-target, .glass-card, a').forEach(el => {
+                    if(!el.dataset.hoverBound) {
+                        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+                        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+                        el.dataset.hoverBound = "true";
                     }
-                    return;
-                }
-                img.onerror = () => { idx++; tryNext(); };
-                img.onload = () => {
-                    // Detect Giphy "THIS CONTENT IS NOT AVAILABLE" placeholder (480x270)
-                    if (img.naturalWidth === 480 && img.naturalHeight === 270) {
-                        idx++; tryNext(); return;
-                    }
-                    img.dataset.loaded = 'true';
-                    img.onerror = null;
-                    img.style.display = '';
+                });
+            };
+            addHover();
+            // Call again after fetch completes
+            setTimeout(addHover, 2000); 
+        }
+
+        // === 2. COLORFUL ANTI-GRAVITY LOGOS ===
+        const techIcons = [
+            'devicon-python-plain colored', 'devicon-postgresql-plain colored', 'devicon-docker-plain colored', 
+            'devicon-kubernetes-plain colored', 'devicon-apachekafka-original colored', 'devicon-apachespark-original colored',
+            'devicon-fastapi-plain colored', 'devicon-java-plain colored', 'devicon-mysql-plain colored',
+            'devicon-apacheairflow-plain colored', 'devicon-oracle-original colored', 'devicon-redis-plain colored'
+        ];
+        const floatingElements = [];
+
+        function initAntiGravity() {
+            if (window.innerWidth < 768) return;
+            const container = document.getElementById('anti-gravity-container');
+            const numLogos = 18;
+
+            for(let i=0; i<numLogos; i++) {
+                let iconClass = techIcons[Math.floor(Math.random() * techIcons.length)];
+                let el = document.createElement('i');
+                el.className = `${iconClass} floating-logo`;
+                
+                let size = Math.random() * 50 + 40; // 40px to 90px
+                el.style.fontSize = `${size}px`;
+                el.style.left = `${Math.random() * 100}vw`;
+                el.style.top = `${Math.random() * 100}vh`;
+
+                let physics = {
+                    el: el, x: 0, y: 0,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    rot: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 0.5,
+                    depth: Math.random() * 0.6 + 0.1 
                 };
-                img.src = urls[idx];
+                floatingElements.push(physics);
+                container.appendChild(el);
             }
-            tryNext();
+            requestAnimationFrame(renderAntiGravity);
         }
 
-        document.getElementById('closeYesModal').addEventListener('click', () => closeModal(yesModal));
-        document.getElementById('closeNoModal').addEventListener('click', () => closeModal(noModal));
+        function renderAntiGravity() {
+            let centerX = window.innerWidth / 2; let centerY = window.innerHeight / 2;
+            let mouseOffsetX = (mouseX - centerX) * 0.05;
+            let mouseOffsetY = (mouseY - centerY) * 0.05;
 
-        yesBtn.addEventListener('click', () => {
-            playLoveChord();
-            addLove(10);
+            floatingElements.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.rot += p.vRot;
 
-            /* Step 1: Darken screen */
-            revealOverlay.classList.add('active');
+                // Screen Wrap
+                if(p.x > window.innerWidth + 100) p.x = -100;
+                if(p.x < -100) p.x = window.innerWidth + 100;
+                if(p.y > window.innerHeight + 100) p.y = -100;
+                if(p.y < -100) p.y = window.innerHeight + 100;
 
-            /* Step 2: Show glass heart (after 600ms) */
-            setTimeout(() => { glassHeart.classList.add('show') }, 600);
+                // Apply transforms (Base drift + Mouse Parallax)
+                let finalX = p.x - (mouseOffsetX * p.depth);
+                let finalY = p.y - (mouseOffsetY * p.depth);
 
-            /* Step 3: Heart "opens" — burst (after 2s) */
-            setTimeout(() => {
-                glassHeart.classList.add('burst');
-                const r = yesBtn.getBoundingClientRect();
-                const cx = W / 2, cy = H / 2;
-                burstHearts(cx, cy, 25);
-                spawnConfetti(cx, cy, CONFETTI_COUNT);
-                emojiBurst(cx, cy);
-            }, 2000);
-
-            /* Step 4: Remove overlay, show modal (after 3.2s) */
-            setTimeout(() => {
-                revealOverlay.classList.remove('active');
-                glassHeart.classList.remove('show', 'burst');
-                glassHeart.style.display = 'none';
-
-                yesBtn.textContent = 'You made me the happiest! 🥰';
-                yesBtn.style.pointerEvents = 'none';
-                statusCard.innerHTML = '<strong>📡 Status</strong> ❤️ PERFECT CONNECTION!';
-                liveRegion.textContent = 'Ответ: Да! Сердца летят!';
-
-                loadGifWithFallback(document.getElementById('yesGifImg'), YES_GIF_URLS);
-                populateReasons();
-                openModal(yesModal);
-
-                mainCard.animate(
-                    [{ transform: 'translate(0,0)' }, { transform: 'translate(-2px,1px)' }, { transform: 'translate(2px,-1px)' }, { transform: 'translate(0,0)' }],
-                    { duration: 300 }
-                );
-            }, 3200);
-        });
-
-        function populateReasons() {
-            const list = document.getElementById('reasonsList');
-            if (list.children.length) return;
-            REASONS.forEach((t, i) => {
-                const el = document.createElement('div');
-                el.className = 'reason-item'; el.textContent = `${i + 1}. ${t}`;
-                list.appendChild(el);
+                p.el.style.transform = `translate3d(${finalX}px, ${finalY}px, 0) rotate(${p.rot}deg)`;
             });
+            requestAnimationFrame(renderAntiGravity);
         }
 
-        /* ================================================================
-           13. NO BUTTON — RUNAWAY with text change + shrink + rotate
-           ================================================================ */
-        let noStep = 0;
-        function escapeNoBtn() {
-            const cr = mainCard.getBoundingClientRect();
-            const pad = 12;
-            const maxX = cr.width - noBtn.offsetWidth - pad * 2;
-            const maxY = cr.height - noBtn.offsetHeight - pad * 2;
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = pad + Math.random() * Math.max(maxX, 10) + 'px';
-            noBtn.style.top = pad + Math.random() * Math.max(maxY, 10) + 'px';
-            noBtn.style.zIndex = '100';
-            const rot = (Math.random() - .5) * 30, sc = .65 + Math.random() * .35;
-            noBtn.style.transform = `rotate(${rot}deg) scale(${sc})`;
-            noBtn.style.opacity = (.5 + Math.random() * .5).toFixed(2);
-            noBtn.textContent = NO_TEXTS[noStep % NO_TEXTS.length];
-            noStep++;
-        }
-
-        mainCard.addEventListener('mousemove', e => {
-            const br = noBtn.getBoundingClientRect();
-            const dx = e.clientX - (br.left + br.width / 2);
-            const dy = e.clientY - (br.top + br.height / 2);
-            if (Math.sqrt(dx * dx + dy * dy) < 120) escapeNoBtn();
-        });
-        mainCard.addEventListener('touchmove', e => {
-            const t = e.touches[0]; const br = noBtn.getBoundingClientRect();
-            const dx = t.clientX - (br.left + br.width / 2);
-            const dy = t.clientY - (br.top + br.height / 2);
-            if (Math.sqrt(dx * dx + dy * dy) < 80) escapeNoBtn();
-        }, { passive: true });
-        noBtn.addEventListener('focus', () => {
-            escapeNoBtn();
-            liveRegion.textContent = "Кнопка 'Нет' убежала!";
-            statusCard.innerHTML = '<strong>📡 Status</strong> 🏃 Убежала!';
-            setTimeout(() => { liveRegion.textContent = '' }, 3000);
-        });
-        noBtn.addEventListener('click', e => {
-            e.preventDefault();
-            loadGifWithFallback(document.getElementById('noGifImg'), NO_GIF_URLS);
-            openModal(noModal);
-            setTimeout(() => {
-                noBtn.style = ''; noBtn.textContent = 'Нет... 😬'; noStep = 0;
-            }, 800);
-        });
-
-        /* ================================================================
-           14. MODAL CLOSE HELPERS (ESC, outside click, focus trap)
-           ================================================================ */
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { closeModal(yesModal); closeModal(noModal) }
-            if (e.key === 'Tab') {
-                const o = document.querySelector('.modal-overlay.open');
-                if (o) { e.preventDefault(); o.querySelector('.modal-dialog').focus() }
-            }
-        });
-        [yesModal, noModal].forEach(m => {
-            m.addEventListener('click', e => { if (e.target === m) closeModal(m) });
-        });
-
-        /* ================================================================
-           15. SHARE BUTTON
-           ================================================================ */
-        document.getElementById('shareBtnModal').addEventListener('click', () => {
-            navigator.clipboard.writeText(location.href.split('#')[0] + '#be-my-valentine').then(() => {
-                const t = document.getElementById('toast');
-                t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+        // === 3. WEBGL SHADER BACKGROUND ===
+        function initShader() {
+            if (window.innerWidth < 768) return;
+            const canvas = document.getElementById('webgl-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const material = new THREE.ShaderMaterial({
+                uniforms: { time: { value: 0 } },
+                vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+                fragmentShader: `
+                    uniform float time; varying vec2 vUv;
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+                    float snoise(vec2 v) {
+                        const vec4 C = vec4(0.2113248, 0.366025, -0.57735, 0.02439);
+                        vec2 i  = floor(v + dot(v, C.yy) );
+                        vec2 x0 = v - i + dot(i, C.xx);
+                        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+                        i = mod289(i);
+                        vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                        m = m*m; return 42.0 * dot( m*m, vec3( dot(p.x,x0), dot(p.y,x12.xy), dot(p.z,x12.zw) ) );
+                    }
+                    void main() {
+                        float t = time * 0.15;
+                        float n1 = snoise(vUv * 1.5 + vec2(t, t*0.5));
+                        float n2 = snoise(vUv * 2.0 - vec2(t*0.3, t));
+                        vec3 c1 = vec3(0.05, 0.05, 0.15); vec3 c2 = vec3(0.1, 0.1, 0.3); vec3 c3 = vec3(0.0, 0.2, 0.3);
+                        gl_FragColor = vec4(mix(mix(c1, c2, n1*0.5+0.5), c3, n2*0.5+0.5), 1.0);
+                    }
+                `
             });
-        });
+            scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+            const clock = new THREE.Clock();
+            function animate() { requestAnimationFrame(animate); material.uniforms.time.value = clock.getElapsedTime(); renderer.render(scene, camera); }
+            animate();
+            window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
+        }
 
-        /* ================================================================
-           16. EASTER EGG — type "LOVE" to reveal secret card
-           ================================================================ */
-        let eggBuf = '';
-        const easterEgg = document.getElementById('easterEgg');
-        document.addEventListener('keydown', e => {
-            if (e.key.length === 1) eggBuf += e.key.toUpperCase();
-            if (eggBuf.length > 10) eggBuf = eggBuf.slice(-10);
-            if (eggBuf.includes('LOVE')) {
-                easterEgg.classList.add('show'); eggBuf = '';
-                addLove(20);
-                liveRegion.textContent = 'Секретная карточка найдена!';
-            }
-        });
-        document.getElementById('closeEE').addEventListener('click', () => {
-            easterEgg.classList.remove('show');
-        });
-
-        /* ================================================================
-           17. MINI-GAME: Catch Hearts
-           ================================================================ */
-        let caught = 0;
-        const caughtDisplay = document.getElementById('caughtDisplay');
-
-        function spawnCatchHeart() {
-            if (caught >= 5 || REDUCED) return;
-            const el = document.createElement('div');
-            el.className = 'catch-heart';
-            el.textContent = '❤️';
-            el.style.left = 20 + Math.random() * (W - 60) + 'px';
-            el.style.top = '-40px';
-            el.style.animationDuration = (4 + Math.random() * 3) + 's';
-            document.body.appendChild(el);
-
-            el.addEventListener('click', () => {
-                caught++; caughtDisplay.textContent = `Поймано: ${caught} / 5`;
-                el.remove(); addLove(3);
-                if (caught >= 5) {
-                    statusCard.innerHTML = '<strong>📡 Status</strong> 🏆 Все сердца пойманы!';
-                    const t = document.getElementById('toast');
-                    t.textContent = '🏆 Бонус: Ты поймала все сердца! Ты лучшая!';
-                    t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); t.textContent = 'Ссылка скопирована! 🔗' }, 4000);
+        // === 4. PARTICLE TRAIL ===
+        function initParticles() {
+            const ctx = document.getElementById('fx-canvas').getContext('2d');
+            let w = window.innerWidth, h = window.innerHeight;
+            document.getElementById('fx-canvas').width = w; document.getElementById('fx-canvas').height = h;
+            const particles = [];
+            document.addEventListener('mousemove', (e) => {
+                for (let i = 0; i < 2; i++) particles.push({ x: e.clientX, y: e.clientY, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2, life: 1, color: Math.random()>0.5?'#00d4ff':'#00e6a0', size: Math.random()*3+1 });
+            });
+            function loop() {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    let p = particles[i]; p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                    if (p.life <= 0) { particles.splice(i, 1); continue; }
+                    ctx.globalAlpha = p.life; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
                 }
-            });
-            el.addEventListener('animationend', () => el.remove());
+                requestAnimationFrame(loop);
+            }
+            loop();
         }
-        setInterval(spawnCatchHeart, 3500);
-        setTimeout(spawnCatchHeart, 2000);
 
-        /* ================================================================
-           18. INITIAL MICRO-ANIMATION for card
-           ================================================================ */
-        setTimeout(() => {
-            mainCard.animate(
-                [{ transform: 'translateY(4px)' }, { transform: 'translateY(0)' }],
-                { duration: 700, easing: 'ease-out' }
-            );
-        }, 800);
+        // === 5. DATA INJECTION & DYNAMIC PROJECT LOGOS ===
+        async function loadContent() {
+            // Embedded Books JSON
+            const books = [
+                { title: "Clean Code", author: "Robert C. Martin", cover: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=300&q=80" },
+                { title: "Designing Data-Intensive Applications", author: "Martin Kleppmann", cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=300&q=80" },
+                { title: "Fundamentals of Data Engineering", author: "Joe Reis", cover: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=300&q=80" },
+                { title: "The Data Warehouse Toolkit", author: "Ralph Kimball", cover: "https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=300&q=80" }
+            ];
+            
+            const bookContainer = document.getElementById('books-container');
+            books.forEach(book => {
+                const div = document.createElement('div');
+                div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300 hover-target";
+                div.innerHTML = `
+                    <div class="relative aspect-[2/3] rounded-lg overflow-hidden mb-3 shadow-lg border border-white/10">
+                        <img src="${book.cover}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    </div>
+                    <h4 class="font-bold leading-tight text-white/90 text-sm">${book.title}</h4>
+                    <p class="text-xs text-gray-500 mt-1">${book.author}</p>
+                `;
+                bookContainer.appendChild(div);
+            });
+
+            // Specific mapping of Repositories to relevant Data Engineering logos
+            const repoTechMap = {
+                'KBTU_advanced_software_paradigms': ['devicon-python-plain colored', 'devicon-docker-plain colored', 'devicon-fastapi-plain colored', 'devicon-postgresql-plain colored'],
+                'KBTU_ML_Assignments': ['devicon-pytorch-original colored', 'devicon-tensorflow-original colored', 'devicon-numpy-plain colored', 'devicon-python-plain colored'],
+                'DataMining_SIS1_Project': ['devicon-jupyter-plain colored', 'devicon-pandas-plain colored', 'devicon-python-plain colored'],
+                'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-amazonwebservices-original colored'],
+                'default': ['devicon-python-plain colored', 'devicon-apacheairflow-plain colored', 'devicon-docker-plain colored', 'devicon-postgresql-plain colored']
+            };
+
+            const grid = document.getElementById('projects-grid');
+            try {
+                const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
+                const repos = await res.json();
+                if (repos.length) document.getElementById('stats-repos').innerText = repos.length + "+";
+                
+                repos.forEach(repo => {
+                    // Determine which logos to show based on mapping dictionary
+                    let techStackArray = repoTechMap[repo.name] || repoTechMap['default'];
+                    let techHtml = techStackArray.map(iconClass => `<i class="${iconClass} text-2xl hover:scale-125 transition drop-shadow-md cursor-help" title="${iconClass.split('-')[1]}"></i>`).join('');
+
+                    const card = document.createElement('a');
+                    card.href = repo.html_url; card.target = "_blank";
+                    card.className = "glass-card p-6 flex flex-col h-[280px] group hover-target gs-reveal";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}
+                        </div>
+                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition line-clamp-2">${repo.name}</h3>
+                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'Enterprise grade solution.'}</p>
+                        
+                        <div class="mt-auto pt-4 border-t border-white/10 flex items-center gap-4">
+                            ${techHtml}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<div class="text-gray-500 col-span-3 text-center py-10">GitHub API Limit Reached. Check GitHub directly.</div>';
+            }
+
+            // Init ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 85%" },
+                    y: 50, autoAlpha: 0, duration: 0.8, ease: "power3.out"
+                });
+            });
+        }
+
+        // === BOOTSTRAP ===
+        window.addEventListener('DOMContentLoaded', () => {
+            initShader();
+            initParticles();
+            initCursor();
+            initAntiGravity();
+            loadContent();
+
+            // Hero Parallax
+            const heroCard = document.getElementById('hero-card');
+            document.addEventListener('mousemove', (e) => {
+                if(window.innerWidth < 768) return;
+                const x = (window.innerWidth - e.pageX * 2) / 100;
+                const y = (window.innerHeight - e.pageY * 2) / 100;
+                if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
     </script>
 </body>
-
 </html>
