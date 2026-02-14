@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namazbek Bekzhanov | Data Engineer & Creative Developer</title>
+    <meta name="description"
+        content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (CDN for portability as requested) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Sora', 'sans-serif'],
+                    },
+                    colors: {
+                        glass: {
+                            100: 'rgba(255, 255, 255, 0.1)',
+                            200: 'rgba(255, 255, 255, 0.2)',
+                            300: 'rgba(255, 255, 255, 0.3)',
+                            border: 'rgba(255, 255, 255, 0.2)',
+                            surface: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'tilt': 'tilt 10s infinite linear'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* Liquid Glass Core Styles */
+        :root {
+            --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(20, 20, 25, 0.4);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* The WebGL Canvas fixed background */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Card Utility */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--glass-shadow);
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Specular Highlight Pseudo-element */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent);
+            transition: left 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+            transition: left 0.7s;
+        }
+
+        /* Text readability on glass */
+        .text-shadow {
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Accessibility: Reduce Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .glass-card {
+                transition: none;
+            }
+
+            #webgl-canvas {
+                display: none;
+            }
+
+            body {
+                background: linear-gradient(45deg, #1a1a2e, #16213e);
+            }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .glass-card {
+                backdrop-filter: blur(10px);
+                /* Reduce blur cost */
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- WebGL Background -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Main Content -->
+    <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
+
+        <!-- Navigation / Header -->
+        <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
+            <div class="font-display font-bold text-xl tracking-tight">NB.</div>
+            <div class="space-x-4 hidden md:flex text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#projects" class="hover:text-white transition">Projects</a>
+                <a href="#skills" class="hover:text-white transition">Skills</a>
+                <a href="#contact" class="hover:text-white transition">Contact</a>
+            </div>
+            <!-- Social Widget Mini -->
+            <div class="flex gap-3">
+                <a href="https://github.com/mrnamazbek" target="_blank" rel="noreferrer" aria-label="GitHub">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                        class="w-6 h-6 invert opacity-80 hover:opacity-100 transition" alt="GitHub">
+                </a>
+                <a href="https://instagram.com/mrnamazbek" target="_blank" rel="noreferrer" aria-label="Instagram">
+                    <!-- Placeholder Icon for Instagram if standard one fails, using a generic shape driven fallback can be done but CDN is reliable -->
+                    <svg class="w-6 h-6 text-white opacity-80 hover:opacity-100 transition" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="about" class="min-h-[80vh] flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="flex-1 space-y-6">
+                <!-- Status Badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span class="text-xs font-medium text-green-200">Open to Work</span>
+                </div>
+
+                <h1
+                    class="text-5xl md:text-7xl font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-200 to-cyan-400 text-transparent">
+                    Building Resilient <br> Data Systems.
+                </h1>
+
+                <p class="text-xl text-gray-300 max-w-lg leading-relaxed">
+                    I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft
+                    high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
+                </p>
+
+                <div class="flex gap-4 pt-4">
+                    <a href="#projects"
+                        class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform">View
+                        Projects</a>
+                    <a href="#contact"
+                        class="px-8 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition">Contact Me</a>
+                </div>
+            </div>
+
+            <!-- Profile Card with Parallax -->
+            <div id="hero-card"
+                class="w-full max-w-sm glass-card p-6 md:p-8 flex flex-col items-center text-center transform transition-transform duration-200">
+                <div
+                    class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/30 shadow-2xl mb-6 relative group">
+                    <!-- Placeholder Avatar -->
+                    <div
+                        class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold">
+                        NB</div>
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
+                </div>
+                <h2 class="text-2xl font-bold">Namazbek Bekzhanov</h2>
+                <p class="text-indigo-200 mb-6">Almaty, Kazakhstan</p>
+
+                <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
+                    <div>
+                        <div class="text-2xl font-bold" id="stats-repos">-</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest">Repos</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">3+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest">Years</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">5+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest">Certificates</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack / Skills -->
+        <section id="skills" class="space-y-8">
+            <h3 class="text-3xl font-display font-bold">Tech Ecosystem</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Reusable Skill Glass Item -->
+                <a href="https://www.python.org" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Python">
+                    <span class="text-sm font-medium text-gray-300">Python</span>
+                </a>
+                <a href="https://fastapi.tiangolo.com" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="FastAPI">
+                    <span class="text-sm font-medium text-gray-300">FastAPI</span>
+                </a>
+                <a href="https://www.postgresql.org" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="PostgreSQL">
+                    <span class="text-sm font-medium text-gray-300">PostgreSQL</span>
+                </a>
+                <a href="https://airflow.apache.org" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apacheairflow/apacheairflow-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Airflow">
+                    <span class="text-sm font-medium text-gray-300">Airflow</span>
+                </a>
+                <a href="https://www.docker.com" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Docker">
+                    <span class="text-sm font-medium text-gray-300">Docker</span>
+                </a>
+                <a href="https://kubernetes.io" target="_blank"
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Kubernetes">
+                    <span class="text-sm font-medium text-gray-300">Kubernetes</span>
+                </a>
+                <div
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Grafana">
+                    <span class="text-sm font-medium text-gray-300">Grafana</span>
+                </div>
+                <div
+                    class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
+                    <!-- Git logo -->
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+                        class="w-10 h-10 group-hover:scale-110 transition" alt="Git">
+                    <span class="text-sm font-medium text-gray-300">Git</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section Grid -->
+        <section id="projects" class="space-y-8">
+            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Skeleton Loader -->
+                <div class="glass-card h-64 animate-pulse flex items-center justify-center rounded-2xl">
+                    <span class="text-white/20">Loading GitHub Data...</span>
+                </div>
+                <div class="glass-card h-64 animate-pulse rounded-2xl hidden md:block"></div>
+                <div class="glass-card h-64 animate-pulse rounded-2xl hidden lg:block"></div>
+            </div>
+        </section>
+
+        <!-- Courses & Education -->
+        <section id="education" class="grid md:grid-cols-2 gap-8">
+            <div class="glass-card p-8 rounded-2xl">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="text-indigo-400">❖</span> Bookshelf
+                </h3>
+                <div class="space-y-4 overflow-y-auto max-h-64 pr-2 custom-scrollbar">
+                    <div class="flex gap-4 items-start p-3 hover:bg-white/5 rounded-lg transition">
+                        <div class="w-12 h-16 bg-gray-700 rounded shadow-lg flex-shrink-0 overflow-hidden">
+                            <!-- Placeholder cover -->
+                            <div class="w-full h-full bg-gradient-to-t from-gray-900 to-gray-600"></div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">Designing Data-Intensive Applications</h4>
+                            <p class="text-xs text-gray-400">Martin Kleppmann</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start p-3 hover:bg-white/5 rounded-lg transition">
+                        <div class="w-12 h-16 bg-gray-700 rounded shadow-lg flex-shrink-0 overflow-hidden">
+                            <div class="w-full h-full bg-gradient-to-t from-blue-900 to-blue-600"></div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">Learning Spark</h4>
+                            <p class="text-xs text-gray-400">O'Reilly Media</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="text-cyan-400">❖</span> Education & Courses
+                </h3>
+                <ul class="space-y-4">
+                    <li class="border-l-2 border-cyan-500/50 pl-4 py-1">
+                        <h4 class="font-bold">SQL for Data Science</h4>
+                        <p class="text-sm text-gray-400">UC Davis (Coursera)</p>
+                    </li>
+                    <li class="border-l-2 border-purple-500/50 pl-4 py-1">
+                        <h4 class="font-bold">Data Engineering Nanodegree</h4>
+                        <p class="text-sm text-gray-400">Udacity</p>
+                    </li>
+                    <li class="border-l-2 border-white/20 pl-4 py-1">
+                        <h4 class="font-bold">Bachelor of Science, CS</h4>
+                        <p class="text-sm text-gray-400">Local University (2020-2024)</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer / Contact -->
+        <footer id="contact" class="glass-card p-10 rounded-3xl text-center space-y-6">
+            <h2 class="text-3xl font-bold">Let's Build Something.</h2>
+            <p class="text-gray-300">Open for opportunities in Data Engineering and Backend Development.</p>
+            <div class="flex justify-center gap-6 flex-wrap">
+                <a href="mailto:contact@mrnamazbek.com"
+                    class="px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
+                    Me</a>
+                <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
+                    class="px-6 py-2 border border-white/20 rounded-full hover:bg-[#0077b5] hover:border-[#0077b5] transition">LinkedIn</a>
+                <a href="https://t.me/mrnamazbek" target="_blank"
+                    class="px-6 py-2 border border-white/20 rounded-full hover:bg-[#0088cc] hover:border-[#0088cc] transition">Telegram</a>
+            </div>
+            <div class="pt-8 text-xs text-gray-500 font-mono">
+                &copy; 2026 Namazbek Bekzhanov. Built with Liquid Glass Tech. <br>
+                <span class="opacity-50">Assets loaded from CDNs.</span>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- WebGL Shader Script for Liquid Glass Background -->
+    <script>
+        // SHADER CODE FOR LIQUID BACKGROUND
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform float time;
+            uniform vec2 resolution;
+            varying vec2 vUv;
+
+            // Simple noise function
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+            float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v - i + dot(i, C.xx);
+                vec2 i1;
+                i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m ;
+                return 42.0 * dot( m*m, vec3( dot(p.x,x0), dot(p.y,x12.xy), dot(p.z,x12.zw) ) );
+            }
+
+            void main() {
+                vec2 uv = vUv;
+                
+                // Slow moving noise for "Liquid" feel
+                float t = time * 0.2;
+                
+                // Create large soft blobs
+                float noise1 = snoise(uv * 1.5 + vec2(t, t * 0.5));
+                float noise2 = snoise(uv * 2.0 - vec2(t * 0.3, t));
+                
+                // Mix colors based on noise
+                vec3 color1 = vec3(0.1, 0.1, 0.25); // Deep Blue/Black
+                vec3 color2 = vec3(0.3, 0.1, 0.4); // Purple
+                vec3 color3 = vec3(0.0, 0.3, 0.4); // Cyan/Teal
+                
+                vec3 finalColor = mix(color1, color2, noise1 * 0.5 + 0.5);
+                finalColor = mix(finalColor, color3, noise2 * 0.5 + 0.5);
+                
+                // Add a subtle glow/vignette
+                float dist = distance(uv, vec2(0.5));
+                finalColor *= (1.2 - dist);
+
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
+
+        // SCENE SETUP
+        function initWebGL() {
+            // Check for reduced motion
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                console.log("Reduced motion enabled: WebGL disabled.");
+                return;
+            }
+
+            const canvas = document.getElementById('webgl-canvas');
+
+            // Performance check: if mobile, maybe lower pixel ratio
+            const isMobile = window.innerWidth < 768;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false }); // Antialias false for performance
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            const uniforms = {
+                time: { value: 0 },
+                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+            };
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: uniforms,
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader
+            });
+
+            const plane = new THREE.Mesh(geometry, material);
+            scene.add(plane);
+
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                uniforms.time.value = clock.getElapsedTime();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Wait for DOM
+        window.addEventListener('DOMContentLoaded', initWebGL);
+    </script>
+
+    <!-- Application Logic: Fetch Projects & UI Interactivity -->
+    <script>
+        // PARALLAX EFFECT FOR HERO CARD
+        const heroCard = document.getElementById('hero-card');
+        if (heroCard && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth - e.pageX * 2) / 100;
+                const y = (window.innerHeight - e.pageY * 2) / 100;
+                heroCard.style.transform = `translateX(${x}px) translateY(${y}px)`;
+            });
+        }
+
+        // DATA FETCHING
+        async function loadProjects() {
+            const grid = document.getElementById('projects-grid');
+            const repoUrl = 'https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6';
+            const mockUrl = 'assets/mock_repos.json';
+
+            let repos = [];
+
+            try {
+                // Try fetching live data
+                console.log("Fetching GitHub data...");
+                const response = await fetch(repoUrl);
+                if (!response.ok) throw new Error('GitHub API Limit or Error');
+                repos = await response.json();
+
+                // Update stats check
+                if (repos.length) {
+                    document.getElementById('stats-repos').innerText = repos.length + "+";
+                }
+
+            } catch (err) {
+                console.warn("GitHub fetch failed, falling back to mock data.", err);
+                try {
+                    const mockRes = await fetch(mockUrl);
+                    repos = await mockRes.json();
+                    document.getElementById('stats-repos').innerText = repos.length;
+                } catch (mockErr) {
+                    grid.innerHTML = '<p class="text-red-400">Failed to load projects.</p>';
+                }
+            }
+
+            // FILTER & RENDER
+            // Filter out forks if needed, or keep them. Let's just take top 3-4 interesting ones.
+            // Using the mock data structure or GitHub structure.
+
+            grid.innerHTML = ''; // Clear skeleton
+
+            repos.forEach(repo => {
+                const card = document.createElement('a');
+                card.href = repo.html_url;
+                card.target = "_blank";
+                card.className = "glass-card p-6 flex flex-col justify-between group hover:border-white/40 transition gap-4 min-h-[220px]";
+
+                // Generate a random gradient thumb if no image provided in dataset
+                // Since GitHub API doesn't give images, we use a CSS gradient placeholder
+                const langColor = getLanguageColor(repo.language);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                             <div class="flex items-center gap-2 text-sm text-cyan-300 font-mono">
+                                <span class="w-3 h-3 rounded-full" style="background-color: ${langColor}"></span>
+                                ${repo.language || 'Code'}
+                             </div>
+                             <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
+                        <p class="text-gray-400 text-sm mt-3 line-clamp-3 leading-relaxed">
+                            ${repo.description || 'No description available for this project.'}
+                        </p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // GSAP Animation for cards entry
+            gsap.from("#projects-grid a", {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: "#projects-grid",
+                    start: "top 80%"
+                }
+            });
+        }
+
+        function getLanguageColor(lang) {
+            const colors = {
+                'Python': '#3572A5',
+                'JavaScript': '#f1e05a',
+                'PLpgSQL': '#336791',
+                'HTML': '#e34c26',
+                'CSS': '#563d7c'
+            };
+            return colors[lang] || '#ffffff';
+        }
+
+        // Initialize Data Load
+        window.addEventListener('DOMContentLoaded', loadProjects);
+
+    </script>
+
+    <!-- Deployment & Dev Check -->
+    <!-- 
+        DEPLOYMENT INSTRUCTIONS:
+        1. Ensure 'assets' folder is in the same directory as index.html.
+        2. Push to GitHub.
+        3. Go to Repo Settings -> Pages -> Select 'main' branch as source.
+    -->
+</body>
+
+</html>

@@ -8,7 +8,7 @@
     <meta name="description"
         content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
 
-    <!-- Fonts from example.html -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -35,6 +35,9 @@
                             border: 'rgba(255, 255, 255, 0.2)',
                             surface: 'rgba(0, 0, 0, 0.4)'
                         }
+                    },
+                    cursor: {
+                        'none': 'none',
                     }
                 }
             }
@@ -65,7 +68,7 @@
             background: #555;
         }
 
-        /* === STYLE FROM example.html === */
+        /* === GLOBAL STYLE === */
         :root {
             --glass-border: 1px solid rgba(255, 255, 255, 0.15);
             --glass-bg: rgba(20, 20, 25, 0.4);
@@ -76,8 +79,53 @@
             background-color: #0a0a0a;
             color: #ffffff;
             overflow-x: hidden;
-            cursor: auto;
-            /* We will add trail, but keep default cursor for usability */
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        /* CUSTOM CURSOR */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border: 2px solid cyan;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            /* Topmost */
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            will-change: transform;
+        }
+
+        #custom-cursor.hovered {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.8);
+        }
+
+        /* ANTI-GRAVITY LOGOS CONTAINER */
+        #anti-gravity-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            /* Behind main content but in front of background shader */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-logo {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 2rem;
+            will-change: transform;
         }
 
         #webgl-canvas {
@@ -90,14 +138,15 @@
             pointer-events: none;
         }
 
-        /* Particle Canvas from example2.html */
+        /* Particle Canvas */
         #fx-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            z-index: 9999;
+            z-index: 9998;
+            /* Below cursor */
             pointer-events: none;
         }
 
@@ -137,11 +186,6 @@
             transition: left 0.7s;
         }
 
-        /* Hover Trigger Class */
-        .hover-trigger:hover {
-            /* Logic handled in JS or CSS */
-        }
-
         /* Chip Style */
         .tech-chip {
             padding: 4px 12px;
@@ -164,17 +208,32 @@
             .glass-card {
                 backdrop-filter: blur(10px);
             }
+
+            /* Show regular cursor on mobile usually, but keeping none as requested for consistent feel, or reset to auto */
+            body {
+                cursor: auto;
+            }
+
+            #custom-cursor {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- 1. Background Shader (example.html) -->
+    <!-- 1. Background Shader -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- 2. Particle Effects (example2.html) -->
+    <!-- 2. Anti-Gravity Container -->
+    <div id="anti-gravity-container"></div>
+
+    <!-- 3. Particle Effects -->
     <canvas id="fx-canvas"></canvas>
+
+    <!-- 4. Custom Cursor -->
+    <div id="custom-cursor"></div>
 
     <!-- Main Content -->
     <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
@@ -198,9 +257,10 @@
             </div>
         </nav>
 
-        <!-- Hero Section (example.html style) -->
+        <!-- Hero Section -->
         <section id="about" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-12">
-            <div class="flex-1 space-y-8">
+            <div class="flex-1 space-y-8 glass-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none"
+                style="animation: none;">
                 <div
                     class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -255,7 +315,7 @@
             </div>
         </section>
 
-        <!-- TECHNOLOGY ARSENAL (Restyled to glass-card) -->
+        <!-- TECHNOLOGY ARSENAL -->
         <section id="arsenal" class="space-y-12">
             <div>
                 <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
@@ -379,7 +439,7 @@
 
     <!-- LOGIC -->
     <script>
-        // === 1. SHADER BACKGROUND (example.html) ===
+        // === 1. SHADER BACKGROUND ===
         const vertexShader = `
             varying vec2 vUv;
             void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
@@ -387,7 +447,6 @@
         const fragmentShader = `
             uniform float time;
             varying vec2 vUv;
-            // Simplex noise (simplified)
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -429,7 +488,6 @@
                 vertexShader, fragmentShader
             });
             scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-
             const clock = new THREE.Clock();
             function animate() {
                 requestAnimationFrame(animate);
@@ -440,41 +498,33 @@
             window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
         }
 
-        // === 2. PARTICLE CURSOR EFFECTS (Adapted from example2.html) ===
+        // === 2. PARTICLE CURSOR EFFECTS ===
         function initParticles() {
             const canvas = document.getElementById('fx-canvas');
             const ctx = canvas.getContext('2d');
             let w, h;
             function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
             resize(); window.addEventListener('resize', resize);
-
             const particles = [];
-
-            // Mouse Trail
             document.addEventListener('mousemove', (e) => {
-                // Spawn particles on move
                 for (let i = 0; i < 2; i++) {
                     particles.push({
                         x: e.clientX, y: e.clientY,
                         vx: (Math.random() - 0.5) * 2,
                         vy: (Math.random() - 0.5) * 2,
                         life: 1.0,
-                        color: Math.random() > 0.5 ? '#00d4ff' : '#00e6a0', // Cyan or Neon Green
+                        color: Math.random() > 0.5 ? '#00d4ff' : '#00e6a0',
                         size: Math.random() * 3 + 1
                     });
                 }
             });
-
             function loop() {
                 ctx.clearRect(0, 0, w, h);
                 for (let i = particles.length - 1; i >= 0; i--) {
                     let p = particles[i];
                     p.x += p.vx; p.y += p.vy;
                     p.life -= 0.02;
-                    if (p.life <= 0) {
-                        particles.splice(i, 1);
-                        continue;
-                    }
+                    if (p.life <= 0) { particles.splice(i, 1); continue; }
                     ctx.globalAlpha = p.life;
                     ctx.fillStyle = p.color;
                     ctx.beginPath();
@@ -486,13 +536,184 @@
             loop();
         }
 
-        // === 3. DATA LOADING ===
+        // === 3. CUSTOM MOUSE CURSOR (WITH LERP) ===
+        function initCustomCursor() {
+            const cursor = document.getElementById('custom-cursor');
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let cursorX = mouseX;
+            let cursorY = mouseY;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Make cursor stick/grow on hoverable elements
+            const hoverables = document.querySelectorAll('a, button, .glass-card, .tech-chip');
+            hoverables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+
+            function animateCursor() {
+                // Lerp formula: current + (target - current) * factor
+                const factor = 0.15;
+                cursorX += (mouseX - cursorX) * factor;
+                cursorY += (mouseY - cursorY) * factor;
+
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+        }
+
+        // === 4. ANTI-GRAVITY LOGOS (PHYSICS + PARALLAX) ===
+        function initAntiGravityLogos() {
+            const container = document.getElementById('anti-gravity-container');
+            const icons = [
+                'devicon-python-plain', 'devicon-java-plain', 'devicon-javascript-plain',
+                'devicon-docker-plain', 'devicon-kubernetes-plain', 'devicon-apachekafka-original',
+                'devicon-postgresql-plain', 'devicon-react-original', 'devicon-linux-plain',
+                'devicon-git-plain', 'devicon-bash-plain', 'devicon-amazonwebservices-plain-wordmark'
+            ];
+
+            const logos = [];
+            const count = 20;
+
+            // Spawn Logos
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('i');
+                const iconClass = icons[Math.floor(Math.random() * icons.length)];
+                el.className = `floating-logo ${iconClass}`;
+
+                // Random Props
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const scale = 0.5 + Math.random() * 1.5; // 0.5x to 2.0x
+                const opacity = 0.05 + Math.random() * 0.15; // faint
+
+                el.style.left = '0px';
+                el.style.top = '0px';
+                el.style.opacity = opacity;
+                el.style.fontSize = `${2 * scale}rem`; // Scale size directly
+
+                container.appendChild(el);
+
+                logos.push({
+                    el,
+                    x, y,
+                    vx: (Math.random() - 0.5) * 0.5, // Slow drift
+                    vy: (Math.random() - 0.5) * 0.5,
+                    parallaxFactor: (Math.random() + 0.5) * 0.05 // Different depth perception
+                });
+            }
+
+            // Mouse parallax target
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animateLogos() {
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+
+                // Parallax push (opposite to mouse)
+                const pushX = (centerX - mouseX);
+                const pushY = (centerY - mouseY);
+
+                logos.forEach(logo => {
+                    // Update physics
+                    logo.x += logo.vx;
+                    logo.y += logo.vy;
+
+                    // Wrap around screen
+                    if (logo.x < -50) logo.x = window.innerWidth + 50;
+                    if (logo.x > window.innerWidth + 50) logo.x = -50;
+                    if (logo.y < -50) logo.y = window.innerHeight + 50;
+                    if (logo.y > window.innerHeight + 50) logo.y = -50;
+
+                    // Apply layout + parallax
+                    const finalX = logo.x + (pushX * logo.parallaxFactor);
+                    const finalY = logo.y + (pushY * logo.parallaxFactor);
+
+                    logo.el.style.transform = `translate(${finalX}px, ${finalY}px)`;
+                });
+
+                requestAnimationFrame(animateLogos);
+            }
+            animateLogos();
+        }
+
+        // === 5. SCROLL ANIMATIONS (GSAP) ===
+        function initScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Animate headers and sections
+            const cards = gsap.utils.toArray('.glass-card');
+            cards.forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    delay: i % 3 * 0.1 // Stagger grid items slightly
+                });
+            });
+
+            // Hero text animation
+            gsap.from("#about h1, #about p", {
+                y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out", delay: 0.5
+            });
+        }
+
+        // === 6. DATA LOADING (HARDCODED) ===
         async function loadContent() {
-            // Books
-            try {
-                const res = await fetch('assets/books.json');
-                const books = await res.json();
-                const container = document.getElementById('books-container');
+            // Hardcoded Books Data
+            const books = [
+                {
+                    title: "Designing Data-Intensive Applications",
+                    author: "Martin Kleppmann",
+                    cover_url: "https://m.media-amazon.com/images/I/91cwOSS4sDL._AC_UF1000,1000_QL80_.jpg",
+                    alt_text: "Designing Data-Intensive Applications Book Cover"
+                },
+                {
+                    title: "Clean Code",
+                    author: "Robert C. Martin",
+                    cover_url: "https://m.media-amazon.com/images/I/41-sN-mzwKL.jpg",
+                    alt_text: "Clean Code Book Cover"
+                },
+                {
+                    title: "Data Mesh",
+                    author: "Zhamak Dehghani",
+                    cover_url: "https://m.media-amazon.com/images/I/91V0ofr3C-L._AC_UF1000,1000_QL80_.jpg",
+                    alt_text: "Data Mesh Book Cover"
+                },
+                {
+                    title: "The Pragmatic Programmer",
+                    author: "David Thomas",
+                    cover_url: "https://m.media-amazon.com/images/I/71VStSjZmpL._AC_UF1000,1000_QL80_.jpg",
+                    alt_text: "Pragmatic Programmer Book Cover"
+                },
+                {
+                    title: "Refactoring",
+                    author: "Martin Fowler",
+                    cover_url: "https://m.media-amazon.com/images/I/81HqVRRwp3L._AC_UF1000,1000_QL80_.jpg",
+                    alt_text: "Refactoring Book Cover"
+                }
+            ];
+
+            const container = document.getElementById('books-container');
+            if (container) {
+                container.innerHTML = '';
                 books.forEach(book => {
                     const div = document.createElement('div');
                     div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300";
@@ -505,8 +726,6 @@
                     `;
                     container.appendChild(div);
                 });
-            } catch (e) {
-                console.log("Books skipped");
             }
 
             // GitHub
@@ -516,6 +735,7 @@
                 const repos = await res.json();
                 if (repos.length) document.getElementById('stats-repos').innerText = repos.length + "+";
 
+                grid.innerHTML = '';
                 repos.forEach(repo => {
                     const card = document.createElement('a');
                     card.href = repo.html_url; card.target = "_blank";
@@ -539,10 +759,13 @@
         // INIT
         window.addEventListener('DOMContentLoaded', () => {
             initShader();
+            initCustomCursor(); // New
             initParticles();
-            loadContent();
+            initAntiGravityLogos(); // New
+            initScrollAnimations(); // New
+            loadContent(); // Updated
 
-            // Hero Parallax (example.html feature)
+            // Hero Parallax
             const heroCard = document.getElementById('hero-card');
             document.addEventListener('mousemove', (e) => {
                 const x = (window.innerWidth - e.pageX * 2) / 100;
