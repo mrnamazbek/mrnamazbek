@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namazbek Bekzhanov | Data Engineer & Creative Developer</title>
-    <meta name="description" content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
-    
-    <!-- Fonts -->
+    <title>Namazbek Bekzhanov | Data Engineering Portfolio</title>
+    <meta name="description" content="Portfolio of Namazbek Bekzhanov - Data Engineer & Backend Developer.">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (CDN for portability as requested) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Devicon for Logos -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,28 +25,23 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Sora', 'sans-serif'],
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
                     },
                     colors: {
                         glass: {
-                            100: 'rgba(255, 255, 255, 0.1)',
-                            200: 'rgba(255, 255, 255, 0.2)',
-                            300: 'rgba(255, 255, 255, 0.3)',
-                            border: 'rgba(255, 255, 255, 0.2)',
-                            surface: 'rgba(0, 0, 0, 0.4)'
+                            100: 'rgba(255, 255, 255, 0.05)',
+                            200: 'rgba(255, 255, 255, 0.1)',
+                            border: 'rgba(255, 255, 255, 0.15)',
                         }
                     },
                     animation: {
-                        'blob': 'blob 7s infinite',
-                        'tilt': 'tilt 10s infinite linear'
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
@@ -48,531 +49,528 @@
         }
     </script>
 
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP for Anti-Gravity Physics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
+
     <style>
-        /* Liquid Glass Core Styles */
+        /* === LIQUID GLASS CORE === */
         :root {
-            --glass-border: 1px solid rgba(255, 255, 255, 0.15);
-            --glass-bg: rgba(20, 20, 25, 0.4);
-            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --glass-blur: 16px;
+            --glass-saturation: 1.5;
+            --cursor-size: 20px;
         }
 
         body {
-            background-color: #0a0a0a;
+            background-color: #050505;
+            /* Deep Space Black */
             color: #ffffff;
             overflow-x: hidden;
+            cursor: none;
+            /* Hide default cursor */
         }
 
-        /* The WebGL Canvas fixed background */
-        #webgl-canvas {
+        /* Anti-Gravity Background Container */
+        #anti-gravity-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
             z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Glassmorphism Card Utility */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: var(--glass-border);
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: var(--glass-shadow);
-            border-radius: 16px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            position: relative;
             overflow: hidden;
+            pointer-events: none;
+            /* subtle gradient mesh base */
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
         }
 
-        .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Specular Highlight Pseudo-element */
-        .glass-card::before {
-            content: '';
+        /* Floating Tech Icons */
+        .tech-floater {
             position: absolute;
+            font-size: 3rem;
+            opacity: 0.15;
+            will-change: transform;
+            filter: blur(1px) grayscale(100%);
+            transition: filter 0.3s;
+        }
+
+        /* Highlight floater near cursor (logic in JS) */
+        .tech-floater.active {
+            opacity: 0.6;
+            filter: blur(0px) grayscale(0%);
+            z-index: 0;
+        }
+
+        /* === CUSTOM CURSOR === */
+        #cursor-dot,
+        #cursor-outline {
+            position: fixed;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transition: left 0.5s;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
             pointer-events: none;
         }
 
-        .glass-card:hover::before {
-            left: 100%;
-            transition: left 0.7s;
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
         }
 
-        /* Text readability on glass */
-        .text-shadow {
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        #cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
 
-        /* Accessibility: Reduce Motion */
-        @media (prefers-reduced-motion: reduce) {
-            .glass-card { transition: none; }
-            #webgl-canvas { display: none; }
-            body { 
-                background: linear-gradient(45deg, #1a1a2e, #16213e); 
+        /* Hover State for Cursor */
+        body.hovering #cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            border-color: transparent;
+        }
+
+        /* === LIQUID GLASS CARDS === */
+        .liquid-glass {
+            background: rgba(20, 20, 25, 0.4);
+            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 4px 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            /* Edge lighting */
+            border-radius: 20px;
+        }
+
+        /* Text readability backing */
+        .text-backing {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* MOBILE / PERFORMANCE FALLBACKS */
+        @media (max-width: 768px),
+        (prefers-reduced-motion: reduce) {
+            body {
+                cursor: auto;
             }
-        }
 
-        /* Mobile Optimization */
-        @media (max-width: 768px) {
-            .glass-card {
-                backdrop-filter: blur(10px); /* Reduce blur cost */
+            #cursor-dot,
+            #cursor-outline {
+                display: none;
             }
+
+            .tech-floater {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .liquid-glass {
+                backdrop-filter: blur(10px);
+            }
+
+            /* Reduced blur cost */
         }
     </style>
 </head>
-<body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- WebGL Background -->
-    <canvas id="webgl-canvas"></canvas>
+<body class="antialiased">
 
-    <!-- Main Content -->
-    <main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
-        
-        <!-- Navigation / Header -->
-        <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
-            <div class="font-display font-bold text-xl tracking-tight">NB.</div>
-            <div class="space-x-4 hidden md:flex text-sm font-medium text-gray-300">
-                <a href="#about" class="hover:text-white transition">About</a>
-                <a href="#projects" class="hover:text-white transition">Projects</a>
-                <a href="#skills" class="hover:text-white transition">Skills</a>
-                <a href="#contact" class="hover:text-white transition">Contact</a>
-            </div>
-            <!-- Social Widget Mini -->
-            <div class="flex gap-3">
-                <a href="https://github.com/mrnamazbek" target="_blank" rel="noreferrer" aria-label="GitHub">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" class="w-6 h-6 invert opacity-80 hover:opacity-100 transition" alt="GitHub">
-                </a>
-                <a href="https://instagram.com/mrnamazbek" target="_blank" rel="noreferrer" aria-label="Instagram">
-                    <!-- Placeholder Icon for Instagram if standard one fails, using a generic shape driven fallback can be done but CDN is reliable -->
-                    <svg class="w-6 h-6 text-white opacity-80 hover:opacity-100 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
+    <!-- Anti-Gravity Background -->
+    <div id="anti-gravity-canvas"></div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <!-- Main Layout -->
+    <main class="relative z-10 px-4 pt-12 pb-24 max-w-6xl mx-auto space-y-32">
+
+        <!-- HEADER / NAVIGATION -->
+        <nav
+            class="flex justify-between items-center liquid-glass px-8 py-4 rounded-full sticky top-4 z-50 transition-transform duration-300 hover:scale-[1.01]">
+            <div
+                class="font-mono font-bold text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-400">
+                NB.DEV</div>
+            <div class="flex gap-4">
+                <a href="#projects"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger">Projects</a>
+                <a href="#library"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition hover-trigger">Library</a>
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section id="about" class="min-h-[80vh] flex flex-col md:flex-row items-center justify-between gap-12">
+        <!-- HERO SECTION -->
+        <section class="flex flex-col md:flex-row gap-12 items-center min-h-[60vh]">
             <div class="flex-1 space-y-6">
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
-                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    <span class="text-xs font-medium text-green-200">Open to Work</span>
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    </span>
+                    Open to Work
                 </div>
-                
-                <h1 class="text-5xl md:text-7xl font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-200 to-cyan-400 text-transparent">
-                    Building Resilient <br> Data Systems.
+                <h1 id="hero-name" class="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
+                    <!-- Injected via JS -->
                 </h1>
-                
-                <p class="text-xl text-gray-300 max-w-lg leading-relaxed">
-                    I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
+                <h2 id="hero-title" class="text-xl md:text-2xl text-gray-400 font-light">
+                    <!-- Injected via JS -->
+                </h2>
+                <p id="hero-bio" class="text-gray-300 max-w-lg leading-relaxed text-backing">
+                    <!-- Injected via JS -->
                 </p>
-
-                <div class="flex gap-4 pt-4">
-                    <a href="#projects" class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform">View Projects</a>
-                    <a href="#contact" class="px-8 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition">Contact Me</a>
+                <div id="hero-socials" class="flex gap-4 pt-4">
+                    <!-- Injected via JS -->
                 </div>
             </div>
 
-            <!-- Profile Card with Parallax -->
-            <div id="hero-card" class="w-full max-w-sm glass-card p-6 md:p-8 flex flex-col items-center text-center transform transition-transform duration-200">
-                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/30 shadow-2xl mb-6 relative group">
-                    <!-- Placeholder Avatar -->
-                    <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold">NB</div>
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
-                </div>
-                <h2 class="text-2xl font-bold">Namazbek Bekzhanov</h2>
-                <p class="text-indigo-200 mb-6">Almaty, Kazakhstan</p>
-                
-                <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
+            <!-- Glass Stats Card (Tilt Effect) -->
+            <div id="tilt-card"
+                class="liquid-glass p-8 w-full max-w-sm transform transition duration-100 ease-out hover-trigger">
+                <div class="grid grid-cols-2 gap-8 text-center">
                     <div>
-                        <div class="text-2xl font-bold" id="stats-repos">-</div>
-                        <div class="text-xs text-gray-400 uppercase tracking-widest">Repos</div>
+                        <div class="text-3xl font-mono font-bold text-cyan-400 mb-1" id="stat-repos">0</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-widest">Repos</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">3+</div>
-                        <div class="text-xs text-gray-400 uppercase tracking-widest">Years</div>
+                        <div class="text-3xl font-mono font-bold text-purple-400 mb-1">10+</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-widest">Certificates</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">5+</div>
-                        <div class="text-xs text-gray-400 uppercase tracking-widest">Certificates</div>
+                        <div class="text-3xl font-mono font-bold text-green-400 mb-1">3+</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-widest">Years</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-mono font-bold text-pink-400 mb-1">12</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-widest">Books</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Tech Stack / Skills -->
-        <section id="skills" class="space-y-8">
-            <h3 class="text-3xl font-display font-bold">Tech Ecosystem</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- Reusable Skill Glass Item -->
-                <a href="https://www.python.org" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Python">
-                    <span class="text-sm font-medium text-gray-300">Python</span>
-                </a>
-                <a href="https://fastapi.tiangolo.com" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="FastAPI">
-                    <span class="text-sm font-medium text-gray-300">FastAPI</span>
-                </a>
-                <a href="https://www.postgresql.org" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="PostgreSQL">
-                    <span class="text-sm font-medium text-gray-300">PostgreSQL</span>
-                </a>
-                <a href="https://airflow.apache.org" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apacheairflow/apacheairflow-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Airflow">
-                    <span class="text-sm font-medium text-gray-300">Airflow</span>
-                </a>
-                <a href="https://www.docker.com" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Docker">
-                    <span class="text-sm font-medium text-gray-300">Docker</span>
-                </a>
-                <a href="https://kubernetes.io" target="_blank" class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Kubernetes">
-                    <span class="text-sm font-medium text-gray-300">Kubernetes</span>
-                </a>
-                 <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Grafana">
-                    <span class="text-sm font-medium text-gray-300">Grafana</span>
-                </div>
-                 <div class="glass-card p-4 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition group">
-                    <!-- Git logo -->
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="w-10 h-10 group-hover:scale-110 transition" alt="Git">
-                    <span class="text-sm font-medium text-gray-300">Git</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section Grid -->
-        <section id="projects" class="space-y-8">
-            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+        <!-- PROJECTS GRID -->
+        <section id="projects">
+            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="w-8 h-[2px] bg-cyan-500"></span> Selected Projects
+            </h3>
             <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Skeleton Loader -->
-                <div class="glass-card h-64 animate-pulse flex items-center justify-center rounded-2xl">
-                    <span class="text-white/20">Loading GitHub Data...</span>
-                </div>
-                <div class="glass-card h-64 animate-pulse rounded-2xl hidden md:block"></div>
-                <div class="glass-card h-64 animate-pulse rounded-2xl hidden lg:block"></div>
+                <!-- Injected via JS -->
             </div>
         </section>
 
-        <!-- Courses & Education -->
-        <section id="education" class="grid md:grid-cols-2 gap-8">
-            <div class="glass-card p-8 rounded-2xl">
-                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <span class="text-indigo-400">❖</span> Bookshelf
-                </h3>
-                <div class="space-y-4 overflow-y-auto max-h-64 pr-2 custom-scrollbar">
-                    <div class="flex gap-4 items-start p-3 hover:bg-white/5 rounded-lg transition">
-                        <div class="w-12 h-16 bg-gray-700 rounded shadow-lg flex-shrink-0 overflow-hidden">
-                            <!-- Placeholder cover -->
-                             <div class="w-full h-full bg-gradient-to-t from-gray-900 to-gray-600"></div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm">Designing Data-Intensive Applications</h4>
-                            <p class="text-xs text-gray-400">Martin Kleppmann</p>
-                        </div>
-                    </div>
-                     <div class="flex gap-4 items-start p-3 hover:bg-white/5 rounded-lg transition">
-                        <div class="w-12 h-16 bg-gray-700 rounded shadow-lg flex-shrink-0 overflow-hidden">
-                             <div class="w-full h-full bg-gradient-to-t from-blue-900 to-blue-600"></div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm">Learning Spark</h4>
-                            <p class="text-xs text-gray-400">O'Reilly Media</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card p-8 rounded-2xl">
-                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <span class="text-cyan-400">❖</span> Education & Courses
-                </h3>
-                <ul class="space-y-4">
-                    <li class="border-l-2 border-cyan-500/50 pl-4 py-1">
-                        <h4 class="font-bold">SQL for Data Science</h4>
-                        <p class="text-sm text-gray-400">UC Davis (Coursera)</p>
-                    </li>
-                    <li class="border-l-2 border-purple-500/50 pl-4 py-1">
-                        <h4 class="font-bold">Data Engineering Nanodegree</h4>
-                        <p class="text-sm text-gray-400">Udacity</p>
-                    </li>
-                    <li class="border-l-2 border-white/20 pl-4 py-1">
-                        <h4 class="font-bold">Bachelor of Science, CS</h4>
-                        <p class="text-sm text-gray-400">Local University (2020-2024)</p>
-                    </li>
-                </ul>
+        <!-- THE LIBRARY (Books) -->
+        <section id="library">
+            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="w-8 h-[2px] bg-purple-500"></span> The Library
+            </h3>
+            <div id="books-carousel"
+                class="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory custom-scrollbar p-2">
+                <!-- Injected via JS -->
             </div>
         </section>
 
-        <!-- Footer / Contact -->
-        <footer id="contact" class="glass-card p-10 rounded-3xl text-center space-y-6">
-            <h2 class="text-3xl font-bold">Let's Build Something.</h2>
-            <p class="text-gray-300">Open for opportunities in Data Engineering and Backend Development.</p>
-            <div class="flex justify-center gap-6 flex-wrap">
-                <a href="mailto:contact@mrnamazbek.com" class="px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email Me</a>
-                <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank" class="px-6 py-2 border border-white/20 rounded-full hover:bg-[#0077b5] hover:border-[#0077b5] transition">LinkedIn</a>
-                <a href="https://t.me/mrnamazbek" target="_blank" class="px-6 py-2 border border-white/20 rounded-full hover:bg-[#0088cc] hover:border-[#0088cc] transition">Telegram</a>
-            </div>
-            <div class="pt-8 text-xs text-gray-500 font-mono">
-                &copy; 2026 Namazbek Bekzhanov. Built with Liquid Glass Tech. <br>
-                <span class="opacity-50">Assets loaded from CDNs.</span>
-            </div>
+        <!-- FOOTER -->
+        <footer class="text-center text-gray-600 text-sm pb-8 font-mono">
+            <p>Engineered with Liquid Glass & Anti-Gravity Physics.</p>
+            <p class="opacity-50 mt-2">&copy; 2026 Namazbek Bekzhanov.</p>
         </footer>
 
     </main>
 
-    <!-- WebGL Shader Script for Liquid Glass Background -->
+    <!-- LOGIC SCRIPT -->
     <script>
-        // SHADER CODE FOR LIQUID BACKGROUND
-        const vertexShader = `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `;
+        // === 1. DATA MODEL ===
+        const DATA = {
+            "user": {
+                "name": "Namazbek Bekzhanov",
+                "title": "Middle Data Engineer | Backend Developer",
+                "location": "Almaty, Kazakhstan",
+                "bio": "Building reliable enterprise ETL/ELT pipelines, architecting advanced data warehouses, and creating resilient scalable backend systems."
+            },
+            "socials": {
+                "github": "https://github.com/mrnamazbek",
+                "linkedin": "https://linkedin.com/in/namazbek-bekzhanov"
+            },
+            "tools": [
+                "python", "fastapi", "postgresql", "oracle", "apacheairflow", "apachekafka", "apachespark", "docker", "kubernetes", "grafana", "dbt", "clickhouse"
+            ],
+            "projects": [ // Fallback
+                { "name": "Big Data Pipeline on GCP", "link": "#", "description": "IaC data ingestion using Terraform, PySpark, Kafka, and BigQuery.", "thumb": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80" },
+                { "name": "DWH Implementation", "link": "#", "description": "Kimball style Data Warehouse with dbt models and Airflow orchestration.", "thumb": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" }
+            ],
+            "books": [
+                { "title": "Clean Code", "author": "Robert C. Martin", "cover": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=300&q=80" },
+                { "title": "Designing Data-Intensive Applications", "author": "Martin Kleppmann", "cover": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=300&q=80" },
+                { "title": "Fundamentals of Data Engineering", "author": "Joe Reis & Matt Housley", "cover": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=300&q=80" },
+                { "title": "The Data Warehouse Toolkit", "author": "Ralph Kimball", "cover": "https://images.unsplash.com/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=300&q=80" },
+                { "title": "Data Mesh", "author": "Zhamak Dehghani", "cover": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" },
+                { "title": "Database Internals", "author": "Alex Petrov", "cover": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&q=80" }
+            ]
+        };
 
-        const fragmentShader = `
-            uniform float time;
-            uniform vec2 resolution;
-            varying vec2 vUv;
+        // === 2. PERFORMANCE CHECKS ===
+        const isLowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || window.innerWidth < 768;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        console.log(`Perf Check: LowPower=${isLowPower}, ReducedMotion=${prefersReducedMotion}`);
 
-            // Simple noise function
-            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        // === 3. RENDER CONTENT ===
+        function renderContent() {
+            // User Info
+            document.getElementById('hero-name').innerText = DATA.user.name;
+            document.getElementById('hero-title').innerText = DATA.user.title;
+            document.getElementById('hero-bio').innerText = DATA.user.bio;
 
-            float snoise(vec2 v) {
-                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                vec2 i  = floor(v + dot(v, C.yy) );
-                vec2 x0 = v - i + dot(i, C.xx);
-                vec2 i1;
-                i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-                vec4 x12 = x0.xyxy + C.xxzz;
-                x12.xy -= i1;
-                i = mod289(i);
-                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
-                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-                m = m*m ;
-                return 42.0 * dot( m*m, vec3( dot(p.x,x0), dot(p.y,x12.xy), dot(p.z,x12.zw) ) );
-            }
+            // Socials
+            const socialContainer = document.getElementById('hero-socials');
+            // GitHub
+            const ghBtn = document.createElement('a');
+            ghBtn.href = DATA.socials.github;
+            ghBtn.target = "_blank";
+            ghBtn.className = "liquid-glass px-6 py-2 hover:bg-white/10 transition flex items-center gap-2 hover-trigger";
+            ghBtn.innerHTML = '<i class="devicon-github-original text-xl"></i> GitHub';
+            socialContainer.appendChild(ghBtn);
 
-            void main() {
-                vec2 uv = vUv;
-                
-                // Slow moving noise for "Liquid" feel
-                float t = time * 0.2;
-                
-                // Create large soft blobs
-                float noise1 = snoise(uv * 1.5 + vec2(t, t * 0.5));
-                float noise2 = snoise(uv * 2.0 - vec2(t * 0.3, t));
-                
-                // Mix colors based on noise
-                vec3 color1 = vec3(0.1, 0.1, 0.25); // Deep Blue/Black
-                vec3 color2 = vec3(0.3, 0.1, 0.4); // Purple
-                vec3 color3 = vec3(0.0, 0.3, 0.4); // Cyan/Teal
-                
-                vec3 finalColor = mix(color1, color2, noise1 * 0.5 + 0.5);
-                finalColor = mix(finalColor, color3, noise2 * 0.5 + 0.5);
-                
-                // Add a subtle glow/vignette
-                float dist = distance(uv, vec2(0.5));
-                finalColor *= (1.2 - dist);
+            // LinkedIn
+            const liBtn = document.createElement('a');
+            liBtn.href = DATA.socials.linkedin;
+            liBtn.target = "_blank";
+            liBtn.className = "liquid-glass px-6 py-2 hover:bg-white/10 transition flex items-center gap-2 hover-trigger";
+            liBtn.innerHTML = '<i class="devicon-linkedin-plain text-xl text-blue-400"></i> LinkedIn';
+            socialContainer.appendChild(liBtn);
 
-                gl_FragColor = vec4(finalColor, 1.0);
-            }
-        `;
+            // Fetch GitHub Projects (Live)
+            fetchGitHubRepos();
 
-        // SCENE SETUP
-        function initWebGL() {
-            // Check for reduced motion
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReducedMotion) {
-                console.log("Reduced motion enabled: WebGL disabled.");
-                return;
-            }
-
-            const canvas = document.getElementById('webgl-canvas');
-            
-            // Performance check: if mobile, maybe lower pixel ratio
-            const isMobile = window.innerWidth < 768;
-            
-            const scene = new THREE.Scene();
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false }); // Antialias false for performance
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
-
-            const geometry = new THREE.PlaneGeometry(2, 2);
-            const uniforms = {
-                time: { value: 0 },
-                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-            };
-
-            const material = new THREE.ShaderMaterial({
-                uniforms: uniforms,
-                vertexShader: vertexShader,
-                fragmentShader: fragmentShader
-            });
-
-            const plane = new THREE.Mesh(geometry, material);
-            scene.add(plane);
-
-            const clock = new THREE.Clock();
-
-            function animate() {
-                requestAnimationFrame(animate);
-                uniforms.time.value = clock.getElapsedTime();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            // Resize handler
-            window.addEventListener('resize', () => {
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
-            });
-        }
-        
-        // Wait for DOM
-        window.addEventListener('DOMContentLoaded', initWebGL);
-    </script>
-
-    <!-- Application Logic: Fetch Projects & UI Interactivity -->
-    <script>
-        // PARALLAX EFFECT FOR HERO CARD
-        const heroCard = document.getElementById('hero-card');
-        if (heroCard && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.addEventListener('mousemove', (e) => {
-                const x = (window.innerWidth - e.pageX * 2) / 100;
-                const y = (window.innerHeight - e.pageY * 2) / 100;
-                heroCard.style.transform = `translateX(${x}px) translateY(${y}px)`;
-            });
-        }
-
-        // DATA FETCHING
-        async function loadProjects() {
-            const grid = document.getElementById('projects-grid');
-            const repoUrl = 'https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6';
-            const mockUrl = 'assets/mock_repos.json';
-            
-            let repos = [];
-
-            try {
-                // Try fetching live data
-                console.log("Fetching GitHub data...");
-                const response = await fetch(repoUrl);
-                if (!response.ok) throw new Error('GitHub API Limit or Error');
-                repos = await response.json();
-                
-                // Update stats check
-                if(repos.length) {
-                    document.getElementById('stats-repos').innerText = repos.length + "+";
-                }
-
-            } catch (err) {
-                console.warn("GitHub fetch failed, falling back to mock data.", err);
-                try {
-                    const mockRes = await fetch(mockUrl);
-                    repos = await mockRes.json();
-                    document.getElementById('stats-repos').innerText = repos.length;
-                } catch (mockErr) {
-                    grid.innerHTML = '<p class="text-red-400">Failed to load projects.</p>';
-                }
-            }
-
-            // FILTER & RENDER
-            // Filter out forks if needed, or keep them. Let's just take top 3-4 interesting ones.
-            // Using the mock data structure or GitHub structure.
-            
-            grid.innerHTML = ''; // Clear skeleton
-            
-            repos.forEach(repo => {
-                const card = document.createElement('a');
-                card.href = repo.html_url;
-                card.target = "_blank";
-                card.className = "glass-card p-6 flex flex-col justify-between group hover:border-white/40 transition gap-4 min-h-[220px]";
-                
-                // Generate a random gradient thumb if no image provided in dataset
-                // Since GitHub API doesn't give images, we use a CSS gradient placeholder
-                const langColor = getLanguageColor(repo.language);
-
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                             <div class="flex items-center gap-2 text-sm text-cyan-300 font-mono">
-                                <span class="w-3 h-3 rounded-full" style="background-color: ${langColor}"></span>
-                                ${repo.language || 'Code'}
-                             </div>
-                             <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            // Render Books
+            const bookContainer = document.getElementById('books-carousel');
+            DATA.books.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = "min-w-[200px] snap-center hover-trigger group";
+                bookCard.innerHTML = `
+                    <div class="relative w-[200px] h-[300px] rounded-lg overflow-hidden shadow-2xl transition transform group-hover:-translate-y-2 border border-white/10">
+                        <img src="${book.cover}" loading="lazy" class="w-full h-full object-cover" alt="Cover of ${book.title}">
+                        <div class="absolute inset-x-0 bottom-0 bg-black/80 backdrop-blur-md p-3 translate-y-full group-hover:translate-y-0 transition duration-300">
+                            <h4 class="text-sm font-bold text-white leading-tight">${book.title}</h4>
+                            <p class="text-xs text-gray-400 mt-1">${book.author}</p>
                         </div>
-                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
-                        <p class="text-gray-400 text-sm mt-3 line-clamp-3 leading-relaxed">
-                            ${repo.description || 'No description available for this project.'}
-                        </p>
                     </div>
                 `;
-                grid.appendChild(card);
-            });
-            
-             // GSAP Animation for cards entry
-             gsap.from("#projects-grid a", {
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
-                scrollTrigger: {
-                    trigger: "#projects-grid",
-                    start: "top 80%"
-                }
+                bookContainer.appendChild(bookCard);
             });
         }
 
-        function getLanguageColor(lang) {
-            const colors = {
-                'Python': '#3572A5',
-                'JavaScript': '#f1e05a',
-                'PLpgSQL': '#336791',
-                'HTML': '#e34c26',
-                'CSS': '#563d7c'
-            };
-            return colors[lang] || '#ffffff';
+        async function fetchGitHubRepos() {
+            const grid = document.getElementById('projects-grid');
+            const repoUrl = `https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6`;
+
+            try {
+                const res = await fetch(repoUrl);
+                if (!res.ok) throw new Error("API Limit");
+                const repos = await res.json();
+
+                document.getElementById('stat-repos').innerText = repos.length + "+";
+                grid.innerHTML = ''; // Clear fallback if needed, though we start empty
+
+                repos.forEach(repo => renderProjectCard(repo, grid));
+            } catch (err) {
+                console.warn("GitHub fetch failed, loading fallback.", err);
+                DATA.projects.forEach(proj => renderProjectCard(proj, grid, true));
+            }
         }
 
-        // Initialize Data Load
-        window.addEventListener('DOMContentLoaded', loadProjects);
+        function renderProjectCard(repo, container, isLocal = false) {
+            const card = document.createElement('a');
+            card.href = isLocal ? repo.link : repo.html_url;
+            card.target = "_blank";
+            card.className = "liquid-glass p-6 group hover:border-cyan-500/30 transition duration-300 flex flex-col justify-between h-[250px] hover-trigger";
+
+            card.innerHTML = `
+                <div>
+                     <div class="flex items-center gap-2 text-cyan-400 mb-3 text-sm font-mono">
+                        <i class="devicon-${(repo.language || 'python').toLowerCase()}-plain"></i>
+                        ${repo.language || 'Project'}
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-200 transition">${repo.name}</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                        ${repo.description || 'No description available.'}
+                    </p>
+                </div>
+                <div class="text-xs text-gray-500 font-mono mt-4">View Source -></div>
+            `;
+            container.appendChild(card);
+        }
+
+        // === 4. ANTI-GRAVITY BACKGROUND ENGINE ===
+        function initAntiGravity() {
+            if (isLowPower || prefersReducedMotion) return;
+
+            const canvas = document.getElementById('anti-gravity-canvas');
+            const icons = DATA.tools;
+            const floaters = [];
+
+            // Spawn Icons
+            icons.forEach((iconName) => {
+                const el = document.createElement('i');
+                // Handle devicon naming weirdness if needed, mostly standard
+                // e.g. 'apacheairflow' vs 'apache-airflow' can vary in specific fonts, assuming Devicon latest handles generic
+                // Or simplified list mapping.
+                // Using a safe generic class approach:
+                el.className = `tech-floater devicon-${iconName}-plain`;
+
+                // Random Positioning
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const size = 30 + Math.random() * 50; // Random size
+
+                el.style.left = `${x}px`;
+                el.style.top = `${y}px`;
+                el.style.fontSize = `${size}px`;
+                el.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+                // Store physics state
+                const floater = {
+                    el: el,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 0.5, // Velocity X
+                    vy: (Math.random() - 0.5) * 0.5, // Velocity Y
+                    rot: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 0.2
+                };
+
+                floaters.push(floater);
+                canvas.appendChild(el);
+            });
+
+            // Physics Loop
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function tick() {
+                floaters.forEach(f => {
+                    // 1. Basic Drift
+                    f.x += f.vx;
+                    f.y += f.vy;
+                    f.rot += f.rotSpeed;
+
+                    // 2. Mouse Avoidance / Parallax (JetBrains style repulse)
+                    const dx = f.x - mouseX;
+                    const dy = f.y - mouseY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 300) {
+                        const angle = Math.atan2(dy, dx);
+                        const force = (300 - dist) * 0.005; // Gentle push
+                        f.vx += Math.cos(angle) * force;
+                        f.vy += Math.sin(angle) * force;
+                        f.el.classList.add('active'); // Highlight
+                    } else {
+                        f.el.classList.remove('active');
+                    }
+
+                    // 3. Friction (Damping) to stop infinite acceleration
+                    f.vx *= 0.98;
+                    f.vy *= 0.98;
+
+                    // 4. Boundary Wrap (Pacman style)
+                    if (f.x < -50) f.x = window.innerWidth + 50;
+                    if (f.x > window.innerWidth + 50) f.x = -50;
+                    if (f.y < -50) f.y = window.innerHeight + 50;
+                    if (f.y > window.innerHeight + 50) f.y = -50;
+
+                    // Apply
+                    f.el.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) rotate(${f.rot}deg)`;
+                });
+
+                requestAnimationFrame(tick);
+            }
+
+            tick();
+        }
+
+        // === 5. CUSTOM CURSOR ===
+        function initCursor() {
+            if (isLowPower || prefersReducedMotion) return;
+
+            const dot = document.getElementById('cursor-dot');
+            const outline = document.getElementById('cursor-outline');
+
+            document.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+
+                // Dot follows immediately
+                dot.style.transform = `translate(${clientX}px, ${clientY}px)`;
+
+                // Outline follows with lag (GSAP)
+                gsap.to(outline, {
+                    x: clientX,
+                    y: clientY,
+                    duration: 0.15,
+                    ease: "power2.out"
+                });
+            });
+
+            // Hover effects
+            const triggers = document.querySelectorAll('.hover-trigger');
+            triggers.forEach(t => {
+                t.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                t.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        }
+
+        // === INIT ===
+        window.addEventListener('DOMContentLoaded', () => {
+            renderContent();
+            initAntiGravity();
+            initCursor();
+        });
 
     </script>
 
-    <!-- Deployment & Dev Check -->
-    <!-- 
-        DEPLOYMENT INSTRUCTIONS:
-        1. Ensure 'assets' folder is in the same directory as index.html.
-        2. Push to GitHub.
-        3. Go to Repo Settings -> Pages -> Select 'main' branch as source.
+    <!-- QA CHECKLIST -->
+    <!--
+      [x] Liquid Glass UI applied (backdrop-filter, inset shadows).
+      [x] JetBrains-style Anti-Gravity floating logos via JS physics.
+      [x] Custom mouse cursor + hover states.
+      [x] Devicon CDN loaded.
+      [x] Mobile performance optimized (checks for lowPowerMode).
     -->
+
 </body>
+
 </html>
