@@ -1,0 +1,28 @@
+{
+    "assets": [
+        {
+            "name": "Python Logo",
+            "path": "assets/logos/python.svg",
+            "source_url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+            "license": "MIT"
+        },
+        {
+            "name": "FastAPI Logo",
+            "path": "assets/logos/fastapi.svg",
+            "source_url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
+            "license": "MIT"
+        },
+        {
+            "name": "PostgreSQL Logo",
+            "path": "assets/logos/postgresql.svg",
+            "source_url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+            "license": "PostgreSQL License"
+        },
+        {
+            "name": "Mock Repos Data",
+            "path": "assets/mock_repos.json",
+            "source_url": "Generated locally",
+            "license": "N/A"
+        }
+    ]
+}

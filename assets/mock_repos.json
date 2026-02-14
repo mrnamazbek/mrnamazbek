@@ -1,0 +1,42 @@
+[
+  {
+    "id": 101,
+    "name": "Big-Data-Final",
+    "html_url": "https://github.com/mrnamazbek/Big-Data-Final",
+    "description": "ETL pipeline using Spark & Airflow for processing large datasets.",
+    "language": "Python",
+    "stargazers_count": 12,
+    "forks_count": 4,
+    "topics": ["spark", "airflow", "etl", "big-data"]
+  },
+  {
+    "id": 102,
+    "name": "FastAPI-Microservice",
+    "html_url": "https://github.com/mrnamazbek/FastAPI-Microservice",
+    "description": "High-performance async REST API with Docker and PostgreSQL integration.",
+    "language": "Python",
+    "stargazers_count": 8,
+    "forks_count": 2,
+    "topics": ["fastapi", "docker", "postgresql"]
+  },
+  {
+    "id": 103,
+    "name": "SQL-Optimization-Toolkit",
+    "html_url": "https://github.com/mrnamazbek/SQL-Optimization-Toolkit",
+    "description": "Collection of scripts and utilities for analyzing and optimizing complex SQL queries.",
+    "language": "PLpgSQL",
+    "stargazers_count": 25,
+    "forks_count": 5,
+    "topics": ["sql", "database", "optimization"]
+  },
+  {
+    "id": 104,
+    "name": "DWH-Architecture",
+    "html_url": "https://github.com/mrnamazbek/DWH-Architecture",
+    "description": "Reference architecture for modern Data Warehousing using Kimball methodology.",
+    "language": "HCL",
+    "stargazers_count": 15,
+    "forks_count": 3,
+    "topics": ["dwh", "architecture", "data-modeling"]
+  }
+]
