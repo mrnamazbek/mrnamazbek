@@ -239,16 +239,26 @@
             gsap.from(card, {
                 scrollTrigger: {
                     trigger: card,
-                    start: "top 88%",
-                    toggleActions: "play none none reverse"
+                    start: "top 92%",
+                    toggleActions: "play none none none"
                 },
                 y: 30,
                 opacity: 0,
                 duration: 0.7,
                 ease: "power2.out",
-                delay: Math.min(i * 0.03, 0.25)
+                delay: Math.min(i * 0.03, 0.25),
+                immediateRender: false
             });
         });
+
+        // Ensure ScrollTrigger measurements are accurate after layout settles
+        setTimeout(() => {
+            try {
+                ScrollTrigger.refresh();
+            } catch (e) {
+                // ignore
+            }
+        }, 0);
     }
 
     // === 6. DATA LOADING (HARDCODED) ===
