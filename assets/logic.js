@@ -351,145 +351,413 @@
         });
     }
 
-    async function loadContent() {
-        // Hardcoded Books Data
-        const books = [
+    // === 6.1 VERTICAL LIBRARY (BOOKS) ===
+    const LIBRARY_CONFIG = {
+        BOOKS_URL: 'assets/books.json',
+        USE_MODAL_ON_MOBILE: false
+    };
+
+    function prefersReducedMotion() {
+        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function isMobileViewport() {
+        return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function makeBookCoverFallback(title, author) {
+        const t = String(title || '').slice(0, 38);
+        const a = String(author || '').slice(0, 38);
+        const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="480" viewBox="0 0 320 480">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0ea5e9" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="480" rx="22" fill="#0a0a0a"/>
+  <rect x="14" y="14" width="292" height="452" rx="18" fill="url(#g)" stroke="rgba(255,255,255,0.16)"/>
+  <text x="28" y="215" fill="rgba(255,255,255,0.92)" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">${t}</text>
+  <text x="28" y="250" fill="rgba(229,231,235,0.78)" font-family="Inter, Arial, sans-serif" font-size="14">${a}</text>
+</svg>`;
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    async function fetchBooksWithFallback(statusEl) {
+        const inlineFallback = [
             {
-                title: "Designing Data-Intensive Applications",
-                author: "Martin Kleppmann",
-                cover_url: "https://m.media-amazon.com/images/I/91cwOSS4sDL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Designing Data-Intensive Applications Book Cover"
+                id: 'kleppmann-ddia',
+                title: 'Designing Data-Intensive Applications',
+                author: 'Martin Kleppmann',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg',
+                isbn: '9781449373320',
+                short_blurb: 'A practical guide to designing scalable, reliable, maintainable systems.',
+                long_summary: 'A deep, practical tour of replication, partitioning, transactions, streams, and the real trade-offs behind modern data systems. It helps you reason about correctness, latency, throughput, and failure modes — the exact things that make pipelines trustworthy in production.',
+                tags: ['architecture', 'consistency', 'replication'],
+                read_status: 'reading',
+                alt_text: 'Cover — Designing Data-Intensive Applications'
             },
             {
-                title: "Clean Code",
-                author: "Robert C. Martin",
-                cover_url: "https://m.media-amazon.com/images/I/41-sN-mzwKL.jpg",
-                alt_text: "Clean Code Book Cover"
+                id: 'reis-fundamentals-de',
+                title: 'Fundamentals of Data Engineering',
+                author: 'Joe Reis & Matt Housley',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9781098108304-L.jpg',
+                isbn: '9781098108304',
+                short_blurb: 'Modern map of the data engineering lifecycle: from sources to serving.',
+                long_summary: 'Clarifies what “good” looks like in real data engineering: ownership, quality, observability, governance, and cost. Useful when you’re moving from building pipelines to building reliable data products.',
+                tags: ['lifecycle', 'governance', 'quality'],
+                read_status: 'to-read',
+                alt_text: 'Cover — Fundamentals of Data Engineering'
             },
             {
-                title: "The Clean Coder",
-                author: "Robert C. Martin",
-                cover_url: "https://m.media-amazon.com/images/I/71u8n-bDUQL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "The Clean Coder Book Cover"
+                id: 'martin-clean-code',
+                title: 'Clean Code',
+                author: 'Robert C. Martin',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
+                isbn: '9780132350884',
+                short_blurb: 'Write code that is readable, maintainable, and boring-in-a-good-way.',
+                long_summary: 'Even in data engineering, the fastest way to create outages is unreadable code. This book pushes naming, structure, testing discipline, and refactoring habits that keep pipelines and services easy to evolve.',
+                tags: ['craftsmanship', 'refactoring', 'testing'],
+                read_status: 'completed',
+                alt_text: 'Cover — Clean Code'
             },
             {
-                title: "Fundamentals of Data Engineering",
-                author: "Joe Reis & Matt Housley",
-                cover_url: "https://m.media-amazon.com/images/I/81k0yZ2mQPL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Fundamentals of Data Engineering Book Cover"
+                id: 'kimball-dw-toolkit',
+                title: 'The Data Warehouse Toolkit',
+                author: 'Ralph Kimball',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9781118530801-L.jpg',
+                isbn: '9781118530801',
+                short_blurb: 'Dimensional modeling patterns that still power modern analytics.',
+                long_summary: 'Explains facts, dimensions, slowly changing dimensions, and how to design models that stay understandable as requirements change. Great for building data marts and BI-friendly layers.',
+                tags: ['modeling', 'analytics', 'dimensional'],
+                read_status: 'to-read',
+                alt_text: 'Cover — The Data Warehouse Toolkit'
             },
             {
-                title: "The Data Warehouse Toolkit",
-                author: "Ralph Kimball",
-                cover_url: "https://m.media-amazon.com/images/I/81wD5PzQYlL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "The Data Warehouse Toolkit Book Cover"
+                id: 'densmore-data-pipelines',
+                title: 'Data Pipelines Pocket Reference',
+                author: 'James Densmore',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9781492087830-L.jpg',
+                isbn: '9781492087830',
+                short_blurb: 'A compact guide to moving data from raw sources to analytics.',
+                long_summary: 'Covers patterns, trade-offs, and common failure points in pipeline design — useful as a quick reference when you’re building ingestion, transformations, and data delivery workflows.',
+                tags: ['etl', 'patterns', 'operations'],
+                read_status: 'to-read',
+                alt_text: 'Cover — Data Pipelines Pocket Reference'
             },
             {
-                title: "Streaming Systems",
-                author: "Tyler Akidau",
-                cover_url: "https://m.media-amazon.com/images/I/81Z4y2cVQBL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Streaming Systems Book Cover"
-            },
-            {
-                title: "Kafka: The Definitive Guide",
-                author: "Gwen Shapira",
-                cover_url: "https://m.media-amazon.com/images/I/91qG2vO9ZXL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Kafka: The Definitive Guide Book Cover"
-            },
-            {
-                title: "Data Pipelines Pocket Reference",
-                author: "James Densmore",
-                cover_url: "https://m.media-amazon.com/images/I/71tUKu5pZQL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Data Pipelines Pocket Reference Book Cover"
-            },
-            {
-                title: "The Phoenix Project",
-                author: "Gene Kim, Kevin Behr, George Spafford",
-                cover_url: "https://covers.openlibrary.org/b/isbn/9780988262591-L.jpg",
-                alt_text: "The Phoenix Project Book Cover"
-            },
-            {
-                title: "Accelerate",
-                author: "Nicole Forsgren, Jez Humble, Gene Kim",
-                cover_url: "https://covers.openlibrary.org/b/isbn/9781942788331-L.jpg",
-                alt_text: "Accelerate Book Cover"
-            },
-            {
-                title: "Designing Event-Driven Systems",
-                author: "Ben Stopford",
-                cover_url: "https://covers.openlibrary.org/b/isbn/9781492038252-L.jpg",
-                alt_text: "Designing Event-Driven Systems Book Cover"
-            },
-            {
-                title: "Data Engineering with Python",
-                author: "Paul Crickard",
-                cover_url: "https://covers.openlibrary.org/b/isbn/9781839214189-L.jpg",
-                alt_text: "Data Engineering with Python Book Cover"
-            },
-            {
-                title: "Designing Machine Learning Systems",
-                author: "Chip Huyen",
-                cover_url: "https://covers.openlibrary.org/b/isbn/9781098107968-L.jpg",
-                alt_text: "Designing Machine Learning Systems Book Cover"
-            },
-            {
-                title: "Data Mesh",
-                author: "Zhamak Dehghani",
-                cover_url: "https://m.media-amazon.com/images/I/91V0ofr3C-L._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Data Mesh Book Cover"
-            },
-            {
-                title: "The Pragmatic Programmer",
-                author: "David Thomas",
-                cover_url: "https://m.media-amazon.com/images/I/71VStSjZmpL._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Pragmatic Programmer Book Cover"
-            },
-            {
-                title: "Refactoring",
-                author: "Martin Fowler",
-                cover_url: "https://m.media-amazon.com/images/I/81HqVRRwp3L._AC_UF1000,1000_QL80_.jpg",
-                alt_text: "Refactoring Book Cover"
+                id: 'shapira-kafka',
+                title: 'Kafka: The Definitive Guide',
+                author: 'Gwen Shapira',
+                cover_url: 'https://covers.openlibrary.org/b/isbn/9781491936160-L.jpg',
+                isbn: '9781491936160',
+                short_blurb: 'Event streaming patterns for real-time, decoupled systems.',
+                long_summary: 'A practical look at Kafka architecture, producer/consumer design, delivery guarantees, and operations. Helpful for anyone building CDC, streaming ingestion, or event-driven microservices.',
+                tags: ['streaming', 'events', 'kafka'],
+                read_status: 'to-read',
+                alt_text: 'Cover — Kafka: The Definitive Guide'
             }
         ];
 
-        const makeBookFallback = (title, author) => {
-            const t = String(title || '').slice(0, 42);
-            const a = String(author || '').slice(0, 42);
-            const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0ea5e9" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.28"/>
-    </linearGradient>
-  </defs>
-  <rect width="600" height="900" rx="48" fill="#0a0a0a"/>
-  <rect x="26" y="26" width="548" height="848" rx="42" fill="url(#g)" stroke="rgba(255,255,255,0.16)"/>
-  <text x="60" y="420" fill="rgba(255,255,255,0.92)" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700">${t}</text>
-  <text x="60" y="490" fill="rgba(229,231,235,0.78)" font-family="Inter, Arial, sans-serif" font-size="28">${a}</text>
-  <text x="60" y="820" fill="rgba(0,212,255,0.75)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace" font-size="20">mrnamazbek.dev</text>
-</svg>`;
-            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-        };
+        try {
+            const res = await fetch(LIBRARY_CONFIG.BOOKS_URL, { cache: 'no-store' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            if (!Array.isArray(data)) throw new Error('Invalid books.json format');
+            return { books: data, offline: false };
+        } catch (e) {
+            if (statusEl) statusEl.textContent = 'Library offline — showing cached list';
+            return { books: inlineFallback, offline: true };
+        }
+    }
 
-        const container = document.getElementById('books-container');
-        if (container) {
-            container.innerHTML = '';
-            books.forEach(book => {
-                const fallbackCover = makeBookFallback(book.title, book.author);
-                const div = document.createElement('div');
-                // Ensure consistent rounding (rounded-2xl matches glass-card radius)
-                div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300";
-                div.innerHTML = `
-                    <div class="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 shadow-lg border border-white/10">
-                         <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}" onerror="this.onerror=null;this.src='${fallbackCover}'">
+    function getStatusBadge(status) {
+        const s = String(status || '').toLowerCase();
+        if (s === 'reading') return { text: 'Reading', cls: 'bg-cyan-500/15 text-cyan-200 border-cyan-300/20' };
+        if (s === 'completed') return { text: 'Completed', cls: 'bg-emerald-500/15 text-emerald-200 border-emerald-300/20' };
+        return { text: 'To read', cls: 'bg-white/5 text-gray-200 border-white/10' };
+    }
+
+    function safeText(v) {
+        return String(v || '');
+    }
+
+    function renderVerticalLibrary(books, options) {
+        const listEl = document.getElementById('vertical-books-list');
+        if (!listEl) return;
+
+        const statusEl = document.getElementById('library-status');
+        if (statusEl && options && options.offline) {
+            statusEl.textContent = 'Library offline — showing cached list';
+        }
+
+        const reduceMotion = prefersReducedMotion();
+
+        listEl.innerHTML = '';
+        const domIndex = {};
+
+        books.forEach((b) => {
+            const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
+            const title = safeText(b.title);
+            const author = safeText(b.author);
+            const cover = safeText(b.cover_url);
+            const alt = safeText(b.alt_text || ('Cover — ' + title));
+            const shortBlurb = safeText(b.short_blurb);
+            const tags = Array.isArray(b.tags) ? b.tags : [];
+            const badge = getStatusBadge(b.read_status);
+            const panelId = `book-panel-${id}`;
+
+            const fallbackCover = makeBookCoverFallback(title, author);
+            const item = document.createElement('div');
+            item.className = 'glass-card p-4 rounded-2xl';
+
+            item.innerHTML = `
+                <div class="vl-book" role="button" tabindex="0" aria-expanded="false" aria-controls="${panelId}" aria-label="${title} by ${author}">
+                    <div class="flex gap-4">
+                        <div class="vl-cover w-[56px] h-[84px] rounded-xl overflow-hidden border border-white/10 flex-none">
+                            <img src="${cover}" alt="${alt}" loading="lazy" decoding="async"
+                                 srcset="${cover} 1x, ${cover} 2x"
+                                 onload="this.classList.add('is-loaded')"
+                                 onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('is-loaded')" />
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="font-bold text-white/90 leading-snug truncate">${title}</div>
+                                    <div class="text-xs text-gray-400 truncate">${author}</div>
+                                </div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded-full border ${badge.cls}">${badge.text}</span>
+                            </div>
+                            <div class="text-[11px] text-gray-500 mt-2 truncate">${tags.slice(0, 3).join(' · ')}</div>
+                        </div>
                     </div>
-                    <h4 class="font-bold leading-tight text-white/90 text-sm">${book.title}</h4>
-                    <p class="text-xs text-gray-500">${book.author}</p>
-                `;
-                container.appendChild(div);
+                </div>
+
+                <div id="${panelId}" class="vl-accordion" hidden>
+                    <div class="mt-3 pt-3 border-t border-white/10">
+                        <div class="text-gray-300 text-sm leading-relaxed">${shortBlurb}</div>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <button type="button" class="px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition text-sm" data-action="readmore" data-book-id="${id}">Read more</button>
+                            <button type="button" class="px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition text-sm" data-action="collapse" data-book-id="${id}">Collapse</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            item.dataset.bookId = id;
+            listEl.appendChild(item);
+
+            const header = item.querySelector('.vl-book');
+            const accordion = item.querySelector('#' + CSS.escape(panelId));
+
+            const openAccordion = () => {
+                if (!accordion || !header) return;
+                const expanded = header.getAttribute('aria-expanded') === 'true';
+                if (expanded) return;
+
+                header.setAttribute('aria-expanded', 'true');
+                accordion.hidden = false;
+                accordion.classList.add('is-open');
+
+                if (reduceMotion) {
+                    accordion.style.maxHeight = 'none';
+                } else {
+                    accordion.style.maxHeight = accordion.scrollHeight + 'px';
+                }
+
+                document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
+            };
+
+            const closeAccordion = () => {
+                if (!accordion || !header) return;
+                const expanded = header.getAttribute('aria-expanded') === 'true';
+                if (!expanded) return;
+
+                header.setAttribute('aria-expanded', 'false');
+                if (reduceMotion) {
+                    accordion.classList.remove('is-open');
+                    accordion.hidden = true;
+                    accordion.style.maxHeight = '0px';
+                } else {
+                    accordion.style.maxHeight = '0px';
+                    accordion.classList.remove('is-open');
+                    window.setTimeout(() => {
+                        accordion.hidden = true;
+                    }, 220);
+                }
+                document.dispatchEvent(new CustomEvent('book:close', { detail: id }));
+            };
+
+            const toggleAccordion = () => {
+                const expanded = header.getAttribute('aria-expanded') === 'true';
+                if (expanded) closeAccordion();
+                else openAccordion();
+            };
+
+            domIndex[id] = { item, header, accordion, openAccordion, closeAccordion };
+
+            header.addEventListener('click', (e) => {
+                // Ignore clicks that originate from nested buttons
+                const t = e.target;
+                if (t && t.closest && t.closest('button')) return;
+                toggleAccordion();
+            });
+
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleAccordion();
+                }
+            });
+
+            item.addEventListener('click', (e) => {
+                const btn = e.target && e.target.closest ? e.target.closest('button[data-action]') : null;
+                if (!btn) return;
+
+                const action = btn.getAttribute('data-action');
+                if (action === 'collapse') closeAccordion();
+                if (action === 'readmore') {
+                    openBookInModal(id);
+                }
+            });
+        });
+
+        // Expose API after render
+        window.library = window.library || {};
+        window.library.openBook = (id) => {
+            const key = String(id || '');
+            const entry = window.library._domIndex ? window.library._domIndex[key] : null;
+            if (entry && entry.openAccordion) entry.openAccordion();
+            openBookInModal(key);
+        };
+        window.library.closeModal = () => closeLibraryModal();
+
+        // Keep data accessible for modal
+        window.library._booksIndex = Object.fromEntries(books.map((b) => {
+            const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
+            return [id, b];
+        }));
+
+        window.library._domIndex = domIndex;
+    }
+
+    function openBookInModal(id) {
+        const reduceMotion = prefersReducedMotion();
+        const modal = document.getElementById('library-modal');
+        const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
+        if (!modal || !panel) return;
+
+        const booksIndex = window.library && window.library._booksIndex ? window.library._booksIndex : {};
+        const book = booksIndex[id];
+        if (!book) return;
+
+        const useModal = !isMobileViewport() || LIBRARY_CONFIG.USE_MODAL_ON_MOBILE;
+        if (!useModal) {
+            const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
+            if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer');
+            return;
+        }
+
+        const titleEl = document.getElementById('library-modal-title');
+        const authorEl = document.getElementById('library-modal-author');
+        const tagsEl = document.getElementById('library-modal-tags');
+        const bodyEl = document.getElementById('library-modal-body');
+        const readMoreEl = document.getElementById('library-modal-readmore');
+
+        if (titleEl) titleEl.textContent = safeText(book.title);
+        if (authorEl) authorEl.textContent = safeText(book.author);
+        if (bodyEl) bodyEl.textContent = safeText(book.long_summary || book.short_blurb || '');
+        if (tagsEl) {
+            tagsEl.innerHTML = '';
+            const tags = Array.isArray(book.tags) ? book.tags : [];
+            tags.slice(0, 8).forEach((t) => {
+                const span = document.createElement('span');
+                span.className = 'journey-skill';
+                span.textContent = String(t);
+                tagsEl.appendChild(span);
             });
         }
+
+        if (readMoreEl) {
+            const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
+            readMoreEl.href = url;
+            readMoreEl.classList.toggle('hidden', url === '#');
+        }
+
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+
+        document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
+
+        // Focus trap
+        const lastFocus = document.activeElement;
+        modal._lastFocus = lastFocus;
+
+        const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const getFocusable = () => Array.from(panel.querySelectorAll(focusableSelector)).filter((el) => el.offsetParent !== null);
+
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeLibraryModal();
+                return;
+            }
+            if (e.key === 'Tab') {
+                const focusables = getFocusable();
+                if (!focusables.length) return;
+                const first = focusables[0];
+                const last = focusables[focusables.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+
+        modal._onKeyDown = onKeyDown;
+        document.addEventListener('keydown', onKeyDown);
+
+        // Backdrop + close buttons
+        const onClick = (e) => {
+            const close = e.target && e.target.getAttribute ? e.target.getAttribute('data-close') : null;
+            if (close) closeLibraryModal();
+        };
+        modal._onClick = onClick;
+        modal.addEventListener('click', onClick);
+
+        // Focus dialog
+        if (reduceMotion) {
+            panel.focus();
+        } else {
+            window.setTimeout(() => panel.focus(), 0);
+        }
+    }
+
+    function closeLibraryModal() {
+        const modal = document.getElementById('library-modal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+
+        document.dispatchEvent(new CustomEvent('book:close', { detail: 'modal' }));
+
+        if (modal._onKeyDown) document.removeEventListener('keydown', modal._onKeyDown);
+        if (modal._onClick) modal.removeEventListener('click', modal._onClick);
+
+        const last = modal._lastFocus;
+        if (last && last.focus) {
+            try { last.focus(); } catch (e) { /* ignore */ }
+        }
+    }
+
+    async function loadContent() {
+        const statusEl = document.getElementById('library-status');
+        const result = await fetchBooksWithFallback(statusEl);
+        renderVerticalLibrary(result.books, { offline: result.offline });
 
         // GitHub
         const grid = document.getElementById('projects-grid');

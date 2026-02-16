@@ -376,13 +376,19 @@
         }
 
         .company-mark {
-            width: 44px;
-            height: 44px;
+            width: 52px;
+            height: 52px;
             border-radius: 14px;
             display: grid;
             place-items: center;
             font-weight: 800;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
+            font-size: clamp(0.52rem, 1.2vw, 0.78rem);
+            line-height: 1;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 4px;
+            overflow: hidden;
             color: rgba(255, 255, 255, 0.92);
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.22), rgba(167, 139, 250, 0.18));
             border: 1px solid rgba(255, 255, 255, 0.14);
@@ -422,6 +428,84 @@
 
         .journey-tool i {
             font-size: 1rem;
+        }
+
+        .vl-accordion {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-2px);
+            transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .vl-accordion.is-open {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .vl-cover {
+            background: radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.18), transparent 55%),
+                        radial-gradient(circle at 70% 80%, rgba(167, 139, 250, 0.16), transparent 55%),
+                        rgba(255, 255, 255, 0.04);
+            filter: saturate(1.1);
+        }
+
+        .vl-cover img {
+            opacity: 0.01;
+            transition: opacity 0.25s ease;
+        }
+
+        .vl-cover img.is-loaded {
+            opacity: 0.9;
+        }
+
+        .vl-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99990;
+            display: grid;
+            place-items: center;
+        }
+
+        .vl-modal__backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .vl-modal__panel {
+            position: relative;
+            width: min(720px, calc(100vw - 28px));
+            max-height: min(78vh, 780px);
+            overflow: auto;
+            border-radius: 18px;
+            background: rgba(20, 20, 25, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+            padding: 18px 18px;
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .vl-modal {
+                place-items: end center;
+            }
+            .vl-modal__panel {
+                width: 100vw;
+                border-radius: 18px 18px 0 0;
+                max-height: 88vh;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .vl-accordion {
+                transition: none;
+            }
+            .vl-cover img {
+                transition: none;
+            }
         }
 
         .journey-card:hover {

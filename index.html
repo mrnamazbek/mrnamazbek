@@ -518,11 +518,47 @@
         </div>
     </section>
 
-    <!-- LIBRARY -->
-    <section id="library" class="glass-card p-8 rounded-2xl">
-        <h3 class="text-3xl font-display font-bold mb-8">The Library</h3>
-        <div id="books-container" class="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory">
-            <!-- Injected via JS -->
+    <section id="vertical-library" class="space-y-6" aria-label="Books library">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+            <div>
+                <h3 class="text-3xl font-display font-bold mb-2">Books</h3>
+                <p class="text-gray-400 max-w-2xl">A vertical, scrollable library. Select a book to read a mini-summary.</p>
+            </div>
+            <div id="library-status" class="text-xs font-mono text-gray-500"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card p-4 rounded-2xl lg:col-span-1">
+                <div class="vl-scroll max-h-[520px] overflow-y-auto pr-1" role="list" aria-label="Books list">
+                    <div id="vertical-books-list" class="space-y-3">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl lg:col-span-2">
+                <div class="text-sm font-mono text-cyan-300 mb-2">Tip</div>
+                <div class="text-gray-300 leading-relaxed">Use <span class="text-white">Tab</span> to focus a book and press <span class="text-white">Enter</span> or <span class="text-white">Space</span> to expand. Press <span class="text-white">Esc</span> to close the modal.</div>
+            </div>
+        </div>
+
+        <div id="library-modal" class="vl-modal hidden" aria-hidden="true">
+            <div class="vl-modal__backdrop" data-close="1"></div>
+            <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="library-modal-title" tabindex="-1">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h4 id="library-modal-title" class="text-2xl font-bold font-display"></h4>
+                        <div id="library-modal-author" class="text-gray-400 mt-1"></div>
+                    </div>
+                    <button type="button" class="px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
+                </div>
+                <div id="library-modal-tags" class="flex flex-wrap gap-2 mt-4"></div>
+                <div id="library-modal-body" class="text-gray-200 leading-relaxed mt-4"></div>
+                <div class="flex flex-wrap gap-3 mt-6">
+                    <a id="library-modal-readmore" href="#" target="_blank" rel="noreferrer" class="px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Read more</a>
+                    <button type="button" class="px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
+                </div>
+            </div>
         </div>
     </section>
 
