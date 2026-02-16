@@ -212,19 +212,21 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // Animate only section cards (exclude nav)
-        const cards = gsap.utils.toArray('section .glass-card, #projects-grid .glass-card');
+        const cards = gsap.utils.toArray('section:not(#journey) .glass-card, #projects-grid .glass-card');
         cards.forEach((card, i) => {
             gsap.from(card, {
                 scrollTrigger: {
                     trigger: card,
                     start: "top 85%",
-                    toggleActions: "play none none reverse"
+                    toggleActions: "play none none none",
+                    once: true
                 },
                 y: 50,
                 opacity: 0,
                 duration: 0.8,
                 ease: "power2.out",
-                delay: i % 3 * 0.1
+                delay: i % 3 * 0.1,
+                immediateRender: false
             });
         });
 
@@ -365,6 +367,42 @@
                 alt_text: "Clean Code Book Cover"
             },
             {
+                title: "The Clean Coder",
+                author: "Robert C. Martin",
+                cover_url: "https://m.media-amazon.com/images/I/71u8n-bDUQL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "The Clean Coder Book Cover"
+            },
+            {
+                title: "Fundamentals of Data Engineering",
+                author: "Joe Reis & Matt Housley",
+                cover_url: "https://m.media-amazon.com/images/I/81k0yZ2mQPL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "Fundamentals of Data Engineering Book Cover"
+            },
+            {
+                title: "The Data Warehouse Toolkit",
+                author: "Ralph Kimball",
+                cover_url: "https://m.media-amazon.com/images/I/81wD5PzQYlL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "The Data Warehouse Toolkit Book Cover"
+            },
+            {
+                title: "Streaming Systems",
+                author: "Tyler Akidau",
+                cover_url: "https://m.media-amazon.com/images/I/81Z4y2cVQBL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "Streaming Systems Book Cover"
+            },
+            {
+                title: "Kafka: The Definitive Guide",
+                author: "Gwen Shapira",
+                cover_url: "https://m.media-amazon.com/images/I/91qG2vO9ZXL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "Kafka: The Definitive Guide Book Cover"
+            },
+            {
+                title: "Data Pipelines Pocket Reference",
+                author: "James Densmore",
+                cover_url: "https://m.media-amazon.com/images/I/71tUKu5pZQL._AC_UF1000,1000_QL80_.jpg",
+                alt_text: "Data Pipelines Pocket Reference Book Cover"
+            },
+            {
                 title: "Data Mesh",
                 author: "Zhamak Dehghani",
                 cover_url: "https://m.media-amazon.com/images/I/91V0ofr3C-L._AC_UF1000,1000_QL80_.jpg",
@@ -384,16 +422,37 @@
             }
         ];
 
+        const makeBookFallback = (title, author) => {
+            const t = String(title || '').slice(0, 42);
+            const a = String(author || '').slice(0, 42);
+            const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0ea5e9" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.28"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="900" rx="48" fill="#0a0a0a"/>
+  <rect x="26" y="26" width="548" height="848" rx="42" fill="url(#g)" stroke="rgba(255,255,255,0.16)"/>
+  <text x="60" y="420" fill="rgba(255,255,255,0.92)" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700">${t}</text>
+  <text x="60" y="490" fill="rgba(229,231,235,0.78)" font-family="Inter, Arial, sans-serif" font-size="28">${a}</text>
+  <text x="60" y="820" fill="rgba(0,212,255,0.75)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace" font-size="20">mrnamazbek.dev</text>
+</svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        };
+
         const container = document.getElementById('books-container');
         if (container) {
             container.innerHTML = '';
             books.forEach(book => {
+                const fallbackCover = makeBookFallback(book.title, book.author);
                 const div = document.createElement('div');
                 // Ensure consistent rounding (rounded-2xl matches glass-card radius)
                 div.className = "flex-none w-[200px] group cursor-pointer hover:-translate-y-2 transition duration-300";
                 div.innerHTML = `
                     <div class="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 shadow-lg border border-white/10">
-                         <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}">
+                         <img src="${book.cover_url}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" alt="${book.alt_text}" onerror="this.onerror=null;this.src='${fallbackCover}'">
                     </div>
                     <h4 class="font-bold leading-tight text-white/90 text-sm">${book.title}</h4>
                     <p class="text-xs text-gray-500">${book.author}</p>
