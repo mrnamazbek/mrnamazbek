@@ -1,0 +1,307 @@
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* === GLOBAL STYLE === */
+        :root {
+            --glass-border: 1px solid rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(20, 20, 25, 0.4);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        /* CUSTOM CURSOR */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border: 2px solid cyan;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            /* Topmost */
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            will-change: transform;
+        }
+
+        #custom-cursor.hovered {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.8);
+        }
+
+        /* ANTI-GRAVITY LOGOS CONTAINER */
+        #anti-gravity-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            /* Behind main content but in front of background shader */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-logo {
+            position: absolute;
+            /* REMOVED color override to allow 'colored' class to work */
+            opacity: 0.25;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+            will-change: transform;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Particle Canvas */
+        #fx-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 9998;
+            /* Below cursor */
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--glass-shadow);
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+            transition: left 0.7s;
+        }
+
+        /* Chip Style */
+        .tech-chip {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            transition: background 0.2s;
+            /* NEW: Flexbox for icons */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tech-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            #webgl-canvas {
+                opacity: 0.5;
+            }
+
+            .glass-card {
+                backdrop-filter: blur(10px);
+            }
+
+            /* Show regular cursor on mobile usually, but keeping none as requested for consistent feel, or reset to auto */
+            body {
+                cursor: auto;
+            }
+
+            #custom-cursor {
+                display: none;
+            }
+        }
+
+/* ... existing code ... */
+            #custom-cursor {
+                display: none;
+            }
+        }
+
+        /* === KEYWORDS GLOBE === */
+        #globe-section {
+            position: relative;
+            min-height: 500px;
+        }
+        #globe-container {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        #globe-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            outline: none;
+        }
+        #globe-canvas:active { cursor: grabbing; }
+
+        /* Tooltip */
+        #globe-tooltip {
+            position: absolute;
+            pointer-events: none;
+            padding: 6px 14px;
+            background: rgba(15,15,20,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.15s, transform 0.15s;
+            z-index: 20;
+        }
+        #globe-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #globe-tooltip .tt-keyword { font-weight: 600; }
+        #globe-tooltip .tt-category {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 1px 8px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Legend */
+        .globe-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .globe-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+        .globe-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* 2D Fallback */
+        .globe-fallback-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            padding: 32px 16px;
+            min-height: 300px;
+        }
+        .globe-fallback-tag {
+            padding: 6px 16px;
+            border-radius: 9999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #ddd;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .globe-fallback-tag:hover,
+        .globe-fallback-tag:focus {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.08);
+            box-shadow: 0 0 12px rgba(0,210,255,0.3);
+            outline: none;
+        }
+
+        /* Visual presets via CSS vars */
+        :root {
+            --globe-color-data: #00d4ff;
+            --globe-color-software: #a78bfa;
+            --globe-color-infra: #34d399;
+            --globe-color-tooling: #fbbf24;
+            --globe-rotation-speed: 0.002;
+            --globe-text-scale: 1;
+        }
+        /* Preset: professional */
+        .globe-preset-professional {
+            --globe-color-data: #60a5fa;
+            --globe-color-software: #c084fc;
+            --globe-color-infra: #6ee7b7;
+            --globe-color-tooling: #fcd34d;
+        }
+        /* Preset: minimal */
+        .globe-preset-minimal {
+            --globe-color-data: #94a3b8;
+            --globe-color-software: #cbd5e1;
+            --globe-color-infra: #a7f3d0;
+            --globe-color-tooling: #fde68a;
+        }
