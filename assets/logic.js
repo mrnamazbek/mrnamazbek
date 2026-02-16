@@ -232,9 +232,113 @@
         gsap.from("#about h1, #about p", {
             y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out", delay: 0.5
         });
+
+        // Journey section reveal
+        const journeyCards = gsap.utils.toArray('#journey .journey-card, #journey .edu-card, #journey .journey-insight');
+        journeyCards.forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 88%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.7,
+                ease: "power2.out",
+                delay: Math.min(i * 0.03, 0.25)
+            });
+        });
     }
 
     // === 6. DATA LOADING (HARDCODED) ===
+    let cachedRepos = [];
+
+    // Repo Tech Mapping (Extend with logic)
+    const repoTechMap = {
+        'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
+        'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
+        'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
+        'mrnamazbek': ['devicon-github-original colored', 'devicon-markdown-original colored']
+    };
+
+    function getTechIcons(repo) {
+        if (!repo) return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+        // 1. Check direct map
+        if (repo.name && repoTechMap[repo.name]) return repoTechMap[repo.name];
+
+        // 2. Infer from Language
+        const lang = (repo.language || '').toLowerCase();
+        if (lang === 'python') return ['devicon-python-plain colored', 'devicon-pandas-plain colored', 'devicon-numpy-plain colored'];
+        if (lang === 'java') return ['devicon-java-plain colored', 'devicon-spring-plain colored'];
+        if (lang === 'javascript') return ['devicon-javascript-plain colored', 'devicon-nodejs-plain colored'];
+        if (lang === 'typescript') return ['devicon-typescript-plain colored', 'devicon-react-original colored'];
+        if (lang === 'go') return ['devicon-go-original-wordmark colored', 'devicon-kubernetes-plain colored'];
+        if (lang === 'jupyter notebook') return ['devicon-jupyter-plain colored', 'devicon-python-plain colored'];
+        if (lang === 'html') return ['devicon-html5-plain colored', 'devicon-css3-plain colored'];
+
+        // 3. Default
+        return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+    }
+
+    function normalizeText(value) {
+        return String(value || '').toLowerCase();
+    }
+
+    function renderProjects(repos, keyword) {
+        const grid = document.getElementById('projects-grid');
+        if (!grid) return;
+
+        const list = Array.isArray(repos) ? repos : [];
+
+        const kw = normalizeText(keyword).trim();
+        const filtered = kw
+            ? list.filter(repo => {
+                if (!repo) return false;
+                const hay = [repo.name, repo.description, repo.language].map(normalizeText).join(' ');
+                return hay.includes(kw);
+            })
+            : list;
+
+        if (!filtered.length) {
+            grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + keyword + '</span></div>';
+            return;
+        }
+
+        grid.innerHTML = '';
+        filtered.forEach(repo => {
+            if (!repo) return;
+            const card = document.createElement('a');
+            card.href = repo.html_url || '#';
+            card.target = "_blank";
+            card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
+
+            const techIcons = getTechIcons(repo);
+            const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
+
+            const badge = kw
+                ? `<div class="text-[10px] font-mono uppercase tracking-widest text-cyan-300/80">Filtered by: ${keyword}</div>`
+                : '';
+
+            card.innerHTML = `
+                    <div>
+                         <div class="flex items-center justify-between gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
+                            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}</div>
+                            ${badge}
+                        </div>
+                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
+                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'No description.'}</p>
+                    </div>
+
+                    <!-- Dynamic Tech Icons -->
+                    <div class="mt-auto pt-4 border-t border-white/10 flex items-center gap-4 opacity-80 group-hover:opacity-100 transition">
+                         ${iconsHtml}
+                    </div>
+                `;
+            grid.appendChild(card);
+        });
+    }
+
     async function loadContent() {
         // Hardcoded Books Data
         const books = [
@@ -288,65 +392,18 @@
             });
         }
 
-        // Repo Tech Mapping (Extend with logic)
-        const repoTechMap = {
-            'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
-            'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
-            'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
-            'mrnamazbek': ['devicon-github-original colored', 'devicon-markdown-original colored']
-        };
-
-        function getTechIcons(repo) {
-            // 1. Check direct map
-            if (repoTechMap[repo.name]) return repoTechMap[repo.name];
-
-            // 2. Infer from Language
-            const lang = (repo.language || '').toLowerCase();
-            if (lang === 'python') return ['devicon-python-plain colored', 'devicon-pandas-plain colored', 'devicon-numpy-plain colored'];
-            if (lang === 'java') return ['devicon-java-plain colored', 'devicon-spring-plain colored'];
-            if (lang === 'javascript') return ['devicon-javascript-plain colored', 'devicon-nodejs-plain colored'];
-            if (lang === 'typescript') return ['devicon-typescript-plain colored', 'devicon-react-original colored'];
-            if (lang === 'go') return ['devicon-go-original-wordmark colored', 'devicon-kubernetes-plain colored'];
-            if (lang === 'jupyter notebook') return ['devicon-jupyter-plain colored', 'devicon-python-plain colored'];
-            if (lang === 'html') return ['devicon-html5-plain colored', 'devicon-css3-plain colored'];
-
-            // 3. Default
-            return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
-        }
-
         // GitHub
         const grid = document.getElementById('projects-grid');
         try {
             const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
             const repos = await res.json();
-            if (repos.length) document.getElementById('stats-repos').innerText = repos.length + "+";
+            if (Array.isArray(repos) && repos.length) {
+                const statsEl = document.getElementById('stats-repos');
+                if (statsEl) statsEl.innerText = repos.length + "+";
+            }
 
-            grid.innerHTML = '';
-            repos.forEach(repo => {
-                const card = document.createElement('a');
-                card.href = repo.html_url; card.target = "_blank";
-                // Consistent rounding (rounded-2xl defined in CSS for glass-card is 16px, matching books now)
-                card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
-
-                const techIcons = getTechIcons(repo);
-                const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
-
-                card.innerHTML = `
-                    <div>
-                         <div class="flex items-center gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
-                            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}
-                        </div>
-                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
-                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'No description.'}</p>
-                    </div>
-
-                    <!-- Dynamic Tech Icons -->
-                    <div class="mt-auto pt-4 border-t border-white/10 flex items-center gap-4 opacity-80 group-hover:opacity-100 transition">
-                         ${iconsHtml}
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+            cachedRepos = Array.isArray(repos) ? repos : [];
+            renderProjects(cachedRepos);
         } catch (e) {
             grid.innerHTML = '<div class="text-gray-500">GitHub API Limit Reached.</div>';
         }
@@ -360,6 +417,17 @@
         initAntiGravityLogos(); // New
         initScrollAnimations(); // New
         loadContent(); // Updated
+
+        window.filterByKeyword = (keyword) => {
+            renderProjects(cachedRepos, keyword);
+            const el = document.getElementById('projects');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        document.addEventListener('keyword:click', (e) => {
+            if (!e || !e.detail) return;
+            window.filterByKeyword(e.detail);
+        });
 
         // Hero Parallax
         const heroCard = document.getElementById('hero-card');

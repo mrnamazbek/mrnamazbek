@@ -11,7 +11,7 @@
             SPHERE_RADIUS: 200,
             REPULSE_RADIUS: 80,
             REPULSE_STRENGTH: 15,
-            KEYWORD_URL: '/assets/keywords.json'
+            KEYWORD_URL: 'assets/keywords.json'
         };
 
         /* ── Category Colors (match CSS vars) ── */

@@ -172,11 +172,6 @@
             }
         }
 
-/* ... existing code ... */
-            #custom-cursor {
-                display: none;
-            }
-        }
 
         /* === KEYWORDS GLOBE === */
         #globe-section {
@@ -304,4 +299,452 @@
             --globe-color-software: #cbd5e1;
             --globe-color-infra: #a7f3d0;
             --globe-color-tooling: #fde68a;
+        }
+
+        /* === EXPERIENCE & EDUCATION (JOURNEY) === */
+        .journey-panel {
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .journey-badge {
+            border: 1px solid rgba(0, 212, 255, 0.18);
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.06);
+        }
+
+        .journey-timeline {
+            position: relative;
+            padding-left: 22px;
+        }
+
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 212, 255, 0.55),
+                    rgba(167, 139, 250, 0.25),
+                    rgba(255, 255, 255, 0.08)
+            );
+            border-radius: 2px;
+        }
+
+        .journey-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 22px 1fr;
+            gap: 16px;
+            padding-bottom: 18px;
+        }
+
+        .journey-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.06);
+            margin-left: 1px;
+            margin-top: 6px;
+        }
+
+        .journey-dot--active {
+            background: rgba(0, 212, 255, 0.35);
+            border-color: rgba(0, 212, 255, 0.55);
+            box-shadow: 0 0 22px rgba(0, 212, 255, 0.22);
+        }
+
+        .journey-card {
+            padding: 18px 18px;
+            border-radius: 16px;
+            background: rgba(20, 20, 25, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .journey-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 212, 255, 0.18);
+            box-shadow: 0 12px 44px rgba(0, 0, 0, 0.35);
+        }
+
+        .journey-tag {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: rgba(0, 212, 255, 0.92);
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.18);
+        }
+
+        .journey-points {
+            margin-top: 14px;
+            display: grid;
+            gap: 10px;
+            color: rgba(229, 231, 235, 0.85);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .journey-point {
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .journey-point::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.65em;
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            background: rgba(0, 212, 255, 0.65);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.18);
+        }
+
+        .journey-skills {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .journey-skill {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.80);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .edu-card {
+            padding: 18px 18px;
+            border-radius: 16px;
+            background: rgba(20, 20, 25, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .edu-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .edu-badge {
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .edu-badge--master {
+            color: rgba(0, 212, 255, 0.92);
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.18);
+        }
+
+        .edu-badge--bachelor {
+            color: rgba(167, 139, 250, 0.92);
+            background: rgba(167, 139, 250, 0.08);
+            border-color: rgba(167, 139, 250, 0.18);
+        }
+
+        .edu-note {
+            margin-top: 10px;
+            color: rgba(229, 231, 235, 0.82);
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        .edu-fun {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(148, 163, 184, 0.95);
+            font-size: 0.85rem;
+        }
+
+        .journey-insight {
+            border: 1px solid rgba(0, 212, 255, 0.14);
+            box-shadow: 0 0 26px rgba(0, 212, 255, 0.06);
+        }
+
+        @media (max-width: 768px) {
+            .journey-badge {
+                border-radius: 16px;
+            }
+            .journey-timeline {
+                padding-left: 18px;
+            }
+        }
+
+        /* === CREATIVE ENHANCEMENTS FOR JOURNEY === */
+        /* Scroll-reveal fade-in animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 22px rgba(0, 212, 255, 0.22);
+            }
+            50% {
+                box-shadow: 0 0 32px rgba(0, 212, 255, 0.38);
+            }
+        }
+
+        .journey-item {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .journey-item:nth-child(1) { animation-delay: 0.05s; }
+        .journey-item:nth-child(2) { animation-delay: 0.10s; }
+        .journey-item:nth-child(3) { animation-delay: 0.15s; }
+        .journey-item:nth-child(4) { animation-delay: 0.20s; }
+        .journey-item:nth-child(5) { animation-delay: 0.25s; }
+        .journey-item:nth-child(6) { animation-delay: 0.30s; }
+        .journey-item:nth-child(7) { animation-delay: 0.35s; }
+        .journey-item:nth-child(8) { animation-delay: 0.40s; }
+
+        .journey-dot--active {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        /* Holographic gradient on hover for journey cards */
+        .journey-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(0, 212, 255, 0.02),
+                rgba(167, 139, 250, 0.03),
+                rgba(52, 211, 153, 0.02)
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            border-radius: 16px;
+            pointer-events: none;
+        }
+
+        .journey-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Grid scanline effect on journey-panel background */
+        .journey-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 212, 255, 0.015) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 212, 255, 0.015) 3px
+                );
+            pointer-events: none;
+            opacity: 0.4;
+            border-radius: 16px;
+        }
+
+        /* Skill chip hover with color splash */
+        .journey-skill {
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-skill::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .journey-skill:hover::after {
+            width: 100px;
+            height: 100px;
+        }
+
+        .journey-skill:hover {
+            background: rgba(0, 212, 255, 0.12);
+            border-color: rgba(0, 212, 255, 0.28);
+            color: rgba(0, 212, 255, 0.95);
+            transform: scale(1.05);
+            cursor: default;
+        }
+
+        /* Education card accent bar */
+        .edu-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edu-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom,
+                rgba(0, 212, 255, 0.55),
+                rgba(167, 139, 250, 0.45)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .edu-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Insight box shimmer */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .journey-insight {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-insight::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 212, 255, 0.05),
+                transparent
+            );
+            background-size: 200% 100%;
+            animation: shimmer 4s infinite linear;
+            pointer-events: none;
+        }
+
+        /* Badge pulsing enhancement */
+        .journey-badge span {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Gradient text for section headers */
+        #journey h2 {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 1),
+                rgba(0, 212, 255, 0.9),
+                rgba(167, 139, 250, 0.8)
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Timeline glow on scroll */
+        @keyframes lineGlow {
+            0%, 100% {
+                opacity: 0.55;
+            }
+            50% {
+                opacity: 0.85;
+            }
+        }
+
+        .journey-timeline::before {
+            animation: lineGlow 3s ease-in-out infinite;
+        }
+
+        /* Staggered journey point reveal */
+        @keyframes pointReveal {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .journey-point::before {
+            animation: pointReveal 0.4s ease-out backwards;
+        }
+
+        .journey-point:nth-child(1)::before { animation-delay: 0.1s; }
+        .journey-point:nth-child(2)::before { animation-delay: 0.2s; }
+        .journey-point:nth-child(3)::before { animation-delay: 0.3s; }
+        .journey-point:nth-child(4)::before { animation-delay: 0.4s; }
+
+        /* Panel entrance effect */
+        .journey-panel {
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .journey-panel:nth-child(1) { animation-delay: 0.1s; }
+        .journey-panel:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Journey tag floating */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .journey-tag {
+            animation: float 2.5s ease-in-out infinite;
         }
