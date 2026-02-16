@@ -403,6 +403,36 @@
                 alt_text: "Data Pipelines Pocket Reference Book Cover"
             },
             {
+                title: "The Phoenix Project",
+                author: "Gene Kim, Kevin Behr, George Spafford",
+                cover_url: "https://covers.openlibrary.org/b/isbn/9780988262591-L.jpg",
+                alt_text: "The Phoenix Project Book Cover"
+            },
+            {
+                title: "Accelerate",
+                author: "Nicole Forsgren, Jez Humble, Gene Kim",
+                cover_url: "https://covers.openlibrary.org/b/isbn/9781942788331-L.jpg",
+                alt_text: "Accelerate Book Cover"
+            },
+            {
+                title: "Designing Event-Driven Systems",
+                author: "Ben Stopford",
+                cover_url: "https://covers.openlibrary.org/b/isbn/9781492038252-L.jpg",
+                alt_text: "Designing Event-Driven Systems Book Cover"
+            },
+            {
+                title: "Data Engineering with Python",
+                author: "Paul Crickard",
+                cover_url: "https://covers.openlibrary.org/b/isbn/9781839214189-L.jpg",
+                alt_text: "Data Engineering with Python Book Cover"
+            },
+            {
+                title: "Designing Machine Learning Systems",
+                author: "Chip Huyen",
+                cover_url: "https://covers.openlibrary.org/b/isbn/9781098107968-L.jpg",
+                alt_text: "Designing Machine Learning Systems Book Cover"
+            },
+            {
                 title: "Data Mesh",
                 author: "Zhamak Dehghani",
                 cover_url: "https://m.media-amazon.com/images/I/91V0ofr3C-L._AC_UF1000,1000_QL80_.jpg",
