@@ -31,6 +31,40 @@
             /* Hide default cursor */
         }
 
+        .hero-title {
+            font-size: clamp(2rem, 7vw, 4.5rem);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 4.2vw, 1.25rem);
+        }
+
+        .tap-target {
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        body.compact-mode .glass-card {
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+        }
+
+        body.compact-mode #anti-gravity-container,
+        body.compact-mode #fx-canvas,
+        body.compact-mode #webgl-canvas {
+            display: none;
+        }
+
+        body.low-power #anti-gravity-container,
+        body.low-power #fx-canvas,
+        body.low-power #webgl-canvas {
+            display: none;
+        }
+
+        body.low-power {
+            cursor: auto;
+        }
+
         /* CUSTOM CURSOR */
         #custom-cursor {
             position: fixed;
@@ -169,6 +203,14 @@
 
             #custom-cursor {
                 display: none;
+            }
+
+            main {
+                scroll-padding-bottom: 96px;
+            }
+
+            .glass-card {
+                border-radius: 18px;
             }
         }
 

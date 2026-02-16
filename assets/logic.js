@@ -35,8 +35,102 @@
         }
     `;
 
+    // === 7. MOBILE UX / COMPACT MODE ===
+    function detectLowPowerDevice() {
+        const reduceMotion = prefersReducedMotion();
+        const mem = navigator.deviceMemory || 0;
+        const cores = navigator.hardwareConcurrency || 0;
+        const isSmall = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+        const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+        return reduceMotion || (isSmall && isTouch) || (mem && mem <= 4) || (cores && cores <= 4);
+    }
+
+    function applyCompactMode(enabled) {
+        document.body.classList.toggle('compact-mode', !!enabled);
+        const btn = document.getElementById('compact-toggle');
+        if (btn) btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+
+        // When compact, also disable heavy canvases immediately
+        if (enabled) {
+            document.body.classList.add('low-power');
+        }
+    }
+
+    window.enableCompactMode = function enableCompactMode() {
+        localStorage.setItem('compactMode', '1');
+        applyCompactMode(true);
+    };
+
+    window.disableCompactMode = function disableCompactMode() {
+        localStorage.removeItem('compactMode');
+        applyCompactMode(false);
+    };
+
+    window.loadMoreProjects = function loadMoreProjects() {
+        projectsVisibleCount = Infinity;
+        renderProjects(cachedRepos);
+    };
+
+    window.showAllBooks = function showAllBooks() {
+        booksShowAll = !booksShowAll;
+        const statusEl = document.getElementById('library-status');
+        fetchBooksWithFallback(statusEl).then((result) => {
+            renderVerticalLibrary(result.books, { offline: result.offline });
+        });
+    };
+
+    function initMobileArsenalAccordion() {
+        if (!isMobileViewport()) return;
+        const cards = document.querySelectorAll('[data-arsenal-card]');
+        cards.forEach((card) => {
+            const headerRow = card.querySelector('.flex.items-center.gap-3');
+            const content = card.querySelector('.flex.flex-wrap.gap-2');
+            if (!headerRow || !content) return;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'w-full text-left min-h-[44px]';
+            btn.setAttribute('aria-expanded', 'false');
+
+            // Move existing header into button
+            btn.appendChild(headerRow);
+            card.insertBefore(btn, card.firstChild);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'vl-accordion';
+            wrapper.hidden = true;
+            content.parentNode.insertBefore(wrapper, content);
+            wrapper.appendChild(content);
+
+            const open = () => {
+                btn.setAttribute('aria-expanded', 'true');
+                wrapper.hidden = false;
+                wrapper.classList.add('is-open');
+                wrapper.style.maxHeight = prefersReducedMotion() ? 'none' : (wrapper.scrollHeight + 'px');
+            };
+            const close = () => {
+                btn.setAttribute('aria-expanded', 'false');
+                if (prefersReducedMotion()) {
+                    wrapper.hidden = true;
+                    wrapper.classList.remove('is-open');
+                    wrapper.style.maxHeight = '0px';
+                } else {
+                    wrapper.style.maxHeight = '0px';
+                    wrapper.classList.remove('is-open');
+                    setTimeout(() => { wrapper.hidden = true; }, 220);
+                }
+            };
+            btn.addEventListener('click', () => {
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                expanded ? close() : open();
+            });
+        });
+    }
+
     function initShader() {
         if (window.innerWidth < 768) return;
+        if (document.body.classList.contains('low-power')) return;
+        if (document.body.classList.contains('compact-mode')) return;
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -59,6 +153,8 @@
 
     // === 2. PARTICLE CURSOR EFFECTS ===
     function initParticles() {
+        if (document.body.classList.contains('low-power')) return;
+        if (document.body.classList.contains('compact-mode')) return;
         const canvas = document.getElementById('fx-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
@@ -97,6 +193,9 @@
 
     // === 3. CUSTOM MOUSE CURSOR (WITH LERP) ===
     function initCustomCursor() {
+        if (window.innerWidth < 768) return;
+        if (document.body.classList.contains('low-power')) return;
+        if (document.body.classList.contains('compact-mode')) return;
         const cursor = document.getElementById('custom-cursor');
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
@@ -129,6 +228,9 @@
 
     // === 4. ANTI-GRAVITY LOGOS (PHYSICS + PARALLAX) ===
     function initAntiGravityLogos() {
+        if (window.innerWidth < 768) return;
+        if (document.body.classList.contains('low-power')) return;
+        if (document.body.classList.contains('compact-mode')) return;
         const container = document.getElementById('anti-gravity-container');
         const icons = [
             'devicon-python-plain colored', 'devicon-java-plain colored', 'devicon-javascript-plain colored',
@@ -138,7 +240,7 @@
         ];
 
         const logos = [];
-        const count = 20;
+        const count = window.innerWidth < 1024 ? 6 : 14;
 
         // Spawn Logos
         for (let i = 0; i < count; i++) {
@@ -209,6 +311,8 @@
 
     // === 5. SCROLL ANIMATIONS (GSAP) ===
     function initScrollAnimations() {
+        if (document.body.classList.contains('low-power')) return;
+        if (document.body.classList.contains('compact-mode')) return;
         gsap.registerPlugin(ScrollTrigger);
 
         // Animate only section cards (exclude nav)
@@ -266,6 +370,9 @@
     // === 6. DATA LOADING (HARDCODED) ===
     let cachedRepos = [];
 
+    let projectsVisibleCount = Infinity;
+    let booksShowAll = false;
+
     // Repo Tech Mapping (Extend with logic)
     const repoTechMap = {
         'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
@@ -312,13 +419,22 @@
             })
             : list;
 
-        if (!filtered.length) {
+        const showMoreBtn = document.getElementById('projects-show-more');
+        const limited = Number.isFinite(projectsVisibleCount) ? filtered.slice(0, projectsVisibleCount) : filtered;
+
+        if (showMoreBtn) {
+            const hasMore = limited.length < filtered.length;
+            showMoreBtn.classList.toggle('hidden', !hasMore);
+            showMoreBtn.textContent = hasMore ? 'Show more' : 'Show more';
+        }
+
+        if (!limited.length) {
             grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + keyword + '</span></div>';
             return;
         }
 
         grid.innerHTML = '';
-        filtered.forEach(repo => {
+        limited.forEach(repo => {
             if (!repo) return;
             const card = document.createElement('a');
             card.href = repo.html_url || '#';
@@ -497,7 +613,17 @@
         listEl.innerHTML = '';
         const domIndex = {};
 
-        books.forEach((b) => {
+        const isMobile = isMobileViewport();
+        const visibleBooks = (isMobile && !booksShowAll) ? books.slice(0, 4) : books;
+
+        const seeAllBtn = document.getElementById('books-see-all');
+        if (seeAllBtn) {
+            const shouldShow = isMobile && books.length > 4;
+            seeAllBtn.classList.toggle('hidden', !shouldShow);
+            seeAllBtn.textContent = booksShowAll ? 'Collapse' : 'See all';
+        }
+
+        visibleBooks.forEach((b) => {
             const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
             const title = safeText(b.title);
             const author = safeText(b.author);
@@ -778,12 +904,46 @@
 
     // INIT
     window.addEventListener('DOMContentLoaded', () => {
+        // Low-power detection first
+        if (detectLowPowerDevice()) {
+            document.body.classList.add('low-power');
+        }
+
+        const compactSaved = localStorage.getItem('compactMode') === '1';
+        if (compactSaved) applyCompactMode(true);
+
+        const compactBtn = document.getElementById('compact-toggle');
+        if (compactBtn) {
+            compactBtn.addEventListener('click', () => {
+                const enabled = document.body.classList.contains('compact-mode');
+                if (enabled) window.disableCompactMode();
+                else window.enableCompactMode();
+            });
+        }
+
         initShader();
-        initCustomCursor(); // New
+        initCustomCursor();
         initParticles();
-        initAntiGravityLogos(); // New
-        initScrollAnimations(); // New
+        initAntiGravityLogos();
+        initScrollAnimations();
         loadContent(); // Updated
+
+        initMobileArsenalAccordion();
+
+        const projectsBtn = document.getElementById('projects-show-more');
+        if (projectsBtn) {
+            projectsBtn.addEventListener('click', () => window.loadMoreProjects());
+        }
+
+        const booksBtn = document.getElementById('books-see-all');
+        if (booksBtn) {
+            booksBtn.addEventListener('click', () => window.showAllBooks());
+        }
+
+        // Mobile defaults: reduce visible items
+        if (isMobileViewport()) {
+            projectsVisibleCount = 3;
+        }
 
         window.filterByKeyword = (keyword) => {
             renderProjects(cachedRepos, keyword);
@@ -799,6 +959,7 @@
         // Hero Parallax
         const heroCard = document.getElementById('hero-card');
         document.addEventListener('mousemove', (e) => {
+            if (document.body.classList.contains('low-power')) return;
             const x = (window.innerWidth - e.pageX * 2) / 100;
             const y = (window.innerHeight - e.pageY * 2) / 100;
             if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;

@@ -45,10 +45,10 @@
 <div id="custom-cursor"></div>
 
 <!-- Main Content -->
-<main class="relative z-10 px-4 pt-10 pb-20 max-w-7xl mx-auto space-y-24">
+<main class="relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
 
     <!-- Navigation -->
-    <nav class="flex justify-between items-center py-6 glass-card px-8 rounded-full sticky top-4 z-50">
+    <nav class="flex justify-between items-center py-3 md:py-6 glass-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
         <div
                 class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
             NB.
@@ -58,9 +58,12 @@
             <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
             <a href="#journey" class="hover:text-white transition">Journey</a>
             <a href="#projects" class="hover:text-white transition">Projects</a>
-            <a href="#library" class="hover:text-white transition">Library</a>
+            <a href="#vertical-library" class="hover:text-white transition">Library</a>
         </div>
-        <div class="flex gap-4">
+        <div class="flex gap-2 md:gap-4 items-center">
+            <button id="compact-toggle" type="button" class="min-h-[44px] min-w-[44px] px-3 md:px-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200" aria-pressed="false" aria-label="Toggle compact mode">
+                Compact
+            </button>
             <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
                     class="devicon-github-original text-xl text-white"></i></a>
             <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
@@ -69,7 +72,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="about" class="min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-12">
+    <section id="about" class="min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
         <div class="flex-1 space-y-8 glass-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none"
              style="animation: none;">
             <div
@@ -79,21 +82,21 @@
             </div>
 
             <h1
-                    class="text-5xl md:text-7xl font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
+                    class="hero-title font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
                 Building Resilient <br> Data Systems.
             </h1>
 
-            <p class="text-xl text-gray-300 max-w-lg leading-relaxed">
+            <p class="hero-subtitle text-gray-300 max-w-lg leading-relaxed">
                 I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft
                 high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
             </p>
 
-            <div class="flex gap-4 pt-4">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                 <a href="#projects"
-                   class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform">View
+                   class="min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
                     Projects</a>
                 <a href="#contact"
-                   class="px-8 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition">Contact Me</a>
+                   class="min-h-[44px] px-6 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition text-center">Contact Me</a>
             </div>
         </div>
 
@@ -127,6 +130,13 @@
         </div>
     </section>
 
+    <div class="md:hidden fixed bottom-3 left-3 right-3 z-50">
+        <div class="glass-card px-4 py-3 rounded-2xl flex items-center justify-between gap-3">
+            <a href="#projects" class="min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl bg-white text-black font-bold">Projects</a>
+            <a href="#contact" class="min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
+        </div>
+    </div>
+
     <!-- TECHNOLOGY ARSENAL -->
     <section id="arsenal" class="space-y-12">
         <div>
@@ -137,7 +147,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             <!-- ML -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i
                                 class="devicon-python-plain"></i></span>
@@ -154,7 +164,7 @@
             </div>
 
             <!-- Big Data -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
                                 class="devicon-apachespark-original"></i></span>
@@ -169,7 +179,7 @@
             </div>
 
             <!-- Languages -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i
                                 class="devicon-bash-plain"></i></span>
@@ -185,7 +195,7 @@
             </div>
 
             <!-- DBs -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i
                                 class="devicon-postgresql-plain"></i></span>
@@ -200,7 +210,7 @@
             </div>
 
             <!-- DevOps -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i
                                 class="devicon-docker-plain"></i></span>
@@ -215,7 +225,7 @@
             </div>
 
             <!-- IDEs -->
-            <div class="glass-card p-6">
+            <div class="glass-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i
                                 class="devicon-vscode-plain"></i></span>
@@ -512,7 +522,10 @@
 
     <!-- PROJECTS -->
     <section id="projects" class="space-y-8">
-        <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+            <button id="projects-show-more" type="button" class="min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show more</button>
+        </div>
         <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Injected via JS -->
         </div>
@@ -524,7 +537,10 @@
                 <h3 class="text-3xl font-display font-bold mb-2">Books</h3>
                 <p class="text-gray-400 max-w-2xl">A vertical, scrollable library. Select a book to read a mini-summary.</p>
             </div>
-            <div id="library-status" class="text-xs font-mono text-gray-500"></div>
+            <div class="flex items-center gap-3">
+                <button id="books-see-all" type="button" class="min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">See all</button>
+                <div id="library-status" class="text-xs font-mono text-gray-500"></div>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
