@@ -369,6 +369,61 @@
             position: relative;
         }
 
+        .journey-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .company-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: rgba(255, 255, 255, 0.92);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.22), rgba(167, 139, 250, 0.18));
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+            flex: 0 0 auto;
+        }
+
+        .company-mark--green {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.22), rgba(0, 212, 255, 0.16));
+        }
+
+        .company-mark--purple {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.24), rgba(0, 212, 255, 0.12));
+        }
+
+        .journey-tools {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .journey-tool {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: rgba(229, 231, 235, 0.85);
+            font-size: 0.78rem;
+        }
+
+        .journey-tool i {
+            font-size: 1rem;
+        }
+
         .journey-card:hover {
             transform: translateY(-2px);
             border-color: rgba(0, 212, 255, 0.18);
