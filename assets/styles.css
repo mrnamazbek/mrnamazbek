@@ -1131,3 +1131,382 @@
         .journey-tag {
             animation: float 2.5s ease-in-out infinite;
         }
+
+/* === LIGHT THEME === */
+[data-theme="light"] {
+    --glass-border: 1px solid rgba(0, 0, 0, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    --ui-border: rgba(0, 0, 0, 0.1);
+    --ui-surface: rgba(0, 0, 0, 0.03);
+    --ui-surface-hover: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] body {
+    background-color: #f5f5f7;
+    color: #1a1a1a;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+[data-theme="light"] .glass-card,
+[data-theme="light"] .ui-card {
+    background: var(--glass-bg);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #1a1a1a;
+}
+
+[data-theme="light"] .glass-card:hover,
+[data-theme="light"] .ui-card:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .text-gray-300,
+[data-theme="light"] .text-gray-400,
+[data-theme="light"] .text-gray-500 {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .hero-subtitle,
+[data-theme="light"] #about p {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="light"] .hero-title {
+    background: linear-gradient(135deg, #0a0a0a 0%, #2563eb 50%, #0891b2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] nav a {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="light"] nav a:hover {
+    color: #000;
+}
+
+[data-theme="light"] .tech-chip {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1a1a1a;
+}
+
+[data-theme="light"] .tech-chip:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .journey-card {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #1a1a1a;
+}
+
+[data-theme="light"] .journey-point {
+    color: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .journey-tool {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .edu-card {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .edu-note,
+[data-theme="light"] .edu-fun {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="light"] .mini-row {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .mini-row__title {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="light"] .mini-row__sub {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .mini-table__row {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .mini-db__name {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="light"] .mini-db__meta {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] #globe-container {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* === TERMINAL SIMULATION === */
+.terminal-window {
+    background: rgba(10, 15, 20, 0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terminal-header {
+    background: linear-gradient(180deg, rgba(40, 45, 55, 0.9) 0%, rgba(25, 30, 40, 0.95) 100%);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+}
+
+.terminal-btn--close { background: #ff5f57; }
+.terminal-btn--minimize { background: #febc2e; }
+.terminal-btn--maximize { background: #28c840; }
+
+.terminal-title {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.terminal-spacer {
+    width: 60px;
+}
+
+.terminal-body {
+    padding: 20px;
+    min-height: 280px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.terminal-content {
+    color: #e6e6e6;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.terminal-content .line {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.terminal-content .line.success { color: #4ade80; }
+.terminal-content .line.info { color: #60a5fa; }
+.terminal-content .line.warning { color: #fbbf24; }
+.terminal-content .line.error { color: #f87171; }
+.terminal-content .line.cyan { color: #22d3ee; }
+.terminal-content .line.purple { color: #c084fc; }
+
+.terminal-cursor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    color: #22d3ee;
+}
+
+.terminal-prompt {
+    color: #22d3ee;
+    font-weight: 600;
+}
+
+.terminal-input {
+    color: #e6e6e6;
+    min-width: 10px;
+}
+
+.terminal-caret {
+    color: #22d3ee;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+[data-theme="light"] .terminal-window {
+    background: rgba(30, 35, 45, 0.98);
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* === DATA PIPELINE VISUALIZER (DAG) === */
+.dag-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dag-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+
+.dag-svg:active {
+    cursor: grabbing;
+}
+
+.dag-node {
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.dag-node:hover {
+    filter: brightness(1.2);
+}
+
+.dag-node.selected .dag-node-shape {
+    stroke: #fbbf24;
+    stroke-width: 3;
+    filter: url(#dag-glow);
+}
+
+.dag-node-source .dag-node-shape {
+    fill: rgba(52, 211, 153, 0.25);
+    stroke: rgba(52, 211, 153, 0.8);
+}
+
+.dag-node-transform .dag-node-shape {
+    fill: rgba(34, 211, 238, 0.25);
+    stroke: rgba(34, 211, 238, 0.8);
+}
+
+.dag-node-destination .dag-node-shape {
+    fill: rgba(192, 132, 252, 0.25);
+    stroke: rgba(192, 132, 252, 0.8);
+}
+
+.dag-node-shape {
+    stroke-width: 2;
+    transition: all 0.2s ease;
+}
+
+.dag-node-icon {
+    fill: rgba(255, 255, 255, 0.9);
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+}
+
+.dag-node-label {
+    fill: rgba(255, 255, 255, 0.85);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+}
+
+.dag-edge {
+    fill: none;
+    stroke: rgba(0, 212, 255, 0.6);
+    stroke-width: 2;
+    marker-end: url(#dag-arrowhead);
+    transition: stroke 0.2s ease;
+}
+
+.dag-edge:hover {
+    stroke: rgba(0, 212, 255, 0.9);
+    stroke-width: 3;
+}
+
+.dag-edge.selected {
+    stroke: #fbbf24;
+    stroke-width: 3;
+}
+
+.dag-tooltip {
+    position: absolute;
+    pointer-events: none;
+    padding: 8px 14px;
+    background: rgba(15, 15, 25, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s, transform 0.15s;
+    z-index: 20;
+}
+
+.dag-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dag-drag-line {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 2;
+    stroke-dasharray: 5, 5;
+    pointer-events: none;
+}
+
+[data-theme="light"] .dag-canvas-container {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .dag-node-icon {
+    fill: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="light"] .dag-node-label {
+    fill: rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="light"] .dag-tooltip {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1a1a1a;
+}

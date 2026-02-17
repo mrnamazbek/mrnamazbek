@@ -1207,6 +1207,11 @@
         initWorldClock();
         initDbRankingWidget();
 
+        // Initialize new features
+        initThemeToggle();
+        initTerminalSimulation();
+        initDagVisualizer();
+
         const projectsBtn = document.getElementById('projects-show-more');
         if (projectsBtn) {
             projectsBtn.addEventListener('click', () => window.loadMoreProjects());
@@ -1242,3 +1247,429 @@
             if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;
         });
     });
+
+    // === THEME TOGGLE ===
+    const THEME_KEY = 'portfolio-theme';
+
+    function getStoredTheme() {
+        return localStorage.getItem(THEME_KEY) || 'dark';
+    }
+
+    function setStoredTheme(theme) {
+        localStorage.setItem(THEME_KEY, theme);
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const moonIcon = document.getElementById('theme-icon-moon');
+        const sunIcon = document.getElementById('theme-icon-sun');
+        if (moonIcon && sunIcon) {
+            moonIcon.classList.toggle('hidden', theme === 'light');
+            sunIcon.classList.toggle('hidden', theme === 'dark');
+        }
+    }
+
+    function initThemeToggle() {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+
+        // Apply stored theme on load
+        const storedTheme = getStoredTheme();
+        applyTheme(storedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+            setStoredTheme(newTheme);
+        });
+    }
+
+    // === TERMINAL SIMULATION ===
+    function initTerminalSimulation() {
+        const terminalContent = document.getElementById('terminal-content');
+        const terminalInput = document.getElementById('terminal-input');
+        const replayBtn = document.getElementById('terminal-replay');
+        const pauseBtn = document.getElementById('terminal-pause');
+
+        if (!terminalContent || !terminalInput) return;
+
+        const sequences = [
+            { text: "⚡ user@kbtu:~$ ./init.sh", delay: 500, class: "cyan" },
+            { text: "🔥 Initializing Data Engineer...", delay: 800, class: "warning" },
+            { text: "🧠 Loading ML Models...", delay: 600, class: "info" },
+            { text: "✅ Spark cluster connected (3 nodes)", delay: 400, class: "success" },
+            { text: "✅ Airflow DAGs loaded (12 pipelines)", delay: 300, class: "success" },
+            { text: "✅ PostgreSQL pool ready (20 connections)", delay: 300, class: "success" },
+            { text: "🐘 Kafka brokers: 3/3 healthy", delay: 500, class: "info" },
+            { text: "📊 Data quality checks: PASSED", delay: 400, class: "success" },
+            { text: "🚀 Deploying FastAPI services...", delay: 600, class: "warning" },
+            { text: "✅ All systems operational", delay: 300, class: "success" },
+            { text: "💻 System Ready! Welcome.", delay: 500, class: "purple" },
+            { text: "", delay: 200 },
+            { text: "💡 Tip: Data systems are like banking systems:", delay: 300, class: "info" },
+            { text: "    correctness first, fast second.", delay: 200, class: "info" }
+        ];
+
+        let isPaused = false;
+        let currentSequence = 0;
+        let typingTimeout = null;
+        let isTyping = false;
+
+        function clearTerminal() {
+            terminalContent.innerHTML = '';
+            terminalInput.textContent = '';
+            currentSequence = 0;
+        }
+
+        function addLine(text, className = '') {
+            const line = document.createElement('span');
+            line.className = `line ${className}`;
+            line.textContent = text;
+            terminalContent.appendChild(line);
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+        }
+
+        function typeText(text, callback, charDelay = 30) {
+            isTyping = true;
+            let charIndex = 0;
+            terminalInput.textContent = '';
+
+            function typeChar() {
+                if (isPaused) {
+                    typingTimeout = setTimeout(typeChar, 100);
+                    return;
+                }
+
+                if (charIndex < text.length) {
+                    terminalInput.textContent += text[charIndex];
+                    charIndex++;
+                    typingTimeout = setTimeout(typeChar, charDelay);
+                } else {
+                    isTyping = false;
+                    if (callback) callback();
+                }
+            }
+
+            typeChar();
+        }
+
+        function runSequence() {
+            if (currentSequence >= sequences.length) {
+                terminalInput.textContent = '';
+                return;
+            }
+
+            if (isPaused) {
+                typingTimeout = setTimeout(runSequence, 100);
+                return;
+            }
+
+            const seq = sequences[currentSequence];
+            currentSequence++;
+
+            if (seq.text === "") {
+                addLine("");
+                typingTimeout = setTimeout(runSequence, seq.delay);
+            } else {
+                typeText(seq.text, () => {
+                    addLine(seq.text, seq.class);
+                    terminalInput.textContent = '';
+                    typingTimeout = setTimeout(runSequence, seq.delay);
+                });
+            }
+        }
+
+        function startSequence() {
+            clearTerminal();
+            currentSequence = 0;
+            isPaused = false;
+            if (pauseBtn) pauseBtn.textContent = 'Pause';
+            runSequence();
+        }
+
+        if (replayBtn) {
+            replayBtn.addEventListener('click', () => {
+                clearTimeout(typingTimeout);
+                startSequence();
+            });
+        }
+
+        if (pauseBtn) {
+            pauseBtn.addEventListener('click', () => {
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
+            });
+        }
+
+        // Auto-start on load
+        startSequence();
+    }
+
+    // === DATA PIPELINE VISUALIZER (DAG) ===
+    function initDagVisualizer() {
+        const container = document.getElementById('dag-canvas-container');
+        const svg = document.getElementById('dag-svg');
+        const nodesGroup = document.getElementById('dag-nodes');
+        const edgesGroup = document.getElementById('dag-edges');
+        const tooltip = document.getElementById('dag-tooltip');
+        const modeSelect = document.getElementById('dag-mode-select');
+        const modeConnect = document.getElementById('dag-mode-connect');
+        const modeDelete = document.getElementById('dag-mode-delete');
+        const btnAddSource = document.getElementById('dag-add-source');
+        const btnAddTransform = document.getElementById('dag-add-transform');
+        const btnAddDestination = document.getElementById('dag-add-destination');
+        const btnClear = document.getElementById('dag-clear');
+
+        if (!container || !svg || !nodesGroup || !edgesGroup) return;
+
+        let mode = 'select'; // select, connect, delete
+        let nodes = [];
+        let edges = [];
+        let selectedNode = null;
+        let connectSource = null;
+        let isDragging = false;
+        let dragNode = null;
+        let dragOffset = { x: 0, y: 0 };
+        let nodeIdCounter = 1;
+
+        // Initialize with sample pipeline
+        function initSamplePipeline() {
+            nodes = [
+                { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: 'K' },
+                { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S' },
+                { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C' },
+                { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: 'P' }
+            ];
+            edges = [
+                { from: 1, to: 2 },
+                { from: 1, to: 3 },
+                { from: 2, to: 4 },
+                { from: 3, to: 4 }
+            ];
+            nodeIdCounter = 5;
+            render();
+        }
+
+        function setMode(newMode) {
+            mode = newMode;
+            selectedNode = null;
+            connectSource = null;
+            [modeSelect, modeConnect, modeDelete].forEach(btn => {
+                if (btn) btn.classList.remove('active', 'bg-white/10');
+            });
+            const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
+            if (activeBtn) activeBtn.classList.add('active', 'bg-white/10');
+            render();
+        }
+
+        if (modeSelect) modeSelect.addEventListener('click', () => setMode('select'));
+        if (modeConnect) modeConnect.addEventListener('click', () => setMode('connect'));
+        if (modeDelete) modeDelete.addEventListener('click', () => setMode('delete'));
+
+        function getSVGPoint(evt) {
+            const pt = svg.createSVGPoint();
+            pt.x = evt.clientX;
+            pt.y = evt.clientY;
+            return pt.matrixTransform(svg.getScreenCTM().inverse());
+        }
+
+        function createNode(type, x, y) {
+            const id = nodeIdCounter++;
+            const labels = {
+                source: ['API', 'Logs', 'CDC', 'S3', 'Kafka'],
+                transform: ['ETL', 'Enrich', 'Validate', 'Aggregate', 'Join'],
+                destination: ['DWH', 'Lake', 'BI', 'API', 'Cache']
+            };
+            const icons = {
+                source: ['A', 'L', 'C', 'S', 'K'],
+                transform: ['E', 'N', 'V', 'A', 'J'],
+                destination: ['D', 'L', 'B', 'A', 'C']
+            };
+            const idx = Math.floor(Math.random() * labels[type].length);
+            nodes.push({
+                id,
+                x,
+                y,
+                type,
+                label: labels[type][idx],
+                icon: icons[type][idx]
+            });
+            render();
+        }
+
+        if (btnAddSource) btnAddSource.addEventListener('click', () => createNode('source', 100, 225));
+        if (btnAddTransform) btnAddTransform.addEventListener('click', () => createNode('transform', 300, 225));
+        if (btnAddDestination) btnAddDestination.addEventListener('click', () => createNode('destination', 500, 225));
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                nodes = [];
+                edges = [];
+                nodeIdCounter = 1;
+                render();
+            });
+        }
+
+        function deleteNode(nodeId) {
+            nodes = nodes.filter(n => n.id !== nodeId);
+            edges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
+            render();
+        }
+
+        function render() {
+            // Render nodes
+            nodesGroup.innerHTML = '';
+            nodes.forEach(node => {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.classList.add('dag-node', `dag-node-${node.type}`);
+                if (selectedNode === node.id) g.classList.add('selected');
+                g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+                g.dataset.nodeId = node.id;
+
+                // Node shape
+                const shape = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                shape.setAttribute('x', -35);
+                shape.setAttribute('y', -25);
+                shape.setAttribute('width', 70);
+                shape.setAttribute('height', 50);
+                shape.setAttribute('rx', 8);
+                shape.classList.add('dag-node-shape');
+                g.appendChild(shape);
+
+                // Icon
+                const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                icon.textContent = node.icon;
+                icon.setAttribute('y', -2);
+                icon.classList.add('dag-node-icon');
+                g.appendChild(icon);
+
+                // Label
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.textContent = node.label;
+                label.setAttribute('y', 16);
+                label.classList.add('dag-node-label');
+                g.appendChild(label);
+
+                // Event handlers
+                g.addEventListener('mousedown', (e) => handleNodeMouseDown(e, node));
+                g.addEventListener('mouseenter', () => showTooltip(node));
+                g.addEventListener('mouseleave', hideTooltip);
+
+                nodesGroup.appendChild(g);
+            });
+
+            // Render edges
+            edgesGroup.innerHTML = '';
+            edges.forEach((edge, idx) => {
+                const fromNode = nodes.find(n => n.id === edge.from);
+                const toNode = nodes.find(n => n.id === edge.to);
+                if (!fromNode || !toNode) return;
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const d = calculateEdgePath(fromNode, toNode);
+                path.setAttribute('d', d);
+                path.classList.add('dag-edge');
+                path.addEventListener('click', () => {
+                    if (mode === 'delete') {
+                        edges.splice(idx, 1);
+                        render();
+                    }
+                });
+                edgesGroup.appendChild(path);
+            });
+        }
+
+        function calculateEdgePath(from, to) {
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const midX = (from.x + to.x) / 2;
+            return `M ${from.x + 35} ${from.y} C ${midX} ${from.y}, ${midX} ${to.y}, ${to.x - 35} ${to.y}`;
+        }
+
+        function handleNodeMouseDown(e, node) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            if (mode === 'delete') {
+                deleteNode(node.id);
+                return;
+            }
+
+            if (mode === 'connect') {
+                if (!connectSource) {
+                    connectSource = node.id;
+                    selectedNode = node.id;
+                    render();
+                } else if (connectSource !== node.id) {
+                    // Check if edge already exists
+                    const exists = edges.some(e =>
+                        (e.from === connectSource && e.to === node.id) ||
+                        (e.from === node.id && e.to === connectSource)
+                    );
+                    if (!exists) {
+                        edges.push({ from: connectSource, to: node.id });
+                    }
+                    connectSource = null;
+                    selectedNode = null;
+                    render();
+                }
+                return;
+            }
+
+            // Select mode - start drag
+            isDragging = true;
+            dragNode = node;
+            selectedNode = node.id;
+            const pt = getSVGPoint(e);
+            dragOffset.x = pt.x - node.x;
+            dragOffset.y = pt.y - node.y;
+            render();
+        }
+
+        function showTooltip(node) {
+            if (!tooltip) return;
+            tooltip.textContent = `${node.type.toUpperCase()}: ${node.label}`;
+            tooltip.classList.add('visible');
+            const rect = container.getBoundingClientRect();
+            tooltip.style.left = `${node.x}px`;
+            tooltip.style.top = `${node.y - 40}px`;
+        }
+
+        function hideTooltip() {
+            if (tooltip) tooltip.classList.remove('visible');
+        }
+
+        // Global mouse events
+        svg.addEventListener('mousemove', (e) => {
+            if (isDragging && dragNode) {
+                const pt = getSVGPoint(e);
+                dragNode.x = pt.x - dragOffset.x;
+                dragNode.y = pt.y - dragOffset.y;
+                // Constrain to canvas bounds
+                dragNode.x = Math.max(35, Math.min(565, dragNode.x));
+                dragNode.y = Math.max(25, Math.min(425, dragNode.y));
+                render();
+            }
+        });
+
+        svg.addEventListener('mouseup', () => {
+            isDragging = false;
+            dragNode = null;
+        });
+
+        svg.addEventListener('mouseleave', () => {
+            isDragging = false;
+            dragNode = null;
+        });
+
+        svg.addEventListener('click', (e) => {
+            if (e.target === svg) {
+                selectedNode = null;
+                connectSource = null;
+                render();
+            }
+        });
+
+        // Initialize
+        initSamplePipeline();
+    }
