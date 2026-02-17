@@ -1433,14 +1433,62 @@
         let dragOffset = { x: 0, y: 0 };
         let nodeIdCounter = 1;
 
+        function getCanvasSize() {
+            const viewBox = svg.viewBox && svg.viewBox.baseVal;
+            if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+                return { width: viewBox.width, height: viewBox.height };
+            }
+            return {
+                width: svg.clientWidth || 600,
+                height: svg.clientHeight || 450
+            };
+        }
+
+        function clampNodeToCanvas(node) {
+            const { width, height } = getCanvasSize();
+            const halfW = 35;
+            const halfH = 25;
+            const maxX = Math.max(halfW, width - halfW);
+            const maxY = Math.max(halfH, height - halfH);
+            node.x = Math.max(halfW, Math.min(maxX, node.x));
+            node.y = Math.max(halfH, Math.min(maxY, node.y));
+        }
+
+        function syncCanvasViewport() {
+            const rect = container.getBoundingClientRect();
+            const width = Math.max(1, Math.round(rect.width));
+            const height = Math.max(1, Math.round(rect.height));
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            svg.setAttribute('width', String(width));
+            svg.setAttribute('height', String(height));
+            nodes.forEach(clampNodeToCanvas);
+            render();
+        }
+
         // Initialize with sample pipeline
         function initSamplePipeline() {
+            const { width, height } = getCanvasSize();
+            const leftX = Math.max(80, Math.round(width * 0.16));
+            const midX = Math.round(width * 0.5);
+            const rightX = Math.max(80, Math.min(width - 80, Math.round(width * 0.84)));
+            const centerY = Math.round(height * 0.5);
+            const upperY = Math.max(80, Math.round(height * 0.33));
+            const lowerY = Math.max(80, Math.min(height - 80, Math.round(height * 0.67)));
+
             nodes = [
                 { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: '⬡', iconType: 'symbol' },
                 { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S', iconType: 'letter' },
                 { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C', iconType: 'letter' },
                 { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: '🐘', iconType: 'symbol' }
             ];
+            nodes[0].x = leftX;
+            nodes[0].y = centerY;
+            nodes[1].x = midX;
+            nodes[1].y = upperY;
+            nodes[2].x = midX;
+            nodes[2].y = lowerY;
+            nodes[3].x = rightX;
+            nodes[3].y = centerY;
             edges = [
                 { from: 1, to: 2 },
                 { from: 1, to: 3 },
@@ -1448,6 +1496,7 @@
                 { from: 3, to: 4 }
             ];
             nodeIdCounter = 5;
+            nodes.forEach(clampNodeToCanvas);
             render();
         }
 
@@ -1455,28 +1504,23 @@
             mode = newMode;
             selectedNode = null;
             connectSource = null;
-            
-            // Update button styles - remove active from all, add to current
-            [modeSelect, modeConnect, modeDelete].forEach(btn => {
-                if (btn) {
-                    btn.classList.remove('active', 'bg-white/20', 'text-cyan-300');
-                    btn.classList.add('text-gray-300');
-                }
-            });
-            
+
+            // Update active mode control styling
             const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
-            if (activeBtn) {
-                activeBtn.classList.add('active', 'bg-white/20', 'text-cyan-300');
-                activeBtn.classList.remove('text-gray-300');
-            }
-            
+            [modeSelect, modeConnect, modeDelete].forEach(btn => {
+                if (!btn) return;
+                const isActive = btn === activeBtn;
+                btn.classList.toggle('is-active', isActive);
+                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+
             // Update cursor based on mode
             if (svg) {
                 svg.classList.remove('cursor-crosshair', 'cursor-not-allowed');
                 if (mode === 'connect') svg.classList.add('cursor-crosshair');
                 else if (mode === 'delete') svg.classList.add('cursor-not-allowed');
             }
-            
+
             render();
         }
 
@@ -1484,11 +1528,12 @@
         if (modeConnect) modeConnect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('connect'); });
         if (modeDelete) modeDelete.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('delete'); });
 
-        function getSVGPoint(evt) {
-            const pt = svg.createSVGPoint();
-            pt.x = evt.clientX;
-            pt.y = evt.clientY;
-            return pt.matrixTransform(svg.getScreenCTM().inverse());
+        function getCanvasPoint(evt) {
+            const rect = svg.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
         }
 
         function createNode(type, x, y) {
@@ -1559,7 +1604,7 @@
             const idx = Math.floor(Math.random() * typeTools.length);
             const tool = typeTools[idx];
             
-            nodes.push({
+            const newNode = {
                 id,
                 x,
                 y,
@@ -1567,13 +1612,32 @@
                 label: tool.label,
                 icon: tool.icon,
                 iconType: tool.iconType
-            });
+            };
+            clampNodeToCanvas(newNode);
+            nodes.push(newNode);
             render();
         }
 
-        if (btnAddSource) btnAddSource.addEventListener('click', () => createNode('source', 100, 225));
-        if (btnAddTransform) btnAddTransform.addEventListener('click', () => createNode('transform', 300, 225));
-        if (btnAddDestination) btnAddDestination.addEventListener('click', () => createNode('destination', 500, 225));
+        function getSpawnPoint(type) {
+            const { width, height } = getCanvasSize();
+            const centerY = Math.round(height * 0.5);
+            if (type === 'source') return { x: Math.max(80, Math.round(width * 0.18)), y: centerY };
+            if (type === 'transform') return { x: Math.round(width * 0.5), y: centerY };
+            return { x: Math.max(80, Math.min(width - 80, Math.round(width * 0.82))), y: centerY };
+        }
+
+        if (btnAddSource) btnAddSource.addEventListener('click', () => {
+            const p = getSpawnPoint('source');
+            createNode('source', p.x, p.y);
+        });
+        if (btnAddTransform) btnAddTransform.addEventListener('click', () => {
+            const p = getSpawnPoint('transform');
+            createNode('transform', p.x, p.y);
+        });
+        if (btnAddDestination) btnAddDestination.addEventListener('click', () => {
+            const p = getSpawnPoint('destination');
+            createNode('destination', p.x, p.y);
+        });
         if (btnClear) {
             btnClear.addEventListener('click', () => {
                 nodes = [];
@@ -1696,7 +1760,7 @@
             isDragging = true;
             dragNode = node;
             selectedNode = node.id;
-            const pt = getSVGPoint(e);
+            const pt = getCanvasPoint(e);
             dragOffset.x = pt.x - node.x;
             dragOffset.y = pt.y - node.y;
             render();
@@ -1706,40 +1770,43 @@
             if (!tooltip) return;
             tooltip.textContent = `${node.type.toUpperCase()}: ${node.label}`;
             tooltip.classList.add('visible');
-            const rect = container.getBoundingClientRect();
-            tooltip.style.left = `${node.x}px`;
-            tooltip.style.top = `${node.y - 40}px`;
+            const containerRect = container.getBoundingClientRect();
+            const tooltipWidth = tooltip.offsetWidth || 160;
+            const tooltipHeight = tooltip.offsetHeight || 34;
+            const left = Math.max(8, Math.min(containerRect.width - tooltipWidth - 8, node.x - tooltipWidth / 2));
+            const top = Math.max(8, Math.min(containerRect.height - tooltipHeight - 8, node.y - tooltipHeight - 8));
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
         }
 
         function hideTooltip() {
             if (tooltip) tooltip.classList.remove('visible');
         }
 
-        // Global mouse events
-        svg.addEventListener('mousemove', (e) => {
+        // Drag handling on both svg and window for smoother edge dragging
+        function handleDragMove(e) {
             if (isDragging && dragNode) {
-                const pt = getSVGPoint(e);
+                const pt = getCanvasPoint(e);
                 dragNode.x = pt.x - dragOffset.x;
                 dragNode.y = pt.y - dragOffset.y;
-                // Constrain to current SVG viewport bounds (responsive)
-                const halfW = 35;
-                const halfH = 25;
-                const maxX = Math.max(halfW, (svg.clientWidth || 600) - halfW);
-                const maxY = Math.max(halfH, (svg.clientHeight || 450) - halfH);
-                dragNode.x = Math.max(halfW, Math.min(maxX, dragNode.x));
-                dragNode.y = Math.max(halfH, Math.min(maxY, dragNode.y));
+                clampNodeToCanvas(dragNode);
                 render();
             }
-        });
+        }
 
-        svg.addEventListener('mouseup', () => {
+        function stopDragging() {
             isDragging = false;
             dragNode = null;
-        });
+        }
+
+        window.addEventListener('mousemove', handleDragMove);
+
+        svg.addEventListener('mouseup', stopDragging);
+        window.addEventListener('mouseup', stopDragging);
+        window.addEventListener('blur', stopDragging);
 
         svg.addEventListener('mouseleave', () => {
-            isDragging = false;
-            dragNode = null;
+            hideTooltip();
         });
 
         svg.addEventListener('click', (e) => {
@@ -1749,6 +1816,15 @@
                 render();
             }
         });
+
+        // Keep the SVG user-space in sync with rendered dimensions
+        syncCanvasViewport();
+        if (typeof ResizeObserver !== 'undefined') {
+            const resizeObserver = new ResizeObserver(() => syncCanvasViewport());
+            resizeObserver.observe(container);
+        } else {
+            window.addEventListener('resize', syncCanvasViewport);
+        }
 
         // Initialize
         setMode('select');
