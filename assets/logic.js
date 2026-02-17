@@ -1459,15 +1459,15 @@
             // Update button styles - remove active from all, add to current
             [modeSelect, modeConnect, modeDelete].forEach(btn => {
                 if (btn) {
-                    btn.classList.remove('active', 'bg-white/20', 'text-cyan-300', 'border-cyan-400/50');
-                    btn.classList.add('text-gray-300', 'border-transparent');
+                    btn.classList.remove('active', 'bg-white/20', 'text-cyan-300');
+                    btn.classList.add('text-gray-300');
                 }
             });
             
             const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
             if (activeBtn) {
-                activeBtn.classList.add('active', 'bg-white/20', 'text-cyan-300', 'border-cyan-400/50');
-                activeBtn.classList.remove('text-gray-300', 'border-transparent');
+                activeBtn.classList.add('active', 'bg-white/20', 'text-cyan-300');
+                activeBtn.classList.remove('text-gray-300');
             }
             
             // Update cursor based on mode
@@ -1721,9 +1721,13 @@
                 const pt = getSVGPoint(e);
                 dragNode.x = pt.x - dragOffset.x;
                 dragNode.y = pt.y - dragOffset.y;
-                // Constrain to canvas bounds
-                dragNode.x = Math.max(35, Math.min(565, dragNode.x));
-                dragNode.y = Math.max(25, Math.min(425, dragNode.y));
+                // Constrain to current SVG viewport bounds (responsive)
+                const halfW = 35;
+                const halfH = 25;
+                const maxX = Math.max(halfW, (svg.clientWidth || 600) - halfW);
+                const maxY = Math.max(halfH, (svg.clientHeight || 450) - halfH);
+                dragNode.x = Math.max(halfW, Math.min(maxX, dragNode.x));
+                dragNode.y = Math.max(halfH, Math.min(maxY, dragNode.y));
                 render();
             }
         });
