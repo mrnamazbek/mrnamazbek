@@ -169,6 +169,10 @@
             overflow: visible;
         }
 
+        .mini-tools-card {
+            min-width: 0;
+        }
+
         #vertical-library h3 {
             font-size: clamp(1.75rem, 2.4vw, 2.2rem);
         }
@@ -351,6 +355,10 @@
             .site-nav a[href*="linkedin.com"] {
                 display: none;
             }
+
+            #mini-tools .mini-tools-controls select {
+                min-height: 42px !important;
+            }
         }
 
         @media (hover: none) and (pointer: coarse) {
@@ -502,6 +510,7 @@
             font-size: 0.78rem;
             color: rgba(148, 163, 184, 0.95);
             word-break: break-word;
+            line-height: 1.35;
         }
 
         .mini-row__right {
@@ -509,6 +518,7 @@
             font-size: 0.92rem;
             color: rgba(229, 231, 235, 0.92);
             white-space: nowrap;
+            line-height: 1.2;
         }
 
         .mini-table-shell {
@@ -624,9 +634,10 @@
         }
 
         .mini-db {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 10px;
+            min-width: 0;
         }
 
         .mini-db__icon {
@@ -646,6 +657,8 @@
         .mini-db__name {
             font-weight: 700;
             color: rgba(255, 255, 255, 0.92);
+            overflow-wrap: anywhere;
+            line-height: 1.25;
         }
 
         .mini-db__meta {
@@ -661,6 +674,7 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
+            min-width: 0;
         }
 
         .spark {
@@ -692,6 +706,55 @@
         }
 
         @media (max-width: 640px) {
+            #mini-tools h3 {
+                font-size: clamp(1.45rem, 7.1vw, 1.9rem);
+            }
+
+            #mini-tools .mini-tools-card {
+                padding: 0.9rem !important;
+            }
+
+            #mini-tools .mini-tools-head {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.7rem;
+                align-items: start !important;
+            }
+
+            #mini-tools .mini-tools-controls {
+                display: grid !important;
+                grid-template-columns: 1fr;
+                gap: 0.45rem;
+                align-items: stretch;
+            }
+
+            #mini-tools .mini-tools-controls label {
+                font-size: 0.68rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            #mini-tools .mini-tools-controls select {
+                width: 100%;
+                max-width: 100%;
+                font-size: 0.88rem;
+            }
+
+            #world-clock {
+                margin-top: 0.85rem !important;
+            }
+
+            .mini-row {
+                display: block;
+                padding: 12px 12px;
+            }
+
+            .mini-row__right {
+                display: block;
+                margin-top: 7px;
+                font-size: 0.98rem;
+            }
+
             .mini-table-shell {
                 border-radius: 16px;
             }
@@ -715,15 +778,15 @@
             }
 
             .mini-table__cell {
-                display: flex;
+                display: grid;
+                grid-template-columns: 64px minmax(0, 1fr);
                 align-items: flex-start;
-                justify-content: space-between;
                 gap: 12px;
             }
 
             .mini-table__cell::before {
                 content: attr(data-label);
-                flex: 0 0 68px;
+                width: 64px;
                 font-size: 0.65rem;
                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
                 text-transform: uppercase;
@@ -732,12 +795,65 @@
                 margin-top: 2px;
             }
 
+            .mini-table__cell[data-label="Database"] {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-table__cell[data-label="Database"]::before {
+                display: none;
+            }
+
+            .mini-db {
+                display: grid;
+                grid-template-columns: auto minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .mini-db__name {
+                font-size: 0.95rem;
+            }
+
+            .mini-db__meta {
+                margin-top: 4px;
+                font-size: 0.76rem;
+            }
+
             .mini-table__cell--score {
                 text-align: left;
             }
 
             .mini-table__cell--score .mini-table__score-value {
                 font-size: 0.95rem;
+            }
+
+            .mini-db__trend {
+                margin-top: 8px;
+                gap: 7px;
+            }
+
+            .mini-db__trend .spark {
+                display: none;
+            }
+
+            .delta {
+                font-size: 0.7rem;
+                padding: 4px 7px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .mini-table__cell {
+                grid-template-columns: 56px minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .mini-table__cell::before {
+                width: 56px;
+                font-size: 0.6rem;
+            }
+
+            .mini-db__name {
+                font-size: 0.9rem;
             }
         }
 

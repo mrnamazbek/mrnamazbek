@@ -551,30 +551,32 @@
             <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot. Lightweight and mobile-friendly.</p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="glass-card ui-card p-6 rounded-2xl">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--clock">
+                <div class="mini-tools-head flex items-center justify-between gap-3 flex-wrap">
                     <div>
                         <div class="text-sm font-mono text-cyan-300">World Clock</div>
                         <div class="text-gray-400 text-sm mt-1">Local + selected time zones.</div>
                     </div>
-                    <label class="text-xs font-mono text-gray-400" for="tz-picker">Time zone</label>
-                    <select id="tz-picker" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
-                        <option value="Asia/Almaty">Almaty (Asia/Almaty)</option>
-                        <option value="UTC">UTC</option>
-                        <option value="America/Los_Angeles">SF (America/Los_Angeles)</option>
-                        <option value="Europe/London">London (Europe/London)</option>
-                    </select>
+                    <div class="mini-tools-controls flex items-center gap-3">
+                        <label class="text-xs font-mono text-gray-400" for="tz-picker">Time zone</label>
+                        <select id="tz-picker" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
+                            <option value="Asia/Almaty">Almaty (Asia/Almaty)</option>
+                            <option value="UTC">UTC</option>
+                            <option value="America/Los_Angeles">SF (America/Los_Angeles)</option>
+                            <option value="Europe/London">London (Europe/London)</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="world-clock" class="mt-5 grid gap-3"></div>
             </div>
 
-            <div class="glass-card ui-card p-6 rounded-2xl db-ranking-card">
-                <div class="flex items-end justify-between gap-4 flex-wrap">
+            <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--db db-ranking-card">
+                <div class="mini-tools-head flex items-end justify-between gap-4 flex-wrap">
                     <div>
                         <div class="text-sm font-mono text-cyan-300">DB Rankings</div>
                         <div class="text-gray-400 text-sm mt-1">Loaded from <span class="text-gray-200">assets/db_ranking.json</span>.</div>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="mini-tools-controls flex items-center gap-3">
                         <label class="text-xs font-mono text-gray-400" for="db-sort">Sort</label>
                         <select id="db-sort" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
                             <option value="rank">Rank</option>
