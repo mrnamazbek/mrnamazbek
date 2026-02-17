@@ -1480,9 +1480,9 @@
             render();
         }
 
-        if (modeSelect) modeSelect.addEventListener('click', () => setMode('select'));
-        if (modeConnect) modeConnect.addEventListener('click', () => setMode('connect'));
-        if (modeDelete) modeDelete.addEventListener('click', () => setMode('delete'));
+        if (modeSelect) modeSelect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('select'); });
+        if (modeConnect) modeConnect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('connect'); });
+        if (modeDelete) modeDelete.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('delete'); });
 
         function getSVGPoint(evt) {
             const pt = svg.createSVGPoint();
@@ -1498,15 +1498,25 @@
             const tools = {
                 source: [
                     { label: 'Kafka', icon: '⬡', iconType: 'symbol' },
+                    { label: 'Kinesis', icon: '≈', iconType: 'symbol' },
+                    { label: 'Pub/Sub', icon: '◎', iconType: 'symbol' },
+                    { label: 'Event Hubs', icon: '⎈', iconType: 'symbol' },
+                    { label: 'RabbitMQ', icon: '🐇', iconType: 'symbol' },
                     { label: 'API', icon: 'A', iconType: 'letter' },
                     { label: 'S3', icon: '☁', iconType: 'symbol' },
+                    { label: 'GCS', icon: '☁', iconType: 'symbol' },
+                    { label: 'Azure Blob', icon: '⬢', iconType: 'symbol' },
                     { label: 'MySQL', icon: '🐬', iconType: 'symbol' },
+                    { label: 'SQL Server', icon: '🟦', iconType: 'symbol' },
                     { label: 'MongoDB', icon: '🍃', iconType: 'symbol' },
+                    { label: 'Redis', icon: '🟥', iconType: 'symbol' },
                     { label: 'Logs', icon: '📄', iconType: 'symbol' },
                     { label: 'CDC', icon: '⏱', iconType: 'symbol' },
                     { label: 'Files', icon: '📁', iconType: 'symbol' },
+                    { label: 'FTP/SFTP', icon: '⇄', iconType: 'symbol' },
                     { label: 'Sensor', icon: '📡', iconType: 'symbol' },
-                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' }
+                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
+                    { label: 'IoT', icon: '🔗', iconType: 'symbol' }
                 ],
                 transform: [
                     { label: 'Spark', icon: 'S', iconType: 'letter' },
@@ -1518,21 +1528,30 @@
                     { label: 'Filter', icon: 'F', iconType: 'letter' },
                     { label: 'Sort', icon: '⇅', iconType: 'symbol' },
                     { label: 'Group', icon: 'G', iconType: 'letter' },
-                    { label: 'Window', icon: 'W', iconType: 'letter' }
+                    { label: 'Window', icon: 'W', iconType: 'letter' },
+                    { label: 'dbt', icon: '△', iconType: 'symbol' },
+                    { label: 'Airflow', icon: '⟲', iconType: 'symbol' }
                 ],
                 destination: [
                     { label: 'Postgres', icon: '🐘', iconType: 'symbol' },
                     { label: 'Snowflake', icon: '❄', iconType: 'symbol' },
                     { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
                     { label: 'Redshift', icon: '▲', iconType: 'symbol' },
+                    { label: 'Databricks', icon: '🧱', iconType: 'symbol' },
+                    { label: 'Delta Lake', icon: 'Δ', iconType: 'symbol' },
                     { label: 'DWH', icon: 'D', iconType: 'letter' },
                     { label: 'Lake', icon: 'L', iconType: 'letter' },
                     { label: 'BI', icon: '📊', iconType: 'symbol' },
+                    { label: 'Power BI', icon: '🟨', iconType: 'symbol' },
+                    { label: 'Tableau', icon: '✶', iconType: 'symbol' },
+                    { label: 'Looker', icon: '◔', iconType: 'symbol' },
                     { label: 'API', icon: '🔌', iconType: 'symbol' },
                     { label: 'Cache', icon: '⚡', iconType: 'symbol' },
                     { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
                     { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
-                    { label: 'DuckDB', icon: '🦆', iconType: 'symbol' }
+                    { label: 'DuckDB', icon: '🦆', iconType: 'symbol' },
+                    { label: 'Elasticsearch', icon: '🧲', iconType: 'symbol' },
+                    { label: 'Grafana', icon: '📈', iconType: 'symbol' }
                 ]
             };
             
@@ -1662,10 +1681,7 @@
                     render();
                 } else if (connectSource !== node.id) {
                     // Check if edge already exists
-                    const exists = edges.some(e =>
-                        (e.from === connectSource && e.to === node.id) ||
-                        (e.from === node.id && e.to === connectSource)
-                    );
+                    const exists = edges.some(e => e.from === connectSource && e.to === node.id);
                     if (!exists) {
                         edges.push({ from: connectSource, to: node.id });
                     }
@@ -1731,5 +1747,6 @@
         });
 
         // Initialize
+        setMode('select');
         initSamplePipeline();
     }
