@@ -1385,6 +1385,14 @@
     cursor: grab;
 }
 
+.dag-svg.cursor-crosshair {
+    cursor: crosshair !important;
+}
+
+.dag-svg.cursor-not-allowed {
+    cursor: not-allowed !important;
+}
+
 .dag-svg:active {
     cursor: grabbing;
 }

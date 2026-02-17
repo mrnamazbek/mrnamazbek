@@ -922,11 +922,11 @@
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="flex items-start justify-between gap-3">
-                                <div class="min-w-0">
+                                <div class="min-w-0 flex-1">
                                     <div class="font-bold text-white/90 leading-snug truncate">${title}</div>
                                     <div class="text-xs text-gray-400 truncate">${author}</div>
                                 </div>
-                                <span class="text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded-full border ${badge.cls}">${badge.text}</span>
+                                <span class="flex-shrink-0 text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded-full border ${badge.cls}">${badge.text}</span>
                             </div>
                             <div class="text-[11px] text-gray-500 mt-2 truncate">${tags.slice(0, 3).join(' · ')}</div>
                         </div>
@@ -1436,10 +1436,10 @@
         // Initialize with sample pipeline
         function initSamplePipeline() {
             nodes = [
-                { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: 'K' },
-                { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S' },
-                { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C' },
-                { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: 'P' }
+                { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: '⬡', iconType: 'symbol' },
+                { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S', iconType: 'letter' },
+                { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C', iconType: 'letter' },
+                { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: '🐘', iconType: 'symbol' }
             ];
             edges = [
                 { from: 1, to: 2 },
@@ -1455,11 +1455,28 @@
             mode = newMode;
             selectedNode = null;
             connectSource = null;
+            
+            // Update button styles - remove active from all, add to current
             [modeSelect, modeConnect, modeDelete].forEach(btn => {
-                if (btn) btn.classList.remove('active', 'bg-white/10');
+                if (btn) {
+                    btn.classList.remove('active', 'bg-white/20', 'text-cyan-300', 'border-cyan-400/50');
+                    btn.classList.add('text-gray-300', 'border-transparent');
+                }
             });
+            
             const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
-            if (activeBtn) activeBtn.classList.add('active', 'bg-white/10');
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-white/20', 'text-cyan-300', 'border-cyan-400/50');
+                activeBtn.classList.remove('text-gray-300', 'border-transparent');
+            }
+            
+            // Update cursor based on mode
+            if (svg) {
+                svg.classList.remove('cursor-crosshair', 'cursor-not-allowed');
+                if (mode === 'connect') svg.classList.add('cursor-crosshair');
+                else if (mode === 'delete') svg.classList.add('cursor-not-allowed');
+            }
+            
             render();
         }
 
@@ -1476,24 +1493,61 @@
 
         function createNode(type, x, y) {
             const id = nodeIdCounter++;
-            const labels = {
-                source: ['API', 'Logs', 'CDC', 'S3', 'Kafka'],
-                transform: ['ETL', 'Enrich', 'Validate', 'Aggregate', 'Join'],
-                destination: ['DWH', 'Lake', 'BI', 'API', 'Cache']
+            
+            // Expanded tool library with icons/symbols
+            const tools = {
+                source: [
+                    { label: 'Kafka', icon: '⬡', iconType: 'symbol' },
+                    { label: 'API', icon: 'A', iconType: 'letter' },
+                    { label: 'S3', icon: '☁', iconType: 'symbol' },
+                    { label: 'MySQL', icon: '🐬', iconType: 'symbol' },
+                    { label: 'MongoDB', icon: '🍃', iconType: 'symbol' },
+                    { label: 'Logs', icon: '📄', iconType: 'symbol' },
+                    { label: 'CDC', icon: '⏱', iconType: 'symbol' },
+                    { label: 'Files', icon: '📁', iconType: 'symbol' },
+                    { label: 'Sensor', icon: '📡', iconType: 'symbol' },
+                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' }
+                ],
+                transform: [
+                    { label: 'Spark', icon: 'S', iconType: 'letter' },
+                    { label: 'ETL', icon: 'E', iconType: 'letter' },
+                    { label: 'Cleanse', icon: 'C', iconType: 'letter' },
+                    { label: 'Validate', icon: 'V', iconType: 'letter' },
+                    { label: 'Enrich', icon: 'N', iconType: 'letter' },
+                    { label: 'Join', icon: 'J', iconType: 'letter' },
+                    { label: 'Filter', icon: 'F', iconType: 'letter' },
+                    { label: 'Sort', icon: '⇅', iconType: 'symbol' },
+                    { label: 'Group', icon: 'G', iconType: 'letter' },
+                    { label: 'Window', icon: 'W', iconType: 'letter' }
+                ],
+                destination: [
+                    { label: 'Postgres', icon: '🐘', iconType: 'symbol' },
+                    { label: 'Snowflake', icon: '❄', iconType: 'symbol' },
+                    { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
+                    { label: 'Redshift', icon: '▲', iconType: 'symbol' },
+                    { label: 'DWH', icon: 'D', iconType: 'letter' },
+                    { label: 'Lake', icon: 'L', iconType: 'letter' },
+                    { label: 'BI', icon: '📊', iconType: 'symbol' },
+                    { label: 'API', icon: '🔌', iconType: 'symbol' },
+                    { label: 'Cache', icon: '⚡', iconType: 'symbol' },
+                    { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
+                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
+                    { label: 'DuckDB', icon: '🦆', iconType: 'symbol' }
+                ]
             };
-            const icons = {
-                source: ['A', 'L', 'C', 'S', 'K'],
-                transform: ['E', 'N', 'V', 'A', 'J'],
-                destination: ['D', 'L', 'B', 'A', 'C']
-            };
-            const idx = Math.floor(Math.random() * labels[type].length);
+            
+            const typeTools = tools[type];
+            const idx = Math.floor(Math.random() * typeTools.length);
+            const tool = typeTools[idx];
+            
             nodes.push({
                 id,
                 x,
                 y,
                 type,
-                label: labels[type][idx],
-                icon: icons[type][idx]
+                label: tool.label,
+                icon: tool.icon,
+                iconType: tool.iconType
             });
             render();
         }
@@ -1541,6 +1595,12 @@
                 icon.textContent = node.icon;
                 icon.setAttribute('y', -2);
                 icon.classList.add('dag-node-icon');
+                // Adjust font size for emoji vs letter icons
+                if (node.iconType === 'symbol') {
+                    icon.setAttribute('font-size', '16');
+                } else {
+                    icon.setAttribute('font-size', '14');
+                }
                 g.appendChild(icon);
 
                 // Label
