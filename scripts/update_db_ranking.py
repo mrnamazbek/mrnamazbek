@@ -49,11 +49,8 @@ def parse_top10(html: str):
     if not m:
         raise ValueError("Could not locate ranking header")
 
-    # Extract table rows. DB-Engines uses <tr>..</tr>.
-    # We'll parse cell text by stripping tags.
+    # Extract table rows (works when page is server-side rendered as a <table>).
     rows = re.findall(r"<tr[^>]*>(.*?)</tr>", html, flags=re.IGNORECASE | re.DOTALL)
-    if not rows or len(rows) < 12:
-        raise ValueError("Could not locate enough table rows")
 
     def strip_tags(s: str) -> str:
         s = re.sub(r"<script.*?</script>", " ", s, flags=re.IGNORECASE | re.DOTALL)
@@ -65,49 +62,101 @@ def parse_top10(html: str):
 
     items = []
 
-    # Heuristic: data rows contain a score number with decimal and the DBMS name.
-    for r in rows:
-        text = strip_tags(r)
-        # Typical row begins with "1. Oracle Relational, Multi-model 1203.51 -33.82 -51.31"
-        # But the table also includes historical rank columns. We'll match a robust pattern.
-        # Find rank + name + model + score + mom + yoy.
-        # Name can contain spaces.
-        # Model field often contains commas.
-        m = re.search(
-            r"\b(\d{1,3})\.\s+(.*?)\s+(Relational|Document|Key-value|Multi-model|Graph|Wide column|Search|Time series|Object|Hierarchical|Network|RDF|Vector)[^\d-+]*([0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)",
-            text,
+    def parse_from_rows(tr_rows):
+        parsed = []
+        for r in tr_rows:
+            text = strip_tags(r)
+            # Example after stripping:
+            # "1. Oracle Relational, Multi-model 1203.51 -33.82 -51.31"
+            m2 = re.search(
+                r"\b(\d{1,3})\.\s+(.+?)\s+((?:Relational|Document|Key-value|Multi-model|Wide column|Search|Time Series|Graph|RDF|Spatial|Vector)[^\d-+]{0,120})\s+([0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)",
+                text,
+                flags=re.IGNORECASE,
+            )
+            if not m2:
+                continue
+            rank = int(m2.group(1))
+            name = m2.group(2).strip()
+            model = re.sub(r"\s+", " ", m2.group(3)).strip()
+            score = float(m2.group(4))
+            delta_mom = float(m2.group(5))
+            delta_yoy = float(m2.group(6))
+            parsed.append(
+                {
+                    "rank": rank,
+                    "name": name,
+                    "model": model,
+                    "score_feb_2026": score,  # renamed later
+                    "delta_mom": delta_mom,
+                    "delta_yoy": delta_yoy,
+                    "icon": ICON_MAP.get(name, ""),
+                }
+            )
+            if len(parsed) >= 10:
+                break
+        return parsed
+
+    def parse_from_full_text(full_html):
+        # Fallback when DB-Engines is rendered without <tr> rows (or HTML structure changes).
+        text = strip_tags(full_html)
+        # Find the section starting at the first rank.
+        idx = text.find("1.")
+        if idx > 0:
+            text = text[idx:]
+
+        parsed = []
+        # Match: "1.1.1.OracleRelational, Multi-model1203.51-33.82-51.31" (spaces may be missing)
+        # Keep it tolerant: require rank, name, model keywords, score, mom, yoy.
+        pattern = re.compile(
+            r"\b(\d{1,3})\.\s*(?:\d{1,3}\.\s*)?(?:\d{1,3}\.\s*)?"  # historical rank columns sometimes appear
+            r"([A-Za-z0-9][A-Za-z0-9 .+\-/&()]*?)"  # name
+            r"\s*(Relational|Document|Key-value|Multi-model|Wide column|Search|Time Series|Graph|RDF|Spatial|Vector)"  # model anchor
+            r"([^\d]{0,120}?)"  # remainder of model
+            r"\s*([0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)\s*([+-][0-9]+\.[0-9]+)",
             flags=re.IGNORECASE,
         )
-        if not m:
-            continue
 
-        rank = int(m.group(1))
-        name = m.group(2).strip()
-        # Model: take from the first occurrence of known model keyword onwards
-        model_start = m.start(3)
-        model_end = m.start(4)
-        model = text[model_start:model_end].strip().rstrip("·").strip()
-        score = float(m.group(4))
-        delta_mom = float(m.group(5))
-        delta_yoy = float(m.group(6))
+        for m2 in pattern.finditer(text):
+            rank = int(m2.group(1))
+            name = re.sub(r"\s+", " ", m2.group(2)).strip()
+            model = (m2.group(3) + (m2.group(4) or "")).strip()
+            model = re.sub(r"\s+", " ", model)
+            score = float(m2.group(5))
+            delta_mom = float(m2.group(6))
+            delta_yoy = float(m2.group(7))
+            parsed.append(
+                {
+                    "rank": rank,
+                    "name": name,
+                    "model": model,
+                    "score_feb_2026": score,
+                    "delta_mom": delta_mom,
+                    "delta_yoy": delta_yoy,
+                    "icon": ICON_MAP.get(name, ""),
+                }
+            )
+            if len(parsed) >= 10:
+                break
+        return parsed
 
-        items.append(
-            {
-                "rank": rank,
-                "name": name,
-                "model": model,
-                "score_feb_2026": score,  # will be renamed to current month later
-                "delta_mom": delta_mom,
-                "delta_yoy": delta_yoy,
-                "icon": ICON_MAP.get(name, ""),
-            }
-        )
-
-        if len(items) >= 10:
-            break
+    if rows and len(rows) >= 3:
+        items = parse_from_rows(rows)
 
     if len(items) < 10:
-        raise ValueError(f"Parsed only {len(items)} items")
+        items = parse_from_full_text(html)
+
+    if len(items) < 10:
+        # Provide diagnostics for GitHub Actions logs.
+        lower = html.lower()
+        hints = []
+        for token in ["captcha", "cloudflare", "access denied", "enable javascript", "blocked", "robot"]:
+            if token in lower:
+                hints.append(token)
+        raise ValueError(
+            "Parsed only " + str(len(items)) + " items. "
+            + "HTML length=" + str(len(html)) + ", tr_count=" + str(len(rows))
+            + (", hints=" + ",".join(hints) if hints else "")
+        )
 
     return items
 
