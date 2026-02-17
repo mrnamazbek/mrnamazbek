@@ -202,34 +202,105 @@
         const sortSel = document.getElementById('db-sort');
 
         const fallback = [
-            { rank: 1, name: 'Oracle', score: 1280, category: 'relational', icon: 'devicon-oracle-original colored' },
-            { rank: 2, name: 'MySQL', score: 1200, category: 'relational', icon: 'devicon-mysql-plain colored' },
-            { rank: 3, name: 'Microsoft SQL Server', score: 1150, category: 'relational', icon: 'devicon-microsoftsqlserver-plain colored' },
-            { rank: 4, name: 'PostgreSQL', score: 1120, category: 'relational', icon: 'devicon-postgresql-plain colored' },
-            { rank: 5, name: 'MongoDB', score: 980, category: 'document', icon: 'devicon-mongodb-plain colored' },
-            { rank: 6, name: 'Redis', score: 910, category: 'key-value', icon: 'devicon-redis-plain colored' }
+            { rank: 1, name: 'Oracle', model: 'Relational, Multi-model', score_feb_2026: 1203.51, score_jan_2026: 1237.33, score_feb_2025: 1254.82, delta_mom: -33.82, delta_yoy: -51.31, icon: 'devicon-oracle-original colored' },
+            { rank: 2, name: 'MySQL', model: 'Relational, Multi-model', score_feb_2026: 868.22, score_jan_2026: 867.52, score_feb_2025: 999.99, delta_mom: 0.70, delta_yoy: -131.77, icon: 'devicon-mysql-plain colored' },
+            { rank: 3, name: 'Microsoft SQL Server', model: 'Relational, Multi-model', score_feb_2026: 708.14, score_jan_2026: 706.26, score_feb_2025: 786.87, delta_mom: 1.88, delta_yoy: -78.73, icon: 'devicon-microsoftsqlserver-plain colored' },
+            { rank: 4, name: 'PostgreSQL', model: 'Relational, Multi-model', score_feb_2026: 672.03, score_jan_2026: 666.26, score_feb_2025: 659.61, delta_mom: 5.77, delta_yoy: 12.42, icon: 'devicon-postgresql-plain colored' },
+            { rank: 5, name: 'MongoDB', model: 'Document, Multi-model', score_feb_2026: 378.73, score_jan_2026: 376.74, score_feb_2025: 396.63, delta_mom: 1.99, delta_yoy: -17.90, icon: 'devicon-mongodb-plain colored' },
+            { rank: 6, name: 'Snowflake', model: 'Relational', score_feb_2026: 208.14, score_jan_2026: 207.80, score_feb_2025: 155.58, delta_mom: 0.34, delta_yoy: 52.56, icon: '' },
+            { rank: 7, name: 'Redis', model: 'Key-value, Multi-model', score_feb_2026: 147.04, score_jan_2026: 144.16, score_feb_2025: 157.91, delta_mom: 2.88, delta_yoy: -10.87, icon: 'devicon-redis-plain colored' },
+            { rank: 8, name: 'Databricks', model: 'Multi-model', score_feb_2026: 144.51, score_jan_2026: 141.54, score_feb_2025: 90.03, delta_mom: 2.97, delta_yoy: 54.48, icon: '' },
+            { rank: 9, name: 'IBM Db2', model: 'Relational, Multi-model', score_feb_2026: 111.22, score_jan_2026: 112.72, score_feb_2025: 125.43, delta_mom: -1.50, delta_yoy: -14.21, icon: '' },
+            { rank: 10, name: 'Elasticsearch', model: 'Multi-model', score_feb_2026: 106.46, score_jan_2026: 107.15, score_feb_2025: 134.63, delta_mom: -0.69, delta_yoy: -28.17, icon: 'devicon-elasticsearch-plain colored' }
         ];
 
         let data = [];
 
         function normalize(items) {
             if (!Array.isArray(items)) return [];
+
             return items
-                .map(it => ({
-                    rank: Number(it.rank) || 999,
-                    name: String(it.name || '').trim() || 'Unknown',
-                    score: Number(it.score) || 0,
-                    category: String(it.category || '').trim() || 'other',
-                    icon: it.icon ? String(it.icon) : ''
-                }))
+                .map(it => {
+                    const name = String(it.name || '').trim() || 'Unknown';
+                    const legacyScore = Number(it.score);
+
+                    // Support two schemas:
+                    // A) Explicit month keys (score_feb_2026, score_jan_2026, score_feb_2025)
+                    // B) Updater keys (score_current, score_prev_month, score_prev_year)
+                    const hasUpdaterSchema = Number.isFinite(Number(it.score_current)) || Number.isFinite(Number(it.score_prev_month)) || Number.isFinite(Number(it.score_prev_year));
+
+                    const scoreFeb = Number.isFinite(Number(it.score_feb_2026)) ? Number(it.score_feb_2026)
+                        : (Number.isFinite(Number(it.score_current)) ? Number(it.score_current)
+                            : (Number.isFinite(legacyScore) ? legacyScore : 0));
+
+                    const scoreJan = Number.isFinite(Number(it.score_jan_2026)) ? Number(it.score_jan_2026)
+                        : (Number.isFinite(Number(it.score_prev_month)) ? Number(it.score_prev_month)
+                            : (Number.isFinite(Number(it.delta_mom)) ? (scoreFeb - Number(it.delta_mom)) : scoreFeb));
+
+                    const scorePrevYear = Number.isFinite(Number(it.score_feb_2025)) ? Number(it.score_feb_2025)
+                        : (Number.isFinite(Number(it.score_prev_year)) ? Number(it.score_prev_year)
+                            : (Number.isFinite(Number(it.delta_yoy)) ? (scoreFeb - Number(it.delta_yoy)) : scoreFeb));
+
+                    const deltaMoM = Number.isFinite(Number(it.delta_mom)) ? Number(it.delta_mom) : (scoreFeb - scoreJan);
+                    const deltaYoY = Number.isFinite(Number(it.delta_yoy)) ? Number(it.delta_yoy) : (scoreFeb - scorePrevYear);
+
+                    return {
+                        rank: Number(it.rank) || 999,
+                        name,
+                        model: String(it.model || it.category || '').trim() || 'other',
+                        scoreFeb,
+                        scoreJan,
+                        scorePrevYear,
+                        deltaMoM,
+                        deltaYoY,
+                        asOf: String(it.as_of || it.asOf || '').trim(),
+                        icon: it.icon ? String(it.icon) : ''
+                    };
+                })
                 .filter(it => it.name !== 'Unknown');
+        }
+
+        function fmtDelta(v) {
+            const n = Number(v) || 0;
+            const sign = n > 0 ? '+' : '';
+            return sign + n.toFixed(2);
+        }
+
+        function deltaClass(v) {
+            const n = Number(v) || 0;
+            if (n > 0) return 'delta delta--up';
+            if (n < 0) return 'delta delta--down';
+            return 'delta';
+        }
+
+        function sparklineSvg(values) {
+            const pts = values.map(v => (Number.isFinite(v) ? v : 0));
+            const min = Math.min(...pts);
+            const max = Math.max(...pts);
+            const w = 54;
+            const h = 18;
+            const pad = 2;
+            const span = Math.max(1e-9, max - min);
+
+            const xy = pts.map((v, i) => {
+                const x = pad + (i * (w - pad * 2) / (pts.length - 1));
+                const y = pad + ((max - v) * (h - pad * 2) / span);
+                return [x, y];
+            });
+
+            const d = xy.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+            return `
+                <svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">
+                    <path d="${d}" fill="none" stroke="rgba(0,212,255,0.85)" stroke-width="1.6" />
+                </svg>
+            `;
         }
 
         function sortItems(items) {
             const key = sortSel && sortSel.value ? sortSel.value : 'rank';
             const list = [...items];
             if (key === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
-            else if (key === 'score') list.sort((a, b) => (b.score - a.score) || (a.rank - b.rank));
+            else if (key === 'score') list.sort((a, b) => (b.scoreFeb - a.scoreFeb) || (a.rank - b.rank));
             else list.sort((a, b) => a.rank - b.rank);
             return list;
         }
@@ -240,6 +311,7 @@
                 <div class="mini-table" role="table" aria-label="DB rankings">
                     ${items.map(it => {
                         const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
+                        const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
                         return `
                             <div class="mini-table__row" role="row">
                                 <div class="mini-table__cell mono" role="cell">#${it.rank}</div>
@@ -248,9 +320,14 @@
                                         <span class="mini-db__icon" aria-hidden="true">${icon}</span>
                                         <span class="mini-db__name">${it.name}</span>
                                     </div>
-                                    <div class="mini-db__meta">${it.category}</div>
+                                    <div class="mini-db__meta">${it.model}</div>
+                                    <div class="mini-db__trend">
+                                        ${trend}
+                                        <span class="${deltaClass(it.deltaMoM)}" title="Month over month change">MoM ${fmtDelta(it.deltaMoM)}</span>
+                                        <span class="${deltaClass(it.deltaYoY)}" title="Year over year change">YoY ${fmtDelta(it.deltaYoY)}</span>
+                                    </div>
                                 </div>
-                                <div class="mini-table__cell mono" role="cell">${it.score}</div>
+                                <div class="mini-table__cell mono" role="cell">${it.scoreFeb.toFixed(2)}</div>
                             </div>
                         `;
                     }).join('')}

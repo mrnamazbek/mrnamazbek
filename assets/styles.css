@@ -479,6 +479,42 @@
             color: rgba(148, 163, 184, 0.95);
         }
 
+        .mini-db__trend {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .spark {
+            opacity: 0.9;
+        }
+
+        .delta {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 0.72rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: rgba(229, 231, 235, 0.88);
+        }
+
+        .delta--up {
+            border-color: rgba(52, 211, 153, 0.28);
+            color: rgba(110, 231, 183, 0.95);
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        .delta--down {
+            border-color: rgba(248, 113, 113, 0.28);
+            color: rgba(252, 165, 165, 0.95);
+            background: rgba(248, 113, 113, 0.08);
+        }
+
         @media (max-width: 480px) {
             .mini-table__row {
                 grid-template-columns: 64px 1fr 70px;
