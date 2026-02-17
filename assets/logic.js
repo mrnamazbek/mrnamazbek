@@ -45,25 +45,43 @@
         return reduceMotion || (isSmall && isTouch) || (mem && mem <= 4) || (cores && cores <= 4);
     }
 
-    function applyCompactMode(enabled) {
-        document.body.classList.toggle('compact-mode', !!enabled);
-        const btn = document.getElementById('compact-toggle');
-        if (btn) btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    const COMPACT_PREF_KEY = 'compactMobile';
 
-        // When compact, also disable heavy canvases immediately
-        if (enabled) {
+    function isCompactMobileViewport() {
+        return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+    }
+
+    function getCompactPref() {
+        return localStorage.getItem(COMPACT_PREF_KEY) === '1';
+    }
+
+    function setCompactPref(enabled) {
+        if (enabled) localStorage.setItem(COMPACT_PREF_KEY, '1');
+        else localStorage.removeItem(COMPACT_PREF_KEY);
+    }
+
+    function applyCompactMobileClass() {
+        const enabled = getCompactPref();
+        const isMobile = isCompactMobileViewport();
+        document.body.classList.toggle('compact-mobile', !!(enabled && isMobile));
+
+        const btn = document.getElementById('compact-toggle');
+        if (btn) btn.setAttribute('aria-pressed', enabled && isMobile ? 'true' : 'false');
+
+        // Compact is a mobile-only UX mode. Never force low-power on desktop.
+        if (enabled && isMobile) {
             document.body.classList.add('low-power');
         }
     }
 
     window.enableCompactMode = function enableCompactMode() {
-        localStorage.setItem('compactMode', '1');
-        applyCompactMode(true);
+        setCompactPref(true);
+        applyCompactMobileClass();
     };
 
     window.disableCompactMode = function disableCompactMode() {
-        localStorage.removeItem('compactMode');
-        applyCompactMode(false);
+        setCompactPref(false);
+        applyCompactMobileClass();
     };
 
     window.loadMoreProjects = function loadMoreProjects() {
@@ -130,7 +148,7 @@
     function initShader() {
         if (window.innerWidth < 768) return;
         if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mode')) return;
+        if (document.body.classList.contains('compact-mobile')) return;
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -154,7 +172,7 @@
     // === 2. PARTICLE CURSOR EFFECTS ===
     function initParticles() {
         if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mode')) return;
+        if (document.body.classList.contains('compact-mobile')) return;
         const canvas = document.getElementById('fx-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
@@ -195,7 +213,7 @@
     function initCustomCursor() {
         if (window.innerWidth < 768) return;
         if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mode')) return;
+        if (document.body.classList.contains('compact-mobile')) return;
         const cursor = document.getElementById('custom-cursor');
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
@@ -230,7 +248,7 @@
     function initAntiGravityLogos() {
         if (window.innerWidth < 768) return;
         if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mode')) return;
+        if (document.body.classList.contains('compact-mobile')) return;
         const container = document.getElementById('anti-gravity-container');
         const icons = [
             'devicon-python-plain colored', 'devicon-java-plain colored', 'devicon-javascript-plain colored',
@@ -312,7 +330,7 @@
     // === 5. SCROLL ANIMATIONS (GSAP) ===
     function initScrollAnimations() {
         if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mode')) return;
+        if (document.body.classList.contains('compact-mobile')) return;
         gsap.registerPlugin(ScrollTrigger);
 
         // Animate only section cards (exclude nav)
@@ -909,17 +927,26 @@
             document.body.classList.add('low-power');
         }
 
-        const compactSaved = localStorage.getItem('compactMode') === '1';
-        if (compactSaved) applyCompactMode(true);
+        // Default compact-mobile to ON for first-time mobile visitors (can be disabled via toggle)
+        if (isCompactMobileViewport() && localStorage.getItem(COMPACT_PREF_KEY) === null) {
+            setCompactPref(true);
+        }
+
+        applyCompactMobileClass();
 
         const compactBtn = document.getElementById('compact-toggle');
         if (compactBtn) {
             compactBtn.addEventListener('click', () => {
-                const enabled = document.body.classList.contains('compact-mode');
-                if (enabled) window.disableCompactMode();
-                else window.enableCompactMode();
+                const enabled = getCompactPref();
+                setCompactPref(!enabled);
+                applyCompactMobileClass();
             });
         }
+
+        // Re-apply compact-mobile class on viewport changes.
+        window.addEventListener('resize', () => {
+            applyCompactMobileClass();
+        });
 
         initShader();
         initCustomCursor();

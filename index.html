@@ -48,7 +48,7 @@
 <main class="relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
 
     <!-- Navigation -->
-    <nav class="flex justify-between items-center py-3 md:py-6 glass-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
+    <nav class="flex justify-between items-center py-3 md:py-6 glass-card ui-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
         <div
                 class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
             NB.
@@ -61,7 +61,7 @@
             <a href="#vertical-library" class="hover:text-white transition">Library</a>
         </div>
         <div class="flex gap-2 md:gap-4 items-center">
-            <button id="compact-toggle" type="button" class="min-h-[44px] min-w-[44px] px-3 md:px-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200" aria-pressed="false" aria-label="Toggle compact mode">
+            <button id="compact-toggle" type="button" class="ui-button min-h-[44px] min-w-[44px] px-3 md:px-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200" aria-pressed="false" aria-label="Toggle compact mode">
                 Compact
             </button>
             <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
@@ -73,8 +73,7 @@
 
     <!-- Hero Section -->
     <section id="about" class="min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-        <div class="flex-1 space-y-8 glass-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none"
-             style="animation: none;">
+        <div class="flex-1 space-y-8 glass-card ui-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none">
             <div
                     class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -93,16 +92,16 @@
 
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                 <a href="#projects"
-                   class="min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
+                   class="ui-button min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
                     Projects</a>
                 <a href="#contact"
-                   class="min-h-[44px] px-6 py-3 glass-card hover:bg-white/10 font-bold rounded-lg transition text-center">Contact Me</a>
+                   class="ui-button min-h-[44px] px-6 py-3 glass-card ui-card hover:bg-white/10 font-bold rounded-lg transition text-center">Contact Me</a>
             </div>
         </div>
 
         <!-- Profile Card -->
         <div id="hero-card"
-             class="w-full max-w-sm glass-card p-8 flex flex-col items-center text-center transform transition-transform duration-200 hover:shadow-2xl hover:shadow-cyan-500/20">
+             class="w-full max-w-sm glass-card ui-card p-8 flex flex-col items-center text-center transform transition-transform duration-200 hover:shadow-2xl hover:shadow-cyan-500/20">
             <div
                     class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-2xl mb-6 relative group">
                 <div
@@ -131,9 +130,9 @@
     </section>
 
     <div class="md:hidden fixed bottom-3 left-3 right-3 z-50">
-        <div class="glass-card px-4 py-3 rounded-2xl flex items-center justify-between gap-3">
-            <a href="#projects" class="min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl bg-white text-black font-bold">Projects</a>
-            <a href="#contact" class="min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
+        <div class="glass-card ui-card px-4 py-3 rounded-2xl flex items-center justify-between gap-3">
+            <a href="#projects" class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl bg-white text-black font-bold">Projects</a>
+            <a href="#contact" class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
         </div>
     </div>
 
@@ -147,7 +146,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             <!-- ML -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i
                                 class="devicon-python-plain"></i></span>
@@ -164,7 +163,7 @@
             </div>
 
             <!-- Big Data -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
                                 class="devicon-apachespark-original"></i></span>
@@ -179,7 +178,7 @@
             </div>
 
             <!-- Languages -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i
                                 class="devicon-bash-plain"></i></span>
@@ -195,7 +194,7 @@
             </div>
 
             <!-- DBs -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i
                                 class="devicon-postgresql-plain"></i></span>
@@ -210,7 +209,7 @@
             </div>
 
             <!-- DevOps -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i
                                 class="devicon-docker-plain"></i></span>
@@ -225,7 +224,7 @@
             </div>
 
             <!-- IDEs -->
-            <div class="glass-card p-6" data-arsenal-card>
+            <div class="glass-card ui-card p-6" data-arsenal-card>
                 <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i
                                 class="devicon-vscode-plain"></i></span>
@@ -249,26 +248,22 @@
             <h2 class="text-4xl font-display font-bold mb-2">Keywords Universe</h2>
             <p class="text-gray-400">Click any keyword to filter projects. Drag to explore.</p>
         </div>
-        <div id="globe-container" class="glass-card">
+        <div id="globe-container" class="glass-card ui-card">
             <canvas id="globe-canvas" tabindex="0" role="img"
                     aria-label="Interactive 3D globe of technology keywords. Use tab to navigate keywords, Enter to select."></canvas>
             <div id="globe-tooltip"><span class="tt-keyword"></span><span class="tt-category"></span></div>
             <!-- 2D fallback injected here if needed -->
         </div>
         <div class="globe-legend" role="list" aria-label="Category legend">
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot"
-                                                                 style="background:var(--globe-color-data)"></span>Data
+            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--data"></span>Data
                 Engineering
             </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot"
-                                                                 style="background:var(--globe-color-software)"></span>Software
+            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--software"></span>Software
                 Engineering
             </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot"
-                                                                 style="background:var(--globe-color-infra)"></span>Infrastructure
+            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--infra"></span>Infrastructure
             </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot"
-                                                                 style="background:var(--globe-color-tooling)"></span>Tooling
+            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--tooling"></span>Tooling
                 & ML
             </div>
         </div>
@@ -288,7 +283,7 @@
             </div>
         </div>
 
-        <div class="journey-panel glass-card p-8 rounded-2xl">
+        <div class="journey-panel glass-card ui-card p-8 rounded-2xl">
             <div class="journey-timeline" role="list">
                 <div class="journey-item" role="listitem">
                     <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
@@ -488,7 +483,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="edu-card glass-card p-8 rounded-2xl">
+            <div class="edu-card glass-card ui-card p-8 rounded-2xl">
                 <div class="edu-top">
                     <div>
                         <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present</div>
@@ -514,7 +509,7 @@
             </div>
         </div>
 
-        <div class="journey-insight glass-card p-6 rounded-2xl">
+        <div class="journey-insight glass-card ui-card p-6 rounded-2xl">
             <div class="text-sm font-mono text-cyan-300 mb-2">Non-obvious insight</div>
             <div class="text-gray-200 leading-relaxed">I treat data systems like banking systems: correctness first, fast second. That mindset turns "pipelines" into durable products — observable, testable, and trusted.</div>
         </div>
@@ -524,7 +519,7 @@
     <section id="projects" class="space-y-8">
         <div class="flex flex-wrap items-end justify-between gap-4">
             <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
-            <button id="projects-show-more" type="button" class="min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show more</button>
+            <button id="projects-show-more" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show more</button>
         </div>
         <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Injected via JS -->
@@ -538,13 +533,13 @@
                 <p class="text-gray-400 max-w-2xl">A vertical, scrollable library. Select a book to read a mini-summary.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button id="books-see-all" type="button" class="min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">See all</button>
+                <button id="books-see-all" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">See all</button>
                 <div id="library-status" class="text-xs font-mono text-gray-500"></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-4 rounded-2xl lg:col-span-1">
+            <div class="glass-card ui-card p-4 rounded-2xl lg:col-span-1">
                 <div class="vl-scroll max-h-[520px] overflow-y-auto pr-1" role="list" aria-label="Books list">
                     <div id="vertical-books-list" class="space-y-3">
                         <!-- Injected via JS -->
@@ -552,7 +547,7 @@
                 </div>
             </div>
 
-            <div class="glass-card p-6 rounded-2xl lg:col-span-2">
+            <div class="glass-card ui-card p-6 rounded-2xl lg:col-span-2">
                 <div class="text-sm font-mono text-cyan-300 mb-2">Tip</div>
                 <div class="text-gray-300 leading-relaxed">Use <span class="text-white">Tab</span> to focus a book and press <span class="text-white">Enter</span> or <span class="text-white">Space</span> to expand. Press <span class="text-white">Esc</span> to close the modal.</div>
             </div>
@@ -566,13 +561,13 @@
                         <h4 id="library-modal-title" class="text-2xl font-bold font-display"></h4>
                         <div id="library-modal-author" class="text-gray-400 mt-1"></div>
                     </div>
-                    <button type="button" class="px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
+                    <button type="button" class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
                 </div>
                 <div id="library-modal-tags" class="flex flex-wrap gap-2 mt-4"></div>
                 <div id="library-modal-body" class="text-gray-200 leading-relaxed mt-4"></div>
                 <div class="flex flex-wrap gap-3 mt-6">
-                    <a id="library-modal-readmore" href="#" target="_blank" rel="noreferrer" class="px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Read more</a>
-                    <button type="button" class="px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
+                    <a id="library-modal-readmore" href="#" target="_blank" rel="noreferrer" class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Read more</a>
+                    <button type="button" class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
                 </div>
             </div>
         </div>
@@ -583,7 +578,7 @@
         <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
         <div class="flex justify-center gap-6 mb-8">
             <a href="mailto:namazbek.bekzhanov@gmail.com"
-               class="px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
+               class="ui-button px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
                 Me</a>
         </div>
         <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>

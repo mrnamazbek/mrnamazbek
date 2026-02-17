@@ -21,6 +21,20 @@
             --glass-border: 1px solid rgba(255, 255, 255, 0.15);
             --glass-bg: rgba(20, 20, 25, 0.4);
             --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+            --ui-radius-card: 22px;
+            --ui-radius-card-mobile: 18px;
+            --ui-radius-pill: 9999px;
+            --ui-pad-card: 24px;
+            --ui-pad-card-compact: 16px;
+
+            --ui-border: rgba(255, 255, 255, 0.12);
+            --ui-surface: rgba(255, 255, 255, 0.05);
+            --ui-surface-hover: rgba(255, 255, 255, 0.10);
+
+            --ui-font-h1: clamp(2rem, 7vw, 4.5rem);
+            --ui-font-body-lg: clamp(1rem, 4.2vw, 1.25rem);
+            --ui-font-body: clamp(0.95rem, 3.8vw, 1.05rem);
         }
 
         body {
@@ -31,27 +45,23 @@
             /* Hide default cursor */
         }
 
-        .hero-title {
-            font-size: clamp(2rem, 7vw, 4.5rem);
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 4.2vw, 1.25rem);
-        }
+        .hero-title { font-size: var(--ui-font-h1); }
+        .hero-subtitle { font-size: var(--ui-font-body-lg); }
 
         .tap-target {
             min-width: 44px;
             min-height: 44px;
         }
 
-        body.compact-mode .glass-card {
+        body.compact-mobile .glass-card,
+        body.compact-mobile .ui-card {
             backdrop-filter: blur(10px) saturate(140%);
             -webkit-backdrop-filter: blur(10px) saturate(140%);
         }
 
-        body.compact-mode #anti-gravity-container,
-        body.compact-mode #fx-canvas,
-        body.compact-mode #webgl-canvas {
+        body.compact-mobile #anti-gravity-container,
+        body.compact-mobile #fx-canvas,
+        body.compact-mobile #webgl-canvas {
             display: none;
         }
 
@@ -63,6 +73,63 @@
 
         body.low-power {
             cursor: auto;
+        }
+
+        .ui-card {
+            background: var(--ui-surface);
+            border: 1px solid var(--ui-border);
+            border-radius: var(--ui-radius-card);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ui-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .ui-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+            pointer-events: none;
+        }
+
+        .ui-card:hover::before {
+            left: 100%;
+            transition: left 0.7s;
+        }
+
+        .ui-chip {
+            padding: 6px 12px;
+            border-radius: var(--ui-radius-pill);
+            background: var(--ui-surface);
+            border: 1px solid var(--ui-border);
+            font-size: 0.75rem;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ui-chip:hover {
+            background: var(--ui-surface-hover);
+        }
+
+        .ui-button {
+            min-height: 44px;
+            min-width: 44px;
+            border-radius: 9999px;
         }
 
         /* CUSTOM CURSOR */
@@ -135,12 +202,12 @@
 
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
             border: var(--glass-border);
             border-top: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: var(--glass-shadow);
-            border-radius: 16px;
+            border-radius: var(--ui-radius-card);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -171,10 +238,10 @@
 
         /* Chip Style */
         .tech-chip {
-            padding: 4px 12px;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: var(--ui-radius-pill);
+            background: var(--ui-surface);
+            border: 1px solid var(--ui-border);
             font-size: 0.75rem;
             transition: background 0.2s;
             /* NEW: Flexbox for icons */
@@ -184,7 +251,7 @@
         }
 
         .tech-chip:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--ui-surface-hover);
         }
 
         @media (max-width: 768px) {
@@ -281,10 +348,15 @@
         .globe-legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: #aaa;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: rgba(229, 231, 235, 0.72);
         }
+
+        .globe-legend-dot--data { background: var(--globe-color-data); }
+        .globe-legend-dot--software { background: var(--globe-color-software); }
+        .globe-legend-dot--infra { background: var(--globe-color-infra); }
+        .globe-legend-dot--tooling { background: var(--globe-color-tooling); }
         .globe-legend-dot {
             width: 10px;
             height: 10px;
