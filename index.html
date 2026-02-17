@@ -45,10 +45,10 @@
 <div id="custom-cursor"></div>
 
 <!-- Main Content -->
-<main class="relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
+<main class="site-main relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
 
     <!-- Navigation -->
-    <nav class="flex justify-between items-center py-3 md:py-6 glass-card ui-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
+    <nav id="site-nav" class="site-nav flex justify-between items-center py-3 md:py-6 glass-card ui-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
         <div
                 class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
             NB.
@@ -67,7 +67,7 @@
                 <svg id="theme-icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                 <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </button>
-            <button id="resume-open" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200">Resume</button>
+            <button id="resume-open" type="button" aria-controls="resume-modal" aria-expanded="false" class="ui-button min-h-[44px] px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200">Resume</button>
             <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
                     class="devicon-github-original text-xl"></i></a>
             <a href="https://linkedin.com/in/namazbek" target="_blank" class="hover:scale-110 transition"><i
@@ -76,7 +76,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="about" class="min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
+    <section id="about" class="site-section min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
         <div class="flex-1 space-y-8 glass-card ui-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none">
             <div
                     class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
@@ -141,7 +141,7 @@
     </div>
 
     <!-- TECHNOLOGY ARSENAL -->
-    <section id="arsenal" class="space-y-12">
+    <section id="arsenal" class="site-section space-y-12">
         <div>
             <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
             <p class="text-gray-400">The tools I use to build the future.</p>
@@ -247,7 +247,7 @@
     </section>
 
     <!-- KEYWORDS GLOBE -->
-    <section id="globe-section" class="space-y-6" aria-label="Skills keyword globe">
+    <section id="globe-section" class="site-section space-y-6" aria-label="Skills keyword globe">
         <div>
             <h2 class="text-4xl font-display font-bold mb-2">Keywords Universe</h2>
             <p class="text-gray-400">Click any keyword to filter projects. Drag to explore.</p>
@@ -275,7 +275,7 @@
         <ul id="globe-sr-list" class="sr-only" aria-label="All keywords"></ul>
     </section>
 
-    <section id="journey" class="space-y-8" aria-label="Experience and education">
+    <section id="journey" class="site-section space-y-8" aria-label="Experience and education">
         <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
                 <h2 class="text-4xl font-display font-bold mb-2">Experience &amp; Education</h2>
@@ -535,7 +535,7 @@
     </section>
 
     <!-- PROJECTS -->
-    <section id="projects" class="space-y-8">
+    <section id="projects" class="site-section space-y-8">
         <div class="flex flex-wrap items-end justify-between gap-4">
             <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
             <button id="projects-show-more" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show more</button>
@@ -545,7 +545,7 @@
         </div>
     </section>
 
-    <section id="mini-tools" class="space-y-8" aria-label="Mini tools">
+    <section id="mini-tools" class="site-section space-y-8" aria-label="Mini tools">
         <div>
             <h3 class="text-3xl font-display font-bold mb-2">Mini Tools</h3>
             <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot. Lightweight and mobile-friendly.</p>
@@ -568,7 +568,7 @@
                 <div id="world-clock" class="mt-5 grid gap-3"></div>
             </div>
 
-            <div class="glass-card ui-card p-6 rounded-2xl">
+            <div class="glass-card ui-card p-6 rounded-2xl db-ranking-card">
                 <div class="flex items-end justify-between gap-4 flex-wrap">
                     <div>
                         <div class="text-sm font-mono text-cyan-300">DB Rankings</div>
@@ -590,7 +590,7 @@
     </section>
 
     <!-- TERMINAL SIMULATION -->
-    <section id="terminal" class="space-y-6" aria-label="Terminal simulation">
+    <section id="terminal" class="site-section space-y-6" aria-label="Terminal simulation">
         <div>
             <h2 class="text-4xl font-display font-bold mb-2">System Console</h2>
             <p class="text-gray-400">Interactive terminal simulation. Watch the initialization sequence.</p>
@@ -623,7 +623,7 @@
     </section>
 
     <!-- DATA PIPELINE VISUALIZER -->
-    <section id="pipeline-visualizer" class="space-y-6" aria-label="Data pipeline visualizer">
+    <section id="pipeline-visualizer" class="site-section space-y-6" aria-label="Data pipeline visualizer">
         <div>
             <h2 class="text-4xl font-display font-bold mb-2">Pipeline Architect</h2>
             <p class="text-gray-400">Interactive DAG builder. Click nodes to connect, drag to reposition, build your data flow.</p>
@@ -673,7 +673,7 @@
         </div>
     </section>
 
-    <section id="vertical-library" class="space-y-6" aria-label="Books library">
+    <section id="vertical-library" class="site-section space-y-6 library-shell" aria-label="Books library">
         <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
                 <h3 class="text-3xl font-display font-bold mb-2">Books</h3>
@@ -685,8 +685,8 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card ui-card p-4 rounded-2xl lg:col-span-1">
+        <div class="library-layout grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card ui-card p-4 rounded-2xl lg:col-span-1 library-list-panel">
                 <div class="vl-scroll max-h-[520px] overflow-y-auto pr-1" role="list" aria-label="Books list">
                     <div id="vertical-books-list" class="space-y-3">
                         <!-- Injected via JS -->
@@ -694,7 +694,7 @@
                 </div>
             </div>
 
-            <div class="glass-card ui-card p-6 rounded-2xl lg:col-span-2">
+            <div class="glass-card ui-card p-6 rounded-2xl lg:col-span-2 library-info-panel">
                 <div class="text-sm font-mono text-cyan-300 mb-2">Tip</div>
                 <div class="text-gray-300 leading-relaxed">Use <span class="text-white">Tab</span> to focus a book and press <span class="text-white">Enter</span> or <span class="text-white">Space</span> to expand. Press <span class="text-white">Esc</span> to close the modal.</div>
             </div>

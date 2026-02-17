@@ -94,30 +94,162 @@
         });
     };
 
+    let modalScrollLockDepth = 0;
+    let modalScrollY = 0;
+
+    function lockBodyScroll() {
+        if (modalScrollLockDepth > 0) {
+            modalScrollLockDepth += 1;
+            return;
+        }
+        modalScrollLockDepth = 1;
+        modalScrollY = window.scrollY || window.pageYOffset || 0;
+        const scrollBarComp = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+        document.body.classList.add('modal-open');
+        document.body.style.top = `-${modalScrollY}px`;
+        if (scrollBarComp > 0) {
+            document.body.style.paddingRight = `${scrollBarComp}px`;
+        }
+    }
+
+    function unlockBodyScroll() {
+        if (modalScrollLockDepth <= 0) return;
+        modalScrollLockDepth -= 1;
+        if (modalScrollLockDepth > 0) return;
+
+        const top = parseInt(document.body.style.top || '0', 10);
+        const restoreY = Number.isFinite(top) ? Math.abs(top) : modalScrollY;
+        document.body.classList.remove('modal-open');
+        document.body.style.top = '';
+        document.body.style.paddingRight = '';
+        window.scrollTo(0, restoreY);
+    }
+
+    function createFocusTrap(panel, onEscape) {
+        if (!panel) return () => {};
+        const focusableSelector = 'a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+        const getFocusable = () => Array.from(panel.querySelectorAll(focusableSelector)).filter((el) => el.offsetParent !== null);
+
+        const onKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                if (typeof onEscape === 'function') onEscape();
+                return;
+            }
+
+            if (e.key !== 'Tab') return;
+            const focusables = getFocusable();
+            if (!focusables.length) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        };
+
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }
+
+    function updateAnchorOffsetVar() {
+        const nav = document.getElementById('site-nav') || document.querySelector('nav');
+        if (!nav) return;
+        const top = parseFloat(window.getComputedStyle(nav).top || '0') || 0;
+        const offset = Math.ceil(nav.getBoundingClientRect().height + top + 14);
+        document.documentElement.style.setProperty('--anchor-offset', `${offset}px`);
+    }
+
+    function getAnchorOffset() {
+        const raw = window.getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset');
+        const parsed = parseFloat(raw);
+        return Number.isFinite(parsed) ? parsed : 96;
+    }
+
+    function scrollToAnchorTarget(target, behavior) {
+        if (!target) return;
+        const targetTop = target.getBoundingClientRect().top + (window.pageYOffset || window.scrollY || 0);
+        const offset = getAnchorOffset();
+        const y = Math.max(0, targetTop - offset);
+        window.scrollTo({ top: y, behavior: behavior || 'smooth' });
+    }
+
+    function initAnchorNavigation() {
+        updateAnchorOffsetVar();
+        window.addEventListener('resize', updateAnchorOffsetVar, { passive: true });
+        window.addEventListener('load', updateAnchorOffsetVar);
+
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener('click', (e) => {
+                const href = anchor.getAttribute('href');
+                if (!href || href === '#') return;
+                const target = document.querySelector(href);
+                if (!target) return;
+                e.preventDefault();
+                scrollToAnchorTarget(target, 'smooth');
+                history.pushState(null, '', href);
+            });
+        });
+
+        if (window.location.hash) {
+            const initialTarget = document.querySelector(window.location.hash);
+            if (initialTarget) {
+                window.setTimeout(() => {
+                    scrollToAnchorTarget(initialTarget, 'auto');
+                }, 80);
+            }
+        }
+
+        window.addEventListener('hashchange', () => {
+            const target = document.querySelector(window.location.hash);
+            if (target) scrollToAnchorTarget(target, 'smooth');
+        });
+    }
+
     function initResumeModal() {
         const openBtn = document.getElementById('resume-open');
         const modal = document.getElementById('resume-modal');
         const frame = document.getElementById('resume-frame');
-        if (!openBtn || !modal || !frame) return;
+        const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
+        if (!openBtn || !modal || !frame || !panel) return;
 
         const RESUME_URL = 'assets/Namazbek_s_Resume_INT.pdf';
+        let releaseTrap = null;
 
         function openModal() {
             modal.classList.remove('hidden');
             modal.setAttribute('aria-hidden', 'false');
+            openBtn.setAttribute('aria-expanded', 'true');
+            modal._lastFocus = document.activeElement;
+            lockBodyScroll();
 
             if (!frame.getAttribute('src')) {
                 frame.setAttribute('src', RESUME_URL);
             }
 
-            const panel = modal.querySelector('.vl-modal__panel');
-            if (panel) window.setTimeout(() => panel.focus(), 0);
+            if (releaseTrap) releaseTrap();
+            releaseTrap = createFocusTrap(panel, closeModal);
+
+            window.setTimeout(() => panel.focus(), 0);
         }
 
         function closeModal() {
             modal.classList.add('hidden');
             modal.setAttribute('aria-hidden', 'true');
-            try { openBtn.focus(); } catch (e) { /* ignore */ }
+            openBtn.setAttribute('aria-expanded', 'false');
+
+            if (releaseTrap) {
+                releaseTrap();
+                releaseTrap = null;
+            }
+            unlockBodyScroll();
+
+            const last = modal._lastFocus && modal._lastFocus.focus ? modal._lastFocus : openBtn;
+            try { last.focus(); } catch (e) { /* ignore */ }
         }
 
         openBtn.addEventListener('click', openModal);
@@ -128,12 +260,6 @@
             if (t.getAttribute('data-close') === '1') {
                 closeModal();
             }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key !== 'Escape') return;
-            if (modal.classList.contains('hidden')) return;
-            closeModal();
         });
     }
 
@@ -305,34 +431,72 @@
             return list;
         }
 
+        function syncMiniTableOverflowState() {
+            const shell = root.querySelector('.mini-table-shell');
+            const scroller = root.querySelector('.mini-table-scroll');
+            if (!shell || !scroller) return;
+
+            if (root._miniTableCleanup) {
+                root._miniTableCleanup();
+                root._miniTableCleanup = null;
+            }
+
+            const sync = () => {
+                const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                shell.classList.toggle('is-scrollable', max > 6);
+                shell.classList.toggle('at-start', scroller.scrollLeft <= 1);
+                shell.classList.toggle('at-end', scroller.scrollLeft >= (max - 1));
+            };
+
+            scroller.addEventListener('scroll', sync, { passive: true });
+            window.addEventListener('resize', sync);
+            root._miniTableCleanup = () => {
+                scroller.removeEventListener('scroll', sync);
+                window.removeEventListener('resize', sync);
+            };
+            sync();
+        }
+
         function render() {
             const items = sortItems(data).slice(0, 12);
             root.innerHTML = `
-                <div class="mini-table" role="table" aria-label="DB rankings">
-                    ${items.map(it => {
-                        const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
-                        const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
-                        return `
-                            <div class="mini-table__row" role="row">
-                                <div class="mini-table__cell mono" role="cell">#${it.rank}</div>
-                                <div class="mini-table__cell" role="cell">
-                                    <div class="mini-db">
-                                        <span class="mini-db__icon" aria-hidden="true">${icon}</span>
-                                        <span class="mini-db__name">${it.name}</span>
-                                    </div>
-                                    <div class="mini-db__meta">${it.model}</div>
-                                    <div class="mini-db__trend">
-                                        ${trend}
-                                        <span class="${deltaClass(it.deltaMoM)}" title="Month over month change">MoM ${fmtDelta(it.deltaMoM)}</span>
-                                        <span class="${deltaClass(it.deltaYoY)}" title="Year over year change">YoY ${fmtDelta(it.deltaYoY)}</span>
-                                    </div>
-                                </div>
-                                <div class="mini-table__cell mono" role="cell">${it.scoreFeb.toFixed(2)}</div>
+                <div class="mini-table-shell">
+                    <div class="mini-table-scroll" role="region" aria-label="DB rankings table" tabindex="0">
+                        <div class="mini-table" role="table" aria-label="DB rankings">
+                            <div class="mini-table__head" role="row">
+                                <div class="mini-table__head-cell" role="columnheader">Rank</div>
+                                <div class="mini-table__head-cell" role="columnheader">Database</div>
+                                <div class="mini-table__head-cell" role="columnheader">Score</div>
                             </div>
-                        `;
-                    }).join('')}
+                            ${items.map(it => {
+                                const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
+                                const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
+                                return `
+                                    <div class="mini-table__row" role="row">
+                                        <div class="mini-table__cell mono" role="cell" data-label="Rank">#${it.rank}</div>
+                                        <div class="mini-table__cell" role="cell" data-label="Database">
+                                            <div class="mini-db">
+                                                <span class="mini-db__icon" aria-hidden="true">${icon}</span>
+                                                <span class="mini-db__name">${it.name}</span>
+                                            </div>
+                                            <div class="mini-db__meta">${it.model}</div>
+                                            <div class="mini-db__trend">
+                                                ${trend}
+                                                <span class="${deltaClass(it.deltaMoM)}" title="Month over month change">MoM ${fmtDelta(it.deltaMoM)}</span>
+                                                <span class="${deltaClass(it.deltaYoY)}" title="Year over year change">YoY ${fmtDelta(it.deltaYoY)}</span>
+                                            </div>
+                                        </div>
+                                        <div class="mini-table__cell mini-table__cell--score mono" role="cell" data-label="Score">
+                                            <span class="mini-table__score-value">${it.scoreFeb.toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
                 </div>
             `;
+            syncMiniTableOverflowState();
         }
 
         async function load() {
@@ -1086,41 +1250,17 @@
 
         modal.classList.remove('hidden');
         modal.setAttribute('aria-hidden', 'false');
+        lockBodyScroll();
 
         document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
 
-        // Focus trap
         const lastFocus = document.activeElement;
         modal._lastFocus = lastFocus;
-
-        const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-        const getFocusable = () => Array.from(panel.querySelectorAll(focusableSelector)).filter((el) => el.offsetParent !== null);
-
-        const onKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                closeLibraryModal();
-                return;
-            }
-            if (e.key === 'Tab') {
-                const focusables = getFocusable();
-                if (!focusables.length) return;
-                const first = focusables[0];
-                const last = focusables[focusables.length - 1];
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault();
-                    last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault();
-                    first.focus();
-                }
-            }
-        };
-
-        modal._onKeyDown = onKeyDown;
-        document.addEventListener('keydown', onKeyDown);
+        if (modal._releaseFocusTrap) modal._releaseFocusTrap();
+        modal._releaseFocusTrap = createFocusTrap(panel, closeLibraryModal);
 
         // Backdrop + close buttons
+        if (modal._onClick) modal.removeEventListener('click', modal._onClick);
         const onClick = (e) => {
             const close = e.target && e.target.getAttribute ? e.target.getAttribute('data-close') : null;
             if (close) closeLibraryModal();
@@ -1144,8 +1284,15 @@
 
         document.dispatchEvent(new CustomEvent('book:close', { detail: 'modal' }));
 
-        if (modal._onKeyDown) document.removeEventListener('keydown', modal._onKeyDown);
-        if (modal._onClick) modal.removeEventListener('click', modal._onClick);
+        if (modal._releaseFocusTrap) {
+            modal._releaseFocusTrap();
+            modal._releaseFocusTrap = null;
+        }
+        if (modal._onClick) {
+            modal.removeEventListener('click', modal._onClick);
+            modal._onClick = null;
+        }
+        unlockBodyScroll();
 
         const last = modal._lastFocus;
         if (last && last.focus) {
@@ -1188,6 +1335,7 @@
         }
 
         applyCompactMobileClass();
+        initAnchorNavigation();
 
         // Re-apply compact-mobile class on viewport changes.
         window.addEventListener('resize', () => {
@@ -1230,7 +1378,7 @@
         window.filterByKeyword = (keyword) => {
             renderProjects(cachedRepos, keyword);
             const el = document.getElementById('projects');
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (el) scrollToAnchorTarget(el, 'smooth');
         };
 
         document.addEventListener('keyword:click', (e) => {
