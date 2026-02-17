@@ -65,9 +65,6 @@
         const isMobile = isCompactMobileViewport();
         document.body.classList.toggle('compact-mobile', !!(enabled && isMobile));
 
-        const btn = document.getElementById('compact-toggle');
-        if (btn) btn.setAttribute('aria-pressed', enabled && isMobile ? 'true' : 'false');
-
         // Compact is a mobile-only UX mode. Never force low-power on desktop.
         if (enabled && isMobile) {
             document.body.classList.add('low-power');
@@ -933,15 +930,6 @@
         }
 
         applyCompactMobileClass();
-
-        const compactBtn = document.getElementById('compact-toggle');
-        if (compactBtn) {
-            compactBtn.addEventListener('click', () => {
-                const enabled = getCompactPref();
-                setCompactPref(!enabled);
-                applyCompactMobileClass();
-            });
-        }
 
         // Re-apply compact-mobile class on viewport changes.
         window.addEventListener('resize', () => {

@@ -75,6 +75,7 @@
         let focusedIndex = -1;
         let animId = null;
         let globeCanvas, ctx, tooltip, container;
+        let cssWidth = 0, cssHeight = 0;
 
         /* ── Helpers ── */
         function fibonacciSphere(n) {
@@ -206,7 +207,8 @@
 
         /* ── Draw ── */
         function draw() {
-            const cw = globeCanvas.width, ch = globeCanvas.height;
+            const cw = cssWidth || globeCanvas.clientWidth || globeCanvas.width;
+            const ch = cssHeight || globeCanvas.clientHeight || globeCanvas.height;
             ctx.clearRect(0, 0, cw, ch);
 
             // Update positions
@@ -274,6 +276,8 @@
         function resize() {
             const rect = container.getBoundingClientRect();
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            cssWidth = rect.width;
+            cssHeight = rect.height;
             globeCanvas.width = rect.width * dpr;
             globeCanvas.height = rect.height * dpr;
             globeCanvas.style.width = rect.width + 'px';

@@ -61,13 +61,10 @@
             <a href="#vertical-library" class="hover:text-white transition">Library</a>
         </div>
         <div class="flex gap-2 md:gap-4 items-center">
-            <button id="compact-toggle" type="button" class="ui-button min-h-[44px] min-w-[44px] px-3 md:px-4 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200" aria-pressed="false" aria-label="Toggle compact mode">
-                Compact
-            </button>
             <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
-                    class="devicon-github-original text-xl text-white"></i></a>
-            <a href="https://linkedin.com/in/namazbek-bekzhanov" target="_blank"
-               class="hover:scale-110 transition"><i class="devicon-linkedin-plain text-xl text-blue-400"></i></a>
+                    class="devicon-github-original text-xl"></i></a>
+            <a href="https://linkedin.com/in/namazbek" target="_blank" class="hover:scale-110 transition"><i
+                    class="devicon-linkedin-plain text-xl"></i></a>
         </div>
     </nav>
 
@@ -482,30 +479,45 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="edu-card glass-card ui-card p-8 rounded-2xl">
-                <div class="edu-top">
-                    <div>
-                        <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present</div>
-                        <h4 class="text-xl font-bold">Master's degree — Computer Science and Data Analytics</h4>
-                        <div class="text-gray-400">Kazakh-British Technical University</div>
+        <div class="journey-panel glass-card ui-card p-8 rounded-2xl" aria-label="Education timeline">
+            <div class="text-sm font-mono text-cyan-300 mb-4">Education</div>
+            <div class="journey-timeline" role="list">
+                <div class="journey-item" role="listitem">
+                    <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
+                    <div class="journey-card edu-card">
+                        <div class="edu-top">
+                            <div class="journey-head">
+                                <div class="company-mark company-mark--green" aria-hidden="true">MSc</div>
+                                <div>
+                                    <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present</div>
+                                    <h4 class="text-xl font-bold">Master's degree — Computer Science and Data Analytics</h4>
+                                    <div class="text-gray-400">Kazakh-British Technical University</div>
+                                </div>
+                            </div>
+                            <div class="edu-badge edu-badge--master">Master's</div>
+                        </div>
+                        <div class="edu-note">Focused on Big Data, Machine Learning, AI, Data Engineering &amp; Analytics, and Software Engineering. Building deeper expertise in Python, ML libraries, and intelligent systems.</div>
                     </div>
-                    <div class="edu-badge edu-badge--master">Master's</div>
                 </div>
-                <div class="edu-note">Focused on Big Data, Machine Learning, AI, Data Engineering &amp; Analytics, and Software Engineering. Building deeper expertise in Python, ML libraries, and intelligent systems.</div>
-            </div>
 
-            <div class="edu-card glass-card p-8 rounded-2xl">
-                <div class="edu-top">
-                    <div>
-                        <div class="text-sm font-mono text-cyan-300">Sep 2021 — Jun 2025</div>
-                        <h4 class="text-xl font-bold">Bachelor's degree — Information Systems</h4>
-                        <div class="text-gray-400">Suleyman Demirel University</div>
+                <div class="journey-item" role="listitem">
+                    <div class="journey-dot" aria-hidden="true"></div>
+                    <div class="journey-card edu-card">
+                        <div class="edu-top">
+                            <div class="journey-head">
+                                <div class="company-mark company-mark--purple" aria-hidden="true">BSc</div>
+                                <div>
+                                    <div class="text-sm font-mono text-cyan-300">Sep 2021 — Jun 2025</div>
+                                    <h4 class="text-xl font-bold">Bachelor's degree — Information Systems</h4>
+                                    <div class="text-gray-400">Suleyman Demirel University</div>
+                                </div>
+                            </div>
+                            <div class="edu-badge edu-badge--bachelor">Bachelor's</div>
+                        </div>
+                        <div class="edu-note">Focused on Software Engineering, Databases, and Computer Networks. Explored Big Data, Blockchain, Web Development, and Linux Administration; built strong foundations in algorithms, probability &amp; statistics, and data engineering concepts.</div>
+                        <div class="edu-fun">Off the clock: football fan — teamwork, strategy, and fast decisions under pressure.</div>
                     </div>
-                    <div class="edu-badge edu-badge--bachelor">Bachelor's</div>
                 </div>
-                <div class="edu-note">Focused on Software Engineering, Databases, and Computer Networks. Explored Big Data, Blockchain, Web Development, and Linux Administration; built strong foundations in algorithms, probability &amp; statistics, and data engineering concepts.</div>
-                <div class="edu-fun">Off the clock: football fan — teamwork, strategy, and fast decisions under pressure.</div>
             </div>
         </div>
 
