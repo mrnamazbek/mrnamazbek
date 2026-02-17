@@ -61,6 +61,7 @@
             <a href="#vertical-library" class="hover:text-white transition">Library</a>
         </div>
         <div class="flex gap-2 md:gap-4 items-center">
+            <button id="resume-open" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200">Resume</button>
             <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
                     class="devicon-github-original text-xl"></i></a>
             <a href="https://linkedin.com/in/namazbek" target="_blank" class="hover:scale-110 transition"><i
@@ -538,6 +539,50 @@
         </div>
     </section>
 
+    <section id="mini-tools" class="space-y-8" aria-label="Mini tools">
+        <div>
+            <h3 class="text-3xl font-display font-bold mb-2">Mini Tools</h3>
+            <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot. Lightweight and mobile-friendly.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card ui-card p-6 rounded-2xl">
+                <div class="flex items-center justify-between gap-3 flex-wrap">
+                    <div>
+                        <div class="text-sm font-mono text-cyan-300">World Clock</div>
+                        <div class="text-gray-400 text-sm mt-1">Local + selected time zones.</div>
+                    </div>
+                    <label class="text-xs font-mono text-gray-400" for="tz-picker">Time zone</label>
+                    <select id="tz-picker" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
+                        <option value="Asia/Almaty">Almaty (Asia/Almaty)</option>
+                        <option value="UTC">UTC</option>
+                        <option value="America/Los_Angeles">SF (America/Los_Angeles)</option>
+                        <option value="Europe/London">London (Europe/London)</option>
+                    </select>
+                </div>
+                <div id="world-clock" class="mt-5 grid gap-3"></div>
+            </div>
+
+            <div class="glass-card ui-card p-6 rounded-2xl">
+                <div class="flex items-end justify-between gap-4 flex-wrap">
+                    <div>
+                        <div class="text-sm font-mono text-cyan-300">DB Rankings</div>
+                        <div class="text-gray-400 text-sm mt-1">Loaded from <span class="text-gray-200">assets/db_ranking.json</span>.</div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="text-xs font-mono text-gray-400" for="db-sort">Sort</label>
+                        <select id="db-sort" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
+                            <option value="rank">Rank</option>
+                            <option value="score">Score</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="db-ranking" class="mt-5"></div>
+                <a href="https://db-engines.com/en/ranking" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 mt-4 text-xs font-mono text-gray-400 hover:text-gray-200 transition">Source: DB-Engines ranking</a>
+            </div>
+        </div>
+    </section>
+
     <section id="vertical-library" class="space-y-6" aria-label="Books library">
         <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -593,8 +638,32 @@
                class="ui-button px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
                 Me</a>
         </div>
+        <div class="flex justify-center mb-8">
+            <img src="assets/NBA_signature.png" loading="lazy" alt="Namazbek Bekzhanov signature" class="max-w-[220px] opacity-90" />
+        </div>
         <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
     </footer>
+
+    <div id="resume-modal" class="vl-modal hidden" aria-hidden="true">
+        <div class="vl-modal__backdrop" data-close="1"></div>
+        <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="resume-modal-title" tabindex="-1">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h4 id="resume-modal-title" class="text-2xl font-bold font-display">Resume</h4>
+                    <div class="text-gray-400 mt-1">PDF viewer</div>
+                </div>
+                <button type="button" class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
+            </div>
+            <div class="mt-4">
+                <iframe id="resume-frame" title="Resume PDF" class="w-full rounded-xl border border-white/10" style="height: min(70vh, 820px); background: rgba(255,255,255,0.03);"></iframe>
+            </div>
+            <div class="flex flex-wrap gap-3 mt-6">
+                <a id="resume-open-newtab" href="assets/Namazbek_s_Resume_INT.pdf" target="_blank" rel="noreferrer" class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Open in new tab</a>
+                <a id="resume-download" href="assets/Namazbek_s_Resume_INT.pdf" download class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition">Download</a>
+                <button type="button" class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
+            </div>
+        </div>
+    </div>
 
 </main>
 

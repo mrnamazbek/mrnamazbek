@@ -391,6 +391,100 @@
             outline: none;
         }
 
+        .mini-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mini-row.is-selected {
+            border-color: rgba(0, 212, 255, 0.22);
+            box-shadow: 0 0 22px rgba(0, 212, 255, 0.06);
+        }
+
+        .mini-row__title {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .mini-row__sub {
+            margin-top: 2px;
+            font-size: 0.78rem;
+            color: rgba(148, 163, 184, 0.95);
+            word-break: break-word;
+        }
+
+        .mini-row__right {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.92rem;
+            color: rgba(229, 231, 235, 0.92);
+            white-space: nowrap;
+        }
+
+        .mini-table {
+            display: grid;
+            gap: 10px;
+        }
+
+        .mini-table__row {
+            display: grid;
+            grid-template-columns: 72px 1fr 84px;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mini-table__cell.mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: rgba(229, 231, 235, 0.92);
+            font-size: 0.85rem;
+        }
+
+        .mini-db {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-db__icon {
+            width: 26px;
+            height: 26px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mini-db__icon i {
+            font-size: 18px;
+        }
+
+        .mini-db__name {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .mini-db__meta {
+            margin-top: 3px;
+            font-size: 0.78rem;
+            color: rgba(148, 163, 184, 0.95);
+        }
+
+        @media (max-width: 480px) {
+            .mini-table__row {
+                grid-template-columns: 64px 1fr 70px;
+            }
+        }
+
         /* Visual presets via CSS vars */
         :root {
             --globe-color-data: #00d4ff;

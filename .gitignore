@@ -32,4 +32,4 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
-.cache/
+.cache/!/assets/NBA_signature.png

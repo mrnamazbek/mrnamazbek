@@ -1,0 +1,58 @@
+[
+  {
+    "rank": 1,
+    "name": "Oracle",
+    "score": 1280,
+    "category": "relational",
+    "icon": "devicon-oracle-original colored"
+  },
+  {
+    "rank": 2,
+    "name": "MySQL",
+    "score": 1200,
+    "category": "relational",
+    "icon": "devicon-mysql-plain colored"
+  },
+  {
+    "rank": 3,
+    "name": "Microsoft SQL Server",
+    "score": 1150,
+    "category": "relational",
+    "icon": "devicon-microsoftsqlserver-plain colored"
+  },
+  {
+    "rank": 4,
+    "name": "PostgreSQL",
+    "score": 1120,
+    "category": "relational",
+    "icon": "devicon-postgresql-plain colored"
+  },
+  {
+    "rank": 5,
+    "name": "MongoDB",
+    "score": 980,
+    "category": "document",
+    "icon": "devicon-mongodb-plain colored"
+  },
+  {
+    "rank": 6,
+    "name": "Redis",
+    "score": 910,
+    "category": "key-value",
+    "icon": "devicon-redis-plain colored"
+  },
+  {
+    "rank": 7,
+    "name": "Apache Cassandra",
+    "score": 860,
+    "category": "wide-column",
+    "icon": ""
+  },
+  {
+    "rank": 8,
+    "name": "Elasticsearch",
+    "score": 820,
+    "category": "search",
+    "icon": "devicon-elasticsearch-plain colored"
+  }
+]

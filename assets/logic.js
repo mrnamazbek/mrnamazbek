@@ -94,6 +94,187 @@
         });
     };
 
+    function initResumeModal() {
+        const openBtn = document.getElementById('resume-open');
+        const modal = document.getElementById('resume-modal');
+        const frame = document.getElementById('resume-frame');
+        if (!openBtn || !modal || !frame) return;
+
+        const RESUME_URL = 'assets/Namazbek_s_Resume_INT.pdf';
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+
+            if (!frame.getAttribute('src')) {
+                frame.setAttribute('src', RESUME_URL);
+            }
+
+            const panel = modal.querySelector('.vl-modal__panel');
+            if (panel) window.setTimeout(() => panel.focus(), 0);
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            try { openBtn.focus(); } catch (e) { /* ignore */ }
+        }
+
+        openBtn.addEventListener('click', openModal);
+
+        modal.addEventListener('click', (e) => {
+            const t = e.target;
+            if (!t || !t.getAttribute) return;
+            if (t.getAttribute('data-close') === '1') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            if (modal.classList.contains('hidden')) return;
+            closeModal();
+        });
+    }
+
+    function initWorldClock() {
+        const root = document.getElementById('world-clock');
+        if (!root) return;
+
+        const tzPicker = document.getElementById('tz-picker');
+        const timeZones = [
+            { label: 'Local', tz: null },
+            { label: 'Almaty', tz: 'Asia/Almaty' },
+            { label: 'UTC', tz: 'UTC' },
+            { label: 'San Francisco', tz: 'America/Los_Angeles' },
+            { label: 'London', tz: 'Europe/London' }
+        ];
+
+        function formatTime(tz) {
+            const opts = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit'
+            };
+            if (tz) opts.timeZone = tz;
+            return new Intl.DateTimeFormat(undefined, opts).format(new Date());
+        }
+
+        function render() {
+            const selectedTz = tzPicker && tzPicker.value ? tzPicker.value : 'Asia/Almaty';
+            const rows = timeZones.map(({ label, tz }) => {
+                const useTz = label === 'Local' ? null : tz;
+                const isSelected = useTz === selectedTz;
+                const tzLabel = label === 'Local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : useTz;
+                return {
+                    label,
+                    tz: tzLabel,
+                    time: formatTime(useTz),
+                    selected: isSelected
+                };
+            });
+
+            root.innerHTML = rows.map(r => {
+                return `
+                    <div class="mini-row ${r.selected ? 'is-selected' : ''}">
+                        <div class="mini-row__left">
+                            <div class="mini-row__title">${r.label}</div>
+                            <div class="mini-row__sub">${r.tz || ''}</div>
+                        </div>
+                        <div class="mini-row__right">${r.time}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        if (tzPicker) tzPicker.addEventListener('change', render);
+        render();
+        window.setInterval(render, 1000);
+    }
+
+    function initDbRankingWidget() {
+        const root = document.getElementById('db-ranking');
+        if (!root) return;
+
+        const sortSel = document.getElementById('db-sort');
+
+        const fallback = [
+            { rank: 1, name: 'Oracle', score: 1280, category: 'relational', icon: 'devicon-oracle-original colored' },
+            { rank: 2, name: 'MySQL', score: 1200, category: 'relational', icon: 'devicon-mysql-plain colored' },
+            { rank: 3, name: 'Microsoft SQL Server', score: 1150, category: 'relational', icon: 'devicon-microsoftsqlserver-plain colored' },
+            { rank: 4, name: 'PostgreSQL', score: 1120, category: 'relational', icon: 'devicon-postgresql-plain colored' },
+            { rank: 5, name: 'MongoDB', score: 980, category: 'document', icon: 'devicon-mongodb-plain colored' },
+            { rank: 6, name: 'Redis', score: 910, category: 'key-value', icon: 'devicon-redis-plain colored' }
+        ];
+
+        let data = [];
+
+        function normalize(items) {
+            if (!Array.isArray(items)) return [];
+            return items
+                .map(it => ({
+                    rank: Number(it.rank) || 999,
+                    name: String(it.name || '').trim() || 'Unknown',
+                    score: Number(it.score) || 0,
+                    category: String(it.category || '').trim() || 'other',
+                    icon: it.icon ? String(it.icon) : ''
+                }))
+                .filter(it => it.name !== 'Unknown');
+        }
+
+        function sortItems(items) {
+            const key = sortSel && sortSel.value ? sortSel.value : 'rank';
+            const list = [...items];
+            if (key === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+            else if (key === 'score') list.sort((a, b) => (b.score - a.score) || (a.rank - b.rank));
+            else list.sort((a, b) => a.rank - b.rank);
+            return list;
+        }
+
+        function render() {
+            const items = sortItems(data).slice(0, 12);
+            root.innerHTML = `
+                <div class="mini-table" role="table" aria-label="DB rankings">
+                    ${items.map(it => {
+                        const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
+                        return `
+                            <div class="mini-table__row" role="row">
+                                <div class="mini-table__cell mono" role="cell">#${it.rank}</div>
+                                <div class="mini-table__cell" role="cell">
+                                    <div class="mini-db">
+                                        <span class="mini-db__icon" aria-hidden="true">${icon}</span>
+                                        <span class="mini-db__name">${it.name}</span>
+                                    </div>
+                                    <div class="mini-db__meta">${it.category}</div>
+                                </div>
+                                <div class="mini-table__cell mono" role="cell">${it.score}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        async function load() {
+            try {
+                const res = await fetch('assets/db_ranking.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const json = await res.json();
+                data = normalize(json);
+                if (!data.length) data = normalize(fallback);
+            } catch (e) {
+                data = normalize(fallback);
+            }
+            render();
+        }
+
+        if (sortSel) sortSel.addEventListener('change', render);
+        load();
+    }
+
     function initMobileArsenalAccordion() {
         if (!isMobileViewport()) return;
         const cards = document.querySelectorAll('[data-arsenal-card]');
@@ -944,6 +1125,10 @@
         loadContent(); // Updated
 
         initMobileArsenalAccordion();
+
+        initResumeModal();
+        initWorldClock();
+        initDbRankingWidget();
 
         const projectsBtn = document.getElementById('projects-show-more');
         if (projectsBtn) {
