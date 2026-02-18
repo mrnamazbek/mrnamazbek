@@ -77,17 +77,41 @@ jobs:
 
           npx playwright screenshot --device="iPhone 13" --full-page http://127.0.0.1:4173 artifacts/mobile-home.png
 
-          npx lighthouse http://127.0.0.1:4173 \
-            --quiet \
-            --only-categories=performance,accessibility,best-practices,seo \
-            --form-factor=mobile \
-            --screenEmulation.mobile=true \
-            --screenEmulation.width=375 \
-            --screenEmulation.height=812 \
-            --screenEmulation.deviceScaleFactor=2 \
-            --output=json \
-            --output=html \
-            --output-path=artifacts/lighthouse-mobile || echo "Lighthouse failed; keeping pipeline non-blocking."
+          CHROME_PATH=$(find "${HOME}/.cache/ms-playwright" -type f -path "*/chrome-linux/chrome" | head -n 1)
+          if [ -z "${CHROME_PATH}" ]; then
+            echo "Playwright Chromium not found, skipping Lighthouse."
+            exit 0
+          fi
+          echo "Using Chromium for Lighthouse: ${CHROME_PATH}"
+
+          set +e
+          LH_EXIT=1
+          for ATTEMPT in 1 2 3; do
+            echo "Lighthouse attempt ${ATTEMPT}/3"
+            npx lighthouse http://127.0.0.1:4173 \
+              --quiet \
+              --chrome-path="${CHROME_PATH}" \
+              --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu" \
+              --only-categories=performance,accessibility,best-practices,seo \
+              --form-factor=mobile \
+              --screenEmulation.mobile=true \
+              --screenEmulation.width=375 \
+              --screenEmulation.height=812 \
+              --screenEmulation.deviceScaleFactor=2 \
+              --output=json \
+              --output=html \
+              --output-path=artifacts/lighthouse-mobile
+            LH_EXIT=$?
+            if [ "${LH_EXIT}" -eq 0 ]; then
+              break
+            fi
+            sleep 5
+          done
+          set -e
+
+          if [ "${LH_EXIT}" -ne 0 ]; then
+            echo "Lighthouse failed after retries; continuing without blocking the release."
+          fi
 
       - name: AI mobile UI review
         run: python scripts/ai_mobile_visual_review.py --image artifacts/mobile-home.png --output artifacts/mobile-review.json
