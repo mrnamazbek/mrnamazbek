@@ -1,44 +1,29 @@
 [
   {
-    "id": "2026-02-ai-agents",
+    "id": "2026-02-ai-automation",
     "month": "2026-02",
-    "title": "AI agents: Monthly AI Feature",
-    "trend_keyword": "AI agents",
-    "description": "Automatically generated feature from current trend data.",
-    "why_now": "Trend data indicates high current interest, making it a useful candidate for quick product experiments.",
-    "mobile_review_notes": "Built with responsive layout and mobile-safe controls.",
+    "title": "News-to-Action Digest: Turn Trending “новости” Into Team-Ready Updates",
+    "trend_keyword": "AI automation",
+    "description": "Build a lightweight internal digest that converts high-volume news queries into actionable, non-political operational updates for product and engineering teams. The feature pulls headlines from approved sources, clusters duplicates, summarizes in plain English, and routes items i",
+    "why_now": "In KZ during 2026-02, “новости” is trending, signaling elevated demand for timely information. Teams often waste time scanning multiple feeds and still miss operationally relevant items. A structured digest with deduplication, summarization, and routing reduces context switching ",
+    "mobile_review_notes": "Ensure the digest cards are readable on small screens: 2-line title clamp, source + timestamp visible, and a single primary action (Assign/Save). Summaries should default to ~280 characters with “Read more” expansion. Provide offline-friend",
     "source": {
       "type": "google_trends",
       "geo": "KZ",
-      "captured_at": "2026-02-18T10:23:13.233491+00:00"
+      "captured_at": "2026-02-18T11:32:38.254337+00:00"
     },
     "widget": {
-      "type": "roadmap_planner",
-      "heading": "AI agents: 4-Step Rollout",
-      "description": "Track rollout tasks and completion progress.",
+      "type": "impact_estimator",
+      "heading": "Time Saved by Automated News-to-Action Digest",
+      "description": "Estimate weekly hours saved by replacing manual scanning and ad-hoc sharing with an automated, deduplicated digest that routes actionable items to the right tool and owner.",
       "config": {
-        "steps": [
-          {
-            "name": "Trend analysis",
-            "detail": "Confirm relevance and user value.",
-            "weeks": 0.2
-          },
-          {
-            "name": "Build",
-            "detail": "Implement feature and interactions.",
-            "weeks": 0.4
-          },
-          {
-            "name": "Quality checks",
-            "detail": "Run mobile tests and performance checks.",
-            "weeks": 0.2
-          },
-          {
-            "name": "Release",
-            "detail": "Commit and push via workflow.",
-            "weeks": 0.1
-          }
-        ]
+        "input_label": "Minutes per day currently spent per person on scanning/sharing news",
+        "min": 0,
+        "max": 90,
+        "step": 5,
+        "default": 25,
+        "baseline_hours": 80.0,
+        "efficiency_factor": 0.6
       }
     }
   }
