@@ -64,8 +64,8 @@ jobs:
           fi
           python scripts/monthly_ai_feature_pipeline.py ${FORCE_FLAG}
 
-      - name: Run responsive and monthly tests
-        run: npx playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js
+      - name: Run responsive and feature tests
+        run: npx playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js tests/ai-audience-engagement.spec.js
 
       - name: Lighthouse mobile audit + screenshot
         run: |

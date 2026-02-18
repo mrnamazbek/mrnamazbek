@@ -4,7 +4,7 @@
   "private": true,
   "description": "Portfolio site automation and monthly AI feature pipeline",
   "scripts": {
-    "test:e2e": "playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js",
+    "test:e2e": "playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js tests/ai-audience-engagement.spec.js",
     "test:e2e:all": "playwright test",
     "feature:monthly": "python scripts/monthly_ai_feature_pipeline.py --force",
     "feature:monthly:offline": "python scripts/monthly_ai_feature_pipeline.py --offline --force"

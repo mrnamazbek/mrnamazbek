@@ -17,6 +17,13 @@
 - Schedule: day 2 of each month at 04:00 UTC
 - Manual run: `workflow_dispatch` with optional `force_regenerate=true`
 
+## Additional Weekly Automation
+- File: `.github/workflows/weekly-ai-audience.yml`
+- Schedule: every Monday at 04:30 UTC
+- Updates `assets/ai_audience_weekly.json` from Wikimedia Pageviews API.
+- Runs `tests/ai-audience-engagement.spec.js`.
+- Commits and pushes dataset updates automatically.
+
 ## Required GitHub Secrets
 - `OPENAI_API_KEY`: API key for model calls.
 
@@ -29,4 +36,9 @@
 ## Local dry run (without AI API)
 ```bash
 python scripts/monthly_ai_feature_pipeline.py --offline --force
+```
+
+## Weekly audience dataset update (local)
+```bash
+python scripts/update_ai_audience_weekly.py
 ```

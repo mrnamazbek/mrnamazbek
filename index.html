@@ -58,6 +58,7 @@
             <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
             <a href="#journey" class="hover:text-white transition">Journey</a>
             <a href="#ai-monthly-lab" class="hover:text-white transition">AI Lab</a>
+            <a href="#audience-pulse" class="hover:text-white transition">Pulse</a>
             <a href="#pipeline-visualizer" class="hover:text-white transition">Pipeline</a>
             <a href="#terminal" class="hover:text-white transition">Console</a>
             <a href="#projects" class="hover:text-white transition">Projects</a>
@@ -602,6 +603,21 @@
         </div>
     </section>
 
+    <section id="audience-pulse" class="site-section space-y-8" aria-label="AI audience pulse and engagement">
+        <div>
+            <h3 class="text-3xl font-display font-bold mb-2">AI Audience Pulse</h3>
+            <p class="text-gray-400 max-w-2xl">Weekly trend proxy based on Wikipedia pageviews for major AI platforms, plus live site engagement counters.</p>
+        </div>
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div id="ai-audience-root" class="glass-card ui-card p-6 rounded-2xl xl:col-span-2 audience-pulse-shell">
+                <div class="text-sm font-mono text-cyan-300">Loading weekly audience pulse...</div>
+            </div>
+            <div id="site-engagement-root" class="glass-card ui-card p-6 rounded-2xl audience-engagement-shell">
+                <div class="text-sm font-mono text-cyan-300">Loading site engagement...</div>
+            </div>
+        </div>
+    </section>
+
     <!-- TERMINAL SIMULATION -->
     <section id="terminal" class="site-section space-y-6" aria-label="Terminal simulation">
         <div>
@@ -773,6 +789,7 @@
 <!-- LOGIC -->
 <script src="assets/logic.js"></script>
 <script src="assets/ai-monthly-feature.js"></script>
+<script src="assets/audience-pulse.js"></script>
 
 <!-- KEYWORDS GLOBE MODULE -->
 <script src="assets/keywords-globe.js"></script>
