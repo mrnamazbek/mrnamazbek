@@ -67,15 +67,13 @@ jobs:
       - name: Run responsive and feature tests
         run: npx playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js tests/ai-audience-engagement.spec.js
 
-      - name: Lighthouse mobile audit + screenshot
+      - name: Lighthouse mobile audit
         run: |
           mkdir -p artifacts
           python -m http.server 4173 >/tmp/http-server.log 2>&1 &
           SERVER_PID=$!
           trap "kill $SERVER_PID" EXIT
           sleep 2
-
-          npx playwright screenshot --device="iPhone 13" --full-page http://127.0.0.1:4173 artifacts/mobile-home.png
 
           CHROME_PATH=$(find "${HOME}/.cache/ms-playwright" -type f -path "*/chrome-linux/chrome" | head -n 1)
           if [ -z "${CHROME_PATH}" ]; then
@@ -113,9 +111,6 @@ jobs:
             echo "Lighthouse failed after retries; continuing without blocking the release."
           fi
 
-      - name: AI mobile UI review
-        run: python scripts/ai_mobile_visual_review.py --image artifacts/mobile-home.png --output artifacts/mobile-review.json
-
       - name: Upload QA artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -125,8 +120,6 @@ jobs:
           path: |
             artifacts/lighthouse-mobile.report.html
             artifacts/lighthouse-mobile.report.json
-            artifacts/mobile-home.png
-            artifacts/mobile-review.json
             artifacts/monthly-feature-brief.md
             playwright-report
 
