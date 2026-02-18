@@ -39,6 +39,16 @@
         }
     }
 
+    function exactNumber(value) {
+        try {
+            return new Intl.NumberFormat(undefined, {
+                maximumFractionDigits: 0
+            }).format(value);
+        } catch (e) {
+            return String(Math.round(value));
+        }
+    }
+
     function formatWeekLabel(isoDate) {
         var d = new Date(String(isoDate || ''));
         if (Number.isNaN(d.getTime())) return String(isoDate || '');
@@ -174,13 +184,20 @@
             '    <div class="audience-pulse__stat"><div class="audience-pulse__stat-label">WoW</div><div class="audience-pulse__stat-value" id="audience-wow">-</div></div>',
             '    <div class="audience-pulse__stat"><div class="audience-pulse__stat-label">12-Week Avg</div><div class="audience-pulse__stat-value" id="audience-avg">-</div></div>',
             '  </div>',
-            '  <div class="audience-pulse__chart" id="audience-bars"></div>',
+            '  <div class="audience-pulse__hover" id="audience-hover">Hover a day bar to see exact weekly count.</div>',
+            '  <div class="audience-pulse__chart-wrap">',
+            '    <div class="audience-pulse__chart" id="audience-bars"></div>',
+            '    <div class="audience-pulse__tooltip" id="audience-tooltip" aria-hidden="true"></div>',
+            '  </div>',
             '  <div class="audience-pulse__foot">' + escapeHtml(String((data && data.methodology) || 'Proxy metric based on Wikipedia pageviews. Not unique active users.')) + '</div>',
             '</div>'
         ].join('');
 
         var chipsRoot = root.querySelector('#audience-pulse-chips');
         var barsRoot = root.querySelector('#audience-bars');
+        var chartWrap = root.querySelector('.audience-pulse__chart-wrap');
+        var hoverEl = root.querySelector('#audience-hover');
+        var tooltipEl = root.querySelector('#audience-tooltip');
         var latestEl = root.querySelector('#audience-latest');
         var wowEl = root.querySelector('#audience-wow');
         var avgEl = root.querySelector('#audience-avg');
@@ -204,7 +221,7 @@
                 var h = Math.max(6, Math.round((views / max) * 100));
                 return [
                     '<div class="audience-bar-wrap">',
-                    '  <div class="audience-bar" style="--audience-bar-height:' + h + '%; --audience-bar-color:' + escapeHtml(selected.color) + '" title="' + escapeHtml(formatWeekLabel(p.week) + ': ' + compactNumber(views)) + '"></div>',
+                    '  <div class="audience-bar" style="--audience-bar-height:' + h + '%; --audience-bar-color:' + escapeHtml(selected.color) + '" data-week="' + escapeHtml(p.week) + '" data-views="' + views + '" title="' + escapeHtml(formatWeekLabel(p.week) + ': ' + compactNumber(views)) + '"></div>',
                     '  <div class="audience-bar-label">' + escapeHtml(formatWeekLabel(p.week)) + '</div>',
                     '</div>'
                 ].join('');
@@ -218,6 +235,36 @@
             wowEl.classList.toggle('is-up', wow >= 0);
             wowEl.classList.toggle('is-down', wow < 0);
             avgEl.textContent = compactNumber(avg);
+            hoverEl.textContent = 'Latest week ' + formatWeekLabel(points[points.length - 1].week) + ': ' + exactNumber(latest) + ' views';
+
+            var bars = Array.prototype.slice.call(barsRoot.querySelectorAll('.audience-bar'));
+            bars.forEach(function (bar) {
+                function showTip(event) {
+                    var week = String(bar.getAttribute('data-week') || '');
+                    var views = toNumber(bar.getAttribute('data-views'), 0);
+                    hoverEl.textContent = formatWeekLabel(week) + ': ' + exactNumber(views) + ' views';
+
+                    if (!tooltipEl || !chartWrap) return;
+                    tooltipEl.textContent = formatWeekLabel(week) + ' - ' + exactNumber(views);
+                    tooltipEl.classList.add('is-visible');
+                    tooltipEl.setAttribute('aria-hidden', 'false');
+
+                    var wrapRect = chartWrap.getBoundingClientRect();
+                    var x = event.clientX - wrapRect.left + 10;
+                    var y = event.clientY - wrapRect.top - 16;
+                    tooltipEl.style.left = x + 'px';
+                    tooltipEl.style.top = y + 'px';
+                }
+
+                bar.addEventListener('mouseenter', showTip);
+                bar.addEventListener('mousemove', showTip);
+                bar.addEventListener('mouseleave', function () {
+                    if (tooltipEl) {
+                        tooltipEl.classList.remove('is-visible');
+                        tooltipEl.setAttribute('aria-hidden', 'true');
+                    }
+                });
+            });
         }
 
         chipsRoot.addEventListener('click', function (event) {

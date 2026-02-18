@@ -114,7 +114,7 @@ def http_post_json(url: str, headers: Dict[str, str], body: Dict[str, Any], time
 
 
 def fetch_google_trends(geo: str) -> List[Dict[str, str]]:
-    url = GOOGLE_TRENDS_RSS_URL.format(geo=urllib.parse.quote(geo.strip() or "US"))
+    url = GOOGLE_TRENDS_RSS_URL.format(geo=urllib.parse.quote(geo.strip() or "KZ"))
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; monthly-ai-feature/1.0; +https://github.com/)"
     }
@@ -761,7 +761,7 @@ def run_pipeline(geo: str, force: bool, offline: bool) -> Tuple[Dict[str, Any], 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate monthly AI feature from trends and update site assets.")
-    parser.add_argument("--geo", default=os.getenv("GOOGLE_TRENDS_GEO", "US"), help="Google Trends region (default: US).")
+    parser.add_argument("--geo", default=os.getenv("GOOGLE_TRENDS_GEO", "KZ"), help="Google Trends region (default: KZ).")
     parser.add_argument("--force", action="store_true", help="Regenerate even if current month already exists in history.")
     parser.add_argument("--offline", action="store_true", help="Skip AI call and use deterministic fallback generation.")
     return parser.parse_args()

@@ -521,6 +521,133 @@
             line-height: 1.2;
         }
 
+        .clock-liquid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .clock-liquid__hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(26px) saturate(170%);
+            -webkit-backdrop-filter: blur(26px) saturate(170%);
+            padding: 16px 18px 18px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 20px 55px rgba(2, 6, 23, 0.25);
+        }
+
+        .clock-liquid__glow {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 9999px;
+            filter: blur(36px);
+            opacity: 0.28;
+            pointer-events: none;
+            top: -110px;
+            right: -80px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.9) 0%, rgba(56, 189, 248, 0.05) 68%);
+        }
+
+        .clock-liquid--night .clock-liquid__glow {
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.95) 0%, rgba(167, 139, 250, 0.05) 68%);
+        }
+
+        .clock-liquid__city {
+            font-size: 0.8rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: rgba(125, 211, 252, 0.95);
+        }
+
+        .clock-liquid__time {
+            margin-top: 8px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .clock-liquid__digits {
+            font-size: clamp(2.15rem, 6vw, 3.55rem);
+            line-height: 0.95;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: rgba(248, 250, 252, 0.98);
+            text-shadow: 0 0 28px rgba(148, 163, 184, 0.22);
+        }
+
+        .clock-liquid__seconds {
+            font-size: 1rem;
+            line-height: 1;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: rgba(186, 230, 253, 0.95);
+            transform: translateY(-6px);
+        }
+
+        .clock-liquid__date {
+            margin-top: 7px;
+            color: rgba(203, 213, 225, 0.95);
+            font-size: 0.88rem;
+        }
+
+        .clock-liquid__zone {
+            margin-top: 3px;
+            color: rgba(148, 163, 184, 0.94);
+            font-size: 0.76rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .clock-liquid__stack {
+            display: grid;
+            gap: 9px;
+        }
+
+        .clock-liquid__tile {
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .clock-liquid__tile-city {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: rgba(241, 245, 249, 0.96);
+        }
+
+        .clock-liquid__tile-zone {
+            margin-top: 2px;
+            font-size: 0.72rem;
+            color: rgba(148, 163, 184, 0.94);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .clock-liquid__tile-time {
+            font-size: 1.15rem;
+            line-height: 1;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: rgba(224, 242, 254, 0.97);
+            font-weight: 600;
+        }
+
+        .mini-table-caption {
+            margin-bottom: 8px;
+            font-size: 0.74rem;
+            color: rgba(148, 163, 184, 0.95);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
         .mini-table-shell {
             position: relative;
             border-radius: 14px;
@@ -576,12 +703,12 @@
             top: 0;
             z-index: 3;
             display: grid;
-            grid-template-columns: 72px minmax(260px, 1fr) 108px;
+            grid-template-columns: 88px minmax(230px, 1fr) minmax(210px, 0.95fr) 112px;
             gap: 12px;
             align-items: center;
             padding: 10px 14px;
             border-radius: 12px;
-            background: rgba(0, 0, 0, 0.4);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.66), rgba(15, 23, 42, 0.38));
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -595,19 +722,28 @@
             color: rgba(148, 163, 184, 0.95);
         }
 
+        .mini-table__head-cell:nth-child(3) {
+            text-align: center;
+        }
+
         .mini-table__head-cell:last-child {
             text-align: right;
         }
 
         .mini-table__row {
             display: grid;
-            grid-template-columns: 72px minmax(260px, 1fr) 108px;
+            grid-template-columns: 88px minmax(230px, 1fr) minmax(210px, 0.95fr) 112px;
             gap: 12px;
             align-items: center;
             padding: 12px 14px;
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mini-table__row--top {
+            border-color: rgba(34, 211, 238, 0.18);
+            background: linear-gradient(140deg, rgba(6, 182, 212, 0.12), rgba(59, 130, 246, 0.03) 62%);
         }
 
         .mini-table__cell {
@@ -629,8 +765,34 @@
             text-align: right;
         }
 
+        .mini-table__cell--momentum {
+            text-align: center;
+        }
+
         .mini-table__score-value {
-            font-weight: 600;
+            font-weight: 700;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 58px;
+            min-height: 28px;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.45);
+        }
+
+        .rank-badge--top {
+            border-color: rgba(250, 204, 21, 0.3);
+            background: linear-gradient(145deg, rgba(250, 204, 21, 0.2), rgba(251, 191, 36, 0.05));
+            color: rgba(254, 240, 138, 0.95);
+            box-shadow: 0 0 16px rgba(250, 204, 21, 0.14);
         }
 
         .mini-db {
@@ -669,9 +831,10 @@
         }
 
         .mini-db__trend {
-            margin-top: 10px;
+            margin-top: 6px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
             min-width: 0;
@@ -703,6 +866,21 @@
             border-color: rgba(248, 113, 113, 0.28);
             color: rgba(252, 165, 165, 0.95);
             background: rgba(248, 113, 113, 0.08);
+        }
+
+        @media (min-width: 1024px) {
+            .mini-table-scroll {
+                overflow: visible;
+            }
+
+            .mini-table {
+                min-width: 0;
+            }
+
+            .mini-table-shell::before,
+            .mini-table-shell::after {
+                display: none;
+            }
         }
 
         @media (max-width: 640px) {
@@ -742,6 +920,24 @@
 
             #world-clock {
                 margin-top: 0.85rem !important;
+            }
+
+            .clock-liquid__hero {
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .clock-liquid__digits {
+                font-size: clamp(2rem, 11vw, 2.65rem);
+            }
+
+            .clock-liquid__seconds {
+                font-size: 0.86rem;
+                transform: translateY(-4px);
+            }
+
+            .clock-liquid__tile {
+                padding: 10px;
             }
 
             .mini-row {
@@ -803,6 +999,14 @@
                 display: none;
             }
 
+            .mini-table__cell[data-label="Momentum"] {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-table__cell[data-label="Momentum"]::before {
+                display: none;
+            }
+
             .mini-db {
                 display: grid;
                 grid-template-columns: auto minmax(0, 1fr);
@@ -829,6 +1033,7 @@
             .mini-db__trend {
                 margin-top: 8px;
                 gap: 7px;
+                justify-content: flex-start;
             }
 
             .mini-db__trend .spark {
@@ -1632,6 +1837,29 @@
     border-color: rgba(0, 0, 0, 0.06);
 }
 
+[data-theme="light"] .clock-liquid__hero,
+[data-theme="light"] .clock-liquid__tile {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+}
+
+[data-theme="light"] .clock-liquid__digits,
+[data-theme="light"] .clock-liquid__tile-time {
+    color: rgba(15, 23, 42, 0.93);
+}
+
+[data-theme="light"] .clock-liquid__seconds,
+[data-theme="light"] .clock-liquid__city {
+    color: rgba(14, 116, 144, 0.9);
+}
+
+[data-theme="light"] .clock-liquid__date,
+[data-theme="light"] .clock-liquid__zone,
+[data-theme="light"] .clock-liquid__tile-zone,
+[data-theme="light"] .mini-table-caption {
+    color: rgba(51, 65, 85, 0.85);
+}
+
 [data-theme="light"] .mini-row__title {
     color: rgba(0, 0, 0, 0.9);
 }
@@ -1643,6 +1871,17 @@
 [data-theme="light"] .mini-table__row {
     background: rgba(0, 0, 0, 0.03);
     border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .mini-table__row--top {
+    background: linear-gradient(140deg, rgba(34, 211, 238, 0.2), rgba(59, 130, 246, 0.08) 62%);
+    border-color: rgba(14, 116, 144, 0.2);
+}
+
+[data-theme="light"] .rank-badge {
+    border-color: rgba(51, 65, 85, 0.18);
+    color: rgba(15, 23, 42, 0.9);
+    background: rgba(226, 232, 240, 0.7);
 }
 
 [data-theme="light"] .mini-table-shell {
@@ -2417,6 +2656,16 @@
     color: rgba(251, 113, 133, 0.95);
 }
 
+.audience-pulse__hover {
+    font-size: 0.82rem;
+    color: rgba(186, 230, 253, 0.92);
+    min-height: 1.35rem;
+}
+
+.audience-pulse__chart-wrap {
+    position: relative;
+}
+
 .audience-pulse__chart {
     min-height: 220px;
     border-radius: 16px;
@@ -2428,6 +2677,30 @@
     gap: 8px;
     align-items: end;
     padding: 14px 10px 10px;
+}
+
+.audience-pulse__tooltip {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(2, 6, 23, 0.88);
+    color: rgba(241, 245, 249, 0.98);
+    font-size: 0.76rem;
+    line-height: 1.2;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    padding: 7px 10px;
+    z-index: 4;
+    white-space: nowrap;
+}
+
+.audience-pulse__tooltip.is-visible {
+    opacity: 1;
 }
 
 .audience-bar-wrap {
@@ -2577,6 +2850,7 @@
 
 [data-theme="light"] .audience-pulse__meta,
 [data-theme="light"] .audience-pulse__stat-label,
+[data-theme="light"] .audience-pulse__hover,
 [data-theme="light"] .audience-pulse__foot,
 [data-theme="light"] .engagement-metric__label,
 [data-theme="light"] .engagement-card__status,
@@ -2594,6 +2868,12 @@
 [data-theme="light"] .audience-pulse__chart {
     border-color: rgba(0, 0, 0, 0.12);
     background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.13), rgba(255, 255, 255, 0.75) 62%);
+}
+
+[data-theme="light"] .audience-pulse__tooltip {
+    background: rgba(255, 255, 255, 0.95);
+    color: rgba(15, 23, 42, 0.9);
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .audience-pulse__stat-value,

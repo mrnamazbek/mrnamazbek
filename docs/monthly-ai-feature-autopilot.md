@@ -1,7 +1,7 @@
 # Monthly AI Feature Autopilot
 
 ## What is automated
-1. Fetch monthly trend signals from Google Trends (US by default).
+1. Fetch monthly trend signals from Google Trends (KZ by default).
 2. Build a feature brief and send it to AI (ChatGPT API or OpenAI-compatible endpoint).
 3. Generate/update:
    - `assets/ai_monthly_feature.json`
@@ -30,7 +30,7 @@
 ## Optional GitHub Variables
 - `AI_MODEL` (default: `gpt-4.1-mini`)
 - `AI_BASE_URL` (default: `https://api.openai.com/v1`)
-- `GOOGLE_TRENDS_GEO` (default: `US`)
+- `GOOGLE_TRENDS_GEO` (default: `KZ`)
 - `AI_REVIEW_MIN_SCORE` (default: `75`)
 
 ## Local dry run (without AI API)

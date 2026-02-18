@@ -37,6 +37,8 @@ node_modules/
 *.temp
 .cache/!/assets/NBA_signature.png
 artifacts/
+assets/avatart.jpeg
+assets/avatar.jpeg
 
 # Python
 __pycache__/

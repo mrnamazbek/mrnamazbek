@@ -8,8 +8,8 @@
   "mobile_review_notes": "Built with responsive layout and mobile-safe controls.",
   "source": {
     "type": "google_trends",
-    "geo": "US",
-    "captured_at": "2026-02-18T09:19:01.811070+00:00"
+    "geo": "KZ",
+    "captured_at": "2026-02-18T10:23:13.233491+00:00"
   },
   "widget": {
     "type": "roadmap_planner",

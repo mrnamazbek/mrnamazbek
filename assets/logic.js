@@ -276,17 +276,22 @@
             { label: 'London', tz: 'Europe/London' }
         ];
 
-        function formatTime(tz) {
-            const opts = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit'
-            };
+        function formatDigital(tz) {
+            const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             if (tz) opts.timeZone = tz;
             return new Intl.DateTimeFormat(undefined, opts).format(new Date());
+        }
+
+        function formatDateLine(tz) {
+            const opts = { weekday: 'short', month: 'short', day: '2-digit', year: 'numeric' };
+            if (tz) opts.timeZone = tz;
+            return new Intl.DateTimeFormat(undefined, opts).format(new Date());
+        }
+
+        function phaseFromHour(timeString) {
+            const hour = Number(String(timeString).split(':')[0]);
+            if (!Number.isFinite(hour)) return 'night';
+            return hour >= 6 && hour < 18 ? 'day' : 'night';
         }
 
         function render() {
@@ -295,25 +300,47 @@
                 const useTz = label === 'Local' ? null : tz;
                 const isSelected = useTz === selectedTz;
                 const tzLabel = label === 'Local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : useTz;
+                const digital = formatDigital(useTz);
+                const timeParts = String(digital).split(':');
                 return {
                     label,
                     tz: tzLabel,
-                    time: formatTime(useTz),
+                    timeMain: `${timeParts[0] || '--'}:${timeParts[1] || '--'}`,
+                    timeSeconds: timeParts[2] || '--',
+                    dateLine: formatDateLine(useTz),
                     selected: isSelected
                 };
             });
 
-            root.innerHTML = rows.map(r => {
-                return `
-                    <div class="mini-row ${r.selected ? 'is-selected' : ''}">
-                        <div class="mini-row__left">
-                            <div class="mini-row__title">${r.label}</div>
-                            <div class="mini-row__sub">${r.tz || ''}</div>
+            const primary = rows.find((r) => r.selected) || rows[0];
+            const phase = phaseFromHour(primary.timeMain);
+            const secondary = rows.filter((r) => r !== primary);
+
+            root.innerHTML = `
+                <div class="clock-liquid clock-liquid--${phase}">
+                    <div class="clock-liquid__hero">
+                        <div class="clock-liquid__glow" aria-hidden="true"></div>
+                        <div class="clock-liquid__city">${primary.label}</div>
+                        <div class="clock-liquid__time">
+                            <span class="clock-liquid__digits">${primary.timeMain}</span>
+                            <span class="clock-liquid__seconds">${primary.timeSeconds}</span>
                         </div>
-                        <div class="mini-row__right">${r.time}</div>
+                        <div class="clock-liquid__date">${primary.dateLine}</div>
+                        <div class="clock-liquid__zone">${primary.tz || ''}</div>
                     </div>
-                `;
-            }).join('');
+                    <div class="clock-liquid__stack">
+                        ${secondary.map((r) => `
+                            <div class="clock-liquid__tile">
+                                <div class="clock-liquid__tile-left">
+                                    <div class="clock-liquid__tile-city">${r.label}</div>
+                                    <div class="clock-liquid__tile-zone">${r.tz || ''}</div>
+                                </div>
+                                <div class="clock-liquid__tile-time">${r.timeMain}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         if (tzPicker) tzPicker.addEventListener('change', render);
@@ -435,6 +462,7 @@
             const shell = root.querySelector('.mini-table-shell');
             const scroller = root.querySelector('.mini-table-scroll');
             if (!shell || !scroller) return;
+            const desktopMedia = window.matchMedia('(min-width: 1024px)');
 
             if (root._miniTableCleanup) {
                 root._miniTableCleanup();
@@ -442,6 +470,11 @@
             }
 
             const sync = () => {
+                if (desktopMedia.matches) {
+                    shell.classList.remove('is-scrollable', 'at-start', 'at-end');
+                    if (scroller.scrollLeft !== 0) scroller.scrollLeft = 0;
+                    return;
+                }
                 const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
                 shell.classList.toggle('is-scrollable', max > 6);
                 shell.classList.toggle('at-start', scroller.scrollLeft <= 1);
@@ -450,36 +483,45 @@
 
             scroller.addEventListener('scroll', sync, { passive: true });
             window.addEventListener('resize', sync);
+            if (desktopMedia.addEventListener) desktopMedia.addEventListener('change', sync);
             root._miniTableCleanup = () => {
                 scroller.removeEventListener('scroll', sync);
                 window.removeEventListener('resize', sync);
+                if (desktopMedia.removeEventListener) desktopMedia.removeEventListener('change', sync);
             };
             sync();
         }
 
         function render() {
             const items = sortItems(data).slice(0, 12);
+            const asOf = items[0] && items[0].asOf ? items[0].asOf : 'latest update';
             root.innerHTML = `
+                <div class="mini-table-caption">Snapshot: ${asOf}</div>
                 <div class="mini-table-shell">
                     <div class="mini-table-scroll" role="region" aria-label="DB rankings table" tabindex="0">
                         <div class="mini-table" role="table" aria-label="DB rankings">
                             <div class="mini-table__head" role="row">
                                 <div class="mini-table__head-cell" role="columnheader">Rank</div>
                                 <div class="mini-table__head-cell" role="columnheader">Database</div>
+                                <div class="mini-table__head-cell" role="columnheader">Momentum</div>
                                 <div class="mini-table__head-cell" role="columnheader">Score</div>
                             </div>
                             ${items.map(it => {
                                 const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
                                 const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
+                                const rankClass = it.rank <= 3 ? 'rank-badge rank-badge--top' : 'rank-badge';
+                                const rowClass = it.rank <= 3 ? 'mini-table__row mini-table__row--top' : 'mini-table__row';
                                 return `
-                                    <div class="mini-table__row" role="row">
-                                        <div class="mini-table__cell mono" role="cell" data-label="Rank">#${it.rank}</div>
+                                    <div class="${rowClass}" role="row">
+                                        <div class="mini-table__cell mono" role="cell" data-label="Rank"><span class="${rankClass}">#${it.rank}</span></div>
                                         <div class="mini-table__cell" role="cell" data-label="Database">
                                             <div class="mini-db">
                                                 <span class="mini-db__icon" aria-hidden="true">${icon}</span>
                                                 <span class="mini-db__name">${it.name}</span>
                                             </div>
                                             <div class="mini-db__meta">${it.model}</div>
+                                        </div>
+                                        <div class="mini-table__cell mini-table__cell--momentum" role="cell" data-label="Momentum">
                                             <div class="mini-db__trend">
                                                 ${trend}
                                                 <span class="${deltaClass(it.deltaMoM)}" title="Month over month change">MoM ${fmtDelta(it.deltaMoM)}</span>
