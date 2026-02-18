@@ -608,7 +608,18 @@ def build_test_file(feature: Dict[str, Any]) -> str:
         interaction_block = """
   const slider = page.locator('#ai-impact-slider');
   await expect(slider).toBeVisible();
-  await slider.fill('80');
+  const sliderMeta = await slider.evaluate((el) => {
+    return {
+      min: Number(el.getAttribute('min') || 0),
+      max: Number(el.getAttribute('max') || 100)
+    };
+  });
+  const target = Math.max(sliderMeta.min, Math.min(sliderMeta.max, sliderMeta.max - 1));
+  await slider.evaluate((el, val) => {
+    el.value = String(val);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }, target);
   await expect(page.locator('#ai-impact-stats')).toContainText('Saved Hours / Month');
         """.strip()
     elif kind == "tradeoff_matrix":
