@@ -1,0 +1,121 @@
+name: Monthly AI Feature Autopilot
+
+on:
+  schedule:
+    # Monthly on day 2 at 04:00 UTC
+    - cron: '0 4 2 * *'
+  workflow_dispatch:
+    inputs:
+      force_regenerate:
+        description: Force regeneration even if this month already exists
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-ai-feature-autopilot
+  cancel-in-progress: false
+
+jobs:
+  autopilot:
+    runs-on: ubuntu-latest
+    env:
+      AI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      AI_MODEL: ${{ vars.AI_MODEL != '' && vars.AI_MODEL || 'gpt-4.1-mini' }}
+      AI_BASE_URL: ${{ vars.AI_BASE_URL != '' && vars.AI_BASE_URL || 'https://api.openai.com/v1' }}
+      GOOGLE_TRENDS_GEO: ${{ vars.GOOGLE_TRENDS_GEO != '' && vars.GOOGLE_TRENDS_GEO || 'US' }}
+      AI_REVIEW_MIN_SCORE: ${{ vars.AI_REVIEW_MIN_SCORE != '' && vars.AI_REVIEW_MIN_SCORE || '75' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate AI credentials
+        run: |
+          if [ -z "${AI_API_KEY}" ]; then
+            echo "Missing OPENAI_API_KEY secret."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate monthly feature from trends + AI
+        run: |
+          FORCE_FLAG=""
+          if [ "${{ github.event.inputs.force_regenerate }}" = "true" ]; then
+            FORCE_FLAG="--force"
+          fi
+          python scripts/monthly_ai_feature_pipeline.py ${FORCE_FLAG}
+
+      - name: Run responsive and monthly tests
+        run: npx playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js
+
+      - name: Lighthouse mobile audit + screenshot
+        run: |
+          mkdir -p artifacts
+          python -m http.server 4173 >/tmp/http-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          sleep 2
+
+          npx lighthouse http://127.0.0.1:4173 \
+            --quiet \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --form-factor=mobile \
+            --screenEmulation.mobile=true \
+            --screenEmulation.width=375 \
+            --screenEmulation.height=812 \
+            --screenEmulation.deviceScaleFactor=2 \
+            --output=json \
+            --output=html \
+            --output-path=artifacts/lighthouse-mobile
+
+          npx playwright screenshot --device="iPhone 13" --full-page http://127.0.0.1:4173 artifacts/mobile-home.png
+
+      - name: AI mobile UI review
+        run: python scripts/ai_mobile_visual_review.py --image artifacts/mobile-home.png --output artifacts/mobile-review.json
+
+      - name: Upload QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monthly-ai-feature-artifacts
+          if-no-files-found: warn
+          path: |
+            artifacts/lighthouse-mobile.report.html
+            artifacts/lighthouse-mobile.report.json
+            artifacts/mobile-home.png
+            artifacts/mobile-review.json
+            artifacts/monthly-feature-brief.md
+            playwright-report
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/ai_monthly_feature.json assets/ai_feature_history.json tests/monthly-ai-feature.spec.js
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          COMMIT_MSG=$(cat artifacts/monthly-feature-commit-message.txt 2>/dev/null || echo "feat: monthly AI feature update")
+          git commit -m "$COMMIT_MSG"
+          git push

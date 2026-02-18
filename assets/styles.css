@@ -2004,3 +2004,323 @@
     border-color: rgba(0, 0, 0, 0.1);
     color: #1a1a1a;
 }
+
+/* === AI MONTHLY FEATURE === */
+.ai-feature-shell {
+    overflow: hidden;
+}
+
+.ai-feature {
+    display: grid;
+    gap: 14px;
+}
+
+.ai-feature__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ai-feature__pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    border: 1px solid rgba(0, 212, 255, 0.28);
+    background: rgba(0, 212, 255, 0.1);
+    color: rgba(34, 211, 238, 0.95);
+}
+
+.ai-feature__pill--ghost {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(226, 232, 240, 0.9);
+}
+
+.ai-feature__title {
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    line-height: 1.25;
+    font-weight: 700;
+    margin: 0;
+}
+
+.ai-feature__desc,
+.ai-feature__why {
+    margin: 0;
+    color: rgba(226, 232, 240, 0.92);
+    line-height: 1.6;
+}
+
+.ai-feature__note {
+    margin-top: 4px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.14);
+    padding-top: 10px;
+    font-size: 0.82rem;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.ai-widget {
+    display: grid;
+    gap: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+}
+
+.ai-widget__head {
+    display: grid;
+    gap: 6px;
+}
+
+.ai-widget__title {
+    margin: 0;
+    font-size: 1.06rem;
+    font-weight: 700;
+}
+
+.ai-widget__desc {
+    margin: 0;
+    color: rgba(148, 163, 184, 0.95);
+    line-height: 1.5;
+    font-size: 0.92rem;
+}
+
+.ai-widget__label {
+    font-size: 0.8rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: rgba(148, 163, 184, 0.98);
+}
+
+.ai-widget__range {
+    width: 100%;
+    accent-color: #22d3ee;
+}
+
+.ai-widget__range-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.ai-widget__range-value {
+    color: rgba(255, 255, 255, 0.94);
+    font-weight: 700;
+}
+
+.ai-widget__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.ai-widget__stat {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.16);
+    padding: 12px;
+}
+
+.ai-widget__stat-label {
+    font-size: 0.72rem;
+    color: rgba(148, 163, 184, 0.98);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ai-widget__stat-value {
+    margin-top: 6px;
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.96);
+}
+
+.ai-widget__question {
+    font-size: 0.92rem;
+    color: rgba(226, 232, 240, 0.95);
+}
+
+.ai-widget__options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.ai-widget__option {
+    min-height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    text-align: left;
+    padding: 10px 12px;
+    display: grid;
+    gap: 3px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ai-widget__option:hover {
+    border-color: rgba(34, 211, 238, 0.35);
+}
+
+.ai-widget__option.is-active {
+    border-color: rgba(34, 211, 238, 0.5);
+    background: rgba(0, 212, 255, 0.09);
+}
+
+.ai-widget__option-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.ai-widget__option-hint {
+    font-size: 0.79rem;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.ai-widget__result {
+    border-radius: 12px;
+    border: 1px solid rgba(34, 211, 238, 0.24);
+    background: rgba(0, 212, 255, 0.08);
+    padding: 12px;
+    min-height: 74px;
+}
+
+.ai-widget__result-title {
+    font-weight: 700;
+}
+
+.ai-widget__result-body {
+    margin-top: 5px;
+    color: rgba(226, 232, 240, 0.94);
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.ai-widget__progress-wrap {
+    display: grid;
+    gap: 8px;
+}
+
+.ai-widget__progress-bar {
+    position: relative;
+    height: 10px;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.ai-widget__progress-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.75), rgba(59, 130, 246, 0.85));
+    transition: width 0.2s ease;
+}
+
+.ai-widget__progress-meta {
+    font-size: 0.84rem;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.ai-widget__steps {
+    display: grid;
+    gap: 10px;
+}
+
+.ai-widget__step {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: start;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 12px;
+}
+
+.ai-widget__step input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: #22d3ee;
+}
+
+.ai-widget__step-copy {
+    display: grid;
+    gap: 3px;
+}
+
+.ai-widget__step-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.ai-widget__step-detail {
+    color: rgba(148, 163, 184, 0.95);
+    font-size: 0.83rem;
+    line-height: 1.45;
+}
+
+.ai-widget__step-weeks {
+    font-size: 0.8rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: rgba(34, 211, 238, 0.94);
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .ai-widget__stats {
+        grid-template-columns: 1fr;
+    }
+
+    .ai-widget__options {
+        grid-template-columns: 1fr;
+    }
+}
+
+[data-theme="light"] .ai-feature__pill--ghost {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.03);
+    color: rgba(30, 41, 59, 0.85);
+}
+
+[data-theme="light"] .ai-feature__desc,
+[data-theme="light"] .ai-feature__why,
+[data-theme="light"] .ai-widget__question,
+[data-theme="light"] .ai-widget__result-body {
+    color: rgba(15, 23, 42, 0.85);
+}
+
+[data-theme="light"] .ai-feature__note,
+[data-theme="light"] .ai-widget__desc,
+[data-theme="light"] .ai-widget__label,
+[data-theme="light"] .ai-widget__range-row,
+[data-theme="light"] .ai-widget__progress-meta,
+[data-theme="light"] .ai-widget__step-detail {
+    color: rgba(51, 65, 85, 0.9);
+}
+
+[data-theme="light"] .ai-widget,
+[data-theme="light"] .ai-widget__stat,
+[data-theme="light"] .ai-widget__option,
+[data-theme="light"] .ai-widget__step {
+    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="light"] .ai-widget__result {
+    border-color: rgba(14, 116, 144, 0.2);
+    background: rgba(34, 211, 238, 0.12);
+}
+
+[data-theme="light"] .ai-widget__stat-value,
+[data-theme="light"] .ai-widget__range-value {
+    color: rgba(15, 23, 42, 0.92);
+}

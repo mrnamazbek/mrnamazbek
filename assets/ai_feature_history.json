@@ -1,0 +1,45 @@
+[
+  {
+    "id": "2026-02-ai-agents",
+    "month": "2026-02",
+    "title": "AI agents: Monthly AI Feature",
+    "trend_keyword": "AI agents",
+    "description": "Automatically generated feature from current trend data.",
+    "why_now": "Trend data indicates high current interest, making it a useful candidate for quick product experiments.",
+    "mobile_review_notes": "Built with responsive layout and mobile-safe controls.",
+    "source": {
+      "type": "google_trends",
+      "geo": "US",
+      "captured_at": "2026-02-18T09:19:01.811070+00:00"
+    },
+    "widget": {
+      "type": "roadmap_planner",
+      "heading": "AI agents: 4-Step Rollout",
+      "description": "Track rollout tasks and completion progress.",
+      "config": {
+        "steps": [
+          {
+            "name": "Trend analysis",
+            "detail": "Confirm relevance and user value.",
+            "weeks": 0.2
+          },
+          {
+            "name": "Build",
+            "detail": "Implement feature and interactions.",
+            "weeks": 0.4
+          },
+          {
+            "name": "Quality checks",
+            "detail": "Run mobile tests and performance checks.",
+            "weeks": 0.2
+          },
+          {
+            "name": "Release",
+            "detail": "Commit and push via workflow.",
+            "weeks": 0.1
+          }
+        ]
+      }
+    }
+  }
+]
