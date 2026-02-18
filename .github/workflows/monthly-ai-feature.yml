@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      AI_MODEL: ${{ vars.AI_MODEL != '' && vars.AI_MODEL || 'gpt-4.1-mini' }}
+      AI_MODEL: ${{ vars.AI_MODEL != '' && vars.AI_MODEL || 'gpt-5.2' }}
       AI_BASE_URL: ${{ vars.AI_BASE_URL != '' && vars.AI_BASE_URL || 'https://api.openai.com/v1' }}
       GOOGLE_TRENDS_GEO: ${{ vars.GOOGLE_TRENDS_GEO != '' && vars.GOOGLE_TRENDS_GEO || 'KZ' }}
       AI_REVIEW_MIN_SCORE: ${{ vars.AI_REVIEW_MIN_SCORE != '' && vars.AI_REVIEW_MIN_SCORE || '75' }}

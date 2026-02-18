@@ -28,7 +28,7 @@
 - `OPENAI_API_KEY`: API key for model calls.
 
 ## Optional GitHub Variables
-- `AI_MODEL` (default: `gpt-4.1-mini`)
+- `AI_MODEL` (default: `gpt-5.2`)
 - `AI_BASE_URL` (default: `https://api.openai.com/v1`)
 - `GOOGLE_TRENDS_GEO` (default: `KZ`)
 - `AI_REVIEW_MIN_SCORE` (default: `75`)

@@ -15,7 +15,7 @@ DEFAULT_FEATURE_FILE = ROOT / "assets" / "ai_monthly_feature.json"
 DEFAULT_OUTPUT_FILE = ROOT / "artifacts" / "mobile-review.json"
 
 DEFAULT_BASE_URL = "https://api.openai.com/v1"
-DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_MODEL = "gpt-5.2"
 
 
 class ReviewError(Exception):

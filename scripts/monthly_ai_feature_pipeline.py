@@ -24,7 +24,7 @@ COMMIT_MSG_FILE = ARTIFACTS_DIR / "monthly-feature-commit-message.txt"
 BRIEF_FILE = ARTIFACTS_DIR / "monthly-feature-brief.md"
 
 GOOGLE_TRENDS_RSS_URL = "https://trends.google.com/trending/rss?geo={geo}"
-DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_MODEL = "gpt-5.2"
 DEFAULT_BASE_URL = "https://api.openai.com/v1"
 
 ALLOWED_WIDGET_TYPES = {"impact_estimator", "tradeoff_matrix", "roadmap_planner"}
