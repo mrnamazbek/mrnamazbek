@@ -43,3 +43,12 @@ assets/avatar.jpeg
 # Python
 __pycache__/
 *.pyc
+.venv/
+*.egg-info/
+
+# Generated demo data files (created at runtime)
+blog/demos/post-a-postgres/sales.csv
+blog/demos/post-b-feature-pipeline/events.csv
+blog/demos/post-b-feature-pipeline/feature_store.db
+blog/demos/post-c-python-perf/transactions.csv
+blog/demos/post-c-python-perf/chunk_*.csv
