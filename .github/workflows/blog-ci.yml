@@ -1,0 +1,239 @@
+name: Blog CI
+
+on:
+  push:
+    paths:
+      - "blog/**"
+      - ".github/workflows/blog-ci.yml"
+  pull_request:
+    paths:
+      - "blog/**"
+      - ".github/workflows/blog-ci.yml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: blog-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Post A — Postgres query optimization
+  # ---------------------------------------------------------------------------
+  post-a-unit-tests:
+    name: "Post A · Unit tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog/demos/post-a-postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: pytest tests/test_unit.py -v
+
+  post-a-integration:
+    name: "Post A · Integration smoke tests"
+    runs-on: ubuntu-latest
+    needs: post-a-unit-tests
+    defaults:
+      run:
+        working-directory: blog/demos/post-a-postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Postgres + demo via Docker Compose
+        run: docker compose up --build -d
+
+      - name: Wait for Postgres to be healthy
+        run: |
+          for i in $(seq 1 30); do
+            if docker compose exec -T postgres pg_isready -U demo; then
+              echo "Postgres is ready."
+              break
+            fi
+            echo "Waiting for Postgres… ($i/30)"
+            sleep 3
+          done
+
+      - name: Run the demo
+        run: docker compose run --rm demo python app.py
+
+      - name: Run smoke tests
+        run: |
+          docker compose run --rm \
+            -e DATABASE_URL=postgresql://demo:demo@postgres:5432/demodb \
+            demo pytest tests/test_smoke.py -v -m integration
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-a-artifacts
+          if-no-files-found: warn
+          path: |
+            blog/demos/post-a-postgres/sales.csv
+
+      - name: Teardown
+        if: always()
+        run: docker compose down -v
+
+  # ---------------------------------------------------------------------------
+  # Post B — ETL for AI / Feature pipelines
+  # ---------------------------------------------------------------------------
+  post-b-unit-tests:
+    name: "Post B · Unit tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog/demos/post-b-feature-pipeline
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: pytest tests/test_unit.py -v
+
+  post-b-integration:
+    name: "Post B · Integration smoke tests"
+    runs-on: ubuntu-latest
+    needs: post-b-unit-tests
+    defaults:
+      run:
+        working-directory: blog/demos/post-b-feature-pipeline
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and start Feature API
+        run: docker compose up --build -d
+
+      - name: Wait for API to be healthy
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/healthz; then
+              echo "API is ready."
+              break
+            fi
+            echo "Waiting for API… ($i/30)"
+            sleep 3
+          done
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run smoke tests
+        env:
+          API_BASE_URL: http://localhost:8000
+        run: pytest tests/test_smoke.py -v -m integration
+
+      - name: Teardown
+        if: always()
+        run: docker compose down -v
+
+  # ---------------------------------------------------------------------------
+  # Post C — Python performance
+  # ---------------------------------------------------------------------------
+  post-c-unit-tests:
+    name: "Post C · Unit tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: blog/demos/post-c-python-perf
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: pytest tests/test_unit.py -v
+
+  post-c-integration:
+    name: "Post C · Integration smoke tests"
+    runs-on: ubuntu-latest
+    needs: post-c-unit-tests
+    defaults:
+      run:
+        working-directory: blog/demos/post-c-python-perf
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run smoke tests (pipeline as subprocess)
+        run: pytest tests/test_smoke.py -v -m integration
+
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-c-artifacts
+          if-no-files-found: warn
+          path: |
+            blog/demos/post-c-python-perf/transactions.csv
+
+  # ---------------------------------------------------------------------------
+  # Playwright smoke tests (Playwright for the portfolio site)
+  # ---------------------------------------------------------------------------
+  playwright-smoke:
+    name: "Playwright smoke tests"
+    runs-on: ubuntu-latest
+    needs:
+      - post-a-unit-tests
+      - post-b-unit-tests
+      - post-c-unit-tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright smoke tests
+        run: npx playwright test tests/responsive-smoke.spec.js
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          if-no-files-found: warn
+          path: playwright-report
