@@ -1,7 +1,7 @@
 {
   "as_of": "2026-02-16",
   "window_weeks": 24,
-  "generated_at": "2026-02-18T10:23:16.424689+00:00",
+  "generated_at": "2026-02-23T05:48:11.844366+00:00",
   "status": "ok",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
@@ -112,7 +112,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 178956
+          "views": 561775
         }
       ]
     },
@@ -216,7 +216,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 19198
+          "views": 66179
         }
       ]
     },
@@ -320,7 +320,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 409
+          "views": 1553
         }
       ]
     },
@@ -424,7 +424,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 4053
+          "views": 13032
         }
       ]
     },
@@ -528,7 +528,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 7855
+          "views": 27969
         }
       ]
     },
@@ -632,7 +632,7 @@
         },
         {
           "week": "2026-02-16",
-          "views": 5343
+          "views": 17777
         }
       ]
     }
@@ -641,32 +641,32 @@
     {
       "id": "chatgpt",
       "label": "ChatGPT",
-      "views": 178956
+      "views": 561775
     },
     {
       "id": "claude",
       "label": "Claude",
-      "views": 19198
+      "views": 66179
     },
     {
       "id": "perplexity",
       "label": "Perplexity",
-      "views": 7855
+      "views": 27969
     },
     {
       "id": "deepseek",
       "label": "DeepSeek",
-      "views": 5343
+      "views": 17777
     },
     {
       "id": "copilot",
       "label": "Copilot",
-      "views": 4053
+      "views": 13032
     },
     {
       "id": "gemini",
       "label": "Gemini",
-      "views": 409
+      "views": 1553
     }
   ],
   "errors": []
