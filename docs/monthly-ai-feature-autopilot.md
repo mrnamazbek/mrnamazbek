@@ -17,6 +17,20 @@
 - Schedule: day 2 of each month at 04:00 UTC
 - Manual run: `workflow_dispatch` with optional `force_regenerate=true`
 
+## GitLab schedule to push feature JSON to a cloud agent
+- File: `.gitlab-ci.yml`
+- Job: `monthly_ai_feature_to_cloud_agent`
+- Required GitLab CI variables:
+  - `CLOUD_AGENT_URL`: endpoint of your cloud agent intake API
+  - `CLOUD_AGENT_TOKEN`: bearer token for that endpoint
+- The job regenerates `assets/ai_monthly_feature.json` and POSTs it to the cloud agent.
+
+## Live FX + Weather widget
+- Rendered by `assets/ai-monthly-feature.js` into `#ai-live-signals-root`.
+- Rates source: Frankfurter API (`USD -> RUB, GBP, EUR`).
+- Weather source: Open-Meteo (`Almaty`, `Shymkent`, `Astana`).
+- On network/API errors, the widget degrades gracefully and shows `N/A` without breaking the page.
+
 ## Additional Weekly Automation
 - File: `.github/workflows/weekly-ai-audience.yml`
 - Schedule: every Monday at 04:30 UTC

@@ -2,7 +2,14 @@
     'use strict';
 
     const ROOT_ID = 'ai-monthly-feature-root';
+    const LIVE_SIGNALS_ROOT_ID = 'ai-live-signals-root';
     const FEATURE_URL = 'assets/ai_monthly_feature.json';
+    const FX_URL = 'https://api.frankfurter.app/latest?from=USD&to=RUB,GBP,EUR';
+    const WEATHER_CITIES = [
+        { id: 'almaty', label: 'Almaty', latitude: 43.238949, longitude: 76.889709 },
+        { id: 'shymkent', label: 'Shymkent', latitude: 42.3417, longitude: 69.5901 },
+        { id: 'astana', label: 'Astana', latitude: 51.1694, longitude: 71.4491 }
+    ];
 
     const FALLBACK_FEATURE = {
         id: 'fallback-agentic-workflow-checklist',
@@ -311,6 +318,140 @@
         attachWidgetHandlers(root, feature);
     }
 
+    function formatRate(value) {
+        const n = asNumber(value, NaN);
+        return Number.isFinite(n) ? n.toFixed(4) : 'N/A';
+    }
+
+    function describeWeatherCode(code) {
+        const map = {
+            0: 'Clear',
+            1: 'Mainly clear',
+            2: 'Partly cloudy',
+            3: 'Overcast',
+            45: 'Fog',
+            48: 'Depositing rime fog',
+            51: 'Light drizzle',
+            53: 'Drizzle',
+            55: 'Dense drizzle',
+            61: 'Slight rain',
+            63: 'Rain',
+            65: 'Heavy rain',
+            71: 'Slight snow',
+            73: 'Snow',
+            75: 'Heavy snow',
+            80: 'Rain showers',
+            81: 'Showers',
+            82: 'Violent showers',
+            95: 'Thunderstorm'
+        };
+        return map[asNumber(code, -1)] || 'Unknown';
+    }
+
+    async function fetchJsonWithTimeout(url, timeoutMs) {
+        const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+        try {
+            const response = await fetch(url, controller ? { signal: controller.signal, cache: 'no-cache' } : { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+            return await response.json();
+        } finally {
+            if (timer) clearTimeout(timer);
+        }
+    }
+
+    async function loadLiveSignals() {
+        const fallbackRates = { RUB: null, GBP: null, EUR: null };
+        const fallbackWeather = WEATHER_CITIES.map((city) => ({
+            city: city.label,
+            temperature: null,
+            feelsLike: null,
+            wind: null,
+            weatherCode: null
+        }));
+
+        try {
+            const fxPromise = fetchJsonWithTimeout(FX_URL, 9000);
+            const weatherPromises = WEATHER_CITIES.map((city) => {
+                const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(city.latitude)}&longitude=${encodeURIComponent(city.longitude)}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`;
+                return fetchJsonWithTimeout(weatherUrl, 9000)
+                    .then((payload) => ({
+                        city: city.label,
+                        temperature: payload && payload.current ? asNumber(payload.current.temperature_2m, NaN) : NaN,
+                        feelsLike: payload && payload.current ? asNumber(payload.current.apparent_temperature, NaN) : NaN,
+                        wind: payload && payload.current ? asNumber(payload.current.wind_speed_10m, NaN) : NaN,
+                        weatherCode: payload && payload.current ? asNumber(payload.current.weather_code, NaN) : NaN
+                    }))
+                    .catch(() => ({
+                        city: city.label,
+                        temperature: NaN,
+                        feelsLike: NaN,
+                        wind: NaN,
+                        weatherCode: NaN
+                    }));
+            });
+
+            const [fxData, weatherRows] = await Promise.all([fxPromise, Promise.all(weatherPromises)]);
+            const rates = fxData && fxData.rates ? fxData.rates : fallbackRates;
+            return {
+                updatedAt: fxData && fxData.date ? fxData.date : new Date().toISOString().slice(0, 10),
+                rates: {
+                    RUB: asNumber(rates.RUB, NaN),
+                    GBP: asNumber(rates.GBP, NaN),
+                    EUR: asNumber(rates.EUR, NaN)
+                },
+                weather: weatherRows
+            };
+        } catch (error) {
+            console.warn('Falling back to unavailable live signals.', error);
+            return {
+                updatedAt: new Date().toISOString().slice(0, 10),
+                rates: fallbackRates,
+                weather: fallbackWeather
+            };
+        }
+    }
+
+    function renderLiveSignals(root, payload) {
+        const rates = payload && payload.rates ? payload.rates : {};
+        const weatherRows = payload && Array.isArray(payload.weather) ? payload.weather : [];
+        const weatherHtml = weatherRows.map((row) => {
+            const temp = Number.isFinite(row.temperature) ? `${row.temperature.toFixed(1)}°C` : 'N/A';
+            const feels = Number.isFinite(row.feelsLike) ? `${row.feelsLike.toFixed(1)}°C` : 'N/A';
+            const wind = Number.isFinite(row.wind) ? `${row.wind.toFixed(1)} km/h` : 'N/A';
+            return `
+                <div class="ai-live-signals__weather-card">
+                    <div class="ai-live-signals__weather-city">${escapeHtml(row.city)}</div>
+                    <div class="ai-live-signals__weather-main">${escapeHtml(temp)} · ${escapeHtml(describeWeatherCode(row.weatherCode))}</div>
+                    <div class="ai-live-signals__weather-meta">Feels like: ${escapeHtml(feels)} · Wind: ${escapeHtml(wind)}</div>
+                </div>
+            `;
+        }).join('');
+
+        root.innerHTML = `
+            <div class="ai-live-signals">
+                <div class="ai-live-signals__head">
+                    <h4 class="ai-widget__title">Live Signals: FX + Weather</h4>
+                    <p class="ai-widget__desc">USD exchange rates for RUB, GBP, EUR and real-time weather for Almaty, Shymkent, Astana.</p>
+                </div>
+                <div class="ai-live-signals__rates">
+                    <div class="ai-live-signals__rate"><span>USD → RUB</span><strong>${escapeHtml(formatRate(rates.RUB))}</strong></div>
+                    <div class="ai-live-signals__rate"><span>USD → GBP</span><strong>${escapeHtml(formatRate(rates.GBP))}</strong></div>
+                    <div class="ai-live-signals__rate"><span>USD → EUR</span><strong>${escapeHtml(formatRate(rates.EUR))}</strong></div>
+                </div>
+                <div class="ai-live-signals__weather">${weatherHtml}</div>
+                <div class="ai-feature__note">Updated: ${escapeHtml(String(payload.updatedAt || 'N/A'))}</div>
+            </div>
+        `;
+    }
+
+    async function initLiveSignals() {
+        const root = document.getElementById(LIVE_SIGNALS_ROOT_ID);
+        if (!root) return;
+        const payload = await loadLiveSignals();
+        renderLiveSignals(root, payload);
+    }
+
     async function loadFeature() {
         try {
             const response = await fetch(FEATURE_URL, { cache: 'no-cache' });
@@ -331,5 +472,8 @@
         renderFeature(root, feature);
     }
 
-    document.addEventListener('DOMContentLoaded', initAIMonthlyFeature);
+    document.addEventListener('DOMContentLoaded', () => {
+        initAIMonthlyFeature();
+        initLiveSignals();
+    });
 })();

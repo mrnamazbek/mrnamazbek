@@ -1,0 +1,31 @@
+stages:
+  - monthly_feature
+
+monthly_ai_feature_to_cloud_agent:
+  stage: monthly_feature
+  image: python:3.12-slim
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  variables:
+    PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*
+  script:
+    - python scripts/monthly_ai_feature_pipeline.py --force
+    - |
+      if [ -n "$CLOUD_AGENT_URL" ] && [ -n "$CLOUD_AGENT_TOKEN" ]; then
+        curl --fail --show-error --silent \
+          -H "Authorization: Bearer ${CLOUD_AGENT_TOKEN}" \
+          -H "Content-Type: application/json" \
+          --data-binary @assets/ai_monthly_feature.json \
+          "$CLOUD_AGENT_URL"
+      else
+        echo "CLOUD_AGENT_URL/CLOUD_AGENT_TOKEN are not set. Skipping cloud-agent push."
+      fi
+  artifacts:
+    when: always
+    paths:
+      - assets/ai_monthly_feature.json
+      - assets/ai_feature_history.json
+      - artifacts/monthly-feature-brief.md
