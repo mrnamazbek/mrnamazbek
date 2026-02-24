@@ -4,7 +4,8 @@
     const ROOT_ID = 'ai-monthly-feature-root';
     const LIVE_SIGNALS_ROOT_ID = 'ai-live-signals-root';
     const FEATURE_URL = 'assets/ai_monthly_feature.json';
-    const FX_URL = 'https://api.frankfurter.app/latest?from=USD&to=RUB,GBP,EUR';
+    const FX_URL = 'https://open.er-api.com/v6/latest/USD';
+    const API_TIMEOUT_MS = 9000;
     const WEATHER_CITIES = [
         { id: 'almaty', label: 'Almaty', latitude: 43.238949, longitude: 76.889709 },
         { id: 'shymkent', label: 'Shymkent', latitude: 42.3417, longitude: 69.5901 },
@@ -323,6 +324,16 @@
         return Number.isFinite(n) ? n.toFixed(4) : 'N/A';
     }
 
+    function extractFxUpdateTimestamp(fxData) {
+        if (!fxData || typeof fxData !== 'object') return new Date().toISOString().slice(0, 10);
+        if (fxData.time_last_update_utc) return String(fxData.time_last_update_utc);
+        if (fxData.time_last_update_unix) {
+            const unix = asNumber(fxData.time_last_update_unix, 0);
+            return new Date(unix * 1000).toISOString().slice(0, 10);
+        }
+        return new Date().toISOString().slice(0, 10);
+    }
+
     function describeWeatherCode(code) {
         const map = {
             0: 'Clear',
@@ -371,10 +382,10 @@
         }));
 
         try {
-            const fxPromise = fetchJsonWithTimeout(FX_URL, 9000);
+            const fxPromise = fetchJsonWithTimeout(FX_URL, API_TIMEOUT_MS);
             const weatherPromises = WEATHER_CITIES.map((city) => {
                 const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(city.latitude)}&longitude=${encodeURIComponent(city.longitude)}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`;
-                return fetchJsonWithTimeout(weatherUrl, 9000)
+                return fetchJsonWithTimeout(weatherUrl, API_TIMEOUT_MS)
                     .then((payload) => ({
                         city: city.label,
                         temperature: payload && payload.current ? asNumber(payload.current.temperature_2m, NaN) : NaN,
@@ -394,7 +405,7 @@
             const [fxData, weatherRows] = await Promise.all([fxPromise, Promise.all(weatherPromises)]);
             const rates = fxData && fxData.rates ? fxData.rates : fallbackRates;
             return {
-                updatedAt: fxData && fxData.date ? fxData.date : new Date().toISOString().slice(0, 10),
+                updatedAt: extractFxUpdateTimestamp(fxData),
                 rates: {
                     RUB: asNumber(rates.RUB, NaN),
                     GBP: asNumber(rates.GBP, NaN),

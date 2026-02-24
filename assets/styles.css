@@ -2651,7 +2651,7 @@
     color: rgba(15, 23, 42, 0.92);
 }
 
-[data-theme="light"] .ai-live-signals__rate,
+[data-theme="light"] .ai-live-signals__rate span,
 [data-theme="light"] .ai-live-signals__weather-meta {
     color: rgba(51, 65, 85, 0.9);
 }
