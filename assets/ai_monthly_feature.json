@@ -3,9 +3,9 @@
   "month": "2026-02",
   "title": "News-to-Action Digest: Turn Trending “новости” Into Team-Ready Updates",
   "trend_keyword": "AI automation",
-  "description": "Build a lightweight internal digest that converts high-volume news queries into actionable, non-political operational updates for product and engineering teams. The feature pulls headlines from approved sources, clusters duplicates, summarizes in plain English, and routes items i",
-  "why_now": "In KZ during 2026-02, “новости” is trending, signaling elevated demand for timely information. Teams often waste time scanning multiple feeds and still miss operationally relevant items. A structured digest with deduplication, summarization, and routing reduces context switching ",
-  "mobile_review_notes": "Ensure the digest cards are readable on small screens: 2-line title clamp, source + timestamp visible, and a single primary action (Assign/Save). Summaries should default to ~280 characters with “Read more” expansion. Provide offline-friend",
+  "description": "Build a lightweight internal digest that converts high-volume news queries into actionable, non-political operational updates for product and engineering teams. The feature pulls headlines from approved sources, clusters duplicates, summarizes in plain English, and routes items into the right Slack channel, Jira board, or Linear project automatically.",
+  "why_now": "In KZ during 2026-02, “новости” is trending, signaling elevated demand for timely information. Teams often waste time scanning multiple feeds and still miss operationally relevant items. A structured digest with deduplication, summarization, and routing reduces context switching and helps engineers stay focused on what matters.",
+  "mobile_review_notes": "Ensure the digest cards are readable on small screens: 2-line title clamp, source + timestamp visible, and a single primary action (Assign/Save). Summaries should default to ~280 characters with “Read more” expansion. Provide offline-friendly caching via localStorage for the latest digest.",
   "source": {
     "type": "google_trends",
     "geo": "KZ",

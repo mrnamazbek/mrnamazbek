@@ -1,0 +1,114 @@
+# GitLab CI – Monthly AI Feature Autopilot
+#
+# Mirrors the GitHub Actions workflow (.github/workflows/monthly-ai-feature.yml).
+# Runs the monthly-ai-feature pipeline, which fetches Google Trends data,
+# sends a prompt to a GitHub Copilot / OpenAI-compatible API, updates
+# assets/ai_monthly_feature.json and tests/monthly-ai-feature.spec.js,
+# then commits and pushes the result back to the repository.
+#
+# Required CI/CD variables (set in GitLab → Settings → CI/CD → Variables):
+#   OPENAI_API_KEY   – API key for the AI model (masked, protected).
+#   AI_MODEL         – Optional. Model name (default: gpt-5.2).
+#   AI_BASE_URL      – Optional. Base URL for OpenAI-compatible endpoint
+#                      (default: https://api.openai.com/v1).
+#   GOOGLE_TRENDS_GEO – Optional. Region for Google Trends (default: KZ).
+#
+# For GitHub Copilot Enterprise (azure.com endpoint), set:
+#   AI_BASE_URL  = https://api.githubcopilot.com
+#   AI_MODEL     = gpt-4o   # or copilot-gpt-4 depending on your license
+
+stages:
+  - generate
+  - test
+  - release
+
+variables:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "20"
+  AI_MODEL: ${AI_MODEL:-gpt-5.2}
+  AI_BASE_URL: ${AI_BASE_URL:-https://api.openai.com/v1}
+  GOOGLE_TRENDS_GEO: ${GOOGLE_TRENDS_GEO:-KZ}
+
+# ---------------------------------------------------------------------------
+# Stage 1 – Generate the monthly AI feature JSON + updated Playwright test
+# ---------------------------------------------------------------------------
+monthly-ai-feature-generate:
+  stage: generate
+  image: python:3.12-slim
+  rules:
+    # Run automatically on the 2nd of every month.
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    # Allow manual trigger with optional force-regenerate flag.
+    - if: $CI_PIPELINE_SOURCE == "web"
+  variables:
+    FORCE_FLAG: ""
+  before_script:
+    - pip install --quiet requests
+    - |
+      if [ -z "${OPENAI_API_KEY}" ]; then
+        echo "ERROR: OPENAI_API_KEY CI variable is not set." >&2
+        exit 1
+      fi
+    - |
+      if [ "${FORCE_REGENERATE:-false}" = "true" ]; then
+        FORCE_FLAG="--force"
+      fi
+  script:
+    - python scripts/monthly_ai_feature_pipeline.py ${FORCE_FLAG}
+  artifacts:
+    paths:
+      - assets/ai_monthly_feature.json
+      - assets/ai_feature_history.json
+      - tests/monthly-ai-feature.spec.js
+      - artifacts/monthly-feature-brief.md
+      - artifacts/monthly-feature-commit-message.txt
+    expire_in: 1 week
+
+# ---------------------------------------------------------------------------
+# Stage 2 – Run Playwright responsive + feature tests
+# ---------------------------------------------------------------------------
+playwright-tests:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.50.0-noble
+  needs:
+    - monthly-ai-feature-generate
+  before_script:
+    - npm install
+  script:
+    - npx playwright test
+        tests/responsive-smoke.spec.js
+        tests/monthly-ai-feature.spec.js
+        tests/ai-audience-engagement.spec.js
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+    expire_in: 1 week
+
+# ---------------------------------------------------------------------------
+# Stage 3 – Commit and push updated assets back to the repository
+# ---------------------------------------------------------------------------
+commit-and-push:
+  stage: release
+  image: alpine/git:latest
+  needs:
+    - playwright-tests
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  before_script:
+    - git config user.name "gitlab-ci[bot]"
+    - git config user.email "gitlab-ci[bot]@users.noreply.gitlab.com"
+    - git remote set-url origin \
+        "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+  script:
+    - git add assets/ai_monthly_feature.json assets/ai_feature_history.json \
+        tests/monthly-ai-feature.spec.js
+    - |
+      if git diff --cached --quiet; then
+        echo "No changes to commit."
+        exit 0
+      fi
+    - COMMIT_MSG=$(cat artifacts/monthly-feature-commit-message.txt 2>/dev/null || echo "feat: monthly AI feature update")
+    - git commit -m "${COMMIT_MSG}"
+    - git push origin HEAD:${CI_COMMIT_REF_NAME}

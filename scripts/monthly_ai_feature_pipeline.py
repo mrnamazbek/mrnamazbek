@@ -554,9 +554,9 @@ def finalize_feature(spec: Dict[str, Any], trends: List[Dict[str, str]], geo: st
                 break
     if not any(hint in trend_keyword.lower() for hint in TECH_TREND_HINTS):
         trend_keyword = "AI automation"
-    description = normalize_string(spec.get("description"), "Automatically generated feature from current trends.", max_len=280)
-    why_now = normalize_string(spec.get("why_now"), "Trend signal is elevated this month.", max_len=280)
-    mobile_notes = normalize_string(spec.get("mobile_review_notes"), "Built with responsive spacing and touch-friendly controls.", max_len=240)
+    description = normalize_string(spec.get("description"), "Automatically generated feature from current trends.", max_len=600)
+    why_now = normalize_string(spec.get("why_now"), "Trend signal is elevated this month.", max_len=600)
+    mobile_notes = normalize_string(spec.get("mobile_review_notes"), "Built with responsive spacing and touch-friendly controls.", max_len=480)
     widget = normalize_widget(spec.get("widget"))
 
     slug = sanitize_slug(trend_keyword)
