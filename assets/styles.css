@@ -2566,11 +2566,15 @@
 
 .ai-live-signals {
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
 .ai-live-signals-shell {
     overflow: hidden;
+    background: linear-gradient(160deg, #f7f9fc 0%, #ffffff 100%);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
 }
 
 .ai-live-signals__head {
@@ -2578,27 +2582,90 @@
     gap: 6px;
 }
 
+.ai-live-signals__panel {
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    background: #fff;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-live-signals__panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.ai-live-signals__section-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(71, 85, 105, 0.9);
+}
+
 .ai-live-signals__rates {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
 
 .ai-live-signals__rate {
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 1);
+    background: #fff;
     padding: 10px 12px;
     display: grid;
-    gap: 6px;
+    gap: 4px;
     font-size: 0.84rem;
-    color: rgba(148, 163, 184, 0.95);
+    color: rgba(71, 85, 105, 0.95);
     min-width: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ai-live-signals__rate:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 .ai-live-signals__rate strong {
-    color: rgba(255, 255, 255, 0.96);
-    font-size: 1rem;
+    color: rgba(15, 23, 42, 0.96);
+    font-size: 1.35rem;
+    line-height: 1.15;
+    transition: color 0.22s ease;
+}
+
+.ai-live-signals__rate-code {
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ai-live-signals__trend {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    transition: background-color 0.22s ease, color 0.22s ease;
+}
+
+.ai-live-signals__rate--up .ai-live-signals__trend {
+    color: rgba(22, 101, 52, 0.95);
+    background: rgba(134, 239, 172, 0.35);
+}
+
+.ai-live-signals__rate--down .ai-live-signals__trend {
+    color: rgba(153, 27, 27, 0.95);
+    background: rgba(254, 202, 202, 0.38);
+}
+
+.ai-live-signals__rate--neutral .ai-live-signals__trend {
+    color: rgba(71, 85, 105, 0.95);
+    background: rgba(226, 232, 240, 0.9);
 }
 
 .ai-live-signals__weather {
@@ -2608,52 +2675,100 @@
 }
 
 .ai-live-signals__weather-card {
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 1);
+    background: #fff;
     padding: 10px 12px;
     display: grid;
     gap: 4px;
     min-width: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-live-signals__weather-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 .ai-live-signals__weather-city {
     font-weight: 700;
+    color: rgba(15, 23, 42, 0.92);
 }
 
 .ai-live-signals__weather-main {
-    font-size: 0.9rem;
+    font-size: 1rem;
     overflow-wrap: anywhere;
+    color: rgba(15, 23, 42, 0.95);
+}
+
+.ai-live-signals__weather-temp {
+    font-size: 1.55rem;
+    font-weight: 700;
+    line-height: 1.15;
+    display: inline-block;
+    animation: ai-temp-rise 0.5s ease both;
 }
 
 .ai-live-signals__weather-meta {
     font-size: 0.8rem;
-    color: rgba(148, 163, 184, 0.95);
+    color: rgba(71, 85, 105, 0.95);
     overflow-wrap: anywhere;
 }
 
-@media (max-width: 768px) {
-    .ai-live-signals__rates,
-    .ai-live-signals__weather {
-        grid-template-columns: 1fr;
+@keyframes ai-temp-rise {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-[data-theme="light"] .ai-live-signals__rate,
-[data-theme="light"] .ai-live-signals__weather-card {
-    border-color: rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.72);
+@media (max-width: 768px) {
+    .ai-live-signals__rates {
+        grid-template-columns: 1fr;
+    }
+
+    .ai-live-signals__weather {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-[data-theme="light"] .ai-live-signals__rate strong,
-[data-theme="light"] .ai-live-signals__weather-city,
-[data-theme="light"] .ai-live-signals__weather-main {
-    color: rgba(15, 23, 42, 0.92);
+[data-theme="light"] .ai-live-signals__panel {
+    background: rgba(255, 255, 255, 0.96);
 }
 
-[data-theme="light"] .ai-live-signals__rate span,
-[data-theme="light"] .ai-live-signals__weather-meta {
-    color: rgba(51, 65, 85, 0.9);
+[data-theme="dark"] .ai-live-signals-shell {
+    background: linear-gradient(160deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.96));
+    border-color: rgba(51, 65, 85, 0.85);
+    box-shadow: 0 16px 34px rgba(2, 6, 23, 0.46);
+}
+
+[data-theme="dark"] .ai-live-signals__panel,
+[data-theme="dark"] .ai-live-signals__rate,
+[data-theme="dark"] .ai-live-signals__weather-card {
+    border-color: rgba(51, 65, 85, 0.8);
+    background: rgba(15, 23, 42, 0.82);
+}
+
+[data-theme="dark"] .ai-live-signals__section-title,
+[data-theme="dark"] .ai-live-signals__rate-code,
+[data-theme="dark"] .ai-live-signals__weather-meta {
+    color: rgba(148, 163, 184, 0.92);
+}
+
+[data-theme="dark"] .ai-live-signals__rate strong,
+[data-theme="dark"] .ai-live-signals__weather-city,
+[data-theme="dark"] .ai-live-signals__weather-main {
+    color: rgba(241, 245, 249, 0.95);
+}
+
+@media (max-width: 540px) {
+    .ai-live-signals__weather {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* === AUDIENCE PULSE + ENGAGEMENT === */

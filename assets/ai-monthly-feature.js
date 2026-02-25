@@ -3,6 +3,7 @@
 
     const ROOT_ID = 'ai-monthly-feature-root';
     const LIVE_SIGNALS_ROOT_ID = 'ai-live-signals-root';
+    const LIVE_SIGNALS_STORAGE_KEY = 'ai_live_signals_rates_v2';
     const FEATURE_URL = 'assets/ai_monthly_feature.json';
     const FX_URL = 'https://open.er-api.com/v6/latest/USD';
     const API_TIMEOUT_MS = 9000;
@@ -324,6 +325,53 @@
         return Number.isFinite(n) ? n.toFixed(4) : 'N/A';
     }
 
+    function weatherIconForCode(code) {
+        const n = asNumber(code, -1);
+        if (n === 0) return '☀️';
+        if (n >= 1 && n <= 3) return '⛅';
+        if (n === 45 || n === 48) return '🌫️';
+        if ((n >= 51 && n <= 67) || (n >= 80 && n <= 82)) return '🌧️';
+        if (n >= 71 && n <= 77) return '❄️';
+        if (n >= 95) return '⛈️';
+        return '🌤️';
+    }
+
+    function readPreviousLiveSignalRates() {
+        try {
+            if (typeof localStorage === 'undefined') return null;
+            const raw = localStorage.getItem(LIVE_SIGNALS_STORAGE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : null;
+        } catch (_) {
+            return null;
+        }
+    }
+
+    function storeLiveSignalRates(rates) {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            localStorage.setItem(LIVE_SIGNALS_STORAGE_KEY, JSON.stringify(rates || {}));
+        } catch (_) {}
+    }
+
+    function formatUpdatedTime(value) {
+        const date = new Date(value || '');
+        if (!Number.isNaN(date.getTime())) {
+            return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        }
+        return String(value || 'N/A');
+    }
+
+    function getRateTrend(current, previous) {
+        const curr = asNumber(current, NaN);
+        const prev = asNumber(previous, NaN);
+        if (!Number.isFinite(curr) || !Number.isFinite(prev)) return 'neutral';
+        if (curr > prev) return 'up';
+        if (curr < prev) return 'down';
+        return 'neutral';
+    }
+
     function extractFxUpdateTimestamp(fxData) {
         if (!fxData || typeof fxData !== 'object') return new Date().toISOString().slice(0, 10);
         if (fxData.time_last_update_utc) return String(fxData.time_last_update_utc);
@@ -372,7 +420,7 @@
     }
 
     async function loadLiveSignals() {
-        const fallbackRates = { RUB: null, GBP: null, EUR: null };
+        const fallbackRates = { USD: null, RUB: null, GBP: null, EUR: null };
         const fallbackWeather = WEATHER_CITIES.map((city) => ({
             city: city.label,
             temperature: null,
@@ -404,12 +452,20 @@
 
             const [fxData, weatherRows] = await Promise.all([fxPromise, Promise.all(weatherPromises)]);
             const rates = fxData && fxData.rates ? fxData.rates : fallbackRates;
+            const usdRate = asNumber(rates.USD, 1);
+            const kztRate = asNumber(rates.KZT, NaN);
+            const toKzt = (sourceRate) => {
+                const n = asNumber(sourceRate, NaN);
+                if (!Number.isFinite(kztRate) || !Number.isFinite(n) || n === 0) return NaN;
+                return (kztRate / n) * usdRate;
+            };
             return {
                 updatedAt: extractFxUpdateTimestamp(fxData),
                 rates: {
-                    RUB: asNumber(rates.RUB, NaN),
-                    GBP: asNumber(rates.GBP, NaN),
-                    EUR: asNumber(rates.EUR, NaN)
+                    USD: toKzt(rates.USD),
+                    RUB: toKzt(rates.RUB),
+                    GBP: toKzt(rates.GBP),
+                    EUR: toKzt(rates.EUR)
                 },
                 weather: weatherRows
             };
@@ -425,35 +481,52 @@
 
     function renderLiveSignals(root, payload) {
         const rates = payload && payload.rates ? payload.rates : {};
+        const previousRates = readPreviousLiveSignalRates() || {};
         const weatherRows = payload && Array.isArray(payload.weather) ? payload.weather : [];
+        const currencyRows = ['USD', 'RUB', 'GBP', 'EUR'].map((code) => {
+            const trend = getRateTrend(rates[code], previousRates[code]);
+            const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '●';
+            return `
+                <div class="ai-live-signals__rate ai-live-signals__rate--${trend}">
+                    <span class="ai-live-signals__rate-code">${escapeHtml(code)}/KZT</span>
+                    <strong>${escapeHtml(formatRate(rates[code]))}</strong>
+                    <span class="ai-live-signals__trend" aria-label="${escapeHtml(trend)} trend">${arrow}</span>
+                </div>
+            `;
+        }).join('');
         const weatherHtml = weatherRows.map((row) => {
             const temp = Number.isFinite(row.temperature) ? `${row.temperature.toFixed(1)}°C` : 'N/A';
             const feels = Number.isFinite(row.feelsLike) ? `${row.feelsLike.toFixed(1)}°C` : 'N/A';
-            const wind = Number.isFinite(row.wind) ? `${row.wind.toFixed(1)} km/h` : 'N/A';
+            const icon = weatherIconForCode(row.weatherCode);
             return `
                 <div class="ai-live-signals__weather-card">
-                    <div class="ai-live-signals__weather-city">${escapeHtml(row.city)}</div>
-                    <div class="ai-live-signals__weather-main">${escapeHtml(temp)} · ${escapeHtml(describeWeatherCode(row.weatherCode))}</div>
-                    <div class="ai-live-signals__weather-meta">Feels like: ${escapeHtml(feels)} · Wind: ${escapeHtml(wind)}</div>
+                    <div class="ai-live-signals__weather-city">${escapeHtml(row.city)} <span aria-hidden="true">${icon}</span></div>
+                    <div class="ai-live-signals__weather-main"><span class="ai-live-signals__weather-temp">${escapeHtml(temp)}</span></div>
+                    <div class="ai-live-signals__weather-meta">Feels like: ${escapeHtml(feels)} · ${escapeHtml(describeWeatherCode(row.weatherCode))}</div>
                 </div>
             `;
         }).join('');
 
         root.innerHTML = `
-            <div class="ai-live-signals">
+            <div class="ai-live-signals max-w-[1200px] mx-auto">
                 <div class="ai-live-signals__head">
-                    <h4 class="ai-widget__title">Live Signals: FX + Weather</h4>
-                    <p class="ai-widget__desc">USD exchange rates for RUB, GBP, EUR and real-time weather for Almaty, Shymkent, Astana.</p>
+                    <h4 class="ai-widget__title">KZT Rates & Weather</h4>
+                    <p class="ai-widget__desc">Live KZT exchange rates and real-time weather for Almaty, Astana, and Shymkent.</p>
                 </div>
-                <div class="ai-live-signals__rates">
-                    <div class="ai-live-signals__rate"><span>USD → RUB</span><strong>${escapeHtml(formatRate(rates.RUB))}</strong></div>
-                    <div class="ai-live-signals__rate"><span>USD → GBP</span><strong>${escapeHtml(formatRate(rates.GBP))}</strong></div>
-                    <div class="ai-live-signals__rate"><span>USD → EUR</span><strong>${escapeHtml(formatRate(rates.EUR))}</strong></div>
+                <div class="grid gap-4 lg:grid-cols-2">
+                    <section class="ai-live-signals__panel ai-live-signals__panel--currency">
+                        <div class="ai-live-signals__section-title">Currency</div>
+                        <div class="ai-live-signals__rates">${currencyRows}</div>
+                    </section>
+                    <section class="ai-live-signals__panel ai-live-signals__panel--weather">
+                        <div class="ai-live-signals__section-title">Weather</div>
+                        <div class="ai-live-signals__weather">${weatherHtml}</div>
+                    </section>
                 </div>
-                <div class="ai-live-signals__weather">${weatherHtml}</div>
-                <div class="ai-feature__note">Updated: ${escapeHtml(String(payload.updatedAt || 'N/A'))}</div>
+                <div class="ai-feature__note">Updated: ${escapeHtml(formatUpdatedTime(payload.updatedAt))}</div>
             </div>
         `;
+        storeLiveSignalRates(rates);
     }
 
     async function initLiveSignals() {
