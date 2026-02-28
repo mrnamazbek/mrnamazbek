@@ -10,7 +10,7 @@
     "delta_yoy": -51.31,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-oracle-original colored"
+    "icon": "assets/logos/oracle.svg"
   },
   {
     "rank": 2,
@@ -23,7 +23,7 @@
     "delta_yoy": -131.77,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-mysql-plain colored"
+    "icon": "assets/logos/mysql.svg"
   },
   {
     "rank": 3,
@@ -36,7 +36,7 @@
     "delta_yoy": -78.73,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-microsoftsqlserver-plain colored"
+    "icon": "assets/logos/microsoftsqlserver.svg"
   },
   {
     "rank": 4,
@@ -49,7 +49,7 @@
     "delta_yoy": 12.42,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-postgresql-plain colored"
+    "icon": "assets/logos/postgresql.svg"
   },
   {
     "rank": 5,
@@ -62,7 +62,7 @@
     "delta_yoy": -17.9,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-mongodb-plain colored"
+    "icon": "assets/logos/mongodb.svg"
   },
   {
     "rank": 6,
@@ -75,7 +75,7 @@
     "delta_yoy": 52.56,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": ""
+    "icon": "assets/logos/snowflake.svg"
   },
   {
     "rank": 7,
@@ -88,7 +88,7 @@
     "delta_yoy": -10.87,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "devicon-redis-plain colored"
+    "icon": "assets/logos/redis.svg"
   },
   {
     "rank": 8,
@@ -101,7 +101,7 @@
     "delta_yoy": 54.48,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": ""
+    "icon": "assets/logos/databricks.svg"
   },
   {
     "rank": 9,
@@ -114,7 +114,7 @@
     "delta_yoy": -14.21,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": ""
+    "icon": "assets/logos/ibm-db2.svg"
   },
   {
     "rank": 10,
@@ -127,6 +127,6 @@
     "delta_yoy": -28.17,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": ""
+    "icon": "assets/logos/elasticsearch.svg"
   }
 ]

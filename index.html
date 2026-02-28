@@ -164,8 +164,10 @@
         <!-- TECHNOLOGY ARSENAL -->
         <section id="arsenal" class="site-section space-y-12">
             <div>
-                <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
-                <p class="text-gray-400">The tools I use to build the future.</p>
+                <h2
+                    class="text-4xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                    Technology Arsenal</h2>
+                <p class="text-gray-400 text-lg">The tools I use to build the future.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -270,8 +272,10 @@
         <!-- KEYWORDS GLOBE -->
         <section id="globe-section" class="site-section space-y-6" aria-label="Skills keyword globe">
             <div>
-                <h2 class="text-4xl font-display font-bold mb-2">Keywords Universe</h2>
-                <p class="text-gray-400">Click any keyword to filter projects. Drag to explore.</p>
+                <h2
+                    class="text-4xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-300">
+                    Keywords Universe</h2>
+                <p class="text-gray-400 text-lg">Click any keyword to filter projects. Drag to explore.</p>
             </div>
             <div id="globe-container" class="glass-card ui-card">
                 <canvas id="globe-canvas" tabindex="0" role="img"
@@ -303,8 +307,11 @@
         <section id="journey" class="site-section space-y-8" aria-label="Experience and education">
             <div class="flex flex-wrap items-end justify-between gap-6">
                 <div>
-                    <h2 class="text-4xl font-display font-bold mb-2">Experience &amp; Education</h2>
-                    <p class="text-gray-400 max-w-2xl">A timeline of roles, research, and learning — optimized for
+                    <h2
+                        class="text-4xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-300">
+                        Experience &amp; Education</h2>
+                    <p class="text-gray-400 text-lg max-w-2xl">A timeline of roles, research, and learning — optimized
+                        for
                         impact and reliability.</p>
                 </div>
                 <div
@@ -620,8 +627,8 @@
         <section id="mini-tools" class="site-section space-y-8" aria-label="Mini tools">
             <div>
                 <h3 class="text-3xl font-display font-bold mb-2">Mini Tools</h3>
-                <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot.
-                    Lightweight and mobile-friendly.</p>
+                <p class="text-gray-400 text-lg max-w-2xl">Small interactive widgets: world clock and a DB popularity
+                    snapshot. Lightweight and mobile-friendly.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--clock">
@@ -671,9 +678,11 @@
 
         <section id="developer-lab" class="site-section space-y-8" aria-label="Developer Lab">
             <div>
-                <h3 class="text-3xl font-display font-bold mb-2">Developer Lab</h3>
-                <p class="text-gray-400 max-w-2xl">A collection of interactive engineering tools: Regex Playground,
-                    Docker Compose Generator, Live Tech Radar, and Cloud Cost Estimator.</p>
+                <h3
+                    class="text-3xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300">
+                    Developer Lab</h3>
+                <p class="text-gray-400 text-lg max-w-2xl">A collection of interactive engineering tools: Regex
+                    Playground, Docker Compose Generator, Live Tech Radar, and Cloud Cost Estimator.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-7xl mx-auto">
@@ -885,14 +894,26 @@
                                 class="w-full accent-cyan-400 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
                         </div>
 
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-mono text-gray-400">Region</label>
-                            <select id="cost-input-region"
-                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition text-sm">
-                                <option value="1" class="bg-gray-900">US East (N. Virginia)</option>
-                                <option value="1.1" class="bg-gray-900">EU (Frankfurt) [+10%]</option>
-                                <option value="1.2" class="bg-gray-900">Asia (Tokyo) [+20%]</option>
-                            </select>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-mono text-gray-400">Provider</label>
+                                <select id="cost-input-provider"
+                                    class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition text-sm">
+                                    <option value="aws" class="bg-gray-900">AWS</option>
+                                    <option value="gcp" class="bg-gray-900">Google Cloud</option>
+                                    <option value="azure" class="bg-gray-900">Azure</option>
+                                    <option value="yandex" class="bg-gray-900">Yandex Cloud</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-mono text-gray-400">Region</label>
+                                <select id="cost-input-region"
+                                    class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition text-sm">
+                                    <option value="1" class="bg-gray-900">US East (N. Virginia)</option>
+                                    <option value="1.1" class="bg-gray-900">EU (Frankfurt) [+10%]</option>
+                                    <option value="1.2" class="bg-gray-900">Asia (Tokyo) [+20%]</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -966,8 +987,10 @@
         <!-- TERMINAL SIMULATION -->
         <section id="terminal" class="site-section space-y-6" aria-label="Terminal simulation">
             <div>
-                <h2 class="text-4xl font-display font-bold mb-2">System Console</h2>
-                <p class="text-gray-400">Interactive terminal simulation. Watch the initialization sequence.</p>
+                <h2
+                    class="text-4xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-white">
+                    System Console</h2>
+                <p class="text-gray-400 text-lg">Interactive terminal simulation. Watch the initialization sequence.</p>
             </div>
             <div class="glass-card ui-card p-6 rounded-2xl">
                 <div id="terminal-window" class="terminal-window">
@@ -1002,9 +1025,11 @@
         <!-- DATA PIPELINE VISUALIZER -->
         <section id="pipeline-visualizer" class="site-section space-y-6" aria-label="Data pipeline visualizer">
             <div>
-                <h2 class="text-4xl font-display font-bold mb-2">Pipeline Architect</h2>
-                <p class="text-gray-400">Interactive DAG builder. Click nodes to connect, drag to reposition, build your
-                    data flow.</p>
+                <h2
+                    class="text-4xl font-display font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                    Pipeline Architect</h2>
+                <p class="text-gray-400 text-lg">Interactive DAG builder. Click nodes to connect, drag to reposition,
+                    build your data flow.</p>
             </div>
             <div class="glass-card ui-card p-6 rounded-2xl">
                 <div class="flex items-center justify-between gap-4 flex-wrap mb-4">

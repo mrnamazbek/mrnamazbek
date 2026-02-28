@@ -177,10 +177,44 @@ function initDockerGenerator() {
     const btnCopy = document.getElementById('docker-btn-copy');
     const btnDownload = document.getElementById('docker-btn-download');
 
+    // Mappings for DBs
+    const dbMapping = {
+        'oracle': { image: 'gvenzl/oracle-free', version: 'latest', port: '1521', vol: '/opt/oracle/oradata' },
+        'mysql': { image: 'mysql', version: '8.0', port: '3306', vol: '/var/lib/mysql' },
+        'microsoft sql server': { image: 'mcr.microsoft.com/mssql/server', version: '2022-latest', port: '1433', vol: '/var/opt/mssql' },
+        'postgresql': { image: 'postgres', version: '15', port: '5432', vol: '/var/lib/postgresql/data' },
+        'mongodb': { image: 'mongo', version: '6.0', port: '27017', vol: '/data/db' },
+        'snowflake': { image: 'ghcr.io/snowflakedb/snowflake-emulator', version: 'latest', port: '8080', vol: '/tmp/snowflake' },
+        'redis': { image: 'redis', version: '7.0', port: '6379', vol: '/data' },
+        'databricks': { image: 'databricksruntime/standard', version: 'latest', port: '8080', vol: '/databricks' },
+        'ibm db2': { image: 'ibmcom/db2', version: 'latest', port: '50000', vol: '/database' },
+        'elasticsearch': { image: 'elasticsearch', version: '8.10.2', port: '9200', vol: '/usr/share/elasticsearch/data' }
+    };
+
+    const populateSelect = async () => {
+        try {
+            const res = await fetch('assets/db_ranking.json', { cache: 'no-cache' });
+            if (res.ok) {
+                const data = await res.json();
+                dbType.innerHTML = data.map(db => `<option value="${db.name.toLowerCase()}" class="bg-gray-900">${db.name}</option>`).join('');
+
+                // Trigger change to set default values for the first item
+                dbType.dispatchEvent(new Event('change'));
+            }
+        } catch (e) {
+            console.warn('Failed to fetch DB ranking for Docker Compose generator');
+        }
+    };
+
     const generateYaml = () => {
-        const type = dbType.value;
-        const v = version.value || 'latest';
-        const p = port.value || '5432';
+        const typeRaw = dbType.value;
+        const mapped = dbMapping[typeRaw] || { image: typeRaw, version: 'latest', port: '8080', vol: '/data' };
+
+        const type = mapped.image.split('/')[mapped.image.split('/').length - 1].split(':')[0]; // sanitize name for docker service
+        const safeName = typeRaw.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+        const v = version.value || mapped.version;
+        const p = port.value || mapped.port;
         const d = dbName.value || 'mydb';
         const u = user.value || 'user';
         const pw = pass.value || 'password';
@@ -188,39 +222,61 @@ function initDockerGenerator() {
         let yaml = `version: '3.9'
 
 services:
-  ${type}:
-    image: ${type}:${v}
+  ${safeName}:
+    image: ${mapped.image}:${v}
     ports:
       - "${p}:${p}"
     restart: unless-stopped
     volumes:
-      - ${type}_data:/var/lib/${type === 'postgres' ? 'postgresql/data' : type === 'mysql' ? 'mysql' : type === 'mongodb' ? 'mongodb' : 'redis/data'}
+      - ${safeName}_data:${mapped.vol}
 `;
 
-        if (type === 'postgres') {
+        if (typeRaw === 'postgresql') {
             yaml += `    environment:
       POSTGRES_USER: ${u}
       POSTGRES_PASSWORD: ${pw}
       POSTGRES_DB: ${d}
 `;
-        } else if (type === 'mysql') {
+        } else if (typeRaw === 'mysql') {
             yaml += `    environment:
       MYSQL_ROOT_PASSWORD: ${pw}
       MYSQL_USER: ${u}
       MYSQL_PASSWORD: ${pw}
       MYSQL_DATABASE: ${d}
 `;
-        } else if (type === 'mongodb') {
+        } else if (typeRaw === 'mongodb') {
             yaml += `    environment:
       MONGO_INITDB_ROOT_USERNAME: ${u}
       MONGO_INITDB_ROOT_PASSWORD: ${pw}
       MONGO_INITDB_DATABASE: ${d}
 `;
+        } else if (typeRaw === 'oracle') {
+            yaml += `    environment:
+      ORACLE_PASSWORD: ${pw}
+      APP_USER: ${u}
+      APP_USER_PASSWORD: ${pw}
+`;
+        } else if (typeRaw === 'microsoft sql server') {
+            yaml += `    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${pw}
+`;
+        } else if (typeRaw === 'ibm db2') {
+            yaml += `    environment:
+      DB2INST1_PASSWORD: ${pw}
+      DBNAME: ${d}
+      LICENSE: "accept"
+`;
+        } else if (typeRaw === 'elasticsearch') {
+            yaml += `    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+`;
         }
 
         yaml += `
 volumes:
-  ${type}_data:`;
+  ${safeName}_data:`;
 
         output.textContent = yaml;
         return yaml;
@@ -252,23 +308,15 @@ volumes:
 
     // Presets based on DB type
     dbType.addEventListener('change', () => {
-        if (dbType.value === 'postgres') {
-            version.value = '15';
-            port.value = '5432';
-        } else if (dbType.value === 'mysql') {
-            version.value = '8.0';
-            port.value = '3306';
-        } else if (dbType.value === 'mongodb') {
-            version.value = '6.0';
-            port.value = '27017';
-        } else if (dbType.value === 'redis') {
-            version.value = '7.0';
-            port.value = '6379';
+        const typeRaw = dbType.value;
+        if (dbMapping[typeRaw]) {
+            version.value = dbMapping[typeRaw].version;
+            port.value = dbMapping[typeRaw].port;
         }
         generateYaml();
     });
 
-    generateYaml();
+    populateSelect();
 }
 
 // ==========================================
@@ -402,6 +450,7 @@ function initCostEstimator() {
     const inputRam = document.getElementById('cost-input-ram');
     const inputStorage = document.getElementById('cost-input-storage');
     const inputRegion = document.getElementById('cost-input-region');
+    const inputProvider = document.getElementById('cost-input-provider');
 
     const valCpu = document.getElementById('cost-val-cpu');
     const valRam = document.getElementById('cost-val-ram');
@@ -416,26 +465,49 @@ function initCostEstimator() {
     const btnCurrency = document.getElementById('cost-currency-toggle');
 
     let isUSD = true;
-    const KZT_RATE = 500;
+    let KZT_RATE = 500;
 
-    // Prices (approximate)
-    const CPU_PRICE = 15; // per core / month
-    const RAM_PRICE = 5;  // per GB / month
-    const STORAGE_PRICE = 0.10; // per GB / month
+    // Attempt to load live KZT rate from storage
+    try {
+        const raw = localStorage.getItem('ai_live_signals_rates_v2');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && parsed.USD) {
+                KZT_RATE = parseFloat(parsed.USD);
+            }
+        }
+    } catch (e) {
+        console.warn('Could not read KZT rate from local storage, using default', e);
+    }
+
+    // Baseline Prices (approximate average) per month
+    const CPU_PRICE = 15; // per core
+    const RAM_PRICE = 5;  // per GB
+    const STORAGE_PRICE = 0.10; // per GB
+
+    // Provider Multiplier
+    const providerMult = {
+        'aws': 1.05,
+        'gcp': 0.95,
+        'azure': 1.00,
+        'yandex': 0.85
+    };
 
     const calculate = () => {
-        const cpu = parseInt(inputCpu.value);
-        const ram = parseInt(inputRam.value);
-        const storage = parseInt(inputStorage.value);
-        const regionMultiplier = parseFloat(inputRegion.value);
+        const cpu = parseInt(inputCpu.value) || 4;
+        const ram = parseInt(inputRam.value) || 16;
+        const storage = parseInt(inputStorage.value) || 250;
+        const regionMultiplier = parseFloat(inputRegion.value) || 1.0;
+        const provMultiplier = providerMult[inputProvider.value] || 1.0;
 
         valCpu.textContent = cpu;
         valRam.textContent = ram;
         valStorage.textContent = storage;
 
-        const costCpu = cpu * CPU_PRICE * regionMultiplier;
-        const costRam = ram * RAM_PRICE * regionMultiplier;
-        const costStorage = storage * STORAGE_PRICE * regionMultiplier;
+        const mult = regionMultiplier * provMultiplier;
+        const costCpu = cpu * CPU_PRICE * mult;
+        const costRam = ram * RAM_PRICE * mult;
+        const costStorage = storage * STORAGE_PRICE * mult;
 
         let total = costCpu + costRam + costStorage;
 
@@ -489,7 +561,8 @@ function initCostEstimator() {
         }, stepTime);
     };
 
-    [inputCpu, inputRam, inputStorage, inputRegion].forEach(el => {
+    [inputCpu, inputRam, inputStorage, inputRegion, inputProvider].forEach(el => {
+        if (!el) return;
         el.addEventListener('input', calculate);
         el.addEventListener('change', calculate);
     });

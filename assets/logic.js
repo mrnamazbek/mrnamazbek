@@ -1,11 +1,11 @@
 import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileViewport } from './utils.js';
 
-    // === 1. SHADER BACKGROUND ===
-    const vertexShader = `
+// === 1. SHADER BACKGROUND ===
+const vertexShader = `
         varying vec2 vUv;
         void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
     `;
-    const fragmentShader = `
+const fragmentShader = `
         uniform float time;
         varying vec2 vUv;
         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -37,288 +37,288 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
         }
     `;
 
-    // === 7. MOBILE UX / COMPACT MODE ===
-    function detectLowPowerDevice() {
-        const reduceMotion = prefersReducedMotion();
-        const mem = navigator.deviceMemory || 0;
-        const cores = navigator.hardwareConcurrency || 0;
-        const isSmall = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-        const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
-        return reduceMotion || (isSmall && isTouch) || (mem && mem <= 4) || (cores && cores <= 4);
+// === 7. MOBILE UX / COMPACT MODE ===
+function detectLowPowerDevice() {
+    const reduceMotion = prefersReducedMotion();
+    const mem = navigator.deviceMemory || 0;
+    const cores = navigator.hardwareConcurrency || 0;
+    const isSmall = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+    return reduceMotion || (isSmall && isTouch) || (mem && mem <= 4) || (cores && cores <= 4);
+}
+
+const COMPACT_PREF_KEY = 'compactMobile';
+
+function isCompactMobileViewport() {
+    return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+}
+
+function getCompactPref() {
+    return localStorage.getItem(COMPACT_PREF_KEY) === '1';
+}
+
+function setCompactPref(enabled) {
+    if (enabled) localStorage.setItem(COMPACT_PREF_KEY, '1');
+    else localStorage.removeItem(COMPACT_PREF_KEY);
+}
+
+function applyCompactMobileClass() {
+    const enabled = getCompactPref();
+    const isMobile = isCompactMobileViewport();
+    document.body.classList.toggle('compact-mobile', !!(enabled && isMobile));
+
+    // Compact is a mobile-only UX mode. Never force low-power on desktop.
+    if (enabled && isMobile) {
+        document.body.classList.add('low-power');
     }
+}
 
-    const COMPACT_PREF_KEY = 'compactMobile';
+window.enableCompactMode = function enableCompactMode() {
+    setCompactPref(true);
+    applyCompactMobileClass();
+};
 
-    function isCompactMobileViewport() {
-        return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+window.disableCompactMode = function disableCompactMode() {
+    setCompactPref(false);
+    applyCompactMobileClass();
+};
+
+window.loadMoreProjects = function loadMoreProjects() {
+    projectsVisibleCount = Infinity;
+    renderProjects(cachedRepos);
+};
+
+window.showAllBooks = function showAllBooks() {
+    booksShowAll = !booksShowAll;
+    const statusEl = document.getElementById('library-status');
+    fetchBooksWithFallback(statusEl).then((result) => {
+        renderVerticalLibrary(result.books, { offline: result.offline });
+    });
+};
+
+let modalScrollLockDepth = 0;
+let modalScrollY = 0;
+
+function lockBodyScroll() {
+    if (modalScrollLockDepth > 0) {
+        modalScrollLockDepth += 1;
+        return;
     }
-
-    function getCompactPref() {
-        return localStorage.getItem(COMPACT_PREF_KEY) === '1';
+    modalScrollLockDepth = 1;
+    modalScrollY = window.scrollY || window.pageYOffset || 0;
+    const scrollBarComp = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+    document.body.classList.add('modal-open');
+    document.body.style.top = `-${modalScrollY}px`;
+    if (scrollBarComp > 0) {
+        document.body.style.paddingRight = `${scrollBarComp}px`;
     }
+}
 
-    function setCompactPref(enabled) {
-        if (enabled) localStorage.setItem(COMPACT_PREF_KEY, '1');
-        else localStorage.removeItem(COMPACT_PREF_KEY);
-    }
+function unlockBodyScroll() {
+    if (modalScrollLockDepth <= 0) return;
+    modalScrollLockDepth -= 1;
+    if (modalScrollLockDepth > 0) return;
 
-    function applyCompactMobileClass() {
-        const enabled = getCompactPref();
-        const isMobile = isCompactMobileViewport();
-        document.body.classList.toggle('compact-mobile', !!(enabled && isMobile));
+    const top = parseInt(document.body.style.top || '0', 10);
+    const restoreY = Number.isFinite(top) ? Math.abs(top) : modalScrollY;
+    document.body.classList.remove('modal-open');
+    document.body.style.top = '';
+    document.body.style.paddingRight = '';
+    window.scrollTo(0, restoreY);
+}
 
-        // Compact is a mobile-only UX mode. Never force low-power on desktop.
-        if (enabled && isMobile) {
-            document.body.classList.add('low-power');
-        }
-    }
+function createFocusTrap(panel, onEscape) {
+    if (!panel) return () => { };
+    const focusableSelector = 'a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+    const getFocusable = () => Array.from(panel.querySelectorAll(focusableSelector)).filter((el) => el.offsetParent !== null);
 
-    window.enableCompactMode = function enableCompactMode() {
-        setCompactPref(true);
-        applyCompactMobileClass();
-    };
-
-    window.disableCompactMode = function disableCompactMode() {
-        setCompactPref(false);
-        applyCompactMobileClass();
-    };
-
-    window.loadMoreProjects = function loadMoreProjects() {
-        projectsVisibleCount = Infinity;
-        renderProjects(cachedRepos);
-    };
-
-    window.showAllBooks = function showAllBooks() {
-        booksShowAll = !booksShowAll;
-        const statusEl = document.getElementById('library-status');
-        fetchBooksWithFallback(statusEl).then((result) => {
-            renderVerticalLibrary(result.books, { offline: result.offline });
-        });
-    };
-
-    let modalScrollLockDepth = 0;
-    let modalScrollY = 0;
-
-    function lockBodyScroll() {
-        if (modalScrollLockDepth > 0) {
-            modalScrollLockDepth += 1;
+    const onKeyDown = (e) => {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            if (typeof onEscape === 'function') onEscape();
             return;
         }
-        modalScrollLockDepth = 1;
-        modalScrollY = window.scrollY || window.pageYOffset || 0;
-        const scrollBarComp = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
-        document.body.classList.add('modal-open');
-        document.body.style.top = `-${modalScrollY}px`;
-        if (scrollBarComp > 0) {
-            document.body.style.paddingRight = `${scrollBarComp}px`;
+
+        if (e.key !== 'Tab') return;
+        const focusables = getFocusable();
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+}
+
+function updateAnchorOffsetVar() {
+    const nav = document.getElementById('site-nav') || document.querySelector('nav');
+    if (!nav) return;
+    const top = parseFloat(window.getComputedStyle(nav).top || '0') || 0;
+    const offset = Math.ceil(nav.getBoundingClientRect().height + top + 14);
+    document.documentElement.style.setProperty('--anchor-offset', `${offset}px`);
+}
+
+function getAnchorOffset() {
+    const raw = window.getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset');
+    const parsed = parseFloat(raw);
+    return Number.isFinite(parsed) ? parsed : 96;
+}
+
+function scrollToAnchorTarget(target, behavior) {
+    if (!target) return;
+    const targetTop = target.getBoundingClientRect().top + (window.pageYOffset || window.scrollY || 0);
+    const offset = getAnchorOffset();
+    const y = Math.max(0, targetTop - offset);
+    window.scrollTo({ top: y, behavior: behavior || 'smooth' });
+}
+
+function initAnchorNavigation() {
+    updateAnchorOffsetVar();
+    window.addEventListener('resize', updateAnchorOffsetVar, { passive: true });
+    window.addEventListener('load', updateAnchorOffsetVar);
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+            const href = anchor.getAttribute('href');
+            if (!href || href === '#') return;
+            const target = document.querySelector(href);
+            if (!target) return;
+            e.preventDefault();
+            scrollToAnchorTarget(target, 'smooth');
+            history.pushState(null, '', href);
+        });
+    });
+
+    if (window.location.hash) {
+        const initialTarget = document.querySelector(window.location.hash);
+        if (initialTarget) {
+            window.setTimeout(() => {
+                scrollToAnchorTarget(initialTarget, 'auto');
+            }, 80);
         }
     }
 
-    function unlockBodyScroll() {
-        if (modalScrollLockDepth <= 0) return;
-        modalScrollLockDepth -= 1;
-        if (modalScrollLockDepth > 0) return;
+    window.addEventListener('hashchange', () => {
+        const target = document.querySelector(window.location.hash);
+        if (target) scrollToAnchorTarget(target, 'smooth');
+    });
+}
 
-        const top = parseInt(document.body.style.top || '0', 10);
-        const restoreY = Number.isFinite(top) ? Math.abs(top) : modalScrollY;
-        document.body.classList.remove('modal-open');
-        document.body.style.top = '';
-        document.body.style.paddingRight = '';
-        window.scrollTo(0, restoreY);
+function initResumeModal() {
+    const openBtn = document.getElementById('resume-open');
+    const modal = document.getElementById('resume-modal');
+    const frame = document.getElementById('resume-frame');
+    const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
+    if (!openBtn || !modal || !frame || !panel) return;
+
+    const RESUME_URL = 'assets/Namazbek_s_Resume_INT.pdf';
+    let releaseTrap = null;
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        openBtn.setAttribute('aria-expanded', 'true');
+        modal._lastFocus = document.activeElement;
+        lockBodyScroll();
+
+        if (!frame.getAttribute('src')) {
+            frame.setAttribute('src', RESUME_URL);
+        }
+
+        if (releaseTrap) releaseTrap();
+        releaseTrap = createFocusTrap(panel, closeModal);
+
+        window.setTimeout(() => panel.focus(), 0);
     }
 
-    function createFocusTrap(panel, onEscape) {
-        if (!panel) return () => {};
-        const focusableSelector = 'a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
-        const getFocusable = () => Array.from(panel.querySelectorAll(focusableSelector)).filter((el) => el.offsetParent !== null);
+    function closeModal() {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        openBtn.setAttribute('aria-expanded', 'false');
 
-        const onKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                if (typeof onEscape === 'function') onEscape();
-                return;
-            }
+        if (releaseTrap) {
+            releaseTrap();
+            releaseTrap = null;
+        }
+        unlockBodyScroll();
 
-            if (e.key !== 'Tab') return;
-            const focusables = getFocusable();
-            if (!focusables.length) return;
-            const first = focusables[0];
-            const last = focusables[focusables.length - 1];
-
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-            }
-        };
-
-        document.addEventListener('keydown', onKeyDown);
-        return () => document.removeEventListener('keydown', onKeyDown);
+        const last = modal._lastFocus && modal._lastFocus.focus ? modal._lastFocus : openBtn;
+        try { last.focus(); } catch (e) { /* ignore */ }
     }
 
-    function updateAnchorOffsetVar() {
-        const nav = document.getElementById('site-nav') || document.querySelector('nav');
-        if (!nav) return;
-        const top = parseFloat(window.getComputedStyle(nav).top || '0') || 0;
-        const offset = Math.ceil(nav.getBoundingClientRect().height + top + 14);
-        document.documentElement.style.setProperty('--anchor-offset', `${offset}px`);
+    openBtn.addEventListener('click', openModal);
+
+    modal.addEventListener('click', (e) => {
+        const t = e.target;
+        if (!t || !t.getAttribute) return;
+        if (t.getAttribute('data-close') === '1') {
+            closeModal();
+        }
+    });
+}
+
+function initWorldClock() {
+    const root = document.getElementById('world-clock');
+    if (!root) return;
+
+    const tzPicker = document.getElementById('tz-picker');
+    const timeZones = [
+        { label: 'Local', tz: null },
+        { label: 'Almaty', tz: 'Asia/Almaty' },
+        { label: 'UTC', tz: 'UTC' },
+        { label: 'San Francisco', tz: 'America/Los_Angeles' },
+        { label: 'London', tz: 'Europe/London' }
+    ];
+
+    function formatDigital(tz) {
+        const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        if (tz) opts.timeZone = tz;
+        return new Intl.DateTimeFormat(undefined, opts).format(new Date());
     }
 
-    function getAnchorOffset() {
-        const raw = window.getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset');
-        const parsed = parseFloat(raw);
-        return Number.isFinite(parsed) ? parsed : 96;
+    function formatDateLine(tz) {
+        const opts = { weekday: 'short', month: 'short', day: '2-digit', year: 'numeric' };
+        if (tz) opts.timeZone = tz;
+        return new Intl.DateTimeFormat(undefined, opts).format(new Date());
     }
 
-    function scrollToAnchorTarget(target, behavior) {
-        if (!target) return;
-        const targetTop = target.getBoundingClientRect().top + (window.pageYOffset || window.scrollY || 0);
-        const offset = getAnchorOffset();
-        const y = Math.max(0, targetTop - offset);
-        window.scrollTo({ top: y, behavior: behavior || 'smooth' });
+    function phaseFromHour(timeString) {
+        const hour = Number(String(timeString).split(':')[0]);
+        if (!Number.isFinite(hour)) return 'night';
+        return hour >= 6 && hour < 18 ? 'day' : 'night';
     }
 
-    function initAnchorNavigation() {
-        updateAnchorOffsetVar();
-        window.addEventListener('resize', updateAnchorOffsetVar, { passive: true });
-        window.addEventListener('load', updateAnchorOffsetVar);
-
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener('click', (e) => {
-                const href = anchor.getAttribute('href');
-                if (!href || href === '#') return;
-                const target = document.querySelector(href);
-                if (!target) return;
-                e.preventDefault();
-                scrollToAnchorTarget(target, 'smooth');
-                history.pushState(null, '', href);
-            });
+    function render() {
+        const selectedTz = tzPicker && tzPicker.value ? tzPicker.value : 'Asia/Almaty';
+        const rows = timeZones.map(({ label, tz }) => {
+            const useTz = label === 'Local' ? null : tz;
+            const isSelected = useTz === selectedTz;
+            const tzLabel = label === 'Local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : useTz;
+            const digital = formatDigital(useTz);
+            const timeParts = String(digital).split(':');
+            return {
+                label,
+                tz: tzLabel,
+                timeMain: `${timeParts[0] || '--'}:${timeParts[1] || '--'}`,
+                timeSeconds: timeParts[2] || '--',
+                dateLine: formatDateLine(useTz),
+                selected: isSelected
+            };
         });
 
-        if (window.location.hash) {
-            const initialTarget = document.querySelector(window.location.hash);
-            if (initialTarget) {
-                window.setTimeout(() => {
-                    scrollToAnchorTarget(initialTarget, 'auto');
-                }, 80);
-            }
-        }
+        const primary = rows.find((r) => r.selected) || rows[0];
+        const phase = phaseFromHour(primary.timeMain);
+        const secondary = rows.filter((r) => r !== primary);
 
-        window.addEventListener('hashchange', () => {
-            const target = document.querySelector(window.location.hash);
-            if (target) scrollToAnchorTarget(target, 'smooth');
-        });
-    }
-
-    function initResumeModal() {
-        const openBtn = document.getElementById('resume-open');
-        const modal = document.getElementById('resume-modal');
-        const frame = document.getElementById('resume-frame');
-        const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
-        if (!openBtn || !modal || !frame || !panel) return;
-
-        const RESUME_URL = 'assets/Namazbek_s_Resume_INT.pdf';
-        let releaseTrap = null;
-
-        function openModal() {
-            modal.classList.remove('hidden');
-            modal.setAttribute('aria-hidden', 'false');
-            openBtn.setAttribute('aria-expanded', 'true');
-            modal._lastFocus = document.activeElement;
-            lockBodyScroll();
-
-            if (!frame.getAttribute('src')) {
-                frame.setAttribute('src', RESUME_URL);
-            }
-
-            if (releaseTrap) releaseTrap();
-            releaseTrap = createFocusTrap(panel, closeModal);
-
-            window.setTimeout(() => panel.focus(), 0);
-        }
-
-        function closeModal() {
-            modal.classList.add('hidden');
-            modal.setAttribute('aria-hidden', 'true');
-            openBtn.setAttribute('aria-expanded', 'false');
-
-            if (releaseTrap) {
-                releaseTrap();
-                releaseTrap = null;
-            }
-            unlockBodyScroll();
-
-            const last = modal._lastFocus && modal._lastFocus.focus ? modal._lastFocus : openBtn;
-            try { last.focus(); } catch (e) { /* ignore */ }
-        }
-
-        openBtn.addEventListener('click', openModal);
-
-        modal.addEventListener('click', (e) => {
-            const t = e.target;
-            if (!t || !t.getAttribute) return;
-            if (t.getAttribute('data-close') === '1') {
-                closeModal();
-            }
-        });
-    }
-
-    function initWorldClock() {
-        const root = document.getElementById('world-clock');
-        if (!root) return;
-
-        const tzPicker = document.getElementById('tz-picker');
-        const timeZones = [
-            { label: 'Local', tz: null },
-            { label: 'Almaty', tz: 'Asia/Almaty' },
-            { label: 'UTC', tz: 'UTC' },
-            { label: 'San Francisco', tz: 'America/Los_Angeles' },
-            { label: 'London', tz: 'Europe/London' }
-        ];
-
-        function formatDigital(tz) {
-            const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            if (tz) opts.timeZone = tz;
-            return new Intl.DateTimeFormat(undefined, opts).format(new Date());
-        }
-
-        function formatDateLine(tz) {
-            const opts = { weekday: 'short', month: 'short', day: '2-digit', year: 'numeric' };
-            if (tz) opts.timeZone = tz;
-            return new Intl.DateTimeFormat(undefined, opts).format(new Date());
-        }
-
-        function phaseFromHour(timeString) {
-            const hour = Number(String(timeString).split(':')[0]);
-            if (!Number.isFinite(hour)) return 'night';
-            return hour >= 6 && hour < 18 ? 'day' : 'night';
-        }
-
-        function render() {
-            const selectedTz = tzPicker && tzPicker.value ? tzPicker.value : 'Asia/Almaty';
-            const rows = timeZones.map(({ label, tz }) => {
-                const useTz = label === 'Local' ? null : tz;
-                const isSelected = useTz === selectedTz;
-                const tzLabel = label === 'Local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : useTz;
-                const digital = formatDigital(useTz);
-                const timeParts = String(digital).split(':');
-                return {
-                    label,
-                    tz: tzLabel,
-                    timeMain: `${timeParts[0] || '--'}:${timeParts[1] || '--'}`,
-                    timeSeconds: timeParts[2] || '--',
-                    dateLine: formatDateLine(useTz),
-                    selected: isSelected
-                };
-            });
-
-            const primary = rows.find((r) => r.selected) || rows[0];
-            const phase = phaseFromHour(primary.timeMain);
-            const secondary = rows.filter((r) => r !== primary);
-
-            root.innerHTML = `
+        root.innerHTML = `
                 <div class="clock-liquid clock-liquid--${phase}">
                     <div class="clock-liquid__hero">
                         <div class="clock-liquid__glow" aria-hidden="true"></div>
@@ -343,161 +343,161 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
                     </div>
                 </div>
             `;
-        }
-
-        if (tzPicker) tzPicker.addEventListener('change', render);
-        render();
-        window.setInterval(render, 1000);
     }
 
-    function initDbRankingWidget() {
-        const root = document.getElementById('db-ranking');
-        if (!root) return;
+    if (tzPicker) tzPicker.addEventListener('change', render);
+    render();
+    window.setInterval(render, 1000);
+}
 
-        const sortSel = document.getElementById('db-sort');
+function initDbRankingWidget() {
+    const root = document.getElementById('db-ranking');
+    if (!root) return;
 
-        const fallback = [
-            { rank: 1, name: 'Oracle', model: 'Relational, Multi-model', score_feb_2026: 1203.51, score_jan_2026: 1237.33, score_feb_2025: 1254.82, delta_mom: -33.82, delta_yoy: -51.31, icon: 'devicon-oracle-original colored' },
-            { rank: 2, name: 'MySQL', model: 'Relational, Multi-model', score_feb_2026: 868.22, score_jan_2026: 867.52, score_feb_2025: 999.99, delta_mom: 0.70, delta_yoy: -131.77, icon: 'devicon-mysql-plain colored' },
-            { rank: 3, name: 'Microsoft SQL Server', model: 'Relational, Multi-model', score_feb_2026: 708.14, score_jan_2026: 706.26, score_feb_2025: 786.87, delta_mom: 1.88, delta_yoy: -78.73, icon: 'devicon-microsoftsqlserver-plain colored' },
-            { rank: 4, name: 'PostgreSQL', model: 'Relational, Multi-model', score_feb_2026: 672.03, score_jan_2026: 666.26, score_feb_2025: 659.61, delta_mom: 5.77, delta_yoy: 12.42, icon: 'devicon-postgresql-plain colored' },
-            { rank: 5, name: 'MongoDB', model: 'Document, Multi-model', score_feb_2026: 378.73, score_jan_2026: 376.74, score_feb_2025: 396.63, delta_mom: 1.99, delta_yoy: -17.90, icon: 'devicon-mongodb-plain colored' },
-            { rank: 6, name: 'Snowflake', model: 'Relational', score_feb_2026: 208.14, score_jan_2026: 207.80, score_feb_2025: 155.58, delta_mom: 0.34, delta_yoy: 52.56, icon: '' },
-            { rank: 7, name: 'Redis', model: 'Key-value, Multi-model', score_feb_2026: 147.04, score_jan_2026: 144.16, score_feb_2025: 157.91, delta_mom: 2.88, delta_yoy: -10.87, icon: 'devicon-redis-plain colored' },
-            { rank: 8, name: 'Databricks', model: 'Multi-model', score_feb_2026: 144.51, score_jan_2026: 141.54, score_feb_2025: 90.03, delta_mom: 2.97, delta_yoy: 54.48, icon: '' },
-            { rank: 9, name: 'IBM Db2', model: 'Relational, Multi-model', score_feb_2026: 111.22, score_jan_2026: 112.72, score_feb_2025: 125.43, delta_mom: -1.50, delta_yoy: -14.21, icon: '' },
-            { rank: 10, name: 'Elasticsearch', model: 'Multi-model', score_feb_2026: 106.46, score_jan_2026: 107.15, score_feb_2025: 134.63, delta_mom: -0.69, delta_yoy: -28.17, icon: 'devicon-elasticsearch-plain colored' }
-        ];
+    const sortSel = document.getElementById('db-sort');
 
-        let data = [];
+    const fallback = [
+        { rank: 1, name: 'Oracle', model: 'Relational, Multi-model', score_feb_2026: 1203.51, score_jan_2026: 1237.33, score_feb_2025: 1254.82, delta_mom: -33.82, delta_yoy: -51.31, icon: 'assets/logos/oracle.svg' },
+        { rank: 2, name: 'MySQL', model: 'Relational, Multi-model', score_feb_2026: 868.22, score_jan_2026: 867.52, score_feb_2025: 999.99, delta_mom: 0.70, delta_yoy: -131.77, icon: 'assets/logos/mysql.svg' },
+        { rank: 3, name: 'Microsoft SQL Server', model: 'Relational, Multi-model', score_feb_2026: 708.14, score_jan_2026: 706.26, score_feb_2025: 786.87, delta_mom: 1.88, delta_yoy: -78.73, icon: 'assets/logos/microsoftsqlserver.svg' },
+        { rank: 4, name: 'PostgreSQL', model: 'Relational, Multi-model', score_feb_2026: 672.03, score_jan_2026: 666.26, score_feb_2025: 659.61, delta_mom: 5.77, delta_yoy: 12.42, icon: 'assets/logos/postgresql.svg' },
+        { rank: 5, name: 'MongoDB', model: 'Document, Multi-model', score_feb_2026: 378.73, score_jan_2026: 376.74, score_feb_2025: 396.63, delta_mom: 1.99, delta_yoy: -17.90, icon: 'assets/logos/mongodb.svg' },
+        { rank: 6, name: 'Snowflake', model: 'Relational', score_feb_2026: 208.14, score_jan_2026: 207.80, score_feb_2025: 155.58, delta_mom: 0.34, delta_yoy: 52.56, icon: 'assets/logos/snowflake.svg' },
+        { rank: 7, name: 'Redis', model: 'Key-value, Multi-model', score_feb_2026: 147.04, score_jan_2026: 144.16, score_feb_2025: 157.91, delta_mom: 2.88, delta_yoy: -10.87, icon: 'assets/logos/redis.svg' },
+        { rank: 8, name: 'Databricks', model: 'Multi-model', score_feb_2026: 144.51, score_jan_2026: 141.54, score_feb_2025: 90.03, delta_mom: 2.97, delta_yoy: 54.48, icon: 'assets/logos/databricks.svg' },
+        { rank: 9, name: 'IBM Db2', model: 'Relational, Multi-model', score_feb_2026: 111.22, score_jan_2026: 112.72, score_feb_2025: 125.43, delta_mom: -1.50, delta_yoy: -14.21, icon: 'assets/logos/ibm-db2.svg' },
+        { rank: 10, name: 'Elasticsearch', model: 'Multi-model', score_feb_2026: 106.46, score_jan_2026: 107.15, score_feb_2025: 134.63, delta_mom: -0.69, delta_yoy: -28.17, icon: 'assets/logos/elasticsearch.svg' }
+    ];
 
-        function normalize(items) {
-            if (!Array.isArray(items)) return [];
+    let data = [];
 
-            return items
-                .map(it => {
-                    const name = String(it.name || '').trim() || 'Unknown';
-                    const legacyScore = Number(it.score);
+    function normalize(items) {
+        if (!Array.isArray(items)) return [];
 
-                    // Support two schemas:
-                    // A) Explicit month keys (score_feb_2026, score_jan_2026, score_feb_2025)
-                    // B) Updater keys (score_current, score_prev_month, score_prev_year)
-                    const hasUpdaterSchema = Number.isFinite(Number(it.score_current)) || Number.isFinite(Number(it.score_prev_month)) || Number.isFinite(Number(it.score_prev_year));
+        return items
+            .map(it => {
+                const name = String(it.name || '').trim() || 'Unknown';
+                const legacyScore = Number(it.score);
 
-                    const scoreFeb = Number.isFinite(Number(it.score_feb_2026)) ? Number(it.score_feb_2026)
-                        : (Number.isFinite(Number(it.score_current)) ? Number(it.score_current)
-                            : (Number.isFinite(legacyScore) ? legacyScore : 0));
+                // Support two schemas:
+                // A) Explicit month keys (score_feb_2026, score_jan_2026, score_feb_2025)
+                // B) Updater keys (score_current, score_prev_month, score_prev_year)
+                const hasUpdaterSchema = Number.isFinite(Number(it.score_current)) || Number.isFinite(Number(it.score_prev_month)) || Number.isFinite(Number(it.score_prev_year));
 
-                    const scoreJan = Number.isFinite(Number(it.score_jan_2026)) ? Number(it.score_jan_2026)
-                        : (Number.isFinite(Number(it.score_prev_month)) ? Number(it.score_prev_month)
-                            : (Number.isFinite(Number(it.delta_mom)) ? (scoreFeb - Number(it.delta_mom)) : scoreFeb));
+                const scoreFeb = Number.isFinite(Number(it.score_feb_2026)) ? Number(it.score_feb_2026)
+                    : (Number.isFinite(Number(it.score_current)) ? Number(it.score_current)
+                        : (Number.isFinite(legacyScore) ? legacyScore : 0));
 
-                    const scorePrevYear = Number.isFinite(Number(it.score_feb_2025)) ? Number(it.score_feb_2025)
-                        : (Number.isFinite(Number(it.score_prev_year)) ? Number(it.score_prev_year)
-                            : (Number.isFinite(Number(it.delta_yoy)) ? (scoreFeb - Number(it.delta_yoy)) : scoreFeb));
+                const scoreJan = Number.isFinite(Number(it.score_jan_2026)) ? Number(it.score_jan_2026)
+                    : (Number.isFinite(Number(it.score_prev_month)) ? Number(it.score_prev_month)
+                        : (Number.isFinite(Number(it.delta_mom)) ? (scoreFeb - Number(it.delta_mom)) : scoreFeb));
 
-                    const deltaMoM = Number.isFinite(Number(it.delta_mom)) ? Number(it.delta_mom) : (scoreFeb - scoreJan);
-                    const deltaYoY = Number.isFinite(Number(it.delta_yoy)) ? Number(it.delta_yoy) : (scoreFeb - scorePrevYear);
+                const scorePrevYear = Number.isFinite(Number(it.score_feb_2025)) ? Number(it.score_feb_2025)
+                    : (Number.isFinite(Number(it.score_prev_year)) ? Number(it.score_prev_year)
+                        : (Number.isFinite(Number(it.delta_yoy)) ? (scoreFeb - Number(it.delta_yoy)) : scoreFeb));
 
-                    return {
-                        rank: Number(it.rank) || 999,
-                        name,
-                        model: String(it.model || it.category || '').trim() || 'other',
-                        scoreFeb,
-                        scoreJan,
-                        scorePrevYear,
-                        deltaMoM,
-                        deltaYoY,
-                        asOf: String(it.as_of || it.asOf || '').trim(),
-                        icon: it.icon ? String(it.icon) : ''
-                    };
-                })
-                .filter(it => it.name !== 'Unknown');
-        }
+                const deltaMoM = Number.isFinite(Number(it.delta_mom)) ? Number(it.delta_mom) : (scoreFeb - scoreJan);
+                const deltaYoY = Number.isFinite(Number(it.delta_yoy)) ? Number(it.delta_yoy) : (scoreFeb - scorePrevYear);
 
-        function fmtDelta(v) {
-            const n = Number(v) || 0;
-            const sign = n > 0 ? '+' : '';
-            return sign + n.toFixed(2);
-        }
+                return {
+                    rank: Number(it.rank) || 999,
+                    name,
+                    model: String(it.model || it.category || '').trim() || 'other',
+                    scoreFeb,
+                    scoreJan,
+                    scorePrevYear,
+                    deltaMoM,
+                    deltaYoY,
+                    asOf: String(it.as_of || it.asOf || '').trim(),
+                    icon: it.icon ? String(it.icon) : ''
+                };
+            })
+            .filter(it => it.name !== 'Unknown');
+    }
 
-        function deltaClass(v) {
-            const n = Number(v) || 0;
-            if (n > 0) return 'delta delta--up';
-            if (n < 0) return 'delta delta--down';
-            return 'delta';
-        }
+    function fmtDelta(v) {
+        const n = Number(v) || 0;
+        const sign = n > 0 ? '+' : '';
+        return sign + n.toFixed(2);
+    }
 
-        function sparklineSvg(values) {
-            const pts = values.map(v => (Number.isFinite(v) ? v : 0));
-            const min = Math.min(...pts);
-            const max = Math.max(...pts);
-            const w = 54;
-            const h = 18;
-            const pad = 2;
-            const span = Math.max(1e-9, max - min);
+    function deltaClass(v) {
+        const n = Number(v) || 0;
+        if (n > 0) return 'delta delta--up';
+        if (n < 0) return 'delta delta--down';
+        return 'delta';
+    }
 
-            const xy = pts.map((v, i) => {
-                const x = pad + (i * (w - pad * 2) / (pts.length - 1));
-                const y = pad + ((max - v) * (h - pad * 2) / span);
-                return [x, y];
-            });
+    function sparklineSvg(values) {
+        const pts = values.map(v => (Number.isFinite(v) ? v : 0));
+        const min = Math.min(...pts);
+        const max = Math.max(...pts);
+        const w = 54;
+        const h = 18;
+        const pad = 2;
+        const span = Math.max(1e-9, max - min);
 
-            const d = xy.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
-            return `
+        const xy = pts.map((v, i) => {
+            const x = pad + (i * (w - pad * 2) / (pts.length - 1));
+            const y = pad + ((max - v) * (h - pad * 2) / span);
+            return [x, y];
+        });
+
+        const d = xy.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+        return `
                 <svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">
                     <path d="${d}" fill="none" stroke="rgba(0,212,255,0.85)" stroke-width="1.6" />
                 </svg>
             `;
+    }
+
+    function sortItems(items) {
+        const key = sortSel && sortSel.value ? sortSel.value : 'rank';
+        const list = [...items];
+        if (key === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+        else if (key === 'score') list.sort((a, b) => (b.scoreFeb - a.scoreFeb) || (a.rank - b.rank));
+        else list.sort((a, b) => a.rank - b.rank);
+        return list;
+    }
+
+    function syncMiniTableOverflowState() {
+        const shell = root.querySelector('.mini-table-shell');
+        const scroller = root.querySelector('.mini-table-scroll');
+        if (!shell || !scroller) return;
+        const desktopMedia = window.matchMedia('(min-width: 1024px)');
+
+        if (root._miniTableCleanup) {
+            root._miniTableCleanup();
+            root._miniTableCleanup = null;
         }
 
-        function sortItems(items) {
-            const key = sortSel && sortSel.value ? sortSel.value : 'rank';
-            const list = [...items];
-            if (key === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
-            else if (key === 'score') list.sort((a, b) => (b.scoreFeb - a.scoreFeb) || (a.rank - b.rank));
-            else list.sort((a, b) => a.rank - b.rank);
-            return list;
-        }
-
-        function syncMiniTableOverflowState() {
-            const shell = root.querySelector('.mini-table-shell');
-            const scroller = root.querySelector('.mini-table-scroll');
-            if (!shell || !scroller) return;
-            const desktopMedia = window.matchMedia('(min-width: 1024px)');
-
-            if (root._miniTableCleanup) {
-                root._miniTableCleanup();
-                root._miniTableCleanup = null;
+        const sync = () => {
+            if (desktopMedia.matches) {
+                shell.classList.remove('is-scrollable', 'at-start', 'at-end');
+                if (scroller.scrollLeft !== 0) scroller.scrollLeft = 0;
+                return;
             }
+            const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+            shell.classList.toggle('is-scrollable', max > 6);
+            shell.classList.toggle('at-start', scroller.scrollLeft <= 1);
+            shell.classList.toggle('at-end', scroller.scrollLeft >= (max - 1));
+        };
 
-            const sync = () => {
-                if (desktopMedia.matches) {
-                    shell.classList.remove('is-scrollable', 'at-start', 'at-end');
-                    if (scroller.scrollLeft !== 0) scroller.scrollLeft = 0;
-                    return;
-                }
-                const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                shell.classList.toggle('is-scrollable', max > 6);
-                shell.classList.toggle('at-start', scroller.scrollLeft <= 1);
-                shell.classList.toggle('at-end', scroller.scrollLeft >= (max - 1));
-            };
+        scroller.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync);
+        if (desktopMedia.addEventListener) desktopMedia.addEventListener('change', sync);
+        root._miniTableCleanup = () => {
+            scroller.removeEventListener('scroll', sync);
+            window.removeEventListener('resize', sync);
+            if (desktopMedia.removeEventListener) desktopMedia.removeEventListener('change', sync);
+        };
+        sync();
+    }
 
-            scroller.addEventListener('scroll', sync, { passive: true });
-            window.addEventListener('resize', sync);
-            if (desktopMedia.addEventListener) desktopMedia.addEventListener('change', sync);
-            root._miniTableCleanup = () => {
-                scroller.removeEventListener('scroll', sync);
-                window.removeEventListener('resize', sync);
-                if (desktopMedia.removeEventListener) desktopMedia.removeEventListener('change', sync);
-            };
-            sync();
-        }
-
-        function render() {
-            const items = sortItems(data).slice(0, 12);
-            const asOf = items[0] && items[0].asOf ? items[0].asOf : 'latest update';
-            root.innerHTML = `
+    function render() {
+        const items = sortItems(data).slice(0, 12);
+        const asOf = items[0] && items[0].asOf ? items[0].asOf : 'latest update';
+        root.innerHTML = `
                 <div class="mini-table-caption">Snapshot: ${asOf}</div>
                 <div class="mini-table-shell">
                     <div class="mini-table-scroll" role="region" aria-label="DB rankings table" tabindex="0">
@@ -509,11 +509,11 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
                                 <div class="mini-table__head-cell" role="columnheader">Score</div>
                             </div>
                             ${items.map(it => {
-                                const icon = it.icon ? `<i class="${it.icon}"></i>` : '';
-                                const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
-                                const rankClass = it.rank <= 3 ? 'rank-badge rank-badge--top' : 'rank-badge';
-                                const rowClass = it.rank <= 3 ? 'mini-table__row mini-table__row--top' : 'mini-table__row';
-                                return `
+            const icon = it.icon ? `<img src="${it.icon}" alt="${it.name} logo" class="w-5 h-5 object-contain" />` : '';
+            const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
+            const rankClass = it.rank <= 3 ? 'rank-badge rank-badge--top' : 'rank-badge';
+            const rowClass = it.rank <= 3 ? 'mini-table__row mini-table__row--top' : 'mini-table__row';
+            return `
                                     <div class="${rowClass}" role="row">
                                         <div class="mini-table__cell mono" role="cell" data-label="Rank"><span class="${rankClass}">#${it.rank}</span></div>
                                         <div class="mini-table__cell" role="cell" data-label="Database">
@@ -535,397 +535,397 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
                                         </div>
                                     </div>
                                 `;
-                            }).join('')}
+        }).join('')}
                         </div>
                     </div>
                 </div>
             `;
-            syncMiniTableOverflowState();
-        }
-
-        async function load() {
-            try {
-                const res = await fetch('assets/db_ranking.json', { cache: 'no-cache' });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const json = await res.json();
-                data = normalize(json);
-                if (!data.length) data = normalize(fallback);
-            } catch (e) {
-                data = normalize(fallback);
-            }
-            render();
-        }
-
-        if (sortSel) sortSel.addEventListener('change', render);
-        load();
+        syncMiniTableOverflowState();
     }
 
-    function initMobileArsenalAccordion() {
-        if (!isMobileViewport()) return;
-        const cards = document.querySelectorAll('[data-arsenal-card]');
-        cards.forEach((card) => {
-            const headerRow = card.querySelector('.flex.items-center.gap-3');
-            const content = card.querySelector('.flex.flex-wrap.gap-2');
-            if (!headerRow || !content) return;
+    async function load() {
+        try {
+            const res = await fetch('assets/db_ranking.json', { cache: 'no-cache' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const json = await res.json();
+            data = normalize(json);
+            if (!data.length) data = normalize(fallback);
+        } catch (e) {
+            data = normalize(fallback);
+        }
+        render();
+    }
 
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'w-full text-left min-h-[44px]';
+    if (sortSel) sortSel.addEventListener('change', render);
+    load();
+}
+
+function initMobileArsenalAccordion() {
+    if (!isMobileViewport()) return;
+    const cards = document.querySelectorAll('[data-arsenal-card]');
+    cards.forEach((card) => {
+        const headerRow = card.querySelector('.flex.items-center.gap-3');
+        const content = card.querySelector('.flex.flex-wrap.gap-2');
+        if (!headerRow || !content) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full text-left min-h-[44px]';
+        btn.setAttribute('aria-expanded', 'false');
+
+        // Move existing header into button
+        btn.appendChild(headerRow);
+        card.insertBefore(btn, card.firstChild);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'vl-accordion';
+        wrapper.hidden = true;
+        content.parentNode.insertBefore(wrapper, content);
+        wrapper.appendChild(content);
+
+        const open = () => {
+            btn.setAttribute('aria-expanded', 'true');
+            wrapper.hidden = false;
+            wrapper.classList.add('is-open');
+            wrapper.style.maxHeight = prefersReducedMotion() ? 'none' : (wrapper.scrollHeight + 'px');
+        };
+        const close = () => {
             btn.setAttribute('aria-expanded', 'false');
-
-            // Move existing header into button
-            btn.appendChild(headerRow);
-            card.insertBefore(btn, card.firstChild);
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'vl-accordion';
-            wrapper.hidden = true;
-            content.parentNode.insertBefore(wrapper, content);
-            wrapper.appendChild(content);
-
-            const open = () => {
-                btn.setAttribute('aria-expanded', 'true');
-                wrapper.hidden = false;
-                wrapper.classList.add('is-open');
-                wrapper.style.maxHeight = prefersReducedMotion() ? 'none' : (wrapper.scrollHeight + 'px');
-            };
-            const close = () => {
-                btn.setAttribute('aria-expanded', 'false');
-                if (prefersReducedMotion()) {
-                    wrapper.hidden = true;
-                    wrapper.classList.remove('is-open');
-                    wrapper.style.maxHeight = '0px';
-                } else {
-                    wrapper.style.maxHeight = '0px';
-                    wrapper.classList.remove('is-open');
-                    setTimeout(() => { wrapper.hidden = true; }, 220);
-                }
-            };
-            btn.addEventListener('click', () => {
-                const expanded = btn.getAttribute('aria-expanded') === 'true';
-                expanded ? close() : open();
-            });
-        });
-    }
-
-    function initShader() {
-        if (window.innerWidth < 768) return;
-        if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mobile')) return;
-        const canvas = document.getElementById('webgl-canvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        const material = new THREE.ShaderMaterial({
-            uniforms: { time: { value: 0 } },
-            vertexShader, fragmentShader
-        });
-        scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-        const clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            material.uniforms.time.value = clock.getElapsedTime();
-            renderer.render(scene, camera);
-        }
-        animate();
-        window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
-    }
-
-    // === 2. PARTICLE CURSOR EFFECTS ===
-    function initParticles() {
-        if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mobile')) return;
-        const canvas = document.getElementById('fx-canvas');
-        const ctx = canvas.getContext('2d');
-        let w, h;
-        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-        resize(); window.addEventListener('resize', resize);
-        const particles = [];
-        document.addEventListener('mousemove', (e) => {
-            for (let i = 0; i < 2; i++) {
-                particles.push({
-                    x: e.clientX, y: e.clientY,
-                    vx: (Math.random() - 0.5) * 2,
-                    vy: (Math.random() - 0.5) * 2,
-                    life: 1.0,
-                    color: Math.random() > 0.5 ? '#00d4ff' : '#00e6a0',
-                    size: Math.random() * 3 + 1
-                });
+            if (prefersReducedMotion()) {
+                wrapper.hidden = true;
+                wrapper.classList.remove('is-open');
+                wrapper.style.maxHeight = '0px';
+            } else {
+                wrapper.style.maxHeight = '0px';
+                wrapper.classList.remove('is-open');
+                setTimeout(() => { wrapper.hidden = true; }, 220);
             }
+        };
+        btn.addEventListener('click', () => {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            expanded ? close() : open();
         });
-        function loop() {
-            ctx.clearRect(0, 0, w, h);
-            for (let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i];
-                p.x += p.vx; p.y += p.vy;
-                p.life -= 0.02;
-                if (p.life <= 0) { particles.splice(i, 1); continue; }
-                ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            requestAnimationFrame(loop);
-        }
-        loop();
+    });
+}
+
+function initShader() {
+    if (window.innerWidth < 768) return;
+    if (document.body.classList.contains('low-power')) return;
+    if (document.body.classList.contains('compact-mobile')) return;
+    const canvas = document.getElementById('webgl-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    const material = new THREE.ShaderMaterial({
+        uniforms: { time: { value: 0 } },
+        vertexShader, fragmentShader
+    });
+    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+    const clock = new THREE.Clock();
+    function animate() {
+        requestAnimationFrame(animate);
+        material.uniforms.time.value = clock.getElapsedTime();
+        renderer.render(scene, camera);
     }
+    animate();
+    window.addEventListener('resize', () => renderer.setSize(window.innerWidth, window.innerHeight));
+}
 
-    // === 3. CUSTOM MOUSE CURSOR (WITH LERP) ===
-    function initCustomCursor() {
-        if (window.innerWidth < 768) return;
-        if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mobile')) return;
-        const cursor = document.getElementById('custom-cursor');
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let cursorX = mouseX;
-        let cursorY = mouseY;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        // Make cursor stick/grow on hoverable elements
-        const hoverables = document.querySelectorAll('a, button, .glass-card, .tech-chip');
-        hoverables.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-        });
-
-        function animateCursor() {
-            // Lerp formula: current + (target - current) * factor
-            const factor = 0.15;
-            cursorX += (mouseX - cursorX) * factor;
-            cursorY += (mouseY - cursorY) * factor;
-
-            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-    }
-
-    // === 4. ANTI-GRAVITY LOGOS (PHYSICS + PARALLAX) ===
-    function initAntiGravityLogos() {
-        if (window.innerWidth < 768) return;
-        if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mobile')) return;
-        const container = document.getElementById('anti-gravity-container');
-        const icons = [
-            'devicon-python-plain colored', 'devicon-java-plain colored', 'devicon-javascript-plain colored',
-            'devicon-docker-plain colored', 'devicon-kubernetes-plain colored', 'devicon-apachekafka-original colored',
-            'devicon-postgresql-plain colored', 'devicon-react-original colored', 'devicon-linux-plain colored',
-            'devicon-git-plain colored', 'devicon-bash-plain colored', 'devicon-amazonwebservices-plain-wordmark colored'
-        ];
-
-        const logos = [];
-        const count = window.innerWidth < 1024 ? 6 : 14;
-
-        // Spawn Logos
-        for (let i = 0; i < count; i++) {
-            const el = document.createElement('i');
-            const iconClass = icons[Math.floor(Math.random() * icons.length)];
-            el.className = `floating-logo ${iconClass}`;
-
-            // Random Props
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            const scale = 0.5 + Math.random() * 1.5; // 0.5x to 2.0x
-            const opacity = 0.05 + Math.random() * 0.15; // faint
-
-            el.style.left = '0px';
-            el.style.top = '0px';
-            el.style.opacity = opacity;
-            el.style.fontSize = `${2 * scale}rem`; // Scale size directly
-
-            container.appendChild(el);
-
-            logos.push({
-                el,
-                x, y,
-                vx: (Math.random() - 0.5) * 0.5, // Slow drift
-                vy: (Math.random() - 0.5) * 0.5,
-                parallaxFactor: (Math.random() + 0.5) * 0.05 // Different depth perception
+// === 2. PARTICLE CURSOR EFFECTS ===
+function initParticles() {
+    if (document.body.classList.contains('low-power')) return;
+    if (document.body.classList.contains('compact-mobile')) return;
+    const canvas = document.getElementById('fx-canvas');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const particles = [];
+    document.addEventListener('mousemove', (e) => {
+        for (let i = 0; i < 2; i++) {
+            particles.push({
+                x: e.clientX, y: e.clientY,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: 1.0,
+                color: Math.random() > 0.5 ? '#00d4ff' : '#00e6a0',
+                size: Math.random() * 3 + 1
             });
         }
-
-        // Mouse parallax target
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateLogos() {
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-
-            // Parallax push (opposite to mouse)
-            const pushX = (centerX - mouseX);
-            const pushY = (centerY - mouseY);
-
-            logos.forEach(logo => {
-                // Update physics
-                logo.x += logo.vx;
-                logo.y += logo.vy;
-
-                // Wrap around screen
-                if (logo.x < -50) logo.x = window.innerWidth + 50;
-                if (logo.x > window.innerWidth + 50) logo.x = -50;
-                if (logo.y < -50) logo.y = window.innerHeight + 50;
-                if (logo.y > window.innerHeight + 50) logo.y = -50;
-
-                // Apply layout + parallax
-                const finalX = logo.x + (pushX * logo.parallaxFactor);
-                const finalY = logo.y + (pushY * logo.parallaxFactor);
-
-                logo.el.style.transform = `translate(${finalX}px, ${finalY}px)`;
-            });
-
-            requestAnimationFrame(animateLogos);
+    });
+    function loop() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            p.x += p.vx; p.y += p.vy;
+            p.life -= 0.02;
+            if (p.life <= 0) { particles.splice(i, 1); continue; }
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
         }
-        animateLogos();
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+// === 3. CUSTOM MOUSE CURSOR (WITH LERP) ===
+function initCustomCursor() {
+    if (window.innerWidth < 768) return;
+    if (document.body.classList.contains('low-power')) return;
+    if (document.body.classList.contains('compact-mobile')) return;
+    const cursor = document.getElementById('custom-cursor');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // Make cursor stick/grow on hoverable elements
+    const hoverables = document.querySelectorAll('a, button, .glass-card, .tech-chip');
+    hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+
+    function animateCursor() {
+        // Lerp formula: current + (target - current) * factor
+        const factor = 0.15;
+        cursorX += (mouseX - cursorX) * factor;
+        cursorY += (mouseY - cursorY) * factor;
+
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+}
+
+// === 4. ANTI-GRAVITY LOGOS (PHYSICS + PARALLAX) ===
+function initAntiGravityLogos() {
+    if (window.innerWidth < 768) return;
+    if (document.body.classList.contains('low-power')) return;
+    if (document.body.classList.contains('compact-mobile')) return;
+    const container = document.getElementById('anti-gravity-container');
+    const icons = [
+        'devicon-python-plain colored', 'devicon-java-plain colored', 'devicon-javascript-plain colored',
+        'devicon-docker-plain colored', 'devicon-kubernetes-plain colored', 'devicon-apachekafka-original colored',
+        'devicon-postgresql-plain colored', 'devicon-react-original colored', 'devicon-linux-plain colored',
+        'devicon-git-plain colored', 'devicon-bash-plain colored', 'devicon-amazonwebservices-plain-wordmark colored'
+    ];
+
+    const logos = [];
+    const count = window.innerWidth < 1024 ? 6 : 14;
+
+    // Spawn Logos
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('i');
+        const iconClass = icons[Math.floor(Math.random() * icons.length)];
+        el.className = `floating-logo ${iconClass}`;
+
+        // Random Props
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        const scale = 0.5 + Math.random() * 1.5; // 0.5x to 2.0x
+        const opacity = 0.05 + Math.random() * 0.15; // faint
+
+        el.style.left = '0px';
+        el.style.top = '0px';
+        el.style.opacity = opacity;
+        el.style.fontSize = `${2 * scale}rem`; // Scale size directly
+
+        container.appendChild(el);
+
+        logos.push({
+            el,
+            x, y,
+            vx: (Math.random() - 0.5) * 0.5, // Slow drift
+            vy: (Math.random() - 0.5) * 0.5,
+            parallaxFactor: (Math.random() + 0.5) * 0.05 // Different depth perception
+        });
     }
 
-    // === 5. SCROLL ANIMATIONS (GSAP) ===
-    function initScrollAnimations() {
-        if (document.body.classList.contains('low-power')) return;
-        if (document.body.classList.contains('compact-mobile')) return;
-        gsap.registerPlugin(ScrollTrigger);
+    // Mouse parallax target
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
 
-        // Animate only section cards (exclude nav)
-        const cards = gsap.utils.toArray('section:not(#journey) .glass-card, #projects-grid .glass-card');
-        cards.forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none",
-                    once: true
-                },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power2.out",
-                delay: i % 3 * 0.1,
-                immediateRender: false
-            });
+    function animateLogos() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        // Parallax push (opposite to mouse)
+        const pushX = (centerX - mouseX);
+        const pushY = (centerY - mouseY);
+
+        logos.forEach(logo => {
+            // Update physics
+            logo.x += logo.vx;
+            logo.y += logo.vy;
+
+            // Wrap around screen
+            if (logo.x < -50) logo.x = window.innerWidth + 50;
+            if (logo.x > window.innerWidth + 50) logo.x = -50;
+            if (logo.y < -50) logo.y = window.innerHeight + 50;
+            if (logo.y > window.innerHeight + 50) logo.y = -50;
+
+            // Apply layout + parallax
+            const finalX = logo.x + (pushX * logo.parallaxFactor);
+            const finalY = logo.y + (pushY * logo.parallaxFactor);
+
+            logo.el.style.transform = `translate(${finalX}px, ${finalY}px)`;
         });
 
-        // Hero text animation
-        gsap.from("#about h1, #about p", {
-            y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out", delay: 0.5
-        });
+        requestAnimationFrame(animateLogos);
+    }
+    animateLogos();
+}
 
-        // Journey section reveal
-        const journeyCards = gsap.utils.toArray('#journey .journey-card, #journey .edu-card, #journey .journey-insight');
-        journeyCards.forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 92%",
-                    toggleActions: "play none none none"
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.7,
-                ease: "power2.out",
-                delay: Math.min(i * 0.03, 0.25),
-                immediateRender: false
-            });
-        });
+// === 5. SCROLL ANIMATIONS (GSAP) ===
+function initScrollAnimations() {
+    if (document.body.classList.contains('low-power')) return;
+    if (document.body.classList.contains('compact-mobile')) return;
+    gsap.registerPlugin(ScrollTrigger);
 
-        // Ensure ScrollTrigger measurements are accurate after layout settles
-        setTimeout(() => {
-            try {
-                ScrollTrigger.refresh();
-            } catch (e) {
-                // ignore
-            }
-        }, 0);
+    // Animate only section cards (exclude nav)
+    const cards = gsap.utils.toArray('section:not(#journey) .glass-card, #projects-grid .glass-card');
+    cards.forEach((card, i) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+                toggleActions: "play none none none",
+                once: true
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            delay: i % 3 * 0.1,
+            immediateRender: false
+        });
+    });
+
+    // Hero text animation
+    gsap.from("#about h1, #about p", {
+        y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out", delay: 0.5
+    });
+
+    // Journey section reveal
+    const journeyCards = gsap.utils.toArray('#journey .journey-card, #journey .edu-card, #journey .journey-insight');
+    journeyCards.forEach((card, i) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 92%",
+                toggleActions: "play none none none"
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            delay: Math.min(i * 0.03, 0.25),
+            immediateRender: false
+        });
+    });
+
+    // Ensure ScrollTrigger measurements are accurate after layout settles
+    setTimeout(() => {
+        try {
+            ScrollTrigger.refresh();
+        } catch (e) {
+            // ignore
+        }
+    }, 0);
+}
+
+// === 6. DATA LOADING (HARDCODED) ===
+let cachedRepos = [];
+
+let projectsVisibleCount = Infinity;
+let booksShowAll = false;
+
+// Repo Tech Mapping (Extend with logic)
+const repoTechMap = {
+    'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
+    'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
+    'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
+    'mrnamazbek': ['devicon-github-original colored', 'devicon-markdown-original colored']
+};
+
+function getTechIcons(repo) {
+    if (!repo) return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+    // 1. Check direct map
+    if (repo.name && repoTechMap[repo.name]) return repoTechMap[repo.name];
+
+    // 2. Infer from Language
+    const lang = (repo.language || '').toLowerCase();
+    if (lang === 'python') return ['devicon-python-plain colored', 'devicon-pandas-plain colored', 'devicon-numpy-plain colored'];
+    if (lang === 'java') return ['devicon-java-plain colored', 'devicon-spring-plain colored'];
+    if (lang === 'javascript') return ['devicon-javascript-plain colored', 'devicon-nodejs-plain colored'];
+    if (lang === 'typescript') return ['devicon-typescript-plain colored', 'devicon-react-original colored'];
+    if (lang === 'go') return ['devicon-go-original-wordmark colored', 'devicon-kubernetes-plain colored'];
+    if (lang === 'jupyter notebook') return ['devicon-jupyter-plain colored', 'devicon-python-plain colored'];
+    if (lang === 'html') return ['devicon-html5-plain colored', 'devicon-css3-plain colored'];
+
+    // 3. Default
+    return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+}
+
+function renderProjects(repos, keyword) {
+    const grid = document.getElementById('projects-grid');
+    if (!grid) return;
+
+    const list = Array.isArray(repos) ? repos : [];
+
+    const kw = normalizeText(keyword).trim();
+    const filtered = kw
+        ? list.filter(repo => {
+            if (!repo) return false;
+            const hay = [repo.name, repo.description, repo.language].map(normalizeText).join(' ');
+            return hay.includes(kw);
+        })
+        : list;
+
+    const showMoreBtn = document.getElementById('projects-show-more');
+    const limited = Number.isFinite(projectsVisibleCount) ? filtered.slice(0, projectsVisibleCount) : filtered;
+
+    if (showMoreBtn) {
+        const hasMore = limited.length < filtered.length;
+        showMoreBtn.classList.toggle('hidden', !hasMore);
+        showMoreBtn.textContent = hasMore ? 'Show more' : 'Show more';
     }
 
-    // === 6. DATA LOADING (HARDCODED) ===
-    let cachedRepos = [];
-
-    let projectsVisibleCount = Infinity;
-    let booksShowAll = false;
-
-    // Repo Tech Mapping (Extend with logic)
-    const repoTechMap = {
-        'ConnectIn': ['devicon-fastapi-plain colored', 'devicon-postgresql-plain colored', 'devicon-redis-plain colored', 'devicon-docker-plain colored'],
-        'Antigravity': ['devicon-python-plain colored', 'devicon-tensorflow-original colored', 'devicon-react-original colored'],
-        'DataPipeline-X': ['devicon-apachespark-original colored', 'devicon-apachekafka-original colored', 'devicon-aws-plain colored'],
-        'mrnamazbek': ['devicon-github-original colored', 'devicon-markdown-original colored']
-    };
-
-    function getTechIcons(repo) {
-        if (!repo) return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
-        // 1. Check direct map
-        if (repo.name && repoTechMap[repo.name]) return repoTechMap[repo.name];
-
-        // 2. Infer from Language
-        const lang = (repo.language || '').toLowerCase();
-        if (lang === 'python') return ['devicon-python-plain colored', 'devicon-pandas-plain colored', 'devicon-numpy-plain colored'];
-        if (lang === 'java') return ['devicon-java-plain colored', 'devicon-spring-plain colored'];
-        if (lang === 'javascript') return ['devicon-javascript-plain colored', 'devicon-nodejs-plain colored'];
-        if (lang === 'typescript') return ['devicon-typescript-plain colored', 'devicon-react-original colored'];
-        if (lang === 'go') return ['devicon-go-original-wordmark colored', 'devicon-kubernetes-plain colored'];
-        if (lang === 'jupyter notebook') return ['devicon-jupyter-plain colored', 'devicon-python-plain colored'];
-        if (lang === 'html') return ['devicon-html5-plain colored', 'devicon-css3-plain colored'];
-
-        // 3. Default
-        return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
+    if (!limited.length) {
+        grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + escapeHtml(keyword) + '</span></div>';
+        return;
     }
 
-    function renderProjects(repos, keyword) {
-        const grid = document.getElementById('projects-grid');
-        if (!grid) return;
+    grid.innerHTML = '';
+    limited.forEach(repo => {
+        if (!repo) return;
+        const card = document.createElement('a');
+        card.href = repo.html_url || '#';
+        card.target = "_blank";
+        card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
 
-        const list = Array.isArray(repos) ? repos : [];
+        const techIcons = getTechIcons(repo);
+        const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
 
-        const kw = normalizeText(keyword).trim();
-        const filtered = kw
-            ? list.filter(repo => {
-                if (!repo) return false;
-                const hay = [repo.name, repo.description, repo.language].map(normalizeText).join(' ');
-                return hay.includes(kw);
-            })
-            : list;
+        const badge = kw
+            ? `<div class="text-[10px] font-mono uppercase tracking-widest text-cyan-300/80">Filtered by: ${escapeHtml(keyword)}</div>`
+            : '';
 
-        const showMoreBtn = document.getElementById('projects-show-more');
-        const limited = Number.isFinite(projectsVisibleCount) ? filtered.slice(0, projectsVisibleCount) : filtered;
-
-        if (showMoreBtn) {
-            const hasMore = limited.length < filtered.length;
-            showMoreBtn.classList.toggle('hidden', !hasMore);
-            showMoreBtn.textContent = hasMore ? 'Show more' : 'Show more';
-        }
-
-        if (!limited.length) {
-            grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + escapeHtml(keyword) + '</span></div>';
-            return;
-        }
-
-        grid.innerHTML = '';
-        limited.forEach(repo => {
-            if (!repo) return;
-            const card = document.createElement('a');
-            card.href = repo.html_url || '#';
-            card.target = "_blank";
-            card.className = "glass-card p-6 flex flex-col justify-between h-[240px] group";
-
-            const techIcons = getTechIcons(repo);
-            const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
-
-            const badge = kw
-                ? `<div class="text-[10px] font-mono uppercase tracking-widest text-cyan-300/80">Filtered by: ${escapeHtml(keyword)}</div>`
-                : '';
-
-            card.innerHTML = `
+        card.innerHTML = `
                     <div>
                          <div class="flex items-center justify-between gap-2 text-cyan-400 mb-3 text-xs font-mono uppercase tracking-wider">
                             <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}</div>
@@ -940,20 +940,20 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
                          ${iconsHtml}
                     </div>
                 `;
-            grid.appendChild(card);
-        });
-    }
+        grid.appendChild(card);
+    });
+}
 
-    // === 6.1 VERTICAL LIBRARY (BOOKS) ===
-    const LIBRARY_CONFIG = {
-        BOOKS_URL: 'assets/books.json',
-        USE_MODAL_ON_MOBILE: false
-    };
+// === 6.1 VERTICAL LIBRARY (BOOKS) ===
+const LIBRARY_CONFIG = {
+    BOOKS_URL: 'assets/books.json',
+    USE_MODAL_ON_MOBILE: false
+};
 
-    function makeBookCoverFallback(title, author) {
-        const t = String(title || '').slice(0, 38);
-        const a = String(author || '').slice(0, 38);
-        const svg = `<?xml version="1.0" encoding="UTF-8"?>
+function makeBookCoverFallback(title, author) {
+    const t = String(title || '').slice(0, 38);
+    const a = String(author || '').slice(0, 38);
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="480" viewBox="0 0 320 480">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
@@ -966,144 +966,144 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
   <text x="28" y="215" fill="rgba(255,255,255,0.92)" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">${t}</text>
   <text x="28" y="250" fill="rgba(229,231,235,0.78)" font-family="Inter, Arial, sans-serif" font-size="14">${a}</text>
 </svg>`;
-        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+async function fetchBooksWithFallback(statusEl) {
+    const inlineFallback = [
+        {
+            id: 'kleppmann-ddia',
+            title: 'Designing Data-Intensive Applications',
+            author: 'Martin Kleppmann',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg',
+            isbn: '9781449373320',
+            short_blurb: 'A practical guide to designing scalable, reliable, maintainable systems.',
+            long_summary: 'A deep, practical tour of replication, partitioning, transactions, streams, and the real trade-offs behind modern data systems. It helps you reason about correctness, latency, throughput, and failure modes — the exact things that make pipelines trustworthy in production.',
+            tags: ['architecture', 'consistency', 'replication'],
+            read_status: 'reading',
+            alt_text: 'Cover — Designing Data-Intensive Applications'
+        },
+        {
+            id: 'reis-fundamentals-de',
+            title: 'Fundamentals of Data Engineering',
+            author: 'Joe Reis & Matt Housley',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9781098108304-L.jpg',
+            isbn: '9781098108304',
+            short_blurb: 'Modern map of the data engineering lifecycle: from sources to serving.',
+            long_summary: 'Clarifies what “good” looks like in real data engineering: ownership, quality, observability, governance, and cost. Useful when you’re moving from building pipelines to building reliable data products.',
+            tags: ['lifecycle', 'governance', 'quality'],
+            read_status: 'to-read',
+            alt_text: 'Cover — Fundamentals of Data Engineering'
+        },
+        {
+            id: 'martin-clean-code',
+            title: 'Clean Code',
+            author: 'Robert C. Martin',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
+            isbn: '9780132350884',
+            short_blurb: 'Write code that is readable, maintainable, and boring-in-a-good-way.',
+            long_summary: 'Even in data engineering, the fastest way to create outages is unreadable code. This book pushes naming, structure, testing discipline, and refactoring habits that keep pipelines and services easy to evolve.',
+            tags: ['craftsmanship', 'refactoring', 'testing'],
+            read_status: 'completed',
+            alt_text: 'Cover — Clean Code'
+        },
+        {
+            id: 'kimball-dw-toolkit',
+            title: 'The Data Warehouse Toolkit',
+            author: 'Ralph Kimball',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9781118530801-L.jpg',
+            isbn: '9781118530801',
+            short_blurb: 'Dimensional modeling patterns that still power modern analytics.',
+            long_summary: 'Explains facts, dimensions, slowly changing dimensions, and how to design models that stay understandable as requirements change. Great for building data marts and BI-friendly layers.',
+            tags: ['modeling', 'analytics', 'dimensional'],
+            read_status: 'to-read',
+            alt_text: 'Cover — The Data Warehouse Toolkit'
+        },
+        {
+            id: 'densmore-data-pipelines',
+            title: 'Data Pipelines Pocket Reference',
+            author: 'James Densmore',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9781492087830-L.jpg',
+            isbn: '9781492087830',
+            short_blurb: 'A compact guide to moving data from raw sources to analytics.',
+            long_summary: 'Covers patterns, trade-offs, and common failure points in pipeline design — useful as a quick reference when you’re building ingestion, transformations, and data delivery workflows.',
+            tags: ['etl', 'patterns', 'operations'],
+            read_status: 'to-read',
+            alt_text: 'Cover — Data Pipelines Pocket Reference'
+        },
+        {
+            id: 'shapira-kafka',
+            title: 'Kafka: The Definitive Guide',
+            author: 'Gwen Shapira',
+            cover_url: 'https://covers.openlibrary.org/b/isbn/9781491936160-L.jpg',
+            isbn: '9781491936160',
+            short_blurb: 'Event streaming patterns for real-time, decoupled systems.',
+            long_summary: 'A practical look at Kafka architecture, producer/consumer design, delivery guarantees, and operations. Helpful for anyone building CDC, streaming ingestion, or event-driven microservices.',
+            tags: ['streaming', 'events', 'kafka'],
+            read_status: 'to-read',
+            alt_text: 'Cover — Kafka: The Definitive Guide'
+        }
+    ];
+
+    try {
+        const res = await fetch(LIBRARY_CONFIG.BOOKS_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Invalid books.json format');
+        return { books: data, offline: false };
+    } catch (e) {
+        if (statusEl) statusEl.textContent = 'Library offline — showing cached list';
+        return { books: inlineFallback, offline: true };
+    }
+}
+
+function getStatusBadge(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'reading') return { text: 'Reading', cls: 'bg-cyan-500/15 text-cyan-200 border-cyan-300/20' };
+    if (s === 'completed') return { text: 'Completed', cls: 'bg-emerald-500/15 text-emerald-200 border-emerald-300/20' };
+    return { text: 'To read', cls: 'bg-white/5 text-gray-200 border-white/10' };
+}
+
+function renderVerticalLibrary(books, options) {
+    const listEl = document.getElementById('vertical-books-list');
+    if (!listEl) return;
+
+    const statusEl = document.getElementById('library-status');
+    if (statusEl && options && options.offline) {
+        statusEl.textContent = 'Library offline — showing cached list';
     }
 
-    async function fetchBooksWithFallback(statusEl) {
-        const inlineFallback = [
-            {
-                id: 'kleppmann-ddia',
-                title: 'Designing Data-Intensive Applications',
-                author: 'Martin Kleppmann',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg',
-                isbn: '9781449373320',
-                short_blurb: 'A practical guide to designing scalable, reliable, maintainable systems.',
-                long_summary: 'A deep, practical tour of replication, partitioning, transactions, streams, and the real trade-offs behind modern data systems. It helps you reason about correctness, latency, throughput, and failure modes — the exact things that make pipelines trustworthy in production.',
-                tags: ['architecture', 'consistency', 'replication'],
-                read_status: 'reading',
-                alt_text: 'Cover — Designing Data-Intensive Applications'
-            },
-            {
-                id: 'reis-fundamentals-de',
-                title: 'Fundamentals of Data Engineering',
-                author: 'Joe Reis & Matt Housley',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9781098108304-L.jpg',
-                isbn: '9781098108304',
-                short_blurb: 'Modern map of the data engineering lifecycle: from sources to serving.',
-                long_summary: 'Clarifies what “good” looks like in real data engineering: ownership, quality, observability, governance, and cost. Useful when you’re moving from building pipelines to building reliable data products.',
-                tags: ['lifecycle', 'governance', 'quality'],
-                read_status: 'to-read',
-                alt_text: 'Cover — Fundamentals of Data Engineering'
-            },
-            {
-                id: 'martin-clean-code',
-                title: 'Clean Code',
-                author: 'Robert C. Martin',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
-                isbn: '9780132350884',
-                short_blurb: 'Write code that is readable, maintainable, and boring-in-a-good-way.',
-                long_summary: 'Even in data engineering, the fastest way to create outages is unreadable code. This book pushes naming, structure, testing discipline, and refactoring habits that keep pipelines and services easy to evolve.',
-                tags: ['craftsmanship', 'refactoring', 'testing'],
-                read_status: 'completed',
-                alt_text: 'Cover — Clean Code'
-            },
-            {
-                id: 'kimball-dw-toolkit',
-                title: 'The Data Warehouse Toolkit',
-                author: 'Ralph Kimball',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9781118530801-L.jpg',
-                isbn: '9781118530801',
-                short_blurb: 'Dimensional modeling patterns that still power modern analytics.',
-                long_summary: 'Explains facts, dimensions, slowly changing dimensions, and how to design models that stay understandable as requirements change. Great for building data marts and BI-friendly layers.',
-                tags: ['modeling', 'analytics', 'dimensional'],
-                read_status: 'to-read',
-                alt_text: 'Cover — The Data Warehouse Toolkit'
-            },
-            {
-                id: 'densmore-data-pipelines',
-                title: 'Data Pipelines Pocket Reference',
-                author: 'James Densmore',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9781492087830-L.jpg',
-                isbn: '9781492087830',
-                short_blurb: 'A compact guide to moving data from raw sources to analytics.',
-                long_summary: 'Covers patterns, trade-offs, and common failure points in pipeline design — useful as a quick reference when you’re building ingestion, transformations, and data delivery workflows.',
-                tags: ['etl', 'patterns', 'operations'],
-                read_status: 'to-read',
-                alt_text: 'Cover — Data Pipelines Pocket Reference'
-            },
-            {
-                id: 'shapira-kafka',
-                title: 'Kafka: The Definitive Guide',
-                author: 'Gwen Shapira',
-                cover_url: 'https://covers.openlibrary.org/b/isbn/9781491936160-L.jpg',
-                isbn: '9781491936160',
-                short_blurb: 'Event streaming patterns for real-time, decoupled systems.',
-                long_summary: 'A practical look at Kafka architecture, producer/consumer design, delivery guarantees, and operations. Helpful for anyone building CDC, streaming ingestion, or event-driven microservices.',
-                tags: ['streaming', 'events', 'kafka'],
-                read_status: 'to-read',
-                alt_text: 'Cover — Kafka: The Definitive Guide'
-            }
-        ];
+    const reduceMotion = prefersReducedMotion();
 
-        try {
-            const res = await fetch(LIBRARY_CONFIG.BOOKS_URL, { cache: 'no-store' });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
-            if (!Array.isArray(data)) throw new Error('Invalid books.json format');
-            return { books: data, offline: false };
-        } catch (e) {
-            if (statusEl) statusEl.textContent = 'Library offline — showing cached list';
-            return { books: inlineFallback, offline: true };
-        }
+    listEl.innerHTML = '';
+    const domIndex = {};
+
+    const isMobile = isMobileViewport();
+    const visibleBooks = (isMobile && !booksShowAll) ? books.slice(0, 4) : books;
+
+    const seeAllBtn = document.getElementById('books-see-all');
+    if (seeAllBtn) {
+        const shouldShow = isMobile && books.length > 4;
+        seeAllBtn.classList.toggle('hidden', !shouldShow);
+        seeAllBtn.textContent = booksShowAll ? 'Collapse' : 'See all';
     }
 
-    function getStatusBadge(status) {
-        const s = String(status || '').toLowerCase();
-        if (s === 'reading') return { text: 'Reading', cls: 'bg-cyan-500/15 text-cyan-200 border-cyan-300/20' };
-        if (s === 'completed') return { text: 'Completed', cls: 'bg-emerald-500/15 text-emerald-200 border-emerald-300/20' };
-        return { text: 'To read', cls: 'bg-white/5 text-gray-200 border-white/10' };
-    }
+    visibleBooks.forEach((b) => {
+        const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
+        const title = safeText(b.title);
+        const author = safeText(b.author);
+        const cover = safeText(b.cover_url);
+        const alt = safeText(b.alt_text || ('Cover — ' + title));
+        const shortBlurb = safeText(b.short_blurb);
+        const tags = Array.isArray(b.tags) ? b.tags : [];
+        const badge = getStatusBadge(b.read_status);
+        const panelId = `book-panel-${id}`;
 
-    function renderVerticalLibrary(books, options) {
-        const listEl = document.getElementById('vertical-books-list');
-        if (!listEl) return;
+        const fallbackCover = makeBookCoverFallback(title, author);
+        const item = document.createElement('div');
+        item.className = 'glass-card p-4 rounded-2xl';
 
-        const statusEl = document.getElementById('library-status');
-        if (statusEl && options && options.offline) {
-            statusEl.textContent = 'Library offline — showing cached list';
-        }
-
-        const reduceMotion = prefersReducedMotion();
-
-        listEl.innerHTML = '';
-        const domIndex = {};
-
-        const isMobile = isMobileViewport();
-        const visibleBooks = (isMobile && !booksShowAll) ? books.slice(0, 4) : books;
-
-        const seeAllBtn = document.getElementById('books-see-all');
-        if (seeAllBtn) {
-            const shouldShow = isMobile && books.length > 4;
-            seeAllBtn.classList.toggle('hidden', !shouldShow);
-            seeAllBtn.textContent = booksShowAll ? 'Collapse' : 'See all';
-        }
-
-        visibleBooks.forEach((b) => {
-            const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
-            const title = safeText(b.title);
-            const author = safeText(b.author);
-            const cover = safeText(b.cover_url);
-            const alt = safeText(b.alt_text || ('Cover — ' + title));
-            const shortBlurb = safeText(b.short_blurb);
-            const tags = Array.isArray(b.tags) ? b.tags : [];
-            const badge = getStatusBadge(b.read_status);
-            const panelId = `book-panel-${id}`;
-
-            const fallbackCover = makeBookCoverFallback(title, author);
-            const item = document.createElement('div');
-            item.className = 'glass-card p-4 rounded-2xl';
-
-            item.innerHTML = `
+        item.innerHTML = `
                 <div class="vl-book" role="button" tabindex="0" aria-expanded="false" aria-controls="${panelId}" aria-label="${title} by ${author}">
                     <div class="flex gap-4">
                         <div class="vl-cover w-[56px] h-[84px] rounded-xl overflow-hidden border border-white/10 flex-none">
@@ -1136,873 +1136,873 @@ import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileView
                 </div>
             `;
 
-            item.dataset.bookId = id;
-            listEl.appendChild(item);
+        item.dataset.bookId = id;
+        listEl.appendChild(item);
 
-            const header = item.querySelector('.vl-book');
-            const accordion = item.querySelector('#' + CSS.escape(panelId));
+        const header = item.querySelector('.vl-book');
+        const accordion = item.querySelector('#' + CSS.escape(panelId));
 
-            const openAccordion = () => {
-                if (!accordion || !header) return;
-                const expanded = header.getAttribute('aria-expanded') === 'true';
-                if (expanded) return;
+        const openAccordion = () => {
+            if (!accordion || !header) return;
+            const expanded = header.getAttribute('aria-expanded') === 'true';
+            if (expanded) return;
 
-                header.setAttribute('aria-expanded', 'true');
-                accordion.hidden = false;
-                accordion.classList.add('is-open');
+            header.setAttribute('aria-expanded', 'true');
+            accordion.hidden = false;
+            accordion.classList.add('is-open');
 
-                if (reduceMotion) {
-                    accordion.style.maxHeight = 'none';
-                } else {
-                    accordion.style.maxHeight = accordion.scrollHeight + 'px';
-                }
-
-                document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
-            };
-
-            const closeAccordion = () => {
-                if (!accordion || !header) return;
-                const expanded = header.getAttribute('aria-expanded') === 'true';
-                if (!expanded) return;
-
-                header.setAttribute('aria-expanded', 'false');
-                if (reduceMotion) {
-                    accordion.classList.remove('is-open');
-                    accordion.hidden = true;
-                    accordion.style.maxHeight = '0px';
-                } else {
-                    accordion.style.maxHeight = '0px';
-                    accordion.classList.remove('is-open');
-                    window.setTimeout(() => {
-                        accordion.hidden = true;
-                    }, 220);
-                }
-                document.dispatchEvent(new CustomEvent('book:close', { detail: id }));
-            };
-
-            const toggleAccordion = () => {
-                const expanded = header.getAttribute('aria-expanded') === 'true';
-                if (expanded) closeAccordion();
-                else openAccordion();
-            };
-
-            domIndex[id] = { item, header, accordion, openAccordion, closeAccordion };
-
-            header.addEventListener('click', (e) => {
-                // Ignore clicks that originate from nested buttons
-                const t = e.target;
-                if (t && t.closest && t.closest('button')) return;
-                toggleAccordion();
-            });
-
-            header.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggleAccordion();
-                }
-            });
-
-            item.addEventListener('click', (e) => {
-                const btn = e.target && e.target.closest ? e.target.closest('button[data-action]') : null;
-                if (!btn) return;
-
-                const action = btn.getAttribute('data-action');
-                if (action === 'collapse') closeAccordion();
-                if (action === 'readmore') {
-                    openBookInModal(id);
-                }
-            });
-        });
-
-        // Expose API after render
-        window.library = window.library || {};
-        window.library.openBook = (id) => {
-            const key = String(id || '');
-            const entry = window.library._domIndex ? window.library._domIndex[key] : null;
-            if (entry && entry.openAccordion) entry.openAccordion();
-            openBookInModal(key);
-        };
-        window.library.closeModal = () => closeLibraryModal();
-
-        // Keep data accessible for modal
-        window.library._booksIndex = Object.fromEntries(books.map((b) => {
-            const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
-            return [id, b];
-        }));
-
-        window.library._domIndex = domIndex;
-    }
-
-    function openBookInModal(id) {
-        const reduceMotion = prefersReducedMotion();
-        const modal = document.getElementById('library-modal');
-        const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
-        if (!modal || !panel) return;
-
-        const booksIndex = window.library && window.library._booksIndex ? window.library._booksIndex : {};
-        const book = booksIndex[id];
-        if (!book) return;
-
-        const useModal = !isMobileViewport() || LIBRARY_CONFIG.USE_MODAL_ON_MOBILE;
-        if (!useModal) {
-            const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
-            if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer');
-            return;
-        }
-
-        const titleEl = document.getElementById('library-modal-title');
-        const authorEl = document.getElementById('library-modal-author');
-        const tagsEl = document.getElementById('library-modal-tags');
-        const bodyEl = document.getElementById('library-modal-body');
-        const readMoreEl = document.getElementById('library-modal-readmore');
-
-        if (titleEl) titleEl.textContent = safeText(book.title);
-        if (authorEl) authorEl.textContent = safeText(book.author);
-        if (bodyEl) bodyEl.textContent = safeText(book.long_summary || book.short_blurb || '');
-        if (tagsEl) {
-            tagsEl.innerHTML = '';
-            const tags = Array.isArray(book.tags) ? book.tags : [];
-            tags.slice(0, 8).forEach((t) => {
-                const span = document.createElement('span');
-                span.className = 'journey-skill';
-                span.textContent = String(t);
-                tagsEl.appendChild(span);
-            });
-        }
-
-        if (readMoreEl) {
-            const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
-            readMoreEl.href = url;
-            readMoreEl.classList.toggle('hidden', url === '#');
-        }
-
-        modal.classList.remove('hidden');
-        modal.setAttribute('aria-hidden', 'false');
-        lockBodyScroll();
-
-        document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
-
-        const lastFocus = document.activeElement;
-        modal._lastFocus = lastFocus;
-        if (modal._releaseFocusTrap) modal._releaseFocusTrap();
-        modal._releaseFocusTrap = createFocusTrap(panel, closeLibraryModal);
-
-        // Backdrop + close buttons
-        if (modal._onClick) modal.removeEventListener('click', modal._onClick);
-        const onClick = (e) => {
-            const close = e.target && e.target.getAttribute ? e.target.getAttribute('data-close') : null;
-            if (close) closeLibraryModal();
-        };
-        modal._onClick = onClick;
-        modal.addEventListener('click', onClick);
-
-        // Focus dialog
-        if (reduceMotion) {
-            panel.focus();
-        } else {
-            window.setTimeout(() => panel.focus(), 0);
-        }
-    }
-
-    function closeLibraryModal() {
-        const modal = document.getElementById('library-modal');
-        if (!modal) return;
-        modal.classList.add('hidden');
-        modal.setAttribute('aria-hidden', 'true');
-
-        document.dispatchEvent(new CustomEvent('book:close', { detail: 'modal' }));
-
-        if (modal._releaseFocusTrap) {
-            modal._releaseFocusTrap();
-            modal._releaseFocusTrap = null;
-        }
-        if (modal._onClick) {
-            modal.removeEventListener('click', modal._onClick);
-            modal._onClick = null;
-        }
-        unlockBodyScroll();
-
-        const last = modal._lastFocus;
-        if (last && last.focus) {
-            try { last.focus(); } catch (e) { /* ignore */ }
-        }
-    }
-
-    async function loadContent() {
-        const statusEl = document.getElementById('library-status');
-        const result = await fetchBooksWithFallback(statusEl);
-        renderVerticalLibrary(result.books, { offline: result.offline });
-
-        // GitHub
-        const grid = document.getElementById('projects-grid');
-        try {
-            const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
-            const repos = await res.json();
-            if (Array.isArray(repos) && repos.length) {
-                const statsEl = document.getElementById('stats-repos');
-                if (statsEl) statsEl.innerText = repos.length + "+";
+            if (reduceMotion) {
+                accordion.style.maxHeight = 'none';
+            } else {
+                accordion.style.maxHeight = accordion.scrollHeight + 'px';
             }
 
-            cachedRepos = Array.isArray(repos) ? repos : [];
-            renderProjects(cachedRepos);
-        } catch (e) {
-            grid.innerHTML = '<div class="text-gray-500">GitHub API Limit Reached.</div>';
-        }
-    }
-
-    // INIT
-    window.addEventListener('DOMContentLoaded', () => {
-        // Low-power detection first
-        if (detectLowPowerDevice()) {
-            document.body.classList.add('low-power');
-        }
-
-        // Default compact-mobile to ON for first-time mobile visitors (can be disabled via toggle)
-        if (isCompactMobileViewport() && localStorage.getItem(COMPACT_PREF_KEY) === null) {
-            setCompactPref(true);
-        }
-
-        applyCompactMobileClass();
-        initAnchorNavigation();
-
-        // Re-apply compact-mobile class on viewport changes.
-        window.addEventListener('resize', () => {
-            applyCompactMobileClass();
-        });
-
-        initShader();
-        initCustomCursor();
-        initParticles();
-        initAntiGravityLogos();
-        initScrollAnimations();
-        loadContent(); // Updated
-
-        initMobileArsenalAccordion();
-
-        initResumeModal();
-        initWorldClock();
-        initDbRankingWidget();
-
-        // Initialize new features
-        initThemeToggle();
-        initTerminalSimulation();
-        initDagVisualizer();
-
-        const projectsBtn = document.getElementById('projects-show-more');
-        if (projectsBtn) {
-            projectsBtn.addEventListener('click', () => window.loadMoreProjects());
-        }
-
-        const booksBtn = document.getElementById('books-see-all');
-        if (booksBtn) {
-            booksBtn.addEventListener('click', () => window.showAllBooks());
-        }
-
-        // Mobile defaults: reduce visible items
-        if (isMobileViewport()) {
-            projectsVisibleCount = 3;
-        }
-
-        window.filterByKeyword = (keyword) => {
-            renderProjects(cachedRepos, keyword);
-            const el = document.getElementById('projects');
-            if (el) scrollToAnchorTarget(el, 'smooth');
+            document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
         };
 
-        document.addEventListener('keyword:click', (e) => {
-            if (!e || !e.detail) return;
-            window.filterByKeyword(e.detail);
+        const closeAccordion = () => {
+            if (!accordion || !header) return;
+            const expanded = header.getAttribute('aria-expanded') === 'true';
+            if (!expanded) return;
+
+            header.setAttribute('aria-expanded', 'false');
+            if (reduceMotion) {
+                accordion.classList.remove('is-open');
+                accordion.hidden = true;
+                accordion.style.maxHeight = '0px';
+            } else {
+                accordion.style.maxHeight = '0px';
+                accordion.classList.remove('is-open');
+                window.setTimeout(() => {
+                    accordion.hidden = true;
+                }, 220);
+            }
+            document.dispatchEvent(new CustomEvent('book:close', { detail: id }));
+        };
+
+        const toggleAccordion = () => {
+            const expanded = header.getAttribute('aria-expanded') === 'true';
+            if (expanded) closeAccordion();
+            else openAccordion();
+        };
+
+        domIndex[id] = { item, header, accordion, openAccordion, closeAccordion };
+
+        header.addEventListener('click', (e) => {
+            // Ignore clicks that originate from nested buttons
+            const t = e.target;
+            if (t && t.closest && t.closest('button')) return;
+            toggleAccordion();
         });
 
-        // Hero Parallax
-        const heroCard = document.getElementById('hero-card');
-        document.addEventListener('mousemove', (e) => {
-            if (document.body.classList.contains('low-power')) return;
-            const x = (window.innerWidth - e.pageX * 2) / 100;
-            const y = (window.innerHeight - e.pageY * 2) / 100;
-            if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;
+        header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleAccordion();
+            }
+        });
+
+        item.addEventListener('click', (e) => {
+            const btn = e.target && e.target.closest ? e.target.closest('button[data-action]') : null;
+            if (!btn) return;
+
+            const action = btn.getAttribute('data-action');
+            if (action === 'collapse') closeAccordion();
+            if (action === 'readmore') {
+                openBookInModal(id);
+            }
         });
     });
 
-    // === THEME TOGGLE ===
-    const THEME_KEY = 'portfolio-theme';
+    // Expose API after render
+    window.library = window.library || {};
+    window.library.openBook = (id) => {
+        const key = String(id || '');
+        const entry = window.library._domIndex ? window.library._domIndex[key] : null;
+        if (entry && entry.openAccordion) entry.openAccordion();
+        openBookInModal(key);
+    };
+    window.library.closeModal = () => closeLibraryModal();
 
-    function getStoredTheme() {
-        return localStorage.getItem(THEME_KEY) || 'dark';
+    // Keep data accessible for modal
+    window.library._booksIndex = Object.fromEntries(books.map((b) => {
+        const id = safeText(b.id || (b.title || '').toLowerCase().replace(/\s+/g, '-'));
+        return [id, b];
+    }));
+
+    window.library._domIndex = domIndex;
+}
+
+function openBookInModal(id) {
+    const reduceMotion = prefersReducedMotion();
+    const modal = document.getElementById('library-modal');
+    const panel = modal ? modal.querySelector('.vl-modal__panel') : null;
+    if (!modal || !panel) return;
+
+    const booksIndex = window.library && window.library._booksIndex ? window.library._booksIndex : {};
+    const book = booksIndex[id];
+    if (!book) return;
+
+    const useModal = !isMobileViewport() || LIBRARY_CONFIG.USE_MODAL_ON_MOBILE;
+    if (!useModal) {
+        const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
+        if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer');
+        return;
     }
 
-    function setStoredTheme(theme) {
-        localStorage.setItem(THEME_KEY, theme);
-    }
+    const titleEl = document.getElementById('library-modal-title');
+    const authorEl = document.getElementById('library-modal-author');
+    const tagsEl = document.getElementById('library-modal-tags');
+    const bodyEl = document.getElementById('library-modal-body');
+    const readMoreEl = document.getElementById('library-modal-readmore');
 
-    function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        const moonIcon = document.getElementById('theme-icon-moon');
-        const sunIcon = document.getElementById('theme-icon-sun');
-        if (moonIcon && sunIcon) {
-            moonIcon.classList.toggle('hidden', theme === 'light');
-            sunIcon.classList.toggle('hidden', theme === 'dark');
-        }
-    }
-
-    function initThemeToggle() {
-        const themeToggle = document.getElementById('theme-toggle');
-        if (!themeToggle) return;
-
-        // Apply stored theme on load
-        const storedTheme = getStoredTheme();
-        applyTheme(storedTheme);
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyTheme(newTheme);
-            setStoredTheme(newTheme);
+    if (titleEl) titleEl.textContent = safeText(book.title);
+    if (authorEl) authorEl.textContent = safeText(book.author);
+    if (bodyEl) bodyEl.textContent = safeText(book.long_summary || book.short_blurb || '');
+    if (tagsEl) {
+        tagsEl.innerHTML = '';
+        const tags = Array.isArray(book.tags) ? book.tags : [];
+        tags.slice(0, 8).forEach((t) => {
+            const span = document.createElement('span');
+            span.className = 'journey-skill';
+            span.textContent = String(t);
+            tagsEl.appendChild(span);
         });
     }
 
-    // === TERMINAL SIMULATION ===
-    function initTerminalSimulation() {
-        const terminalContent = document.getElementById('terminal-content');
-        const terminalInput = document.getElementById('terminal-input');
-        const replayBtn = document.getElementById('terminal-replay');
-        const pauseBtn = document.getElementById('terminal-pause');
-
-        if (!terminalContent || !terminalInput) return;
-
-        const sequences = [
-            { text: "⚡ user@kbtu:~$ ./init.sh", delay: 500, class: "cyan" },
-            { text: "🔥 Initializing Data Engineer...", delay: 800, class: "warning" },
-            { text: "🧠 Loading ML Models...", delay: 600, class: "info" },
-            { text: "✅ Spark cluster connected (3 nodes)", delay: 400, class: "success" },
-            { text: "✅ Airflow DAGs loaded (12 pipelines)", delay: 300, class: "success" },
-            { text: "✅ PostgreSQL pool ready (20 connections)", delay: 300, class: "success" },
-            { text: "🐘 Kafka brokers: 3/3 healthy", delay: 500, class: "info" },
-            { text: "📊 Data quality checks: PASSED", delay: 400, class: "success" },
-            { text: "🚀 Deploying FastAPI services...", delay: 600, class: "warning" },
-            { text: "✅ All systems operational", delay: 300, class: "success" },
-            { text: "💻 System Ready! Welcome.", delay: 500, class: "purple" },
-            { text: "", delay: 200 },
-            { text: "💡 Tip: Data systems are like banking systems:", delay: 300, class: "info" },
-            { text: "    correctness first, fast second.", delay: 200, class: "info" }
-        ];
-
-        let isPaused = false;
-        let currentSequence = 0;
-        let typingTimeout = null;
-        let isTyping = false;
-
-        function clearTerminal() {
-            terminalContent.innerHTML = '';
-            terminalInput.textContent = '';
-            currentSequence = 0;
-        }
-
-        function addLine(text, className = '') {
-            const line = document.createElement('span');
-            line.className = `line ${className}`;
-            line.textContent = text;
-            terminalContent.appendChild(line);
-            terminalContent.scrollTop = terminalContent.scrollHeight;
-        }
-
-        function typeText(text, callback, charDelay = 30) {
-            isTyping = true;
-            let charIndex = 0;
-            terminalInput.textContent = '';
-
-            function typeChar() {
-                if (isPaused) {
-                    typingTimeout = setTimeout(typeChar, 100);
-                    return;
-                }
-
-                if (charIndex < text.length) {
-                    terminalInput.textContent += text[charIndex];
-                    charIndex++;
-                    typingTimeout = setTimeout(typeChar, charDelay);
-                } else {
-                    isTyping = false;
-                    if (callback) callback();
-                }
-            }
-
-            typeChar();
-        }
-
-        function runSequence() {
-            if (currentSequence >= sequences.length) {
-                terminalInput.textContent = '';
-                return;
-            }
-
-            if (isPaused) {
-                typingTimeout = setTimeout(runSequence, 100);
-                return;
-            }
-
-            const seq = sequences[currentSequence];
-            currentSequence++;
-
-            if (seq.text === "") {
-                addLine("");
-                typingTimeout = setTimeout(runSequence, seq.delay);
-            } else {
-                typeText(seq.text, () => {
-                    addLine(seq.text, seq.class);
-                    terminalInput.textContent = '';
-                    typingTimeout = setTimeout(runSequence, seq.delay);
-                });
-            }
-        }
-
-        function startSequence() {
-            clearTerminal();
-            currentSequence = 0;
-            isPaused = false;
-            if (pauseBtn) pauseBtn.textContent = 'Pause';
-            runSequence();
-        }
-
-        if (replayBtn) {
-            replayBtn.addEventListener('click', () => {
-                clearTimeout(typingTimeout);
-                startSequence();
-            });
-        }
-
-        if (pauseBtn) {
-            pauseBtn.addEventListener('click', () => {
-                isPaused = !isPaused;
-                pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
-            });
-        }
-
-        // Auto-start on load
-        startSequence();
+    if (readMoreEl) {
+        const url = book.isbn ? `https://openlibrary.org/isbn/${book.isbn}` : '#';
+        readMoreEl.href = url;
+        readMoreEl.classList.toggle('hidden', url === '#');
     }
 
-    // === DATA PIPELINE VISUALIZER (DAG) ===
-    function initDagVisualizer() {
-        const container = document.getElementById('dag-canvas-container');
-        const svg = document.getElementById('dag-svg');
-        const nodesGroup = document.getElementById('dag-nodes');
-        const edgesGroup = document.getElementById('dag-edges');
-        const tooltip = document.getElementById('dag-tooltip');
-        const modeSelect = document.getElementById('dag-mode-select');
-        const modeConnect = document.getElementById('dag-mode-connect');
-        const modeDelete = document.getElementById('dag-mode-delete');
-        const btnAddSource = document.getElementById('dag-add-source');
-        const btnAddTransform = document.getElementById('dag-add-transform');
-        const btnAddDestination = document.getElementById('dag-add-destination');
-        const btnClear = document.getElementById('dag-clear');
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    lockBodyScroll();
 
-        if (!container || !svg || !nodesGroup || !edgesGroup) return;
+    document.dispatchEvent(new CustomEvent('book:open', { detail: id }));
 
-        let mode = 'select'; // select, connect, delete
-        let nodes = [];
-        let edges = [];
-        let selectedNode = null;
-        let connectSource = null;
-        let isDragging = false;
-        let dragNode = null;
-        let dragOffset = { x: 0, y: 0 };
-        let nodeIdCounter = 1;
+    const lastFocus = document.activeElement;
+    modal._lastFocus = lastFocus;
+    if (modal._releaseFocusTrap) modal._releaseFocusTrap();
+    modal._releaseFocusTrap = createFocusTrap(panel, closeLibraryModal);
 
-        function getCanvasSize() {
-            const viewBox = svg.viewBox && svg.viewBox.baseVal;
-            if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
-                return { width: viewBox.width, height: viewBox.height };
+    // Backdrop + close buttons
+    if (modal._onClick) modal.removeEventListener('click', modal._onClick);
+    const onClick = (e) => {
+        const close = e.target && e.target.getAttribute ? e.target.getAttribute('data-close') : null;
+        if (close) closeLibraryModal();
+    };
+    modal._onClick = onClick;
+    modal.addEventListener('click', onClick);
+
+    // Focus dialog
+    if (reduceMotion) {
+        panel.focus();
+    } else {
+        window.setTimeout(() => panel.focus(), 0);
+    }
+}
+
+function closeLibraryModal() {
+    const modal = document.getElementById('library-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+
+    document.dispatchEvent(new CustomEvent('book:close', { detail: 'modal' }));
+
+    if (modal._releaseFocusTrap) {
+        modal._releaseFocusTrap();
+        modal._releaseFocusTrap = null;
+    }
+    if (modal._onClick) {
+        modal.removeEventListener('click', modal._onClick);
+        modal._onClick = null;
+    }
+    unlockBodyScroll();
+
+    const last = modal._lastFocus;
+    if (last && last.focus) {
+        try { last.focus(); } catch (e) { /* ignore */ }
+    }
+}
+
+async function loadContent() {
+    const statusEl = document.getElementById('library-status');
+    const result = await fetchBooksWithFallback(statusEl);
+    renderVerticalLibrary(result.books, { offline: result.offline });
+
+    // GitHub
+    const grid = document.getElementById('projects-grid');
+    try {
+        const res = await fetch('https://api.github.com/users/mrnamazbek/repos?sort=updated&per_page=6');
+        const repos = await res.json();
+        if (Array.isArray(repos) && repos.length) {
+            const statsEl = document.getElementById('stats-repos');
+            if (statsEl) statsEl.innerText = repos.length + "+";
+        }
+
+        cachedRepos = Array.isArray(repos) ? repos : [];
+        renderProjects(cachedRepos);
+    } catch (e) {
+        grid.innerHTML = '<div class="text-gray-500">GitHub API Limit Reached.</div>';
+    }
+}
+
+// INIT
+window.addEventListener('DOMContentLoaded', () => {
+    // Low-power detection first
+    if (detectLowPowerDevice()) {
+        document.body.classList.add('low-power');
+    }
+
+    // Default compact-mobile to ON for first-time mobile visitors (can be disabled via toggle)
+    if (isCompactMobileViewport() && localStorage.getItem(COMPACT_PREF_KEY) === null) {
+        setCompactPref(true);
+    }
+
+    applyCompactMobileClass();
+    initAnchorNavigation();
+
+    // Re-apply compact-mobile class on viewport changes.
+    window.addEventListener('resize', () => {
+        applyCompactMobileClass();
+    });
+
+    initShader();
+    initCustomCursor();
+    initParticles();
+    initAntiGravityLogos();
+    initScrollAnimations();
+    loadContent(); // Updated
+
+    initMobileArsenalAccordion();
+
+    initResumeModal();
+    initWorldClock();
+    initDbRankingWidget();
+
+    // Initialize new features
+    initThemeToggle();
+    initTerminalSimulation();
+    initDagVisualizer();
+
+    const projectsBtn = document.getElementById('projects-show-more');
+    if (projectsBtn) {
+        projectsBtn.addEventListener('click', () => window.loadMoreProjects());
+    }
+
+    const booksBtn = document.getElementById('books-see-all');
+    if (booksBtn) {
+        booksBtn.addEventListener('click', () => window.showAllBooks());
+    }
+
+    // Mobile defaults: reduce visible items
+    if (isMobileViewport()) {
+        projectsVisibleCount = 3;
+    }
+
+    window.filterByKeyword = (keyword) => {
+        renderProjects(cachedRepos, keyword);
+        const el = document.getElementById('projects');
+        if (el) scrollToAnchorTarget(el, 'smooth');
+    };
+
+    document.addEventListener('keyword:click', (e) => {
+        if (!e || !e.detail) return;
+        window.filterByKeyword(e.detail);
+    });
+
+    // Hero Parallax
+    const heroCard = document.getElementById('hero-card');
+    document.addEventListener('mousemove', (e) => {
+        if (document.body.classList.contains('low-power')) return;
+        const x = (window.innerWidth - e.pageX * 2) / 100;
+        const y = (window.innerHeight - e.pageY * 2) / 100;
+        if (heroCard) heroCard.style.transform = `translate(${x}px, ${y}px)`;
+    });
+});
+
+// === THEME TOGGLE ===
+const THEME_KEY = 'portfolio-theme';
+
+function getStoredTheme() {
+    return localStorage.getItem(THEME_KEY) || 'dark';
+}
+
+function setStoredTheme(theme) {
+    localStorage.setItem(THEME_KEY, theme);
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    if (moonIcon && sunIcon) {
+        moonIcon.classList.toggle('hidden', theme === 'light');
+        sunIcon.classList.toggle('hidden', theme === 'dark');
+    }
+}
+
+function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+
+    // Apply stored theme on load
+    const storedTheme = getStoredTheme();
+    applyTheme(storedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+        setStoredTheme(newTheme);
+    });
+}
+
+// === TERMINAL SIMULATION ===
+function initTerminalSimulation() {
+    const terminalContent = document.getElementById('terminal-content');
+    const terminalInput = document.getElementById('terminal-input');
+    const replayBtn = document.getElementById('terminal-replay');
+    const pauseBtn = document.getElementById('terminal-pause');
+
+    if (!terminalContent || !terminalInput) return;
+
+    const sequences = [
+        { text: "⚡ user@kbtu:~$ ./init.sh", delay: 500, class: "cyan" },
+        { text: "🔥 Initializing Data Engineer...", delay: 800, class: "warning" },
+        { text: "🧠 Loading ML Models...", delay: 600, class: "info" },
+        { text: "✅ Spark cluster connected (3 nodes)", delay: 400, class: "success" },
+        { text: "✅ Airflow DAGs loaded (12 pipelines)", delay: 300, class: "success" },
+        { text: "✅ PostgreSQL pool ready (20 connections)", delay: 300, class: "success" },
+        { text: "🐘 Kafka brokers: 3/3 healthy", delay: 500, class: "info" },
+        { text: "📊 Data quality checks: PASSED", delay: 400, class: "success" },
+        { text: "🚀 Deploying FastAPI services...", delay: 600, class: "warning" },
+        { text: "✅ All systems operational", delay: 300, class: "success" },
+        { text: "💻 System Ready! Welcome.", delay: 500, class: "purple" },
+        { text: "", delay: 200 },
+        { text: "💡 Tip: Data systems are like banking systems:", delay: 300, class: "info" },
+        { text: "    correctness first, fast second.", delay: 200, class: "info" }
+    ];
+
+    let isPaused = false;
+    let currentSequence = 0;
+    let typingTimeout = null;
+    let isTyping = false;
+
+    function clearTerminal() {
+        terminalContent.innerHTML = '';
+        terminalInput.textContent = '';
+        currentSequence = 0;
+    }
+
+    function addLine(text, className = '') {
+        const line = document.createElement('span');
+        line.className = `line ${className}`;
+        line.textContent = text;
+        terminalContent.appendChild(line);
+        terminalContent.scrollTop = terminalContent.scrollHeight;
+    }
+
+    function typeText(text, callback, charDelay = 30) {
+        isTyping = true;
+        let charIndex = 0;
+        terminalInput.textContent = '';
+
+        function typeChar() {
+            if (isPaused) {
+                typingTimeout = setTimeout(typeChar, 100);
+                return;
             }
-            return {
-                width: svg.clientWidth || 600,
-                height: svg.clientHeight || 450
-            };
+
+            if (charIndex < text.length) {
+                terminalInput.textContent += text[charIndex];
+                charIndex++;
+                typingTimeout = setTimeout(typeChar, charDelay);
+            } else {
+                isTyping = false;
+                if (callback) callback();
+            }
         }
 
-        function clampNodeToCanvas(node) {
-            const { width, height } = getCanvasSize();
-            const halfW = 35;
-            const halfH = 25;
-            const maxX = Math.max(halfW, width - halfW);
-            const maxY = Math.max(halfH, height - halfH);
-            node.x = Math.max(halfW, Math.min(maxX, node.x));
-            node.y = Math.max(halfH, Math.min(maxY, node.y));
+        typeChar();
+    }
+
+    function runSequence() {
+        if (currentSequence >= sequences.length) {
+            terminalInput.textContent = '';
+            return;
         }
 
-        function syncCanvasViewport() {
-            const rect = container.getBoundingClientRect();
-            const width = Math.max(1, Math.round(rect.width));
-            const height = Math.max(1, Math.round(rect.height));
-            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-            svg.setAttribute('width', String(width));
-            svg.setAttribute('height', String(height));
-            nodes.forEach(clampNodeToCanvas);
+        if (isPaused) {
+            typingTimeout = setTimeout(runSequence, 100);
+            return;
+        }
+
+        const seq = sequences[currentSequence];
+        currentSequence++;
+
+        if (seq.text === "") {
+            addLine("");
+            typingTimeout = setTimeout(runSequence, seq.delay);
+        } else {
+            typeText(seq.text, () => {
+                addLine(seq.text, seq.class);
+                terminalInput.textContent = '';
+                typingTimeout = setTimeout(runSequence, seq.delay);
+            });
+        }
+    }
+
+    function startSequence() {
+        clearTerminal();
+        currentSequence = 0;
+        isPaused = false;
+        if (pauseBtn) pauseBtn.textContent = 'Pause';
+        runSequence();
+    }
+
+    if (replayBtn) {
+        replayBtn.addEventListener('click', () => {
+            clearTimeout(typingTimeout);
+            startSequence();
+        });
+    }
+
+    if (pauseBtn) {
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
+        });
+    }
+
+    // Auto-start on load
+    startSequence();
+}
+
+// === DATA PIPELINE VISUALIZER (DAG) ===
+function initDagVisualizer() {
+    const container = document.getElementById('dag-canvas-container');
+    const svg = document.getElementById('dag-svg');
+    const nodesGroup = document.getElementById('dag-nodes');
+    const edgesGroup = document.getElementById('dag-edges');
+    const tooltip = document.getElementById('dag-tooltip');
+    const modeSelect = document.getElementById('dag-mode-select');
+    const modeConnect = document.getElementById('dag-mode-connect');
+    const modeDelete = document.getElementById('dag-mode-delete');
+    const btnAddSource = document.getElementById('dag-add-source');
+    const btnAddTransform = document.getElementById('dag-add-transform');
+    const btnAddDestination = document.getElementById('dag-add-destination');
+    const btnClear = document.getElementById('dag-clear');
+
+    if (!container || !svg || !nodesGroup || !edgesGroup) return;
+
+    let mode = 'select'; // select, connect, delete
+    let nodes = [];
+    let edges = [];
+    let selectedNode = null;
+    let connectSource = null;
+    let isDragging = false;
+    let dragNode = null;
+    let dragOffset = { x: 0, y: 0 };
+    let nodeIdCounter = 1;
+
+    function getCanvasSize() {
+        const viewBox = svg.viewBox && svg.viewBox.baseVal;
+        if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+            return { width: viewBox.width, height: viewBox.height };
+        }
+        return {
+            width: svg.clientWidth || 600,
+            height: svg.clientHeight || 450
+        };
+    }
+
+    function clampNodeToCanvas(node) {
+        const { width, height } = getCanvasSize();
+        const halfW = 35;
+        const halfH = 25;
+        const maxX = Math.max(halfW, width - halfW);
+        const maxY = Math.max(halfH, height - halfH);
+        node.x = Math.max(halfW, Math.min(maxX, node.x));
+        node.y = Math.max(halfH, Math.min(maxY, node.y));
+    }
+
+    function syncCanvasViewport() {
+        const rect = container.getBoundingClientRect();
+        const width = Math.max(1, Math.round(rect.width));
+        const height = Math.max(1, Math.round(rect.height));
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('width', String(width));
+        svg.setAttribute('height', String(height));
+        nodes.forEach(clampNodeToCanvas);
+        render();
+    }
+
+    // Initialize with sample pipeline
+    function initSamplePipeline() {
+        const { width, height } = getCanvasSize();
+        const leftX = Math.max(80, Math.round(width * 0.16));
+        const midX = Math.round(width * 0.5);
+        const rightX = Math.max(80, Math.min(width - 80, Math.round(width * 0.84)));
+        const centerY = Math.round(height * 0.5);
+        const upperY = Math.max(80, Math.round(height * 0.33));
+        const lowerY = Math.max(80, Math.min(height - 80, Math.round(height * 0.67)));
+
+        nodes = [
+            { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: '⬡', iconType: 'symbol' },
+            { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S', iconType: 'letter' },
+            { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C', iconType: 'letter' },
+            { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: '🐘', iconType: 'symbol' }
+        ];
+        nodes[0].x = leftX;
+        nodes[0].y = centerY;
+        nodes[1].x = midX;
+        nodes[1].y = upperY;
+        nodes[2].x = midX;
+        nodes[2].y = lowerY;
+        nodes[3].x = rightX;
+        nodes[3].y = centerY;
+        edges = [
+            { from: 1, to: 2 },
+            { from: 1, to: 3 },
+            { from: 2, to: 4 },
+            { from: 3, to: 4 }
+        ];
+        nodeIdCounter = 5;
+        nodes.forEach(clampNodeToCanvas);
+        render();
+    }
+
+    function setMode(newMode) {
+        mode = newMode;
+        selectedNode = null;
+        connectSource = null;
+
+        // Update active mode control styling
+        const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
+        [modeSelect, modeConnect, modeDelete].forEach(btn => {
+            if (!btn) return;
+            const isActive = btn === activeBtn;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        // Update cursor based on mode
+        if (svg) {
+            svg.classList.remove('cursor-crosshair', 'cursor-not-allowed');
+            if (mode === 'connect') svg.classList.add('cursor-crosshair');
+            else if (mode === 'delete') svg.classList.add('cursor-not-allowed');
+        }
+
+        render();
+    }
+
+    if (modeSelect) modeSelect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('select'); });
+    if (modeConnect) modeConnect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('connect'); });
+    if (modeDelete) modeDelete.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('delete'); });
+
+    function getCanvasPoint(evt) {
+        const rect = svg.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    }
+
+    function createNode(type, x, y) {
+        const id = nodeIdCounter++;
+
+        // Expanded tool library with icons/symbols
+        const tools = {
+            source: [
+                { label: 'Kafka', icon: '⬡', iconType: 'symbol' },
+                { label: 'Kinesis', icon: '≈', iconType: 'symbol' },
+                { label: 'Pub/Sub', icon: '◎', iconType: 'symbol' },
+                { label: 'Event Hubs', icon: '⎈', iconType: 'symbol' },
+                { label: 'RabbitMQ', icon: '🐇', iconType: 'symbol' },
+                { label: 'API', icon: 'A', iconType: 'letter' },
+                { label: 'S3', icon: '☁', iconType: 'symbol' },
+                { label: 'GCS', icon: '☁', iconType: 'symbol' },
+                { label: 'Azure Blob', icon: '⬢', iconType: 'symbol' },
+                { label: 'MySQL', icon: '🐬', iconType: 'symbol' },
+                { label: 'SQL Server', icon: '🟦', iconType: 'symbol' },
+                { label: 'MongoDB', icon: '🍃', iconType: 'symbol' },
+                { label: 'Redis', icon: '🟥', iconType: 'symbol' },
+                { label: 'Logs', icon: '📄', iconType: 'symbol' },
+                { label: 'CDC', icon: '⏱', iconType: 'symbol' },
+                { label: 'Files', icon: '📁', iconType: 'symbol' },
+                { label: 'FTP/SFTP', icon: '⇄', iconType: 'symbol' },
+                { label: 'Sensor', icon: '📡', iconType: 'symbol' },
+                { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
+                { label: 'IoT', icon: '🔗', iconType: 'symbol' }
+            ],
+            transform: [
+                { label: 'Spark', icon: 'S', iconType: 'letter' },
+                { label: 'ETL', icon: 'E', iconType: 'letter' },
+                { label: 'Cleanse', icon: 'C', iconType: 'letter' },
+                { label: 'Validate', icon: 'V', iconType: 'letter' },
+                { label: 'Enrich', icon: 'N', iconType: 'letter' },
+                { label: 'Join', icon: 'J', iconType: 'letter' },
+                { label: 'Filter', icon: 'F', iconType: 'letter' },
+                { label: 'Sort', icon: '⇅', iconType: 'symbol' },
+                { label: 'Group', icon: 'G', iconType: 'letter' },
+                { label: 'Window', icon: 'W', iconType: 'letter' },
+                { label: 'dbt', icon: '△', iconType: 'symbol' },
+                { label: 'Airflow', icon: '⟲', iconType: 'symbol' }
+            ],
+            destination: [
+                { label: 'Postgres', icon: '🐘', iconType: 'symbol' },
+                { label: 'Snowflake', icon: '❄', iconType: 'symbol' },
+                { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
+                { label: 'Redshift', icon: '▲', iconType: 'symbol' },
+                { label: 'Databricks', icon: '🧱', iconType: 'symbol' },
+                { label: 'Delta Lake', icon: 'Δ', iconType: 'symbol' },
+                { label: 'DWH', icon: 'D', iconType: 'letter' },
+                { label: 'Lake', icon: 'L', iconType: 'letter' },
+                { label: 'BI', icon: '📊', iconType: 'symbol' },
+                { label: 'Power BI', icon: '🟨', iconType: 'symbol' },
+                { label: 'Tableau', icon: '✶', iconType: 'symbol' },
+                { label: 'Looker', icon: '◔', iconType: 'symbol' },
+                { label: 'API', icon: '🔌', iconType: 'symbol' },
+                { label: 'Cache', icon: '⚡', iconType: 'symbol' },
+                { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
+                { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
+                { label: 'DuckDB', icon: '🦆', iconType: 'symbol' },
+                { label: 'Elasticsearch', icon: '🧲', iconType: 'symbol' },
+                { label: 'Grafana', icon: '📈', iconType: 'symbol' }
+            ]
+        };
+
+        const typeTools = tools[type];
+        const idx = Math.floor(Math.random() * typeTools.length);
+        const tool = typeTools[idx];
+
+        const newNode = {
+            id,
+            x,
+            y,
+            type,
+            label: tool.label,
+            icon: tool.icon,
+            iconType: tool.iconType
+        };
+        clampNodeToCanvas(newNode);
+        nodes.push(newNode);
+        render();
+    }
+
+    function getSpawnPoint(type) {
+        const { width, height } = getCanvasSize();
+        const centerY = Math.round(height * 0.5);
+        if (type === 'source') return { x: Math.max(80, Math.round(width * 0.18)), y: centerY };
+        if (type === 'transform') return { x: Math.round(width * 0.5), y: centerY };
+        return { x: Math.max(80, Math.min(width - 80, Math.round(width * 0.82))), y: centerY };
+    }
+
+    if (btnAddSource) btnAddSource.addEventListener('click', () => {
+        const p = getSpawnPoint('source');
+        createNode('source', p.x, p.y);
+    });
+    if (btnAddTransform) btnAddTransform.addEventListener('click', () => {
+        const p = getSpawnPoint('transform');
+        createNode('transform', p.x, p.y);
+    });
+    if (btnAddDestination) btnAddDestination.addEventListener('click', () => {
+        const p = getSpawnPoint('destination');
+        createNode('destination', p.x, p.y);
+    });
+    if (btnClear) {
+        btnClear.addEventListener('click', () => {
+            nodes = [];
+            edges = [];
+            nodeIdCounter = 1;
+            render();
+        });
+    }
+
+    function deleteNode(nodeId) {
+        nodes = nodes.filter(n => n.id !== nodeId);
+        edges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
+        render();
+    }
+
+    function render() {
+        // Render nodes
+        nodesGroup.innerHTML = '';
+        nodes.forEach(node => {
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.classList.add('dag-node', `dag-node-${node.type}`);
+            if (selectedNode === node.id) g.classList.add('selected');
+            g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+            g.dataset.nodeId = node.id;
+
+            // Node shape
+            const shape = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            shape.setAttribute('x', -35);
+            shape.setAttribute('y', -25);
+            shape.setAttribute('width', 70);
+            shape.setAttribute('height', 50);
+            shape.setAttribute('rx', 8);
+            shape.classList.add('dag-node-shape');
+            g.appendChild(shape);
+
+            // Icon
+            const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            icon.textContent = node.icon;
+            icon.setAttribute('y', -2);
+            icon.classList.add('dag-node-icon');
+            // Adjust font size for emoji vs letter icons
+            if (node.iconType === 'symbol') {
+                icon.setAttribute('font-size', '16');
+            } else {
+                icon.setAttribute('font-size', '14');
+            }
+            g.appendChild(icon);
+
+            // Label
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.textContent = node.label;
+            label.setAttribute('y', 16);
+            label.classList.add('dag-node-label');
+            g.appendChild(label);
+
+            // Event handlers
+            g.addEventListener('mousedown', (e) => handleNodeMouseDown(e, node));
+            g.addEventListener('mouseenter', () => showTooltip(node));
+            g.addEventListener('mouseleave', hideTooltip);
+
+            nodesGroup.appendChild(g);
+        });
+
+        // Render edges
+        edgesGroup.innerHTML = '';
+        edges.forEach((edge, idx) => {
+            const fromNode = nodes.find(n => n.id === edge.from);
+            const toNode = nodes.find(n => n.id === edge.to);
+            if (!fromNode || !toNode) return;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const d = calculateEdgePath(fromNode, toNode);
+            path.setAttribute('d', d);
+            path.classList.add('dag-edge');
+            path.addEventListener('click', () => {
+                if (mode === 'delete') {
+                    edges.splice(idx, 1);
+                    render();
+                }
+            });
+            edgesGroup.appendChild(path);
+        });
+    }
+
+    function calculateEdgePath(from, to) {
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const midX = (from.x + to.x) / 2;
+        return `M ${from.x + 35} ${from.y} C ${midX} ${from.y}, ${midX} ${to.y}, ${to.x - 35} ${to.y}`;
+    }
+
+    function handleNodeMouseDown(e, node) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (mode === 'delete') {
+            deleteNode(node.id);
+            return;
+        }
+
+        if (mode === 'connect') {
+            if (!connectSource) {
+                connectSource = node.id;
+                selectedNode = node.id;
+                render();
+            } else if (connectSource !== node.id) {
+                // Check if edge already exists
+                const exists = edges.some(e => e.from === connectSource && e.to === node.id);
+                if (!exists) {
+                    edges.push({ from: connectSource, to: node.id });
+                }
+                connectSource = null;
+                selectedNode = null;
+                render();
+            }
+            return;
+        }
+
+        // Select mode - start drag
+        isDragging = true;
+        dragNode = node;
+        selectedNode = node.id;
+        const pt = getCanvasPoint(e);
+        dragOffset.x = pt.x - node.x;
+        dragOffset.y = pt.y - node.y;
+        render();
+    }
+
+    function showTooltip(node) {
+        if (!tooltip) return;
+        tooltip.textContent = `${node.type.toUpperCase()}: ${node.label}`;
+        tooltip.classList.add('visible');
+        const containerRect = container.getBoundingClientRect();
+        const tooltipWidth = tooltip.offsetWidth || 160;
+        const tooltipHeight = tooltip.offsetHeight || 34;
+        const left = Math.max(8, Math.min(containerRect.width - tooltipWidth - 8, node.x - tooltipWidth / 2));
+        const top = Math.max(8, Math.min(containerRect.height - tooltipHeight - 8, node.y - tooltipHeight - 8));
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+    }
+
+    function hideTooltip() {
+        if (tooltip) tooltip.classList.remove('visible');
+    }
+
+    // Drag handling on both svg and window for smoother edge dragging
+    function handleDragMove(e) {
+        if (isDragging && dragNode) {
+            const pt = getCanvasPoint(e);
+            dragNode.x = pt.x - dragOffset.x;
+            dragNode.y = pt.y - dragOffset.y;
+            clampNodeToCanvas(dragNode);
             render();
         }
+    }
 
-        // Initialize with sample pipeline
-        function initSamplePipeline() {
-            const { width, height } = getCanvasSize();
-            const leftX = Math.max(80, Math.round(width * 0.16));
-            const midX = Math.round(width * 0.5);
-            const rightX = Math.max(80, Math.min(width - 80, Math.round(width * 0.84)));
-            const centerY = Math.round(height * 0.5);
-            const upperY = Math.max(80, Math.round(height * 0.33));
-            const lowerY = Math.max(80, Math.min(height - 80, Math.round(height * 0.67)));
+    function stopDragging() {
+        isDragging = false;
+        dragNode = null;
+    }
 
-            nodes = [
-                { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: '⬡', iconType: 'symbol' },
-                { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S', iconType: 'letter' },
-                { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C', iconType: 'letter' },
-                { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: '🐘', iconType: 'symbol' }
-            ];
-            nodes[0].x = leftX;
-            nodes[0].y = centerY;
-            nodes[1].x = midX;
-            nodes[1].y = upperY;
-            nodes[2].x = midX;
-            nodes[2].y = lowerY;
-            nodes[3].x = rightX;
-            nodes[3].y = centerY;
-            edges = [
-                { from: 1, to: 2 },
-                { from: 1, to: 3 },
-                { from: 2, to: 4 },
-                { from: 3, to: 4 }
-            ];
-            nodeIdCounter = 5;
-            nodes.forEach(clampNodeToCanvas);
-            render();
-        }
+    window.addEventListener('mousemove', handleDragMove);
 
-        function setMode(newMode) {
-            mode = newMode;
+    svg.addEventListener('mouseup', stopDragging);
+    window.addEventListener('mouseup', stopDragging);
+    window.addEventListener('blur', stopDragging);
+
+    svg.addEventListener('mouseleave', () => {
+        hideTooltip();
+    });
+
+    svg.addEventListener('click', (e) => {
+        if (e.target === svg) {
             selectedNode = null;
             connectSource = null;
-
-            // Update active mode control styling
-            const activeBtn = mode === 'select' ? modeSelect : mode === 'connect' ? modeConnect : modeDelete;
-            [modeSelect, modeConnect, modeDelete].forEach(btn => {
-                if (!btn) return;
-                const isActive = btn === activeBtn;
-                btn.classList.toggle('is-active', isActive);
-                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-            });
-
-            // Update cursor based on mode
-            if (svg) {
-                svg.classList.remove('cursor-crosshair', 'cursor-not-allowed');
-                if (mode === 'connect') svg.classList.add('cursor-crosshair');
-                else if (mode === 'delete') svg.classList.add('cursor-not-allowed');
-            }
-
             render();
         }
+    });
 
-        if (modeSelect) modeSelect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('select'); });
-        if (modeConnect) modeConnect.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('connect'); });
-        if (modeDelete) modeDelete.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMode('delete'); });
-
-        function getCanvasPoint(evt) {
-            const rect = svg.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
-        }
-
-        function createNode(type, x, y) {
-            const id = nodeIdCounter++;
-            
-            // Expanded tool library with icons/symbols
-            const tools = {
-                source: [
-                    { label: 'Kafka', icon: '⬡', iconType: 'symbol' },
-                    { label: 'Kinesis', icon: '≈', iconType: 'symbol' },
-                    { label: 'Pub/Sub', icon: '◎', iconType: 'symbol' },
-                    { label: 'Event Hubs', icon: '⎈', iconType: 'symbol' },
-                    { label: 'RabbitMQ', icon: '🐇', iconType: 'symbol' },
-                    { label: 'API', icon: 'A', iconType: 'letter' },
-                    { label: 'S3', icon: '☁', iconType: 'symbol' },
-                    { label: 'GCS', icon: '☁', iconType: 'symbol' },
-                    { label: 'Azure Blob', icon: '⬢', iconType: 'symbol' },
-                    { label: 'MySQL', icon: '🐬', iconType: 'symbol' },
-                    { label: 'SQL Server', icon: '🟦', iconType: 'symbol' },
-                    { label: 'MongoDB', icon: '🍃', iconType: 'symbol' },
-                    { label: 'Redis', icon: '🟥', iconType: 'symbol' },
-                    { label: 'Logs', icon: '📄', iconType: 'symbol' },
-                    { label: 'CDC', icon: '⏱', iconType: 'symbol' },
-                    { label: 'Files', icon: '📁', iconType: 'symbol' },
-                    { label: 'FTP/SFTP', icon: '⇄', iconType: 'symbol' },
-                    { label: 'Sensor', icon: '📡', iconType: 'symbol' },
-                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
-                    { label: 'IoT', icon: '🔗', iconType: 'symbol' }
-                ],
-                transform: [
-                    { label: 'Spark', icon: 'S', iconType: 'letter' },
-                    { label: 'ETL', icon: 'E', iconType: 'letter' },
-                    { label: 'Cleanse', icon: 'C', iconType: 'letter' },
-                    { label: 'Validate', icon: 'V', iconType: 'letter' },
-                    { label: 'Enrich', icon: 'N', iconType: 'letter' },
-                    { label: 'Join', icon: 'J', iconType: 'letter' },
-                    { label: 'Filter', icon: 'F', iconType: 'letter' },
-                    { label: 'Sort', icon: '⇅', iconType: 'symbol' },
-                    { label: 'Group', icon: 'G', iconType: 'letter' },
-                    { label: 'Window', icon: 'W', iconType: 'letter' },
-                    { label: 'dbt', icon: '△', iconType: 'symbol' },
-                    { label: 'Airflow', icon: '⟲', iconType: 'symbol' }
-                ],
-                destination: [
-                    { label: 'Postgres', icon: '🐘', iconType: 'symbol' },
-                    { label: 'Snowflake', icon: '❄', iconType: 'symbol' },
-                    { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
-                    { label: 'Redshift', icon: '▲', iconType: 'symbol' },
-                    { label: 'Databricks', icon: '🧱', iconType: 'symbol' },
-                    { label: 'Delta Lake', icon: 'Δ', iconType: 'symbol' },
-                    { label: 'DWH', icon: 'D', iconType: 'letter' },
-                    { label: 'Lake', icon: 'L', iconType: 'letter' },
-                    { label: 'BI', icon: '📊', iconType: 'symbol' },
-                    { label: 'Power BI', icon: '🟨', iconType: 'symbol' },
-                    { label: 'Tableau', icon: '✶', iconType: 'symbol' },
-                    { label: 'Looker', icon: '◔', iconType: 'symbol' },
-                    { label: 'API', icon: '🔌', iconType: 'symbol' },
-                    { label: 'Cache', icon: '⚡', iconType: 'symbol' },
-                    { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
-                    { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
-                    { label: 'DuckDB', icon: '🦆', iconType: 'symbol' },
-                    { label: 'Elasticsearch', icon: '🧲', iconType: 'symbol' },
-                    { label: 'Grafana', icon: '📈', iconType: 'symbol' }
-                ]
-            };
-            
-            const typeTools = tools[type];
-            const idx = Math.floor(Math.random() * typeTools.length);
-            const tool = typeTools[idx];
-            
-            const newNode = {
-                id,
-                x,
-                y,
-                type,
-                label: tool.label,
-                icon: tool.icon,
-                iconType: tool.iconType
-            };
-            clampNodeToCanvas(newNode);
-            nodes.push(newNode);
-            render();
-        }
-
-        function getSpawnPoint(type) {
-            const { width, height } = getCanvasSize();
-            const centerY = Math.round(height * 0.5);
-            if (type === 'source') return { x: Math.max(80, Math.round(width * 0.18)), y: centerY };
-            if (type === 'transform') return { x: Math.round(width * 0.5), y: centerY };
-            return { x: Math.max(80, Math.min(width - 80, Math.round(width * 0.82))), y: centerY };
-        }
-
-        if (btnAddSource) btnAddSource.addEventListener('click', () => {
-            const p = getSpawnPoint('source');
-            createNode('source', p.x, p.y);
-        });
-        if (btnAddTransform) btnAddTransform.addEventListener('click', () => {
-            const p = getSpawnPoint('transform');
-            createNode('transform', p.x, p.y);
-        });
-        if (btnAddDestination) btnAddDestination.addEventListener('click', () => {
-            const p = getSpawnPoint('destination');
-            createNode('destination', p.x, p.y);
-        });
-        if (btnClear) {
-            btnClear.addEventListener('click', () => {
-                nodes = [];
-                edges = [];
-                nodeIdCounter = 1;
-                render();
-            });
-        }
-
-        function deleteNode(nodeId) {
-            nodes = nodes.filter(n => n.id !== nodeId);
-            edges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
-            render();
-        }
-
-        function render() {
-            // Render nodes
-            nodesGroup.innerHTML = '';
-            nodes.forEach(node => {
-                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.classList.add('dag-node', `dag-node-${node.type}`);
-                if (selectedNode === node.id) g.classList.add('selected');
-                g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
-                g.dataset.nodeId = node.id;
-
-                // Node shape
-                const shape = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                shape.setAttribute('x', -35);
-                shape.setAttribute('y', -25);
-                shape.setAttribute('width', 70);
-                shape.setAttribute('height', 50);
-                shape.setAttribute('rx', 8);
-                shape.classList.add('dag-node-shape');
-                g.appendChild(shape);
-
-                // Icon
-                const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                icon.textContent = node.icon;
-                icon.setAttribute('y', -2);
-                icon.classList.add('dag-node-icon');
-                // Adjust font size for emoji vs letter icons
-                if (node.iconType === 'symbol') {
-                    icon.setAttribute('font-size', '16');
-                } else {
-                    icon.setAttribute('font-size', '14');
-                }
-                g.appendChild(icon);
-
-                // Label
-                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                label.textContent = node.label;
-                label.setAttribute('y', 16);
-                label.classList.add('dag-node-label');
-                g.appendChild(label);
-
-                // Event handlers
-                g.addEventListener('mousedown', (e) => handleNodeMouseDown(e, node));
-                g.addEventListener('mouseenter', () => showTooltip(node));
-                g.addEventListener('mouseleave', hideTooltip);
-
-                nodesGroup.appendChild(g);
-            });
-
-            // Render edges
-            edgesGroup.innerHTML = '';
-            edges.forEach((edge, idx) => {
-                const fromNode = nodes.find(n => n.id === edge.from);
-                const toNode = nodes.find(n => n.id === edge.to);
-                if (!fromNode || !toNode) return;
-
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const d = calculateEdgePath(fromNode, toNode);
-                path.setAttribute('d', d);
-                path.classList.add('dag-edge');
-                path.addEventListener('click', () => {
-                    if (mode === 'delete') {
-                        edges.splice(idx, 1);
-                        render();
-                    }
-                });
-                edgesGroup.appendChild(path);
-            });
-        }
-
-        function calculateEdgePath(from, to) {
-            const dx = to.x - from.x;
-            const dy = to.y - from.y;
-            const midX = (from.x + to.x) / 2;
-            return `M ${from.x + 35} ${from.y} C ${midX} ${from.y}, ${midX} ${to.y}, ${to.x - 35} ${to.y}`;
-        }
-
-        function handleNodeMouseDown(e, node) {
-            e.stopPropagation();
-            e.preventDefault();
-
-            if (mode === 'delete') {
-                deleteNode(node.id);
-                return;
-            }
-
-            if (mode === 'connect') {
-                if (!connectSource) {
-                    connectSource = node.id;
-                    selectedNode = node.id;
-                    render();
-                } else if (connectSource !== node.id) {
-                    // Check if edge already exists
-                    const exists = edges.some(e => e.from === connectSource && e.to === node.id);
-                    if (!exists) {
-                        edges.push({ from: connectSource, to: node.id });
-                    }
-                    connectSource = null;
-                    selectedNode = null;
-                    render();
-                }
-                return;
-            }
-
-            // Select mode - start drag
-            isDragging = true;
-            dragNode = node;
-            selectedNode = node.id;
-            const pt = getCanvasPoint(e);
-            dragOffset.x = pt.x - node.x;
-            dragOffset.y = pt.y - node.y;
-            render();
-        }
-
-        function showTooltip(node) {
-            if (!tooltip) return;
-            tooltip.textContent = `${node.type.toUpperCase()}: ${node.label}`;
-            tooltip.classList.add('visible');
-            const containerRect = container.getBoundingClientRect();
-            const tooltipWidth = tooltip.offsetWidth || 160;
-            const tooltipHeight = tooltip.offsetHeight || 34;
-            const left = Math.max(8, Math.min(containerRect.width - tooltipWidth - 8, node.x - tooltipWidth / 2));
-            const top = Math.max(8, Math.min(containerRect.height - tooltipHeight - 8, node.y - tooltipHeight - 8));
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-        }
-
-        function hideTooltip() {
-            if (tooltip) tooltip.classList.remove('visible');
-        }
-
-        // Drag handling on both svg and window for smoother edge dragging
-        function handleDragMove(e) {
-            if (isDragging && dragNode) {
-                const pt = getCanvasPoint(e);
-                dragNode.x = pt.x - dragOffset.x;
-                dragNode.y = pt.y - dragOffset.y;
-                clampNodeToCanvas(dragNode);
-                render();
-            }
-        }
-
-        function stopDragging() {
-            isDragging = false;
-            dragNode = null;
-        }
-
-        window.addEventListener('mousemove', handleDragMove);
-
-        svg.addEventListener('mouseup', stopDragging);
-        window.addEventListener('mouseup', stopDragging);
-        window.addEventListener('blur', stopDragging);
-
-        svg.addEventListener('mouseleave', () => {
-            hideTooltip();
-        });
-
-        svg.addEventListener('click', (e) => {
-            if (e.target === svg) {
-                selectedNode = null;
-                connectSource = null;
-                render();
-            }
-        });
-
-        // Keep the SVG user-space in sync with rendered dimensions
-        syncCanvasViewport();
-        if (typeof ResizeObserver !== 'undefined') {
-            const resizeObserver = new ResizeObserver(() => syncCanvasViewport());
-            resizeObserver.observe(container);
-        } else {
-            window.addEventListener('resize', syncCanvasViewport);
-        }
-
-        // Initialize
-        setMode('select');
-        initSamplePipeline();
+    // Keep the SVG user-space in sync with rendered dimensions
+    syncCanvasViewport();
+    if (typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(() => syncCanvasViewport());
+        resizeObserver.observe(container);
+    } else {
+        window.addEventListener('resize', syncCanvasViewport);
     }
+
+    // Initialize
+    setMode('select');
+    initSamplePipeline();
+}
