@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namazbek Bekzhanov | Data Engineer & Creative Developer</title>
     <meta name="description"
-          content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
+        content="Portfolio of Namazbek Bekzhanov. Data Engineer, Backend Developer, and SQL Optimizer.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap"
-            rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Devicon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
@@ -32,775 +32,1159 @@
 
 <body class="antialiased selection:bg-cyan-500 selection:text-white">
 
-<!-- 1. Background Shader -->
-<canvas id="webgl-canvas"></canvas>
+    <!-- 1. Background Shader -->
+    <canvas id="webgl-canvas"></canvas>
 
-<!-- 2. Anti-Gravity Container -->
-<div id="anti-gravity-container"></div>
+    <!-- 2. Anti-Gravity Container -->
+    <div id="anti-gravity-container"></div>
 
-<!-- 3. Particle Effects -->
-<canvas id="fx-canvas"></canvas>
+    <!-- 3. Particle Effects -->
+    <canvas id="fx-canvas"></canvas>
 
-<!-- 4. Custom Cursor -->
-<div id="custom-cursor"></div>
+    <!-- 4. Custom Cursor -->
+    <div id="custom-cursor"></div>
 
-<!-- Main Content -->
-<main class="site-main relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
+    <!-- Main Content -->
+    <main
+        class="site-main relative z-10 px-4 sm:px-6 pt-6 md:pt-10 pb-24 md:pb-20 max-w-7xl mx-auto space-y-14 md:space-y-24">
 
-    <!-- Navigation -->
-    <nav id="site-nav" class="site-nav flex justify-between items-center py-3 md:py-6 glass-card ui-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
-        <div
+        <!-- Navigation -->
+        <nav id="site-nav"
+            class="site-nav flex justify-between items-center py-3 md:py-6 glass-card ui-card px-4 md:px-8 rounded-full sticky top-3 md:top-4 z-50">
+            <div
                 class="font-display font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-            NB.
-        </div>
-        <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
-            <a href="#about" class="hover:text-white transition">About</a>
-            <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
-            <a href="#journey" class="hover:text-white transition">Journey</a>
-            <a href="#ai-monthly-lab" class="hover:text-white transition">AI Lab</a>
-            <a href="#audience-pulse" class="hover:text-white transition">Pulse</a>
-            <a href="#pipeline-visualizer" class="hover:text-white transition">Pipeline</a>
-            <a href="#terminal" class="hover:text-white transition">Console</a>
-            <a href="#projects" class="hover:text-white transition">Projects</a>
-            <a href="#vertical-library" class="hover:text-white transition">Library</a>
-        </div>
-        <div class="flex gap-2 md:gap-4 items-center">
-            <button id="theme-toggle" type="button" class="ui-button min-h-[44px] px-3 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-gray-200" aria-label="Toggle theme">
-                <svg id="theme-icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            </button>
-            <button id="resume-open" type="button" aria-controls="resume-modal" aria-expanded="false" class="ui-button min-h-[44px] px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200">Resume</button>
-            <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
-                    class="devicon-github-original text-xl"></i></a>
-            <a href="https://linkedin.com/in/namazbek" target="_blank" class="hover:scale-110 transition"><i
-                    class="devicon-linkedin-plain text-xl"></i></a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="about" class="site-section min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-        <div class="flex-1 space-y-8 glass-card ui-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none">
-            <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-xs font-medium text-cyan-200">Open to Work</span>
+                NB.
             </div>
-
-            <h1
-                    class="hero-title font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
-                Building Resilient <br> Data Systems.
-            </h1>
-
-            <p class="hero-subtitle text-gray-300 max-w-lg leading-relaxed">
-                I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft
-                high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-                <a href="#projects"
-                   class="ui-button min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
-                    Projects</a>
-                <a href="#contact"
-                   class="ui-button min-h-[44px] px-6 py-3 glass-card ui-card hover:bg-white/10 font-bold rounded-lg transition text-center">Contact Me</a>
+            <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
+                <a href="#journey" class="hover:text-white transition">Journey</a>
+                <a href="#ai-monthly-lab" class="hover:text-white transition">AI Lab</a>
+                <a href="#audience-pulse" class="hover:text-white transition">Pulse</a>
+                <a href="#pipeline-visualizer" class="hover:text-white transition">Pipeline</a>
+                <a href="#terminal" class="hover:text-white transition">Console</a>
+                <a href="#projects" class="hover:text-white transition">Projects</a>
+                <a href="#vertical-library" class="hover:text-white transition">Library</a>
             </div>
-        </div>
+            <div class="flex gap-2 md:gap-4 items-center">
+                <button id="theme-toggle" type="button"
+                    class="ui-button min-h-[44px] px-3 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-gray-200"
+                    aria-label="Toggle theme">
+                    <svg id="theme-icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                    <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                </button>
+                <button id="resume-open" type="button" aria-controls="resume-modal" aria-expanded="false"
+                    class="ui-button min-h-[44px] px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono text-gray-200">Resume</button>
+                <a href="https://github.com/mrnamazbek" target="_blank" class="hover:scale-110 transition"><i
+                        class="devicon-github-original text-xl"></i></a>
+                <a href="https://linkedin.com/in/namazbek" target="_blank" class="hover:scale-110 transition"><i
+                        class="devicon-linkedin-plain text-xl"></i></a>
+            </div>
+        </nav>
 
-        <!-- Profile Card -->
-        <div id="hero-card"
-             class="w-full max-w-sm glass-card ui-card p-8 flex flex-col items-center text-center transform transition-transform duration-200 hover:shadow-2xl hover:shadow-cyan-500/20">
+        <!-- Hero Section -->
+        <section id="about"
+            class="site-section min-h-[60vh] md:min-h-[70vh] flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
             <div
-                    class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-2xl mb-6 relative group">
+                class="flex-1 space-y-8 glass-card ui-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none">
                 <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span class="text-xs font-medium text-cyan-200">Open to Work</span>
+                </div>
+
+                <h1
+                    class="hero-title font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
+                    Building Resilient <br> Data Systems.
+                </h1>
+
+                <p class="hero-subtitle text-gray-300 max-w-lg leading-relaxed">
+                    I'm <strong class="text-white">Namazbek</strong>, a Data Engineer & Backend Developer. I craft
+                    high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+                    <a href="#projects"
+                        class="ui-button min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
+                        Projects</a>
+                    <a href="#contact"
+                        class="ui-button min-h-[44px] px-6 py-3 glass-card ui-card hover:bg-white/10 font-bold rounded-lg transition text-center">Contact
+                        Me</a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div id="hero-card"
+                class="w-full max-w-sm glass-card ui-card p-8 flex flex-col items-center text-center transform transition-transform duration-200 hover:shadow-2xl hover:shadow-cyan-500/20">
+                <div
+                    class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-2xl mb-6 relative group">
+                    <div
                         class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold">
-                    NB
+                        NB
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold font-display">Namazbek Bekzhanov</h2>
+                <p class="text-indigo-200 mb-6 font-mono text-sm">Almaty, Kazakhstan</p>
+
+                <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
+                    <div>
+                        <div class="text-2xl font-bold font-mono" id="stats-repos">-</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Repos</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-mono">3+</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Years</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-mono">5+</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Certs</div>
+                    </div>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold font-display">Namazbek Bekzhanov</h2>
-            <p class="text-indigo-200 mb-6 font-mono text-sm">Almaty, Kazakhstan</p>
+        </section>
 
-            <div class="grid grid-cols-3 gap-4 w-full border-t border-white/10 pt-6">
-                <div>
-                    <div class="text-2xl font-bold font-mono" id="stats-repos">-</div>
-                    <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Repos</div>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold font-mono">3+</div>
-                    <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Years</div>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold font-mono">5+</div>
-                    <div class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Certs</div>
-                </div>
+        <div class="md:hidden fixed bottom-3 left-3 right-3 z-50">
+            <div class="glass-card ui-card px-4 py-3 rounded-2xl flex items-center justify-between gap-3">
+                <a href="#projects"
+                    class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl bg-white text-black font-bold">Projects</a>
+                <a href="#contact"
+                    class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
             </div>
         </div>
-    </section>
 
-    <div class="md:hidden fixed bottom-3 left-3 right-3 z-50">
-        <div class="glass-card ui-card px-4 py-3 rounded-2xl flex items-center justify-between gap-3">
-            <a href="#projects" class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl bg-white text-black font-bold">Projects</a>
-            <a href="#contact" class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
-        </div>
-    </div>
+        <!-- TECHNOLOGY ARSENAL -->
+        <section id="arsenal" class="site-section space-y-12">
+            <div>
+                <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
+                <p class="text-gray-400">The tools I use to build the future.</p>
+            </div>
 
-    <!-- TECHNOLOGY ARSENAL -->
-    <section id="arsenal" class="site-section space-y-12">
-        <div>
-            <h2 class="text-4xl font-display font-bold mb-2">Technology Arsenal</h2>
-            <p class="text-gray-400">The tools I use to build the future.</p>
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <!-- ML -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- ML -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"><i
                                 class="devicon-python-plain"></i></span>
-                    <h3 class="text-xl font-bold">Machine Learning & AI</h3>
+                        <h3 class="text-xl font-bold">Machine Learning & AI</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-scikitlearn-plain colored"></i> Scikit-learn</span>
+                        <span class="tech-chip"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span>
+                        <span class="tech-chip"><i class="devicon-pytorch-original colored"></i> PyTorch</span>
+                        <span class="tech-chip"><i class="devicon-keras-plain colored"></i> Keras</span>
+                        <span class="tech-chip"><i class="devicon-numpy-plain colored"></i> NumPy</span>
+                        <span class="tech-chip"><i class="devicon-pandas-plain colored"></i> Pandas</span>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-scikitlearn-plain colored"></i> Scikit-learn</span>
-                    <span class="tech-chip"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span>
-                    <span class="tech-chip"><i class="devicon-pytorch-original colored"></i> PyTorch</span>
-                    <span class="tech-chip"><i class="devicon-keras-plain colored"></i> Keras</span>
-                    <span class="tech-chip"><i class="devicon-numpy-plain colored"></i> NumPy</span>
-                    <span class="tech-chip"><i class="devicon-pandas-plain colored"></i> Pandas</span>
-                </div>
-            </div>
 
-            <!-- Big Data -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- Big Data -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
                                 class="devicon-apachespark-original"></i></span>
-                    <h3 class="text-xl font-bold">Big Data</h3>
+                        <h3 class="text-xl font-bold">Big Data</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-apachespark-original colored"></i> Spark</span>
+                        <span class="tech-chip"><i class="devicon-hadoop-plain colored"></i> Hadoop</span>
+                        <span class="tech-chip"><i class="devicon-apacheairflow-plain colored"></i> Airflow</span>
+                        <span class="tech-chip"><i class="devicon-apachekafka-original colored"></i> Kafka</span>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-apachespark-original colored"></i> Spark</span>
-                    <span class="tech-chip"><i class="devicon-hadoop-plain colored"></i> Hadoop</span>
-                    <span class="tech-chip"><i class="devicon-apacheairflow-plain colored"></i> Airflow</span>
-                    <span class="tech-chip"><i class="devicon-apachekafka-original colored"></i> Kafka</span>
-                </div>
-            </div>
 
-            <!-- Languages -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- Languages -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i
                                 class="devicon-bash-plain"></i></span>
-                    <h3 class="text-xl font-bold">Languages</h3>
+                        <h3 class="text-xl font-bold">Languages</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-python-plain colored"></i> Python</span>
+                        <span class="tech-chip"><i class="devicon-go-original-wordmark colored"></i> Go</span>
+                        <span class="tech-chip"><i class="devicon-java-plain colored"></i> Java</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> SQL</span>
+                        <span class="tech-chip"><i class="devicon-bash-plain colored"></i> Bash</span>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-python-plain colored"></i> Python</span>
-                    <span class="tech-chip"><i class="devicon-go-original-wordmark colored"></i> Go</span>
-                    <span class="tech-chip"><i class="devicon-java-plain colored"></i> Java</span>
-                    <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> SQL</span>
-                    <span class="tech-chip"><i class="devicon-bash-plain colored"></i> Bash</span>
-                </div>
-            </div>
 
-            <!-- DBs -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- DBs -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i
                                 class="devicon-postgresql-plain"></i></span>
-                    <h3 class="text-xl font-bold">Databases</h3>
+                        <h3 class="text-xl font-bold">Databases</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-postgresql-plain colored"></i> Postgres</span>
+                        <span class="tech-chip"><i class="devicon-oracle-original colored"></i> Oracle</span>
+                        <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+                        <span class="tech-chip"><i class="devicon-microsoftsqlserver-plain colored"></i> MSSQL</span>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-postgresql-plain colored"></i> Postgres</span>
-                    <span class="tech-chip"><i class="devicon-oracle-original colored"></i> Oracle</span>
-                    <span class="tech-chip"><i class="devicon-mysql-plain colored"></i> MySQL</span>
-                    <span class="tech-chip"><i class="devicon-microsoftsqlserver-plain colored"></i> MSSQL</span>
-                </div>
-            </div>
 
-            <!-- DevOps -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- DevOps -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i
                                 class="devicon-docker-plain"></i></span>
-                    <h3 class="text-xl font-bold">DevOps</h3>
+                        <h3 class="text-xl font-bold">DevOps</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-docker-plain colored"></i> Docker</span>
+                        <span class="tech-chip"><i class="devicon-git-plain colored"></i> Git</span>
+                        <span class="tech-chip"><i class="devicon-linux-plain colored"></i> Linux</span>
+                        <span class="tech-chip"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-docker-plain colored"></i> Docker</span>
-                    <span class="tech-chip"><i class="devicon-git-plain colored"></i> Git</span>
-                    <span class="tech-chip"><i class="devicon-linux-plain colored"></i> Linux</span>
-                    <span class="tech-chip"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
-                </div>
-            </div>
 
-            <!-- IDEs -->
-            <div class="glass-card ui-card p-6" data-arsenal-card>
-                <div class="flex items-center gap-3 mb-6">
+                <!-- IDEs -->
+                <div class="glass-card ui-card p-6" data-arsenal-card>
+                    <div class="flex items-center gap-3 mb-6">
                         <span class="p-2 bg-pink-500/20 rounded-lg text-pink-400"><i
                                 class="devicon-vscode-plain"></i></span>
-                    <h3 class="text-xl font-bold">Environment</h3>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tech-chip"><i class="devicon-pycharm-plain colored"></i> PyCharm</span>
-                    <span class="tech-chip"><i class="devicon-datagrip-plain colored"></i> DataGrip</span>
-                    <span class="tech-chip"><i class="devicon-jetbrains-plain colored"></i> DataSpell</span>
-                    <span class="tech-chip"><i class="devicon-dbeaver-plain colored"></i> DBeaver</span>
-                    <span
+                        <h3 class="text-xl font-bold">Environment</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-chip"><i class="devicon-pycharm-plain colored"></i> PyCharm</span>
+                        <span class="tech-chip"><i class="devicon-datagrip-plain colored"></i> DataGrip</span>
+                        <span class="tech-chip"><i class="devicon-jetbrains-plain colored"></i> DataSpell</span>
+                        <span class="tech-chip"><i class="devicon-dbeaver-plain colored"></i> DBeaver</span>
+                        <span
                             class="tech-chip bg-gradient-to-r from-blue-500/50 to-purple-500/50 border-blue-400/50 font-bold">Antigravity</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- KEYWORDS GLOBE -->
-    <section id="globe-section" class="site-section space-y-6" aria-label="Skills keyword globe">
-        <div>
-            <h2 class="text-4xl font-display font-bold mb-2">Keywords Universe</h2>
-            <p class="text-gray-400">Click any keyword to filter projects. Drag to explore.</p>
-        </div>
-        <div id="globe-container" class="glass-card ui-card">
-            <canvas id="globe-canvas" tabindex="0" role="img"
+        <!-- KEYWORDS GLOBE -->
+        <section id="globe-section" class="site-section space-y-6" aria-label="Skills keyword globe">
+            <div>
+                <h2 class="text-4xl font-display font-bold mb-2">Keywords Universe</h2>
+                <p class="text-gray-400">Click any keyword to filter projects. Drag to explore.</p>
+            </div>
+            <div id="globe-container" class="glass-card ui-card">
+                <canvas id="globe-canvas" tabindex="0" role="img"
                     aria-label="Interactive 3D globe of technology keywords. Use tab to navigate keywords, Enter to select."></canvas>
-            <div id="globe-tooltip"><span class="tt-keyword"></span><span class="tt-category"></span></div>
-            <!-- 2D fallback injected here if needed -->
-        </div>
-        <div class="globe-legend" role="list" aria-label="Category legend">
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--data"></span>Data
-                Engineering
+                <div id="globe-tooltip"><span class="tt-keyword"></span><span class="tt-category"></span></div>
+                <!-- 2D fallback injected here if needed -->
             </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--software"></span>Software
-                Engineering
+            <div class="globe-legend" role="list" aria-label="Category legend">
+                <div class="globe-legend-item" role="listitem"><span
+                        class="globe-legend-dot globe-legend-dot--data"></span>Data
+                    Engineering
+                </div>
+                <div class="globe-legend-item" role="listitem"><span
+                        class="globe-legend-dot globe-legend-dot--software"></span>Software
+                    Engineering
+                </div>
+                <div class="globe-legend-item" role="listitem"><span
+                        class="globe-legend-dot globe-legend-dot--infra"></span>Infrastructure
+                </div>
+                <div class="globe-legend-item" role="listitem"><span
+                        class="globe-legend-dot globe-legend-dot--tooling"></span>Tooling
+                    & ML
+                </div>
             </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--infra"></span>Infrastructure
-            </div>
-            <div class="globe-legend-item" role="listitem"><span class="globe-legend-dot globe-legend-dot--tooling"></span>Tooling
-                & ML
-            </div>
-        </div>
-        <!-- Screen reader text-alternative list -->
-        <ul id="globe-sr-list" class="sr-only" aria-label="All keywords"></ul>
-    </section>
+            <!-- Screen reader text-alternative list -->
+            <ul id="globe-sr-list" class="sr-only" aria-label="All keywords"></ul>
+        </section>
 
-    <section id="journey" class="site-section space-y-8" aria-label="Experience and education">
-        <div class="flex flex-wrap items-end justify-between gap-6">
+        <section id="journey" class="site-section space-y-8" aria-label="Experience and education">
+            <div class="flex flex-wrap items-end justify-between gap-6">
+                <div>
+                    <h2 class="text-4xl font-display font-bold mb-2">Experience &amp; Education</h2>
+                    <p class="text-gray-400 max-w-2xl">A timeline of roles, research, and learning — optimized for
+                        impact and reliability.</p>
+                </div>
+                <div
+                    class="journey-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    <span class="text-xs font-medium text-cyan-200">Currently building production-grade data
+                        systems</span>
+                </div>
+            </div>
+
+            <div class="journey-panel glass-card ui-card p-8 rounded-2xl">
+                <div class="journey-timeline" role="list">
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--green" aria-hidden="true">FI</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Nov 2025 — Present · Almaty,
+                                            Kazakhstan · Hybrid</div>
+                                        <h4 class="text-xl font-bold">Data Engineer</h4>
+                                        <div class="text-gray-400">Freedom Insurance · Full-time</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">Now</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Designed ingestion + orchestration patterns focused on
+                                    reliability and repeatability.</div>
+                                <div class="journey-point">Implemented quality checks to prevent silent data issues from
+                                    reaching downstream users.</div>
+                                <div class="journey-point">Integrated backend APIs with stable contracts and pragmatic
+                                    testing.</div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i
+                                        class="devicon-apacheairflow-plain colored"></i>Airflow</span>
+                                <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
+                                <span class="journey-tool"><i class="devicon-fastapi-plain colored"></i>FastAPI</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-postgresql-plain colored"></i>Postgres</span>
+                                <span class="journey-tool"><i class="devicon-docker-plain colored"></i>Docker</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark" aria-hidden="true">KBTU</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present · Bostandıq
+                                            District · On-site</div>
+                                        <h4 class="text-xl font-bold">Teaching Assistant (Cloud Computing &amp; DevOps)
+                                        </h4>
+                                        <div class="text-gray-400">Kazakh-British Technical University · Part-time</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">TA</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Ran labs + supported lectures on cloud application
+                                    development.</div>
+                                <div class="journey-point">Guided deployments on GCP (App Engine, Cloud Functions, Cloud
+                                    SQL).</div>
+                                <div class="journey-point">Reviewed assignments and helped students debug containerized
+                                    workloads.</div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-googlecloud-plain colored"></i>GCP</span>
+                                <span class="journey-tool"><i class="devicon-docker-plain colored"></i>Docker</span>
+                                <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
+                                <span class="journey-tool"><i class="devicon-linux-plain colored"></i>Linux</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--purple" aria-hidden="true">EPAM</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Sep 2024 — Present · Remote</div>
+                                        <h4 class="text-xl font-bold">Data Software Engineering Trainee</h4>
+                                        <div class="text-gray-400">EPAM Systems · Internship</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">EPAM</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Strengthened advanced SQL and data modeling through
+                                    real-world exercises.</div>
+                                <div class="journey-point">Studied modern DWH/lake patterns and ETL/ELT workflows.</div>
+                                <div class="journey-point">Built analytics/visualization deliverables with cloud-aware
+                                    practices.</div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
+                                <span class="journey-tool"><i class="devicon-postgresql-plain colored"></i>SQL</span>
+                                <span class="journey-tool"><i class="devicon-git-plain colored"></i>Git</span>
+                                <span class="journey-tool"><i class="devicon-gitlab-plain colored"></i>GitLab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--green" aria-hidden="true">BCC</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Jan 2025 — Nov 2025 · Almaty,
+                                            Kazakhstan · On-site</div>
+                                        <h4 class="text-xl font-bold">Software Engineer (Data &amp; Core Banking)</h4>
+                                        <div class="text-gray-400">Bank CenterCredit · Full-time</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">Core</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Optimized Oracle SQL/PL/SQL for core banking workloads
+                                    (performance + correctness).</div>
+                                <div class="journey-point">Built ETL for dashboards and operational reporting with clear
+                                    ownership.</div>
+                                <div class="journey-point">Improved delivery workflows and documentation
+                                    (Jira/Confluence).</div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-microsoftsqlserver-plain colored"></i>SQL</span>
+                                <span class="journey-tool"><i class="devicon-powerbi-plain colored"></i>Power BI</span>
+                                <span class="journey-tool"><i class="devicon-jira-plain colored"></i>Jira</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-confluence-plain colored"></i>Confluence</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark" aria-hidden="true">SDU</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Jun 2024 — Dec 2024 · Almaty,
+                                            Kazakhstan · Remote</div>
+                                        <h4 class="text-xl font-bold">Research Assistant (Computer Vision / ML)</h4>
+                                        <div class="text-gray-400">SDU University, Kazakhstan · Part-time</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">R&amp;D</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Prepared datasets (LabelImg) and trained YOLO detection
+                                    models.</div>
+                                <div class="journey-point">Improved model quality via structured experiments and
+                                    metric-driven evaluation.</div>
+                                <div class="journey-point">Optimized training/inference workflows with PyTorch +
+                                    Scikit-learn.</div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-pytorch-original colored"></i>PyTorch</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-tensorflow-original colored"></i>CV/ML</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--purple" aria-hidden="true">Alma</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">May 2024 — Dec 2024 · Almaty,
+                                            Kazakhstan · On-site</div>
+                                        <h4 class="text-xl font-bold">Database Engineer</h4>
+                                        <div class="text-gray-400">Alma Telecommunications Kazakhstan · Full-time</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">DB</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Developed PL/SQL procedures and tuned queries for measurable
+                                    performance gains.</div>
+                                <div class="journey-point">Administered Oracle DB with security, integrity, and
+                                    availability focus.</div>
+                                <div class="journey-point">Translated business needs into scalable DB/DWH structures.
+                                </div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
+                                <span class="journey-tool"><i class="devicon-linux-plain colored"></i>Linux</span>
+                                <span class="journey-tool"><i
+                                        class="devicon-grafana-original colored"></i>Grafana</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div class="journey-head">
+                                    <div class="company-mark" aria-hidden="true">NBK</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Jun 2023 — Dec 2023</div>
+                                        <h4 class="text-xl font-bold">Backend Development Intern</h4>
+                                        <div class="text-gray-400">The National Bank of Kazakhstan · Internship</div>
+                                    </div>
+                                </div>
+                                <div class="journey-tag">Intern</div>
+                            </div>
+                            <div class="journey-points">
+                                <div class="journey-point">Optimized SQL queries for faster reporting and retrieval.
+                                </div>
+                                <div class="journey-point">Supported DB integrity and day-to-day operational stability.
+                                </div>
+                                <div class="journey-point">Collaborated across teams to unblock data-driven decisions.
+                                </div>
+                            </div>
+                            <div class="journey-tools" aria-label="Tools used">
+                                <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
+                                <span class="journey-tool"><i class="devicon-postgresql-plain colored"></i>SQL</span>
+                                <span class="journey-tool"><i class="devicon-git-plain colored"></i>Git</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-panel glass-card ui-card p-8 rounded-2xl" aria-label="Education timeline">
+                <div class="text-sm font-mono text-cyan-300 mb-4">Education</div>
+                <div class="journey-timeline" role="list">
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
+                        <div class="journey-card edu-card">
+                            <div class="edu-top">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--green" aria-hidden="true">MSc</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present</div>
+                                        <h4 class="text-xl font-bold">Master's degree — Computer Science and Data
+                                            Analytics</h4>
+                                        <div class="text-gray-400">Kazakh-British Technical University</div>
+                                    </div>
+                                </div>
+                                <div class="edu-badge edu-badge--master">Master's</div>
+                            </div>
+                            <div class="edu-note">Focused on Big Data, Machine Learning, AI, Data Engineering &amp;
+                                Analytics, and Software Engineering. Building deeper expertise in Python, ML libraries,
+                                and intelligent systems.</div>
+                        </div>
+                    </div>
+
+                    <div class="journey-item" role="listitem">
+                        <div class="journey-dot" aria-hidden="true"></div>
+                        <div class="journey-card edu-card">
+                            <div class="edu-top">
+                                <div class="journey-head">
+                                    <div class="company-mark company-mark--purple" aria-hidden="true">BSc</div>
+                                    <div>
+                                        <div class="text-sm font-mono text-cyan-300">Sep 2021 — Jun 2025</div>
+                                        <h4 class="text-xl font-bold">Bachelor's degree — Information Systems</h4>
+                                        <div class="text-gray-400">Suleyman Demirel University</div>
+                                    </div>
+                                </div>
+                                <div class="edu-badge edu-badge--bachelor">Bachelor's</div>
+                            </div>
+                            <div class="edu-note">Focused on Software Engineering, Databases, and Computer Networks.
+                                Explored Big Data, Blockchain, Web Development, and Linux Administration; built strong
+                                foundations in algorithms, probability &amp; statistics, and data engineering concepts.
+                            </div>
+                            <div class="edu-fun">Off the clock: football fan — teamwork, strategy, and fast decisions
+                                under pressure.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-insight glass-card ui-card p-6 rounded-2xl">
+                <div class="text-sm font-mono text-cyan-300 mb-2">Non-obvious insight</div>
+                <div class="text-gray-200 leading-relaxed">I treat data systems like banking systems: correctness first,
+                    fast second. That mindset turns "pipelines" into durable products — observable, testable, and
+                    trusted.</div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="site-section space-y-8">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
+                <button id="projects-show-more" type="button"
+                    class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show
+                    more</button>
+            </div>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <section id="mini-tools" class="site-section space-y-8" aria-label="Mini tools">
             <div>
-                <h2 class="text-4xl font-display font-bold mb-2">Experience &amp; Education</h2>
-                <p class="text-gray-400 max-w-2xl">A timeline of roles, research, and learning — optimized for impact and reliability.</p>
+                <h3 class="text-3xl font-display font-bold mb-2">Mini Tools</h3>
+                <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot.
+                    Lightweight and mobile-friendly.</p>
             </div>
-            <div class="journey-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                <span class="text-xs font-medium text-cyan-200">Currently building production-grade data systems</span>
-            </div>
-        </div>
-
-        <div class="journey-panel glass-card ui-card p-8 rounded-2xl">
-            <div class="journey-timeline" role="list">
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--green" aria-hidden="true">FI</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Nov 2025 — Present · Almaty, Kazakhstan · Hybrid</div>
-                                    <h4 class="text-xl font-bold">Data Engineer</h4>
-                                    <div class="text-gray-400">Freedom Insurance · Full-time</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">Now</div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--clock">
+                    <div class="mini-tools-head flex items-center justify-between gap-3 flex-wrap">
+                        <div>
+                            <div class="text-sm font-mono text-cyan-300">World Clock</div>
+                            <div class="text-gray-400 text-sm mt-1">Local + selected time zones.</div>
                         </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Designed ingestion + orchestration patterns focused on reliability and repeatability.</div>
-                            <div class="journey-point">Implemented quality checks to prevent silent data issues from reaching downstream users.</div>
-                            <div class="journey-point">Integrated backend APIs with stable contracts and pragmatic testing.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-apacheairflow-plain colored"></i>Airflow</span>
-                            <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
-                            <span class="journey-tool"><i class="devicon-fastapi-plain colored"></i>FastAPI</span>
-                            <span class="journey-tool"><i class="devicon-postgresql-plain colored"></i>Postgres</span>
-                            <span class="journey-tool"><i class="devicon-docker-plain colored"></i>Docker</span>
+                        <div class="mini-tools-controls flex items-center gap-3">
+                            <label class="text-xs font-mono text-gray-400" for="tz-picker">Time zone</label>
+                            <select id="tz-picker"
+                                class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
+                                <option value="Asia/Almaty">Almaty (Asia/Almaty)</option>
+                                <option value="UTC">UTC</option>
+                                <option value="America/Los_Angeles">SF (America/Los_Angeles)</option>
+                                <option value="Europe/London">London (Europe/London)</option>
+                            </select>
                         </div>
                     </div>
+                    <div id="world-clock" class="mt-5 grid gap-3"></div>
                 </div>
 
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark" aria-hidden="true">KBTU</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present · Bostandıq District · On-site</div>
-                                    <h4 class="text-xl font-bold">Teaching Assistant (Cloud Computing &amp; DevOps)</h4>
-                                    <div class="text-gray-400">Kazakh-British Technical University · Part-time</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">TA</div>
+                <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--db db-ranking-card">
+                    <div class="mini-tools-head flex items-end justify-between gap-4 flex-wrap">
+                        <div>
+                            <div class="text-sm font-mono text-cyan-300">DB Rankings</div>
+                            <div class="text-gray-400 text-sm mt-1">Loaded from <span
+                                    class="text-gray-200">assets/db_ranking.json</span>.</div>
                         </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Ran labs + supported lectures on cloud application development.</div>
-                            <div class="journey-point">Guided deployments on GCP (App Engine, Cloud Functions, Cloud SQL).</div>
-                            <div class="journey-point">Reviewed assignments and helped students debug containerized workloads.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-googlecloud-plain colored"></i>GCP</span>
-                            <span class="journey-tool"><i class="devicon-docker-plain colored"></i>Docker</span>
-                            <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
-                            <span class="journey-tool"><i class="devicon-linux-plain colored"></i>Linux</span>
+                        <div class="mini-tools-controls flex items-center gap-3">
+                            <label class="text-xs font-mono text-gray-400" for="db-sort">Sort</label>
+                            <select id="db-sort"
+                                class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
+                                <option value="rank">Rank</option>
+                                <option value="score">Score</option>
+                                <option value="name">Name</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--purple" aria-hidden="true">EPAM</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Sep 2024 — Present · Remote</div>
-                                    <h4 class="text-xl font-bold">Data Software Engineering Trainee</h4>
-                                    <div class="text-gray-400">EPAM Systems · Internship</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">EPAM</div>
-                        </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Strengthened advanced SQL and data modeling through real-world exercises.</div>
-                            <div class="journey-point">Studied modern DWH/lake patterns and ETL/ELT workflows.</div>
-                            <div class="journey-point">Built analytics/visualization deliverables with cloud-aware practices.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
-                            <span class="journey-tool"><i class="devicon-postgresql-plain colored"></i>SQL</span>
-                            <span class="journey-tool"><i class="devicon-git-plain colored"></i>Git</span>
-                            <span class="journey-tool"><i class="devicon-gitlab-plain colored"></i>GitLab</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--green" aria-hidden="true">BCC</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Jan 2025 — Nov 2025 · Almaty, Kazakhstan · On-site</div>
-                                    <h4 class="text-xl font-bold">Software Engineer (Data &amp; Core Banking)</h4>
-                                    <div class="text-gray-400">Bank CenterCredit · Full-time</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">Core</div>
-                        </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Optimized Oracle SQL/PL/SQL for core banking workloads (performance + correctness).</div>
-                            <div class="journey-point">Built ETL for dashboards and operational reporting with clear ownership.</div>
-                            <div class="journey-point">Improved delivery workflows and documentation (Jira/Confluence).</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
-                            <span class="journey-tool"><i class="devicon-microsoftsqlserver-plain colored"></i>SQL</span>
-                            <span class="journey-tool"><i class="devicon-powerbi-plain colored"></i>Power BI</span>
-                            <span class="journey-tool"><i class="devicon-jira-plain colored"></i>Jira</span>
-                            <span class="journey-tool"><i class="devicon-confluence-plain colored"></i>Confluence</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark" aria-hidden="true">SDU</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Jun 2024 — Dec 2024 · Almaty, Kazakhstan · Remote</div>
-                                    <h4 class="text-xl font-bold">Research Assistant (Computer Vision / ML)</h4>
-                                    <div class="text-gray-400">SDU University, Kazakhstan · Part-time</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">R&amp;D</div>
-                        </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Prepared datasets (LabelImg) and trained YOLO detection models.</div>
-                            <div class="journey-point">Improved model quality via structured experiments and metric-driven evaluation.</div>
-                            <div class="journey-point">Optimized training/inference workflows with PyTorch + Scikit-learn.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-python-plain colored"></i>Python</span>
-                            <span class="journey-tool"><i class="devicon-pytorch-original colored"></i>PyTorch</span>
-                            <span class="journey-tool"><i class="devicon-tensorflow-original colored"></i>CV/ML</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--purple" aria-hidden="true">Alma</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">May 2024 — Dec 2024 · Almaty, Kazakhstan · On-site</div>
-                                    <h4 class="text-xl font-bold">Database Engineer</h4>
-                                    <div class="text-gray-400">Alma Telecommunications Kazakhstan · Full-time</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">DB</div>
-                        </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Developed PL/SQL procedures and tuned queries for measurable performance gains.</div>
-                            <div class="journey-point">Administered Oracle DB with security, integrity, and availability focus.</div>
-                            <div class="journey-point">Translated business needs into scalable DB/DWH structures.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
-                            <span class="journey-tool"><i class="devicon-linux-plain colored"></i>Linux</span>
-                            <span class="journey-tool"><i class="devicon-grafana-original colored"></i>Grafana</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                            <div class="journey-head">
-                                <div class="company-mark" aria-hidden="true">NBK</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Jun 2023 — Dec 2023</div>
-                                    <h4 class="text-xl font-bold">Backend Development Intern</h4>
-                                    <div class="text-gray-400">The National Bank of Kazakhstan · Internship</div>
-                                </div>
-                            </div>
-                            <div class="journey-tag">Intern</div>
-                        </div>
-                        <div class="journey-points">
-                            <div class="journey-point">Optimized SQL queries for faster reporting and retrieval.</div>
-                            <div class="journey-point">Supported DB integrity and day-to-day operational stability.</div>
-                            <div class="journey-point">Collaborated across teams to unblock data-driven decisions.</div>
-                        </div>
-                        <div class="journey-tools" aria-label="Tools used">
-                            <span class="journey-tool"><i class="devicon-oracle-original colored"></i>Oracle</span>
-                            <span class="journey-tool"><i class="devicon-postgresql-plain colored"></i>SQL</span>
-                            <span class="journey-tool"><i class="devicon-git-plain colored"></i>Git</span>
-                        </div>
-                    </div>
+                    <div id="db-ranking" class="mt-5"></div>
+                    <a href="https://db-engines.com/en/ranking" target="_blank" rel="noreferrer"
+                        class="inline-flex items-center gap-2 mt-4 text-xs font-mono text-gray-400 hover:text-gray-200 transition">Source:
+                        DB-Engines ranking</a>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="journey-panel glass-card ui-card p-8 rounded-2xl" aria-label="Education timeline">
-            <div class="text-sm font-mono text-cyan-300 mb-4">Education</div>
-            <div class="journey-timeline" role="list">
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot journey-dot--active" aria-hidden="true"></div>
-                    <div class="journey-card edu-card">
-                        <div class="edu-top">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--green" aria-hidden="true">MSc</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Sep 2025 — Present</div>
-                                    <h4 class="text-xl font-bold">Master's degree — Computer Science and Data Analytics</h4>
-                                    <div class="text-gray-400">Kazakh-British Technical University</div>
-                                </div>
-                            </div>
-                            <div class="edu-badge edu-badge--master">Master's</div>
-                        </div>
-                        <div class="edu-note">Focused on Big Data, Machine Learning, AI, Data Engineering &amp; Analytics, and Software Engineering. Building deeper expertise in Python, ML libraries, and intelligent systems.</div>
-                    </div>
-                </div>
-
-                <div class="journey-item" role="listitem">
-                    <div class="journey-dot" aria-hidden="true"></div>
-                    <div class="journey-card edu-card">
-                        <div class="edu-top">
-                            <div class="journey-head">
-                                <div class="company-mark company-mark--purple" aria-hidden="true">BSc</div>
-                                <div>
-                                    <div class="text-sm font-mono text-cyan-300">Sep 2021 — Jun 2025</div>
-                                    <h4 class="text-xl font-bold">Bachelor's degree — Information Systems</h4>
-                                    <div class="text-gray-400">Suleyman Demirel University</div>
-                                </div>
-                            </div>
-                            <div class="edu-badge edu-badge--bachelor">Bachelor's</div>
-                        </div>
-                        <div class="edu-note">Focused on Software Engineering, Databases, and Computer Networks. Explored Big Data, Blockchain, Web Development, and Linux Administration; built strong foundations in algorithms, probability &amp; statistics, and data engineering concepts.</div>
-                        <div class="edu-fun">Off the clock: football fan — teamwork, strategy, and fast decisions under pressure.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="journey-insight glass-card ui-card p-6 rounded-2xl">
-            <div class="text-sm font-mono text-cyan-300 mb-2">Non-obvious insight</div>
-            <div class="text-gray-200 leading-relaxed">I treat data systems like banking systems: correctness first, fast second. That mindset turns "pipelines" into durable products — observable, testable, and trusted.</div>
-        </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="site-section space-y-8">
-        <div class="flex flex-wrap items-end justify-between gap-4">
-            <h3 class="text-3xl font-display font-bold">Selected Projects</h3>
-            <button id="projects-show-more" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Show more</button>
-        </div>
-        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Injected via JS -->
-        </div>
-    </section>
-
-    <section id="mini-tools" class="site-section space-y-8" aria-label="Mini tools">
-        <div>
-            <h3 class="text-3xl font-display font-bold mb-2">Mini Tools</h3>
-            <p class="text-gray-400 max-w-2xl">Small interactive widgets: world clock and a DB popularity snapshot. Lightweight and mobile-friendly.</p>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--clock">
-                <div class="mini-tools-head flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                        <div class="text-sm font-mono text-cyan-300">World Clock</div>
-                        <div class="text-gray-400 text-sm mt-1">Local + selected time zones.</div>
-                    </div>
-                    <div class="mini-tools-controls flex items-center gap-3">
-                        <label class="text-xs font-mono text-gray-400" for="tz-picker">Time zone</label>
-                        <select id="tz-picker" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
-                            <option value="Asia/Almaty">Almaty (Asia/Almaty)</option>
-                            <option value="UTC">UTC</option>
-                            <option value="America/Los_Angeles">SF (America/Los_Angeles)</option>
-                            <option value="Europe/London">London (Europe/London)</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="world-clock" class="mt-5 grid gap-3"></div>
-            </div>
-
-            <div class="glass-card ui-card p-6 rounded-2xl mini-tools-card mini-tools-card--db db-ranking-card">
-                <div class="mini-tools-head flex items-end justify-between gap-4 flex-wrap">
-                    <div>
-                        <div class="text-sm font-mono text-cyan-300">DB Rankings</div>
-                        <div class="text-gray-400 text-sm mt-1">Loaded from <span class="text-gray-200">assets/db_ranking.json</span>.</div>
-                    </div>
-                    <div class="mini-tools-controls flex items-center gap-3">
-                        <label class="text-xs font-mono text-gray-400" for="db-sort">Sort</label>
-                        <select id="db-sort" class="min-h-[44px] px-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 text-sm">
-                            <option value="rank">Rank</option>
-                            <option value="score">Score</option>
-                            <option value="name">Name</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="db-ranking" class="mt-5"></div>
-                <a href="https://db-engines.com/en/ranking" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 mt-4 text-xs font-mono text-gray-400 hover:text-gray-200 transition">Source: DB-Engines ranking</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="ai-monthly-lab" class="site-section space-y-8" aria-label="AI monthly feature">
-        <div>
-            <h3 class="text-3xl font-display font-bold mb-2">AI Monthly Feature Lab</h3>
-            <p class="text-gray-400 max-w-2xl">Every month an AI-generated feature is selected from current trends, implemented, tested, and shipped automatically.</p>
-        </div>
-        <div id="ai-monthly-feature-root" class="glass-card ui-card p-6 rounded-2xl ai-feature-shell">
-            <div class="text-sm font-mono text-cyan-300">Loading latest feature...</div>
-        </div>
-        <div id="ai-live-signals-root" class="glass-card ui-card p-6 rounded-2xl ai-live-signals-shell">
-            <div class="text-sm font-mono text-cyan-300">Loading live currency and weather signals...</div>
-        </div>
-    </section>
-
-    <section id="audience-pulse" class="site-section space-y-8" aria-label="AI audience pulse and engagement">
-        <div>
-            <h3 class="text-3xl font-display font-bold mb-2">AI Audience Pulse</h3>
-            <p class="text-gray-400 max-w-2xl">Weekly trend proxy based on Wikipedia pageviews for major AI platforms, plus live site engagement counters.</p>
-        </div>
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div id="ai-audience-root" class="glass-card ui-card p-6 rounded-2xl xl:col-span-2 audience-pulse-shell">
-                <div class="text-sm font-mono text-cyan-300">Loading weekly audience pulse...</div>
-            </div>
-            <div id="site-engagement-root" class="glass-card ui-card p-6 rounded-2xl audience-engagement-shell">
-                <div class="text-sm font-mono text-cyan-300">Loading site engagement...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TERMINAL SIMULATION -->
-    <section id="terminal" class="site-section space-y-6" aria-label="Terminal simulation">
-        <div>
-            <h2 class="text-4xl font-display font-bold mb-2">System Console</h2>
-            <p class="text-gray-400">Interactive terminal simulation. Watch the initialization sequence.</p>
-        </div>
-        <div class="glass-card ui-card p-6 rounded-2xl">
-            <div id="terminal-window" class="terminal-window">
-                <div class="terminal-header">
-                    <div class="terminal-buttons">
-                        <span class="terminal-btn terminal-btn--close"></span>
-                        <span class="terminal-btn terminal-btn--minimize"></span>
-                        <span class="terminal-btn terminal-btn--maximize"></span>
-                    </div>
-                    <div class="terminal-title">namazbek@kbtu: ~</div>
-                    <div class="terminal-spacer"></div>
-                </div>
-                <div class="terminal-body">
-                    <div id="terminal-content" class="terminal-content"></div>
-                    <div class="terminal-cursor">
-                        <span class="terminal-prompt">$</span>
-                        <span id="terminal-input" class="terminal-input"></span>
-                        <span class="terminal-caret">_</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex gap-3 mt-4">
-                <button id="terminal-replay" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Replay Sequence</button>
-                <button id="terminal-pause" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Pause</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- DATA PIPELINE VISUALIZER -->
-    <section id="pipeline-visualizer" class="site-section space-y-6" aria-label="Data pipeline visualizer">
-        <div>
-            <h2 class="text-4xl font-display font-bold mb-2">Pipeline Architect</h2>
-            <p class="text-gray-400">Interactive DAG builder. Click nodes to connect, drag to reposition, build your data flow.</p>
-        </div>
-        <div class="glass-card ui-card p-6 rounded-2xl">
-            <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-mono text-cyan-300">Mode:</span>
-                    <div class="dag-mode-group flex rounded-xl border border-white/10 overflow-hidden">
-                        <button id="dag-mode-select" type="button" aria-pressed="false" class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Select</button>
-                        <button id="dag-mode-connect" type="button" aria-pressed="false" class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Connect</button>
-                        <button id="dag-mode-delete" type="button" aria-pressed="false" class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Delete</button>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="dag-add-source" type="button" class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+ Source</button>
-                    <button id="dag-add-transform" type="button" class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+ Transform</button>
-                    <button id="dag-add-destination" type="button" class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+ Destination</button>
-                    <button id="dag-clear" type="button" class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-red-500/10 hover:bg-red-500/20 text-red-300 transition text-xs font-mono">Clear</button>
-                </div>
-            </div>
-            <div id="dag-canvas-container" class="dag-canvas-container">
-                <svg id="dag-svg" class="dag-svg">
-                    <defs>
-                        <marker id="dag-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,212,255,0.8)" />
-                        </marker>
-                        <filter id="dag-glow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <g id="dag-edges"></g>
-                    <g id="dag-nodes"></g>
-                </svg>
-                <div id="dag-tooltip" class="dag-tooltip"></div>
-            </div>
-            <div class="flex items-center gap-4 mt-4 text-xs font-mono text-gray-400">
-                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-400/80"></span> Source</span>
-                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-cyan-400/80"></span> Transform</span>
-                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-400/80"></span> Destination</span>
-                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-yellow-400/80"></span> Selected</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="vertical-library" class="site-section space-y-6 library-shell" aria-label="Books library">
-        <div class="flex flex-wrap items-end justify-between gap-6">
+        <section id="developer-lab" class="site-section space-y-8" aria-label="Developer Lab">
             <div>
-                <h3 class="text-3xl font-display font-bold mb-2">Books</h3>
-                <p class="text-gray-400 max-w-2xl">A vertical, scrollable library. Select a book to read a mini-summary.</p>
+                <h3 class="text-3xl font-display font-bold mb-2">Developer Lab</h3>
+                <p class="text-gray-400 max-w-2xl">A collection of interactive engineering tools: Regex Playground,
+                    Docker Compose Generator, Live Tech Radar, and Cloud Cost Estimator.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <button id="books-see-all" type="button" class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">See all</button>
-                <div id="library-status" class="text-xs font-mono text-gray-500"></div>
-            </div>
-        </div>
 
-        <div class="library-layout grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card ui-card p-4 rounded-2xl lg:col-span-1 library-list-panel">
-                <div class="vl-scroll max-h-[520px] overflow-y-auto pr-1" role="list" aria-label="Books list">
-                    <div id="vertical-books-list" class="space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-7xl mx-auto">
+
+                <!-- 1. Regex Playground -->
+                <div class="glass-card ui-card p-6 flex flex-col gap-4 rounded-xl lab-card">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
+                                class="devicon-javascript-plain"></i></span>
+                        <h4 class="text-xl font-bold">Regex Playground</h4>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Pattern</label>
+                            <div class="flex gap-2">
+                                <span class="flex items-center justify-center p-2 text-gray-400 font-mono">/</span>
+                                <input type="text" id="regex-input"
+                                    class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition"
+                                    placeholder="^\\d+$">
+                                <span class="flex items-center justify-center p-2 text-gray-400 font-mono">/</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 text-sm font-mono text-gray-400">
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-white transition"><input
+                                    type="checkbox" id="regex-flag-g" checked class="accent-cyan-400"> Global
+                                (g)</label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-white transition"><input
+                                    type="checkbox" id="regex-flag-i" class="accent-cyan-400"> Ignore Case (i)</label>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-white transition"><input
+                                    type="checkbox" id="regex-flag-m" class="accent-cyan-400"> Multiline (m)</label>
+                        </div>
+
+                        <div class="flex gap-2 flex-wrap text-xs font-mono">
+                            <button type="button"
+                                class="regex-preset ui-button px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 transition"
+                                data-regex="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$">Email</button>
+                            <button type="button"
+                                class="regex-preset ui-button px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 transition"
+                                data-regex="^\\+?\\d{10,15}$">Phone</button>
+                            <button type="button"
+                                class="regex-preset ui-button px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 transition"
+                                data-regex="https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)">URL</button>
+                            <button type="button"
+                                class="regex-preset ui-button px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 transition"
+                                data-regex="^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$">UUID</button>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Test String</label>
+                            <div class="relative w-full rounded-lg bg-white/5 border border-white/10">
+                                <!-- Overlay for highlighting -->
+                                <div id="regex-highlight-overlay"
+                                    class="absolute inset-0 p-3 font-mono text-white whitespace-pre-wrap break-words pointer-events-none z-0 overflow-hidden"
+                                    style="color: transparent;"></div>
+                                <!-- Textarea -->
+                                <textarea id="regex-test-string"
+                                    class="w-full h-32 p-3 font-mono text-gray-300 z-10 relative bg-transparent resize-y focus:outline-none transition leading-normal"
+                                    spellcheck="false" placeholder="Enter text to test..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-mono text-cyan-300">Explanation & Matches</span>
+                            <span id="regex-match-count" class="text-xs font-mono text-gray-400">0 matches</span>
+                        </div>
+                        <div id="regex-explanation"
+                            class="text-sm text-gray-300 bg-white/5 rounded-lg p-3 border border-white/10 font-mono overflow-y-auto max-h-32">
+                            Pattern explanation will appear here...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Docker Compose Generator -->
+                <div class="glass-card ui-card p-6 flex flex-col gap-4 rounded-xl lab-card">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i
+                                class="devicon-docker-plain"></i></span>
+                        <h4 class="text-xl font-bold">Docker Compose Generator</h4>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Database Type</label>
+                            <select id="docker-db-type"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                                <option value="postgres" class="bg-gray-900">PostgreSQL</option>
+                                <option value="mysql" class="bg-gray-900">MySQL</option>
+                                <option value="mongodb" class="bg-gray-900">MongoDB</option>
+                                <option value="redis" class="bg-gray-900">Redis</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Version</label>
+                            <input type="text" id="docker-version" value="15"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Port</label>
+                            <input type="number" id="docker-port" value="5432"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">DB Name</label>
+                            <input type="text" id="docker-dbname" value="mydb"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+                        <div class="flex flex-col gap-1 mt-2">
+                            <label class="text-xs font-mono text-gray-400">Username</label>
+                            <input type="text" id="docker-user" value="user" autocomplete="off"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+                        <div class="flex flex-col gap-1 mt-2">
+                            <label class="text-xs font-mono text-gray-400">Password</label>
+                            <input type="password" id="docker-pass" value="password" autocomplete="off"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-white/10 flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-cyan-300">Generated YAML</span>
+                            <div class="flex gap-2">
+                                <button id="docker-btn-copy"
+                                    class="ui-button px-3 py-1 text-xs font-mono bg-white/5 border border-white/10 rounded hover:bg-white/10 transition">Copy</button>
+                                <button id="docker-btn-download"
+                                    class="ui-button px-3 py-1 text-xs font-mono bg-white/5 border border-white/10 rounded hover:bg-white/10 transition">Download</button>
+                            </div>
+                        </div>
+                        <pre id="docker-output"
+                            class="text-xs text-cyan-300 bg-white/5 rounded-lg p-3 border border-white/10 font-mono overflow-x-auto whitespace-pre h-[140px] custom-scrollbar">version: '3.9'
+...</pre>
+                    </div>
+                </div>
+
+                <!-- 3. Live Tech Radar -->
+                <div class="glass-card ui-card p-6 flex flex-col gap-4 rounded-xl lab-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-3">
+                            <span class="p-2 bg-purple-500/20 rounded-lg text-purple-400"><i
+                                    class="devicon-github-original"></i></span>
+                            <h4 class="text-xl font-bold">Live Tech Radar</h4>
+                        </div>
+                        <button id="radar-sort-toggle"
+                            class="ui-button px-2 py-1 text-xs font-mono border border-white/10 rounded bg-white/5 hover:bg-white/10 transition"
+                            data-sort="stars">Sort: Stars</button>
+                    </div>
+
+                    <div class="flex gap-2 text-sm max-w-full overflow-x-auto pb-2 custom-scrollbar">
+                        <button
+                            class="radar-tab active ui-button px-3 py-1 rounded-full bg-white/10 border border-white/20 whitespace-nowrap transition"
+                            data-category="python">Python</button>
+                        <button
+                            class="radar-tab ui-button px-3 py-1 rounded-full bg-white/5 border border-white/10 whitespace-nowrap hover:bg-white/10 transition text-gray-400"
+                            data-category="dataeng">Data Engineering</button>
+                        <button
+                            class="radar-tab ui-button px-3 py-1 rounded-full bg-white/5 border border-white/10 whitespace-nowrap hover:bg-white/10 transition text-gray-400"
+                            data-category="devops">DevOps</button>
+                    </div>
+
+                    <div id="radar-loading" class="hidden flex items-center justify-center p-8">
+                        <span
+                            class="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></span>
+                    </div>
+
+                    <div id="radar-list"
+                        class="flex flex-col gap-3 overflow-y-auto max-h-[190px] mt-auto pr-2 custom-scrollbar">
                         <!-- Injected via JS -->
+                        <div class="text-sm font-mono text-gray-400">Loading radar data...</div>
                     </div>
+                </div>
+
+                <!-- 4. Cloud Cost Estimator -->
+                <div class="glass-card ui-card p-6 flex flex-col gap-4 rounded-xl lab-card">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="p-2 bg-green-500/20 rounded-lg text-green-400"><i
+                                class="devicon-googlecloud-plain"></i></span>
+                        <h4 class="text-xl font-bold">Cloud Cost Estimator</h4>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between text-sm font-mono text-gray-300">
+                                <label>vCPU (Cores)</label>
+                                <span id="cost-val-cpu" class="text-cyan-300">4</span>
+                            </div>
+                            <input type="range" id="cost-input-cpu" min="1" max="64" value="4"
+                                class="w-full accent-cyan-400 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between text-sm font-mono text-gray-300">
+                                <label>RAM (GB)</label>
+                                <span id="cost-val-ram" class="text-cyan-300">16</span>
+                            </div>
+                            <input type="range" id="cost-input-ram" min="1" max="256" step="1" value="16"
+                                class="w-full accent-cyan-400 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between text-sm font-mono text-gray-300">
+                                <label>Storage (GB)</label>
+                                <span id="cost-val-storage" class="text-cyan-300">250</span>
+                            </div>
+                            <input type="range" id="cost-input-storage" min="10" max="5000" step="10" value="250"
+                                class="w-full accent-cyan-400 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-mono text-gray-400">Region</label>
+                            <select id="cost-input-region"
+                                class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-cyan-400 transition text-sm">
+                                <option value="1" class="bg-gray-900">US East (N. Virginia)</option>
+                                <option value="1.1" class="bg-gray-900">EU (Frankfurt) [+10%]</option>
+                                <option value="1.2" class="bg-gray-900">Asia (Tokyo) [+20%]</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-mono text-gray-400">Monthly</span>
+                                <button id="cost-currency-toggle"
+                                    class="ui-button px-2 py-0.5 text-[10px] font-mono border border-white/10 rounded bg-white/5 hover:bg-white/10 transition"
+                                    data-currency="USD">Switch KZT</button>
+                            </div>
+                            <div class="text-2xl font-bold font-mono text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300"
+                                id="cost-total">$0.00</div>
+                        </div>
+
+                        <!-- Progress bar -->
+                        <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden flex">
+                            <div id="cost-bar-cpu" class="h-full bg-blue-400" style="width: 33%"></div>
+                            <div id="cost-bar-ram" class="h-full bg-purple-400" style="width: 33%"></div>
+                            <div id="cost-bar-storage" class="h-full bg-emerald-400" style="width: 34%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs font-mono mt-2 text-gray-500">
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                                CPU</span>
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-purple-400"></span> RAM</span>
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-emerald-400"></span> Storage</span>
+                        </div>
+                        <div id="cost-warning"
+                            class="hidden mt-2 text-xs font-mono text-red-400 bg-red-500/10 p-2 rounded-lg border border-red-500/20">
+                            Warning: High estimated cost. Consider reserved instances or optimizing architecture.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="ai-monthly-lab" class="site-section space-y-8" aria-label="AI monthly feature">
+            <div>
+                <h3 class="text-3xl font-display font-bold mb-2">AI Monthly Feature Lab</h3>
+                <p class="text-gray-400 max-w-2xl">Every month an AI-generated feature is selected from current trends,
+                    implemented, tested, and shipped automatically.</p>
+            </div>
+            <div id="ai-monthly-feature-root" class="glass-card ui-card p-6 rounded-2xl ai-feature-shell">
+                <div class="text-sm font-mono text-cyan-300">Loading latest feature...</div>
+            </div>
+            <div id="ai-live-signals-root" class="glass-card ui-card p-6 rounded-2xl ai-live-signals-shell">
+                <div class="text-sm font-mono text-cyan-300">Loading live currency and weather signals...</div>
+            </div>
+        </section>
+
+        <section id="audience-pulse" class="site-section space-y-8" aria-label="AI audience pulse and engagement">
+            <div>
+                <h3 class="text-3xl font-display font-bold mb-2">AI Audience Pulse</h3>
+                <p class="text-gray-400 max-w-2xl">Weekly trend proxy based on Wikipedia pageviews for major AI
+                    platforms, plus live site engagement counters.</p>
+            </div>
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div id="ai-audience-root"
+                    class="glass-card ui-card p-6 rounded-2xl xl:col-span-2 audience-pulse-shell">
+                    <div class="text-sm font-mono text-cyan-300">Loading weekly audience pulse...</div>
+                </div>
+                <div id="site-engagement-root" class="glass-card ui-card p-6 rounded-2xl audience-engagement-shell">
+                    <div class="text-sm font-mono text-cyan-300">Loading site engagement...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TERMINAL SIMULATION -->
+        <section id="terminal" class="site-section space-y-6" aria-label="Terminal simulation">
+            <div>
+                <h2 class="text-4xl font-display font-bold mb-2">System Console</h2>
+                <p class="text-gray-400">Interactive terminal simulation. Watch the initialization sequence.</p>
+            </div>
+            <div class="glass-card ui-card p-6 rounded-2xl">
+                <div id="terminal-window" class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="terminal-btn terminal-btn--close"></span>
+                            <span class="terminal-btn terminal-btn--minimize"></span>
+                            <span class="terminal-btn terminal-btn--maximize"></span>
+                        </div>
+                        <div class="terminal-title">namazbek@kbtu: ~</div>
+                        <div class="terminal-spacer"></div>
+                    </div>
+                    <div class="terminal-body">
+                        <div id="terminal-content" class="terminal-content"></div>
+                        <div class="terminal-cursor">
+                            <span class="terminal-prompt">$</span>
+                            <span id="terminal-input" class="terminal-input"></span>
+                            <span class="terminal-caret">_</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button id="terminal-replay" type="button"
+                        class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Replay
+                        Sequence</button>
+                    <button id="terminal-pause" type="button"
+                        class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">Pause</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DATA PIPELINE VISUALIZER -->
+        <section id="pipeline-visualizer" class="site-section space-y-6" aria-label="Data pipeline visualizer">
+            <div>
+                <h2 class="text-4xl font-display font-bold mb-2">Pipeline Architect</h2>
+                <p class="text-gray-400">Interactive DAG builder. Click nodes to connect, drag to reposition, build your
+                    data flow.</p>
+            </div>
+            <div class="glass-card ui-card p-6 rounded-2xl">
+                <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-mono text-cyan-300">Mode:</span>
+                        <div class="dag-mode-group flex rounded-xl border border-white/10 overflow-hidden">
+                            <button id="dag-mode-select" type="button" aria-pressed="false"
+                                class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Select</button>
+                            <button id="dag-mode-connect" type="button" aria-pressed="false"
+                                class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Connect</button>
+                            <button id="dag-mode-delete" type="button" aria-pressed="false"
+                                class="ui-button dag-mode-button min-h-[44px] px-4 py-2 text-sm font-mono text-gray-300">Delete</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="dag-add-source" type="button"
+                            class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+
+                            Source</button>
+                        <button id="dag-add-transform" type="button"
+                            class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+
+                            Transform</button>
+                        <button id="dag-add-destination" type="button"
+                            class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">+
+                            Destination</button>
+                        <button id="dag-clear" type="button"
+                            class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-red-500/10 hover:bg-red-500/20 text-red-300 transition text-xs font-mono">Clear</button>
+                    </div>
+                </div>
+                <div id="dag-canvas-container" class="dag-canvas-container">
+                    <svg id="dag-svg" class="dag-svg">
+                        <defs>
+                            <marker id="dag-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5"
+                                orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,212,255,0.8)" />
+                            </marker>
+                            <filter id="dag-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <g id="dag-edges"></g>
+                        <g id="dag-nodes"></g>
+                    </svg>
+                    <div id="dag-tooltip" class="dag-tooltip"></div>
+                </div>
+                <div class="flex items-center gap-4 mt-4 text-xs font-mono text-gray-400">
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-400/80"></span>
+                        Source</span>
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-cyan-400/80"></span>
+                        Transform</span>
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-400/80"></span>
+                        Destination</span>
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-yellow-400/80"></span>
+                        Selected</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="vertical-library" class="site-section space-y-6 library-shell" aria-label="Books library">
+            <div class="flex flex-wrap items-end justify-between gap-6">
+                <div>
+                    <h3 class="text-3xl font-display font-bold mb-2">Books</h3>
+                    <p class="text-gray-400 max-w-2xl">A vertical, scrollable library. Select a book to read a
+                        mini-summary.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="books-see-all" type="button"
+                        class="ui-button min-h-[44px] px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-sm font-mono">See
+                        all</button>
+                    <div id="library-status" class="text-xs font-mono text-gray-500"></div>
                 </div>
             </div>
 
-            <div class="glass-card ui-card p-6 rounded-2xl lg:col-span-2 library-info-panel">
-                <div class="text-sm font-mono text-cyan-300 mb-2">Tip</div>
-                <div class="text-gray-300 leading-relaxed">Use <span class="text-white">Tab</span> to focus a book and press <span class="text-white">Enter</span> or <span class="text-white">Space</span> to expand. Press <span class="text-white">Esc</span> to close the modal.</div>
-            </div>
-        </div>
+            <div class="library-layout grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card ui-card p-4 rounded-2xl lg:col-span-1 library-list-panel">
+                    <div class="vl-scroll max-h-[520px] overflow-y-auto pr-1" role="list" aria-label="Books list">
+                        <div id="vertical-books-list" class="space-y-3">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
 
-        <div id="library-modal" class="vl-modal hidden" aria-hidden="true">
+                <div class="glass-card ui-card p-6 rounded-2xl lg:col-span-2 library-info-panel">
+                    <div class="text-sm font-mono text-cyan-300 mb-2">Tip</div>
+                    <div class="text-gray-300 leading-relaxed">Use <span class="text-white">Tab</span> to focus a book
+                        and press <span class="text-white">Enter</span> or <span class="text-white">Space</span> to
+                        expand. Press <span class="text-white">Esc</span> to close the modal.</div>
+                </div>
+            </div>
+
+            <div id="library-modal" class="vl-modal hidden" aria-hidden="true">
+                <div class="vl-modal__backdrop" data-close="1"></div>
+                <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="library-modal-title"
+                    tabindex="-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h4 id="library-modal-title" class="text-2xl font-bold font-display"></h4>
+                            <div id="library-modal-author" class="text-gray-400 mt-1"></div>
+                        </div>
+                        <button type="button"
+                            class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                            aria-label="Close dialog" data-close="1">Close</button>
+                    </div>
+                    <div id="library-modal-tags" class="flex flex-wrap gap-2 mt-4"></div>
+                    <div id="library-modal-body" class="text-gray-200 leading-relaxed mt-4"></div>
+                    <div class="flex flex-wrap gap-3 mt-6">
+                        <a id="library-modal-readmore" href="#" target="_blank" rel="noreferrer"
+                            class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Read
+                            more</a>
+                        <button type="button"
+                            class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                            data-close="1">Done</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer id="contact" class="text-center py-20">
+            <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="mailto:namazbekzhan@gmail.com"
+                    class="ui-button px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
+                    Me</a>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-8 text-xs font-mono">
+                <a href="mailto:namazbekzhan@gmail.com" class="ui-chip">Personal: namazbekzhan@gmail.com</a>
+                <a href="mailto:bekzhanovnnn@gmail.com" class="ui-chip">Secondary: bekzhanovnnn@gmail.com</a>
+                <a href="mailto:na_bekzhanov@kbtu.kz" class="ui-chip">Education: na_bekzhanov@kbtu.kz</a>
+                <a href="mailto:namazbek.bekzhanov@ffins.kz" class="ui-chip">Work: namazbek.bekzhanov@ffins.kz</a>
+                <span class="ui-chip">Future work: namazbek.bekzhanov@bsbnb.kz</span>
+            </div>
+            <div class="flex justify-center mb-8">
+                <img src="assets/NBA_signature.png" loading="lazy" alt="Namazbek Bekzhanov signature"
+                    class="max-w-[220px] opacity-90" />
+            </div>
+            <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
+        </footer>
+
+        <div id="resume-modal" class="vl-modal hidden" aria-hidden="true">
             <div class="vl-modal__backdrop" data-close="1"></div>
-            <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="library-modal-title" tabindex="-1">
+            <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="resume-modal-title"
+                tabindex="-1">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <h4 id="library-modal-title" class="text-2xl font-bold font-display"></h4>
-                        <div id="library-modal-author" class="text-gray-400 mt-1"></div>
+                        <h4 id="resume-modal-title" class="text-2xl font-bold font-display">Resume</h4>
+                        <div class="text-gray-400 mt-1">PDF viewer</div>
                     </div>
-                    <button type="button" class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
+                    <button type="button"
+                        class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                        aria-label="Close dialog" data-close="1">Close</button>
                 </div>
-                <div id="library-modal-tags" class="flex flex-wrap gap-2 mt-4"></div>
-                <div id="library-modal-body" class="text-gray-200 leading-relaxed mt-4"></div>
+                <div class="mt-4">
+                    <iframe id="resume-frame" title="Resume PDF" class="w-full rounded-xl border border-white/10"
+                        style="height: min(70vh, 820px); background: rgba(255,255,255,0.03);"></iframe>
+                </div>
                 <div class="flex flex-wrap gap-3 mt-6">
-                    <a id="library-modal-readmore" href="#" target="_blank" rel="noreferrer" class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Read more</a>
-                    <button type="button" class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
+                    <a id="resume-open-newtab" href="assets/Namazbek_s_Resume_INT.pdf" target="_blank" rel="noreferrer"
+                        class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Open
+                        in new tab</a>
+                    <a id="resume-download" href="assets/Namazbek_s_Resume_INT.pdf" download
+                        class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition">Download</a>
+                    <button type="button"
+                        class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                        data-close="1">Done</button>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- FOOTER -->
-    <footer id="contact" class="text-center py-20">
-        <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
-        <div class="flex justify-center gap-6 mb-6">
-            <a href="mailto:namazbekzhan@gmail.com"
-               class="ui-button px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition">Email
-                Me</a>
-        </div>
-        <div class="flex flex-wrap justify-center gap-3 mb-8 text-xs font-mono">
-            <a href="mailto:namazbekzhan@gmail.com" class="ui-chip">Personal: namazbekzhan@gmail.com</a>
-            <a href="mailto:bekzhanovnnn@gmail.com" class="ui-chip">Secondary: bekzhanovnnn@gmail.com</a>
-            <a href="mailto:na_bekzhanov@kbtu.kz" class="ui-chip">Education: na_bekzhanov@kbtu.kz</a>
-            <a href="mailto:namazbek.bekzhanov@ffins.kz" class="ui-chip">Work: namazbek.bekzhanov@ffins.kz</a>
-            <span class="ui-chip">Future work: namazbek.bekzhanov@bsbnb.kz</span>
-        </div>
-        <div class="flex justify-center mb-8">
-            <img src="assets/NBA_signature.png" loading="lazy" alt="Namazbek Bekzhanov signature" class="max-w-[220px] opacity-90" />
-        </div>
-        <p class="text-gray-500 text-sm font-mono">&copy; 2026 Namazbek Bekzhanov.</p>
-    </footer>
+    </main>
 
-    <div id="resume-modal" class="vl-modal hidden" aria-hidden="true">
-        <div class="vl-modal__backdrop" data-close="1"></div>
-        <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="resume-modal-title" tabindex="-1">
-            <div class="flex items-start justify-between gap-4">
-                <div>
-                    <h4 id="resume-modal-title" class="text-2xl font-bold font-display">Resume</h4>
-                    <div class="text-gray-400 mt-1">PDF viewer</div>
-                </div>
-                <button type="button" class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" aria-label="Close dialog" data-close="1">Close</button>
-            </div>
-            <div class="mt-4">
-                <iframe id="resume-frame" title="Resume PDF" class="w-full rounded-xl border border-white/10" style="height: min(70vh, 820px); background: rgba(255,255,255,0.03);"></iframe>
-            </div>
-            <div class="flex flex-wrap gap-3 mt-6">
-                <a id="resume-open-newtab" href="assets/Namazbek_s_Resume_INT.pdf" target="_blank" rel="noreferrer" class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Open in new tab</a>
-                <a id="resume-download" href="assets/Namazbek_s_Resume_INT.pdf" download class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition">Download</a>
-                <button type="button" class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition" data-close="1">Done</button>
-            </div>
-        </div>
-    </div>
-
-</main>
-
-<!-- LOGIC (ES modules - deferred by default) -->
-<script type="module" src="assets/logic.js"></script>
-<script type="module" src="assets/ai-monthly-feature.js"></script>
-<script src="assets/audience-pulse.js"></script>
-<script src="assets/keywords-globe.js"></script>
+    <!-- LOGIC (ES modules - deferred by default) -->
+    <script type="module" src="assets/logic.js"></script>
+    <script type="module" src="assets/developer-lab.js"></script>
+    <script type="module" src="assets/ai-monthly-feature.js"></script>
+    <script src="assets/audience-pulse.js"></script>
+    <script src="assets/keywords-globe.js"></script>
 </body>
 
 </html>
