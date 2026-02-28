@@ -10,7 +10,8 @@
     "delta_yoy": -51.31,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/oracle.svg"
+    "icon": "assets/logos/oracle.svg",
+    "icon_class": "devicon-oracle-original colored"
   },
   {
     "rank": 2,
@@ -23,7 +24,8 @@
     "delta_yoy": -131.77,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/mysql.svg"
+    "icon": "assets/logos/mysql.svg",
+    "icon_class": "devicon-mysql-plain colored"
   },
   {
     "rank": 3,
@@ -36,7 +38,8 @@
     "delta_yoy": -78.73,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/microsoftsqlserver.svg"
+    "icon": "assets/logos/microsoftsqlserver.svg",
+    "icon_class": "devicon-microsoftsqlserver-plain colored"
   },
   {
     "rank": 4,
@@ -49,7 +52,8 @@
     "delta_yoy": 12.42,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/postgresql.svg"
+    "icon": "assets/logos/postgresql.svg",
+    "icon_class": "devicon-postgresql-plain colored"
   },
   {
     "rank": 5,
@@ -62,7 +66,8 @@
     "delta_yoy": -17.9,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/mongodb.svg"
+    "icon": "assets/logos/mongodb.svg",
+    "icon_class": "devicon-mongodb-plain colored"
   },
   {
     "rank": 6,
@@ -88,7 +93,8 @@
     "delta_yoy": -10.87,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/redis.svg"
+    "icon": "assets/logos/redis.svg",
+    "icon_class": "devicon-redis-plain colored"
   },
   {
     "rank": 8,
@@ -127,6 +133,7 @@
     "delta_yoy": -28.17,
     "as_of": "Feb 2026",
     "source": "https://db-engines.com/en/ranking",
-    "icon": "assets/logos/elasticsearch.svg"
+    "icon": "assets/logos/elasticsearch.svg",
+    "icon_class": "devicon-elasticsearch-plain colored"
   }
 ]
