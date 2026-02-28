@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <path d="M12.4 12.4v103.2h103.2V12.4H12.4z" fill="#052FAD"/>
-  <path d="M30 30h24.8v16.5H35v45h8.3v16.5H30V30zm68 68H73.2V81.5H83V36.5h-8.3V20H98v78zM54.8 46.5H73.2v35H54.8v-35z" fill="#FFFFFF"/>
-</svg>
+<svg fill="#0530AD" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>IBM Db2</title><path d="M3.6 0v4.8H0V0zm4.8 0v4.8H4.8V0zm4.8 0v4.8h-3.6V0zm4.8 0v4.8H14.4V0zM3.6 6v4.8H0V6zm4.8 0v4.8H4.8V6zm4.8 0v4.8h-3.6V6zm4.8 0v4.8H14.4V6zM3.6 13.2V18H0v-4.8zm4.8 0V18H4.8v-4.8zm4.8 0V18h-3.6v-4.8zm4.8 0V18H14.4v-4.8zM3.6 19.2V24H0v-4.8zm4.8 0V24H4.8v-4.8zm4.8 0V24h-3.6v-4.8zm4.8 0V24H14.4v-4.8zM24 0v4.8h-3.6V0zM24 6v4.8h-3.6V6zm0 7.2V18h-3.6v-4.8zm0 6V24h-3.6v-4.8z"/></svg>
