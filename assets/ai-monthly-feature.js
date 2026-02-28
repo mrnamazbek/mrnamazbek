@@ -1,7 +1,6 @@
-(function () {
-    'use strict';
+import { escapeHtml, asNumber, clamp, formatMonth } from './utils.js';
 
-    const ROOT_ID = 'ai-monthly-feature-root';
+const ROOT_ID = 'ai-monthly-feature-root';
     const LIVE_SIGNALS_ROOT_ID = 'ai-live-signals-root';
     const LIVE_SIGNALS_STORAGE_KEY = 'ai_live_signals_rates_v2';
     const FEATURE_URL = 'assets/ai_monthly_feature.json';
@@ -40,38 +39,6 @@
             }
         }
     };
-
-    function escapeHtml(value) {
-        return String(value || '')
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
-
-    function asNumber(value, fallback) {
-        const n = Number(value);
-        return Number.isFinite(n) ? n : fallback;
-    }
-
-    function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
-    }
-
-    function formatMonth(value) {
-        const m = String(value || '').trim();
-        if (!/^\d{4}-\d{2}$/.test(m)) return m || 'Latest';
-        const parts = m.split('-');
-        const year = Number(parts[0]);
-        const month = Number(parts[1]) - 1;
-        const d = new Date(Date.UTC(year, month, 1));
-        try {
-            return new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(d);
-        } catch (e) {
-            return m;
-        }
-    }
 
     function normalizeFeature(raw) {
         if (!raw || typeof raw !== 'object') return FALLBACK_FEATURE;
@@ -560,4 +527,3 @@
         initAIMonthlyFeature();
         initLiveSignals();
     });
-})();

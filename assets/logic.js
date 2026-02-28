@@ -1,3 +1,5 @@
+import { escapeHtml, safeText, normalizeText, prefersReducedMotion, isMobileViewport } from './utils.js';
+
     // === 1. SHADER BACKGROUND ===
     const vertexShader = `
         varying vec2 vUv;
@@ -879,10 +881,6 @@
         return ['devicon-git-plain colored', 'devicon-vscode-plain colored'];
     }
 
-    function normalizeText(value) {
-        return String(value || '').toLowerCase();
-    }
-
     function renderProjects(repos, keyword) {
         const grid = document.getElementById('projects-grid');
         if (!grid) return;
@@ -908,7 +906,7 @@
         }
 
         if (!limited.length) {
-            grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + keyword + '</span></div>';
+            grid.innerHTML = '<div class="text-gray-500">No matching projects found for: <span class="text-cyan-300">' + escapeHtml(keyword) + '</span></div>';
             return;
         }
 
@@ -924,7 +922,7 @@
             const iconsHtml = techIcons.map(icon => `<i class="${icon} text-xl"></i>`).join('');
 
             const badge = kw
-                ? `<div class="text-[10px] font-mono uppercase tracking-widest text-cyan-300/80">Filtered by: ${keyword}</div>`
+                ? `<div class="text-[10px] font-mono uppercase tracking-widest text-cyan-300/80">Filtered by: ${escapeHtml(keyword)}</div>`
                 : '';
 
             card.innerHTML = `
@@ -933,8 +931,8 @@
                             <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-400"></span> ${repo.language || 'Code'}</div>
                             ${badge}
                         </div>
-                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${repo.name}</h3>
-                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${repo.description || 'No description.'}</p>
+                        <h3 class="text-xl font-bold group-hover:text-cyan-200 transition">${escapeHtml(repo.name)}</h3>
+                        <p class="text-gray-400 text-sm mt-3 line-clamp-3">${escapeHtml(repo.description || 'No description.')}</p>
                     </div>
 
                     <!-- Dynamic Tech Icons -->
@@ -951,14 +949,6 @@
         BOOKS_URL: 'assets/books.json',
         USE_MODAL_ON_MOBILE: false
     };
-
-    function prefersReducedMotion() {
-        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-
-    function isMobileViewport() {
-        return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-    }
 
     function makeBookCoverFallback(title, author) {
         const t = String(title || '').slice(0, 38);
@@ -1072,10 +1062,6 @@
         if (s === 'reading') return { text: 'Reading', cls: 'bg-cyan-500/15 text-cyan-200 border-cyan-300/20' };
         if (s === 'completed') return { text: 'Completed', cls: 'bg-emerald-500/15 text-emerald-200 border-emerald-300/20' };
         return { text: 'To read', cls: 'bg-white/5 text-gray-200 border-white/10' };
-    }
-
-    function safeText(v) {
-        return String(v || '');
     }
 
     function renderVerticalLibrary(books, options) {
