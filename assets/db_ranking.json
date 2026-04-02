@@ -8,7 +8,7 @@
     "score_prev_year": 1253.08,
     "delta_mom": -21.05,
     "delta_yoy": -70.62,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-oracle-original colored"
   },
@@ -21,7 +21,7 @@
     "score_prev_year": 988.13,
     "delta_mom": -9.88,
     "delta_yoy": -129.79,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-mysql-plain colored"
   },
@@ -34,7 +34,7 @@
     "score_prev_year": 788.14,
     "delta_mom": 3.33,
     "delta_yoy": -76.67,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-microsoftsqlserver-plain colored"
   },
@@ -47,7 +47,7 @@
     "score_prev_year": 663.42,
     "delta_mom": 8.05,
     "delta_yoy": 16.66,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-postgresql-plain colored"
   },
@@ -60,7 +60,7 @@
     "score_prev_year": 396.43,
     "delta_mom": 4.85,
     "delta_yoy": -12.85,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-mongodb-plain colored"
   },
@@ -73,7 +73,7 @@
     "score_prev_year": 161.78,
     "delta_mom": 3.1,
     "delta_yoy": 49.46,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": ""
   },
@@ -86,7 +86,7 @@
     "score_prev_year": 96.01,
     "delta_mom": 1.29,
     "delta_yoy": 49.8,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": ""
   },
@@ -99,7 +99,7 @@
     "score_prev_year": 155.36,
     "delta_mom": -1.85,
     "delta_yoy": -10.17,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": "devicon-redis-plain colored"
   },
@@ -112,7 +112,7 @@
     "score_prev_year": 126.57,
     "delta_mom": 0.16,
     "delta_yoy": -15.19,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": ""
   },
@@ -125,7 +125,7 @@
     "score_prev_year": 131.38,
     "delta_mom": -2.88,
     "delta_yoy": -27.8,
-    "as_of": "Mar 2026",
+    "as_of": "Apr 2026",
     "source": "https://db-engines.com/en/ranking",
     "icon": ""
   }
