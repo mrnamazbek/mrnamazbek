@@ -357,16 +357,16 @@ function initDbRankingWidget() {
     const sortSel = document.getElementById('db-sort');
 
     const fallback = [
-        { rank: 1, name: 'Oracle', model: 'Relational, Multi-model', score_feb_2026: 1203.51, score_jan_2026: 1237.33, score_feb_2025: 1254.82, delta_mom: -33.82, delta_yoy: -51.31, icon: 'assets/logos/oracle.svg', icon_class: 'devicon-oracle-original colored' },
-        { rank: 2, name: 'MySQL', model: 'Relational, Multi-model', score_feb_2026: 868.22, score_jan_2026: 867.52, score_feb_2025: 999.99, delta_mom: 0.70, delta_yoy: -131.77, icon: 'assets/logos/mysql.svg', icon_class: 'devicon-mysql-plain colored' },
-        { rank: 3, name: 'Microsoft SQL Server', model: 'Relational, Multi-model', score_feb_2026: 708.14, score_jan_2026: 706.26, score_feb_2025: 786.87, delta_mom: 1.88, delta_yoy: -78.73, icon: 'assets/logos/microsoftsqlserver.svg', icon_class: 'devicon-microsoftsqlserver-plain colored' },
-        { rank: 4, name: 'PostgreSQL', model: 'Relational, Multi-model', score_feb_2026: 672.03, score_jan_2026: 666.26, score_feb_2025: 659.61, delta_mom: 5.77, delta_yoy: 12.42, icon: 'assets/logos/postgresql.svg', icon_class: 'devicon-postgresql-plain colored' },
-        { rank: 5, name: 'MongoDB', model: 'Document, Multi-model', score_feb_2026: 378.73, score_jan_2026: 376.74, score_feb_2025: 396.63, delta_mom: 1.99, delta_yoy: -17.90, icon: 'assets/logos/mongodb.svg', icon_class: 'devicon-mongodb-plain colored' },
-        { rank: 6, name: 'Snowflake', model: 'Relational', score_feb_2026: 208.14, score_jan_2026: 207.80, score_feb_2025: 155.58, delta_mom: 0.34, delta_yoy: 52.56, icon: 'assets/logos/snowflake.svg' },
-        { rank: 7, name: 'Redis', model: 'Key-value, Multi-model', score_feb_2026: 147.04, score_jan_2026: 144.16, score_feb_2025: 157.91, delta_mom: 2.88, delta_yoy: -10.87, icon: 'assets/logos/redis.svg', icon_class: 'devicon-redis-plain colored' },
-        { rank: 8, name: 'Databricks', model: 'Multi-model', score_feb_2026: 144.51, score_jan_2026: 141.54, score_feb_2025: 90.03, delta_mom: 2.97, delta_yoy: 54.48, icon: 'assets/logos/databricks.svg' },
-        { rank: 9, name: 'IBM Db2', model: 'Relational, Multi-model', score_feb_2026: 111.22, score_jan_2026: 112.72, score_feb_2025: 125.43, delta_mom: -1.50, delta_yoy: -14.21, icon: 'assets/logos/ibm-db2.svg' },
-        { rank: 10, name: 'Elasticsearch', model: 'Multi-model', score_feb_2026: 106.46, score_jan_2026: 107.15, score_feb_2025: 134.63, delta_mom: -0.69, delta_yoy: -28.17, icon: 'assets/logos/elasticsearch.svg', icon_class: 'devicon-elasticsearch-plain colored' }
+        { rank: 1, name: 'Oracle', model: 'Relational, Multi-model', score_feb_2026: 1203.51, score_jan_2026: 1237.33, score_feb_2025: 1254.82, delta_mom: -33.82, delta_yoy: -51.31, icon_class: 'devicon-oracle-original colored' },
+        { rank: 2, name: 'MySQL', model: 'Relational, Multi-model', score_feb_2026: 868.22, score_jan_2026: 867.52, score_feb_2025: 999.99, delta_mom: 0.70, delta_yoy: -131.77, icon_class: 'devicon-mysql-plain colored' },
+        { rank: 3, name: 'Microsoft SQL Server', model: 'Relational, Multi-model', score_feb_2026: 708.14, score_jan_2026: 706.26, score_feb_2025: 786.87, delta_mom: 1.88, delta_yoy: -78.73, icon_class: 'devicon-microsoftsqlserver-plain colored' },
+        { rank: 4, name: 'PostgreSQL', model: 'Relational, Multi-model', score_feb_2026: 672.03, score_jan_2026: 666.26, score_feb_2025: 659.61, delta_mom: 5.77, delta_yoy: 12.42, icon_class: 'devicon-postgresql-plain colored' },
+        { rank: 5, name: 'MongoDB', model: 'Document, Multi-model', score_feb_2026: 378.73, score_jan_2026: 376.74, score_feb_2025: 396.63, delta_mom: 1.99, delta_yoy: -17.90, icon_class: 'devicon-mongodb-plain colored' },
+        { rank: 6, name: 'Snowflake', model: 'Relational', score_feb_2026: 208.14, score_jan_2026: 207.80, score_feb_2025: 155.58, delta_mom: 0.34, delta_yoy: 52.56, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/snowflake/snowflake-original.svg' },
+        { rank: 7, name: 'Redis', model: 'Key-value, Multi-model', score_feb_2026: 147.04, score_jan_2026: 144.16, score_feb_2025: 157.91, delta_mom: 2.88, delta_yoy: -10.87, icon_class: 'devicon-redis-plain colored' },
+        { rank: 8, name: 'Databricks', model: 'Multi-model', score_feb_2026: 144.51, score_jan_2026: 141.54, score_feb_2025: 90.03, delta_mom: 2.97, delta_yoy: 54.48, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/databricks/databricks-original.svg', icon_class: 'devicon-aicon-plain' },
+        { rank: 9, name: 'IBM Db2', model: 'Relational, Multi-model', score_feb_2026: 111.22, score_jan_2026: 112.72, score_feb_2025: 125.43, delta_mom: -1.50, delta_yoy: -14.21, icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ibm/ibm-original.svg' },
+        { rank: 10, name: 'Elasticsearch', model: 'Multi-model', score_feb_2026: 106.46, score_jan_2026: 107.15, score_feb_2025: 134.63, delta_mom: -0.69, delta_yoy: -28.17, icon_class: 'devicon-elasticsearch-plain colored' }
     ];
 
     let data = [];
@@ -399,6 +399,15 @@ function initDbRankingWidget() {
                 const deltaMoM = Number.isFinite(Number(it.delta_mom)) ? Number(it.delta_mom) : (scoreFeb - scoreJan);
                 const deltaYoY = Number.isFinite(Number(it.delta_yoy)) ? Number(it.delta_yoy) : (scoreFeb - scorePrevYear);
 
+                let parsedIcon = it.icon ? String(it.icon) : '';
+                let parsedIconClass = it.icon_class ? String(it.icon_class) : (it.iconClass ? String(it.iconClass) : '');
+                
+                // Fix for old JSON format putting class inside icon
+                if (parsedIcon.startsWith('devicon-')) {
+                    parsedIconClass = parsedIcon;
+                    parsedIcon = '';
+                }
+
                 return {
                     rank: Number(it.rank) || 999,
                     name,
@@ -409,8 +418,8 @@ function initDbRankingWidget() {
                     deltaMoM,
                     deltaYoY,
                     asOf: String(it.as_of || it.asOf || '').trim(),
-                    icon: it.icon ? String(it.icon) : '',
-                    iconClass: it.icon_class ? String(it.icon_class) : (it.iconClass ? String(it.iconClass) : '')
+                    icon: parsedIcon,
+                    iconClass: parsedIconClass
                 };
             })
             .filter(it => it.name !== 'Unknown');
@@ -510,21 +519,22 @@ function initDbRankingWidget() {
                                 <div class="mini-table__head-cell" role="columnheader">Score</div>
                             </div>
                             ${items.map(it => {
-            const iconHtml = it.iconClass
+            const iconFall = `<div class="w-6 h-6 flex items-center justify-center bg-white/10 rounded-full font-mono text-[10px] uppercase font-bold tracking-tighter text-white" style="display:none;" aria-hidden="true">${it.name.substring(0,2)}</div>`;
+            const iconHtml = it.iconClass && !it.icon
                 ? `<i class="${it.iconClass} text-[18px] leading-none"></i>`
-                : (it.icon ? `<img src="${it.icon}" alt="${escapeHtml(it.name)} logo" class="w-5 h-5 object-contain" />` : '');
+                : (it.icon ? `<img src="${it.icon}" alt="${escapeHtml(it.name)} logo" class="w-5 h-5 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />${iconFall}` : iconFall.replace('display:none;', 'display:flex;'));
             const trend = sparklineSvg([it.scorePrevYear, it.scoreJan, it.scoreFeb]);
             const rankClass = it.rank <= 3 ? 'rank-badge rank-badge--top' : 'rank-badge';
             const rowClass = it.rank <= 3 ? 'mini-table__row mini-table__row--top' : 'mini-table__row';
             return `
                                     <div class="${rowClass}" role="row">
-                                        <div class="mini-table__cell mono" role="cell" data-label="Rank"><span class="${rankClass}">#${it.rank}</span></div>
+                                        <div class="mini-table__cell mono shrink-0" role="cell" data-label="Rank"><span class="${rankClass}">#${it.rank}</span></div>
                                         <div class="mini-table__cell" role="cell" data-label="Database">
                                             <div class="mini-db">
                                                 <span class="mini-db__icon" aria-hidden="true">${iconHtml}</span>
                                                 <span class="mini-db__name">${escapeHtml(it.name)}</span>
                                             </div>
-                                            <div class="mini-db__meta">${escapeHtml(it.model)}</div>
+                                            <div class="mini-db__meta line-clamp-2" title="${escapeHtml(it.model)}">${escapeHtml(it.model)}</div>
                                         </div>
                                         <div class="mini-table__cell mini-table__cell--momentum" role="cell" data-label="Momentum">
                                             <div class="mini-db__trend">

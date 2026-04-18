@@ -519,8 +519,21 @@ const ROOT_ID = 'ai-monthly-feature-root';
         const root = document.getElementById(ROOT_ID);
         if (!root) return;
 
-        const feature = await loadFeature();
-        renderFeature(root, feature);
+        try {
+            const feature = await loadFeature();
+            renderFeature(root, feature);
+        } catch (error) {
+            console.error('AI Monthly Feature rendering failed:', error);
+            root.innerHTML = `
+                <div class="ai-feature ai-feature--error">
+                    <div class="ai-feature__meta">
+                        <span class="ai-feature__pill bg-red-500/20 text-red-300">System Fallback</span>
+                    </div>
+                    <h4 class="ai-feature__title text-red-200">Lab Temporarily Offline</h4>
+                    <p class="ai-feature__desc">The AI Monthly Feature generation service encountered a timeout or data error. We are using fault-tolerant caching to keep the system responsive.</p>
+                </div>
+            `;
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
