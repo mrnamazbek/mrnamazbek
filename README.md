@@ -11,14 +11,14 @@
 <!-- Status Badges Row 1 -->
 <p>
 <img src="https://img.shields.io/badge/🌍_Location-Almaty,_Kazakhstan-e74c3c?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/💼_Role-Data_Engineer-3498db?style=for-the-badge&labelColor=2c3e50" />
+<img src="https://img.shields.io/badge/💼_Role-Big_Data_Engineer-3498db?style=for-the-badge&labelColor=2c3e50" />
 <img src="https://img.shields.io/badge/🎓_Degree-MSc_Student-27ae60?style=for-the-badge&labelColor=2c3e50" />
 </p>
 
 <!-- Status Badges Row 2 -->
 <p>
 <img src="https://img.shields.io/badge/⚽_Captain-Football_Team-f39c12?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/💻_Company-Freedom_Finance-9b59b6?style=for-the-badge&labelColor=2c3e50" />
+<img src="https://img.shields.io/badge/💻_Company-National_Bank_of_Kazakhstan-9b59b6?style=for-the-badge&labelColor=2c3e50" />
 </p>
 
 </div>
