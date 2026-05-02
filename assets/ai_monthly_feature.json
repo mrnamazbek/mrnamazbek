@@ -1,28 +1,48 @@
 {
-  "id": "2026-02-ai-automation",
-  "month": "2026-02",
-  "title": "News-to-Action Digest: Turn Trending “новости” Into Team-Ready Updates",
-  "trend_keyword": "AI automation",
-  "description": "Build a lightweight internal digest that converts high-volume news queries into actionable, non-political operational updates for product and engineering teams. The feature pulls headlines from approved sources, clusters duplicates, summarizes in plain English, and routes items i",
-  "why_now": "In KZ during 2026-02, “новости” is trending, signaling elevated demand for timely information. Teams often waste time scanning multiple feeds and still miss operationally relevant items. A structured digest with deduplication, summarization, and routing reduces context switching ",
-  "mobile_review_notes": "Ensure the digest cards are readable on small screens: 2-line title clamp, source + timestamp visible, and a single primary action (Assign/Save). Summaries should default to ~280 characters with “Read more” expansion. Provide offline-friend",
+  "id": "2026-05-turkish-airlines",
+  "month": "2026-05",
+  "title": "Rocket Launch Watch: A Developer-Friendly Space Events Digest",
+  "trend_keyword": "turkish airlines",
+  "description": "Build a monthly, portfolio-ready feature that turns trending interest in космонавтика (cosmonautics) into a practical product: a lightweight “Space Events Digest” that aggregates upcoming rocket launches, mission milestones, and livestream links, then summarizes them into a clean",
+  "why_now": "In KZ, interest in космонавтика spikes around launch windows and major mission news. May 2026 is a good time to ship a reliable, automated digest because users search for schedules, livestreams, and quick context—exactly the kind of information that benefits from structured data,",
+  "mobile_review_notes": "Ensure the weekly highlight card renders above the fold on 360px width. Use a single-column layout with 44px tap targets for “Watch”, “Add to calendar”, and “Share”. Keep summaries to 280 characters with an expandable “More” section. Cache ",
   "source": {
     "type": "google_trends",
     "geo": "KZ",
-    "captured_at": "2026-02-18T11:32:38.254337+00:00"
+    "captured_at": "2026-05-02T06:08:13.729472+00:00"
   },
   "widget": {
-    "type": "impact_estimator",
-    "heading": "Time Saved by Automated News-to-Action Digest",
-    "description": "Estimate weekly hours saved by replacing manual scanning and ad-hoc sharing with an automated, deduplicated digest that routes actionable items to the right tool and owner.",
+    "type": "roadmap_planner",
+    "heading": "Ship plan: Space Events Digest (4–6 weeks)",
+    "description": "A practical roadmap to implement an automated космонавтика digest: data sources, normalization, summarization, and a mobile-first feed with calendar export.",
     "config": {
-      "input_label": "Minutes per day currently spent per person on scanning/sharing news",
-      "min": 0,
-      "max": 90,
-      "step": 5,
-      "default": 25,
-      "baseline_hours": 80.0,
-      "efficiency_factor": 0.6
+      "steps": [
+        {
+          "name": "Source discovery & schema",
+          "detail": "Identify 2–3 reliable sources (official agency pages, launch schedule sites, RSS/Atom feeds). Define a normalized event schema: mission_name, provider, vehicle, window_start, window_end, location, liv",
+          "weeks": 0.8
+        },
+        {
+          "name": "Ingestion pipeline",
+          "detail": "Implement fetchers with retries, rate limiting, and HTML-to-structured extraction where needed. Store raw payloads for traceability. Schedule daily runs and emit structured events into a database.",
+          "weeks": 1.2
+        },
+        {
+          "name": "Deduplication & quality rules",
+          "detail": "Add canonicalization (time rounding, name normalization), fuzzy matching for mission names, and conflict resolution (prefer official sources). Flag uncertain fields and track provenance per attribute.",
+          "weeks": 0.9
+        },
+        {
+          "name": "Summaries & localization",
+          "detail": "Generate short, factual summaries from structured fields (not freeform scraping). Provide English UI copy and allow optional RU/KZ labels. Add guardrails: no speculation, include source links, and sho",
+          "weeks": 1.0
+        },
+        {
+          "name": "Mobile-first UI + calendar export",
+          "detail": "Build a feed with filters (This week / This month / By provider) and an event detail view. Add ICS export and deep links to livestreams. Implement caching and skeleton loading for slow networks.",
+          "weeks": 1.1
+        }
+      ]
     }
   }
 }
