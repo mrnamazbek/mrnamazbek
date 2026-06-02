@@ -74,5 +74,53 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-06-ai-automation",
+    "month": "2026-06",
+    "title": "eGov KZ Task Automator: One-Click Document Checklist + Status Tracker",
+    "trend_keyword": "AI automation",
+    "description": "Build a lightweight web app that helps users and support teams prepare and track common eGov KZ requests (e.g., certificates, registrations) without storing sensitive data. The feature generates a step-by-step checklist, required document list, and a shareable progress link. It a",
+    "why_now": "In June 2026, “egov kz” is trending in Kazakhstan, signaling increased demand for digital public services. A practical productivity layer—checklists, status tracking, and standardized summaries—reduces repeated support questions and improves completion rates during peak usage per",
+    "mobile_review_notes": "Ensure the checklist is thumb-friendly with large tap targets and offline-first behavior (localStorage/IndexedDB). Avoid collecting personal identifiers; keep notes local-only by default. Provide clear disclaimers that the tool is not an of",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-06-02T08:39:20.470465+00:00"
+    },
+    "widget": {
+      "type": "roadmap_planner",
+      "heading": "4-Week Build Plan (Privacy-First)",
+      "description": "A practical roadmap to ship an MVP that improves completion rates for eGov-related tasks via checklists, progress tracking, and standardized summaries—without handling sensitive data.",
+      "config": {
+        "steps": [
+          {
+            "name": "Scope top 5 workflows + content model",
+            "detail": "Select the most common eGov KZ tasks for your audience, define required documents/steps per workflow, and design a JSON schema for checklists, prerequisites, and help text.",
+            "weeks": 0.8
+          },
+          {
+            "name": "MVP UI: checklist + progress + share link",
+            "detail": "Implement a mobile-first checklist with progress indicator, step details, and a shareable read-only link (no PII). Add local-only notes per step.",
+            "weeks": 1.2
+          },
+          {
+            "name": "Copy-ready request summary + templates",
+            "detail": "Generate a standardized summary (task, completed steps, missing docs, questions) with one-tap copy. Add templates for support teams to reduce back-and-forth.",
+            "weeks": 0.8
+          },
+          {
+            "name": "Reminders + offline-first hardening",
+            "detail": "Add optional reminders (calendar export or local notifications where supported), cache assets for offline use, and ensure graceful degradation on older mobile browsers.",
+            "weeks": 0.7
+          },
+          {
+            "name": "QA, accessibility, and analytics (privacy-safe)",
+            "detail": "Test on common KZ devices/browsers, add keyboard and screen-reader support, and implement privacy-safe event tracking (no user content, no identifiers).",
+            "weeks": 0.5
+          }
+        ]
+      }
+    }
   }
 ]

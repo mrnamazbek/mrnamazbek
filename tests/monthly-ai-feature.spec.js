@@ -14,7 +14,7 @@ test('AI monthly feature renders and works on mobile', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
 
   await expect(page.locator('#ai-monthly-lab')).toBeVisible();
-  await expect(page.locator('#ai-monthly-feature-root')).toContainText("Rocket Launch Watch: A Developer-Friendly Space Events Digest");
+  await expect(page.locator('#ai-monthly-feature-root')).toContainText("eGov KZ Task Automator: One-Click Document Checklist + Status Tracker");
 
   const card = page.locator('#ai-monthly-feature-root .ai-feature');
   await expect(card).toBeVisible();
