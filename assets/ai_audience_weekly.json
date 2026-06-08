@@ -1,8 +1,8 @@
 {
   "as_of": "2026-05-25",
   "window_weeks": 24,
-  "generated_at": "2026-06-01T09:39:29.881165+00:00",
-  "status": "ok",
+  "generated_at": "2026-06-08T09:10:57.168565+00:00",
+  "status": "fallback_existing",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
     "name": "Wikimedia Pageviews API",
@@ -669,5 +669,12 @@
       "views": 1240
     }
   ],
-  "errors": []
+  "errors": [
+    "ChatGPT: HTTP Error 429: Too Many Requests",
+    "Claude: HTTP Error 429: Too Many Requests",
+    "Gemini: HTTP Error 429: Too Many Requests",
+    "Copilot: HTTP Error 429: Too Many Requests",
+    "Perplexity: HTTP Error 429: Too Many Requests",
+    "DeepSeek: HTTP Error 429: Too Many Requests"
+  ]
 }
