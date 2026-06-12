@@ -1,629 +1,436 @@
-<!-- ═══════════════════════════════════════════════════════════════════════
-     NAMAZBEK BEKZHANOV · github.com/mrnamazbek
-     This repository is BOTH my GitHub profile README *and* the source of my
-     live, self-updating personal website → https://mrnamazbek.github.io/mrnamazbek/
-     ═══════════════════════════════════════════════════════════════════════ -->
-
-<!-- Dynamic Gradient Wave Header -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,3,5,6&height=200&section=header&text=NAMAZBEK%20BEKZHANOV&fontSize=50&fontColor=fff&animation=fadeIn&fontAlignY=35&desc=Data%20Engineering%20%E2%80%A2%20Backend%20%E2%80%A2%20Self-Updating%20Systems&descSize=16&descAlignY=53" />
-
 <div align="center">
 
-<!-- Multi-line Terminal Simulation -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=7C3AED&height=210&section=header&text=Namazbek%20Bekzhanov&fontSize=48&fontColor=ffffff&fontAlignY=34&desc=Data%20Engineer%20%C2%B7%20ETL%2FELT%20%C2%B7%20Cloud%20%26%20Distributed%20Data%20Platforms&descSize=17&descAlignY=54&animation=fadeIn" />
+
 <a href="https://github.com/mrnamazbek">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3200&pause=900&color=00F7F7&center=true&vCenter=true&multiline=true&repeat=true&width=760&height=130&lines=Middle+Data+Engineer+%40+National+Bank+of+Kazakhstan;I+build+self-updating+data+systems;This+profile+IS+a+live%2C+self-deploying+website;Spark+%E2%80%A2+Airflow+%E2%80%A2+Python+%E2%80%A2+SQL+%E2%80%A2+ML" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3200&pause=900&color=A78BFA&center=true&vCenter=true&multiline=true&repeat=true&width=780&height=130&lines=Data+Engineer+%40+National+Bank+of+Kazakhstan;ETL+%2F+ELT+%E2%80%A2+Airflow+%E2%80%A2+Kafka+%E2%80%A2+Kubernetes;MSc+Computer+Science+%26+Data+Analytics+%E2%80%94+GPA+3.88;I+build+reliable%2C+large-scale+data+platforms" alt="Typing SVG" />
 </a>
 
-<!-- Quick Links (clickable) -->
 <p>
-<a href="https://mrnamazbek.github.io/mrnamazbek/"><img src="https://img.shields.io/badge/🌐_Live_Site-Visit-00F7F7?style=for-the-badge&labelColor=0D1117" /></a>
-<a href="assets/Namazbek_s_Resume_INT.pdf"><img src="https://img.shields.io/badge/📄_Résumé-PDF-e74c3c?style=for-the-badge&labelColor=0D1117" /></a>
-<a href="https://www.linkedin.com/in/namazbek-bekzhanov/"><img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0D1117" /></a>
-<a href="mailto:namazbekzhan@gmail.com"><img src="https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white&labelColor=0D1117" /></a>
+<img src="https://img.shields.io/badge/MSc-KBTU%20%C2%B7%20GPA%203.88-8B5CF6?style=for-the-badge&logo=googlescholar&logoColor=white&labelColor=0D1117" />
+<img src="https://img.shields.io/badge/BEng-SDU%20%C2%B7%20GPA%203.6-6366F1?style=for-the-badge&logo=googlescholar&logoColor=white&labelColor=0D1117" />
+<img src="https://img.shields.io/badge/Almaty%2C%20Kazakhstan-0D1117?style=for-the-badge&logo=googlemaps&logoColor=A78BFA&labelColor=0D1117" />
 </p>
 
-<!-- Status Badges Row 1 -->
 <p>
-<img src="https://img.shields.io/badge/📍_Location-Almaty,_Kazakhstan-e74c3c?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/💼_Role-Middle_Data_Engineer-3498db?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/🎓_MSc-KBTU_(2025–2027)-27ae60?style=for-the-badge&labelColor=2c3e50" />
+<a href="https://mrnamazbek.github.io/mrnamazbek/"><img src="https://img.shields.io/badge/Portfolio-8B5CF6?style=for-the-badge&logo=githubpages&logoColor=white&labelColor=0D1117" /></a>
+<a href="https://www.linkedin.com/in/namazbek-bekzhanov/"><img src="https://img.shields.io/badge/LinkedIn-2563EB?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0D1117" /></a>
+<a href="mailto:namazbekzhan@gmail.com"><img src="https://img.shields.io/badge/Email-7C3AED?style=for-the-badge&logo=gmail&logoColor=white&labelColor=0D1117" /></a>
+<a href="https://github.com/mrnamazbek"><img src="https://img.shields.io/badge/GitHub-6366F1?style=for-the-badge&logo=github&logoColor=white&labelColor=0D1117" /></a>
 </p>
 
-<!-- Status Badges Row 2 (concurrent roles) -->
 <p>
-<img src="https://img.shields.io/badge/🏦_National_Bank_of_Kazakhstan-Digital_Dev_Center-9b59b6?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/🛡️_Freedom_Insurance-Data_Engineer-f39c12?style=for-the-badge&labelColor=2c3e50" />
-<img src="https://img.shields.io/badge/⚽_Football-Team_Captain-2ecc71?style=for-the-badge&labelColor=2c3e50" />
+<img src="https://komarev.com/ghpvc/?username=mrnamazbek&label=Profile%20Views&color=8B5CF6&style=for-the-badge" />
+<img src="https://img.shields.io/github/followers/mrnamazbek?style=for-the-badge&logo=github&logoColor=white&label=Followers&labelColor=0D1117&color=6366F1" />
+<img src="https://img.shields.io/github/stars/mrnamazbek?style=for-the-badge&logo=github&logoColor=white&label=Stars&labelColor=0D1117&color=7C3AED" />
 </p>
 
 </div>
 
-<br/>
+---
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+## About
 
-<br/>
+Data Engineer with **3+ years** designing enterprise-grade **ETL/ELT platforms** across **banking, insurance, and telecom**. I build ingestion pipelines with **Apache Airflow** and **Kafka/Debezium CDC**, architect **MS SQL / Vertica / Greenplum** data warehouses, and ship **FastAPI** microservices on **Docker + Kubernetes**. Currently engineering financial-reporting data flows at **The National Bank of Kazakhstan — Digital Development Center**, while pursuing an **MSc in Computer Science & Data Analytics (GPA 3.88)** at KBTU.
 
-## 🛰️ This Repo Is Alive
+- **Software Engineering** — production microservices, API gateways, and backend systems in Python/FastAPI; clean, tested, containerized delivery.
+- **AI / ML** — fraud detection on imbalanced financial data (MSc thesis), real-time ML/LLM integrations in data pipelines, and applied ML coursework.
+- **Full-Stack** — from T-SQL warehouses to a hand-built vanilla-JS portfolio that regenerates its own data and ships behind CI/CD test gates.
+- **Product Engineering Mindset** — reliability, observability (Grafana/Prometheus), data governance (OpenMetadata), and measurable performance wins.
 
-> **`mrnamazbek/mrnamazbek` is not a static profile — it's a self-driving website.**
-> Scheduled GitHub Actions wake up every week, pull fresh signals from public APIs
-> (Google Trends, Wikimedia, DB-Engines, exchange rates, weather), regenerate
-> versioned JSON datasets, run an **AI-authored "feature of the month,"** gate
-> everything behind **Playwright + Lighthouse**, and redeploy — all with **zero
-> manual edits**. The README you're reading and the live site share the same repo.
+> **Open To** — Senior / Lead Data Engineering · Platform & Backend Engineering · ML / Data Platform collaborations · Open-source contributions.
 
-<div align="center">
+---
 
-[![🌐 Open the live site](https://img.shields.io/badge/▶_Open_the_Live_Site-mrnamazbek.github.io-00F7F7?style=for-the-badge&labelColor=0D1117)](https://mrnamazbek.github.io/mrnamazbek/)
+## Tech Stack
 
-</div>
+**Languages**
 
-<br/>
+![Python](https://img.shields.io/badge/Python-0D1117?style=for-the-badge&logo=python&logoColor=8B5CF6)
+![SQL](https://img.shields.io/badge/SQL%20(T--SQL%20%2F%20PL%2FSQL)-0D1117?style=for-the-badge&logo=postgresql&logoColor=8B5CF6)
+![Java](https://img.shields.io/badge/Java-0D1117?style=for-the-badge&logo=openjdk&logoColor=8B5CF6)
+![Go](https://img.shields.io/badge/Go-0D1117?style=for-the-badge&logo=go&logoColor=8B5CF6)
+![Bash](https://img.shields.io/badge/Bash-0D1117?style=for-the-badge&logo=gnubash&logoColor=8B5CF6)
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+**Frontend**
 
-## 🧬 `$ python3 profile.py --execute`
+![JavaScript](https://img.shields.io/badge/JavaScript-0D1117?style=for-the-badge&logo=javascript&logoColor=A78BFA)
+![HTML5](https://img.shields.io/badge/HTML5-0D1117?style=for-the-badge&logo=html5&logoColor=A78BFA)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-0D1117?style=for-the-badge&logo=tailwindcss&logoColor=A78BFA)
+![Three.js](https://img.shields.io/badge/Three.js-0D1117?style=for-the-badge&logo=threedotjs&logoColor=A78BFA)
+![GSAP](https://img.shields.io/badge/GSAP-0D1117?style=for-the-badge&logo=greensock&logoColor=A78BFA)
 
-```python
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-╔══════════════════════════════════════════════════════════════════╗
-║  PROFESSIONAL PROFILE: Namazbek Bekzhanov                         ║
-║  Role: Data Engineer & Backend Developer | SQL Optimizer         ║
-║  Now: Middle Data Engineer @ The National Bank of Kazakhstan      ║
-╚══════════════════════════════════════════════════════════════════╝
-"""
+**Backend & Databases**
 
-from dataclasses import dataclass, field
-from typing import Dict, List
+![FastAPI](https://img.shields.io/badge/FastAPI-0D1117?style=for-the-badge&logo=fastapi&logoColor=6366F1)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-0D1117?style=for-the-badge&logo=postgresql&logoColor=6366F1)
+![MS SQL Server](https://img.shields.io/badge/MS%20SQL-0D1117?style=for-the-badge&logo=microsoftsqlserver&logoColor=6366F1)
+![Oracle](https://img.shields.io/badge/Oracle-0D1117?style=for-the-badge&logo=oracle&logoColor=6366F1)
+![Vertica](https://img.shields.io/badge/Vertica-0D1117?style=for-the-badge&logo=vertica&logoColor=6366F1)
+![Greenplum](https://img.shields.io/badge/Greenplum-0D1117?style=for-the-badge&logo=greenplum&logoColor=6366F1)
+![ClickHouse](https://img.shields.io/badge/ClickHouse-0D1117?style=for-the-badge&logo=clickhouse&logoColor=6366F1)
+![Redis](https://img.shields.io/badge/Redis-0D1117?style=for-the-badge&logo=redis&logoColor=6366F1)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-0D1117?style=for-the-badge&logo=elasticsearch&logoColor=6366F1)
+![MinIO](https://img.shields.io/badge/MinIO-0D1117?style=for-the-badge&logo=minio&logoColor=6366F1)
 
+**Cloud, DevOps & Tooling**
 
-@dataclass
-class Engineer:
-    """Data-driven engineer focused on scalable, self-updating systems."""
-
-    name: str = "Namazbek Bekzhanov"
-    role: str = "Data Engineer & Backend Developer"
-    location: str = "Almaty, Kazakhstan 🇰🇿"
-
-    # Several concurrent roles — finance & data at the core
-    roles: Dict[str, str] = field(default_factory=lambda: {
-        "🏦 Now":      "Middle Data Engineer · National Bank of KZ (Digital Dev Center)",
-        "🛡️ Also":     "Data Engineer · Freedom Insurance",
-        "🎓 Teaching": "Teaching Assistant · KBTU",
-        "🌐 Trainee":  "Data Software Engineering · EPAM Systems",
-    })
-
-    education: Dict[str, str] = field(default_factory=lambda: {
-        "🎓 MSc": "Data Science @ KBTU (2025–2027)",
-        "🎓 BSc": "Computer Science @ SDU (2021–2025)",
-    })
-
-    languages: List[str] = field(default_factory=lambda: ["Python", "Go", "Java", "SQL", "Bash"])
-
-    stack: Dict[str, List[str]] = field(default_factory=lambda: {
-        "big_data":  ["Spark", "Hadoop", "Airflow", "Kafka"],
-        "databases": ["PostgreSQL", "Oracle", "MS SQL Server", "MySQL", "MongoDB", "Redis"],
-        "ml_ai":     ["scikit-learn", "PyTorch", "TensorFlow", "pandas", "NumPy"],
-        "backend":   ["FastAPI", "REST", "Docker", "Linux", "CI/CD"],
-    })
-
-    def current_mission(self) -> List[str]:
-        """What I'm shipping these days."""
-        return [
-            "🏦 Data modeling for secure, fast financial reporting & analytics",
-            "🛡️ Hardening data governance, resiliency & cold-data management",
-            "🤖 Researching ML fraud detection (Master's thesis)",
-            "🛰️ Running this site's self-updating AI + data pipelines",
-            "⚽ Captaining the team — on the pitch and in the repo",
-        ]
-
-    def philosophy(self) -> str:
-        return "Code is poetry. Data tells stories. I automate both."
-
-
-if __name__ == "__main__":
-    me = Engineer()
-    print(f"👋 Hi, I'm {me.name} — {me.role}, based in {me.location}")
-    for goal in me.current_mission():
-        print(f"   {goal}")
-    print(f"💡 {me.philosophy()}")
-```
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## 🏗️ How This Site Builds & Updates Itself
+![Docker](https://img.shields.io/badge/Docker-0D1117?style=for-the-badge&logo=docker&logoColor=4F46E5)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-0D1117?style=for-the-badge&logo=kubernetes&logoColor=4F46E5)
+![Terraform](https://img.shields.io/badge/Terraform-0D1117?style=for-the-badge&logo=terraform&logoColor=4F46E5)
+![Apache Airflow](https://img.shields.io/badge/Airflow-0D1117?style=for-the-badge&logo=apacheairflow&logoColor=4F46E5)
+![Apache Kafka](https://img.shields.io/badge/Kafka-0D1117?style=for-the-badge&logo=apachekafka&logoColor=4F46E5)
+![dbt](https://img.shields.io/badge/dbt-0D1117?style=for-the-badge&logo=dbt&logoColor=4F46E5)
+![GitLab CI](https://img.shields.io/badge/GitLab%20CI-0D1117?style=for-the-badge&logo=gitlab&logoColor=4F46E5)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-0D1117?style=for-the-badge&logo=githubactions&logoColor=4F46E5)
+![AWS](https://img.shields.io/badge/AWS-0D1117?style=for-the-badge&logo=amazonwebservices&logoColor=4F46E5)
+![GCP](https://img.shields.io/badge/GCP%20%C2%B7%20BigQuery-0D1117?style=for-the-badge&logo=googlecloud&logoColor=4F46E5)
+![Grafana](https://img.shields.io/badge/Grafana-0D1117?style=for-the-badge&logo=grafana&logoColor=4F46E5)
+![Prometheus](https://img.shields.io/badge/Prometheus-0D1117?style=for-the-badge&logo=prometheus&logoColor=4F46E5)
 
 <div align="center">
-
-```mermaid
-flowchart LR
-    subgraph EXT["🌐 External Signals · free, key-light APIs"]
-        G["Google Trends"]
-        LLM["OpenAI-compatible LLM"]
-        WM["Wikimedia Pageviews"]
-        DBE["DB-Engines"]
-        FXW["ExchangeRate + Open-Meteo"]
-    end
-
-    subgraph CI["⏱️ Scheduled CI · GitHub Actions"]
-        M["monthly-ai-feature · day 2"]
-        A["weekly-ai-audience · Mon"]
-        R["update-db-ranking"]
-        B["blog-ci · on push"]
-    end
-
-    subgraph PY["🐍 Python Pipelines · stdlib only"]
-        P1["monthly_ai_feature_pipeline"]
-        P2["update_ai_audience_weekly"]
-        P3["update_db_ranking"]
-        V["validate_site_data"]
-    end
-
-    subgraph DS["📦 Versioned JSON Datasets"]
-        J1["ai_monthly_feature"]
-        J2["ai_audience_weekly"]
-        J3["db_ranking"]
-    end
-
-    subgraph GATE["✅ Quality Gates"]
-        PW["Playwright e2e + visual regression"]
-        LH["Lighthouse mobile"]
-        VR["AI mobile-screenshot review"]
-    end
-
-    SITE["🎨 Vanilla-JS Site · Three.js · GSAP · Tailwind"]
-    PAGES[("🚀 GitHub Pages")]
-
-    G --> P1
-    LLM --> P1
-    WM --> P2
-    DBE --> P3
-    M --> P1
-    A --> P2
-    R --> P3
-    P1 --> J1
-    P2 --> J2
-    P3 --> J3
-    J1 --> V
-    J2 --> V
-    J3 --> V
-    V --> SITE
-    FXW -. live fetch in browser .-> SITE
-    P1 --> PW --> LH --> VR
-    B --> GATE
-    SITE --> PAGES
-```
-
+<br/>
+<img src="https://skillicons.dev/icons?i=py,go,java,bash,js,html,css,tailwind,threejs,fastapi,postgres,mysql,redis,mongodb,elasticsearch,docker,kubernetes,terraform,gitlab,githubactions,aws,gcp,grafana,prometheus,git,linux&theme=dark&perline=13" />
 </div>
 
+---
+
+## AI / ML Expertise
+
+| Domain | Proficiency | Details |
+| :--- | :--- | :--- |
+| Applied ML & Classification | **Proficient** | Fraud detection on imbalanced financial transactions (MSc thesis) — scikit-learn, precision/recall-driven evaluation |
+| ML in Data Pipelines | **Proficient** | Real-time ML/LLM service integration into ETL/ELT at Bank CenterCredit |
+| MLOps & Model Serving | **Working** | Serverless ML recommendation engine (AWS Lambda + EventBridge) in ConnectIn |
+| Deep Learning | **Working** | PyTorch & TensorFlow coursework (KBTU); Computer Vision / ML research (SDU) |
+| Generative AI & LLMs | **Working** | LLM-assisted data automation; Anthropic Claude & Google AI certified; AI feature pipeline powering this profile |
+
+---
+
+## Featured Projects
+
+<details>
+<summary><b>ConnectIn — Professional Networking Platform (Diploma Project)</b></summary>
 <br/>
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+A platform that connects professional teams with project owners, built on a scalable FastAPI backend with Redis caching and a serverless ML recommendation engine.
 
-## 🤖 Self-Driving Automation
+| Aspect | Detail |
+| :--- | :--- |
+| **Stack** | Python · FastAPI · PostgreSQL · Redis · AWS (Lambda, EventBridge) |
+| **Scale** | Multi-service backend with a serverless recommendation layer |
+| **Performance** | Redis caching for real-time read paths |
+| **Security** | Token-based authentication · managed AWS IAM scopes |
+| **Impact** | Capstone diploma project with a production-style architecture |
+| **Repository** | [github.com/mrnamazbek/ConnectIn](https://github.com/mrnamazbek/ConnectIn) |
 
-> Five Python pipelines (**standard library only — no `requests`, no SDKs**) feed the site,
-> orchestrated by **4 GitHub Actions workflows** + a **GitLab CI** cloud-agent push.
+Engineered the end-to-end backend and deployed a serverless recommendation engine, demonstrating cloud-native design and real-time performance optimization.
 
-| ⚙️ Workflow | ⏰ Schedule | 🔌 Source | 📤 Produces |
-|---|---|---|---|
-| `monthly-ai-feature` | Day 2 · 04:00 UTC | Google Trends → LLM | `ai_monthly_feature.json` + a fresh Playwright spec, Lighthouse audit & AI mobile review |
-| `weekly-ai-audience` | Mondays · 04:30 UTC | Wikimedia Pageviews | `ai_audience_weekly.json` (tech-topic engagement pulse) |
-| `update-db-ranking` | Scheduled | DB-Engines ranking | `db_ranking.json` (live database popularity) |
-| `blog-ci` | On push | — | Lints + tests all runnable blog demos |
-| `monthly_ai_feature_to_cloud_agent` *(GitLab)* | Scheduled | — | POSTs the monthly feature JSON to a cloud agent |
-
-**In the browser, live:** USD→RUB/GBP/EUR exchange rates and Almaty/Shymkent/Astana
-weather, fetched client-side and **degrading gracefully to `N/A`** on any API hiccup.
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## 🎮 Interactive Engineering Toys
-
-The site is hand-built in **vanilla JS** — no framework — yet ships a full **Developer Lab**:
-
-<div align="center">
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### 🧪 Developer Lab
-- **🐳 Docker Compose Generator** — pick a DB, get a copy/download-ready `compose` file
-- **💰 Cloud Cost Estimator** — CPU/RAM/storage × provider × region, with currency toggle
-- **🔣 Regex Playground** — test patterns live
-- **📡 Live Tech Radar** — adoption signals at a glance
-
-</td>
-<td width="50%" valign="top">
-
-### ✨ Visual & Spatial
-- **🔀 Data-Pipeline (DAG) Visualizer** — drag, connect & delete source→transform→sink nodes
-- **🌐 3D Keyword Globe** — Three.js, up to 150 tech tags, **fully keyboard-accessible**
-- **🌊 Custom WebGL shader** background (hand-written GLSL simplex noise)
-- **🪐 Anti-gravity particles**, custom cursor & GSAP scroll-triggered motion
-
-</td>
-</tr>
-</table>
-</div>
-
-Plus: 🌗 light/dark theme, an accessible focus-trapped résumé modal, a live **DB-Engines
-ranking** table (mobile cards / desktop sticky-header), an **AI feature of the month**,
-and a **weekly audience pulse** chart.
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## ⚡ Technology Arsenal
-
-<details open>
-<summary><b>🧠 Machine Learning & AI</b></summary>
-<br/>
-<div align="center">
-
-![scikit-learn](https://img.shields.io/badge/Scikit--Learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
-![Keras](https://img.shields.io/badge/Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
-![NumPy](https://img.shields.io/badge/Numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
-
-</div>
-</details>
-
-<details open>
-<summary><b>🐘 Big Data & Orchestration</b></summary>
-<br/>
-<div align="center">
-
-![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)
-![Hadoop](https://img.shields.io/badge/Apache%20Hadoop-66CCFF?style=for-the-badge&logo=apachehadoop&logoColor=black)
-![Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=Apache%20Airflow&logoColor=white)
-![Kafka](https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka)
-
-</div>
-</details>
-
-<details open>
-<summary><b>💻 Programming Languages</b></summary>
-<br/>
-<div align="center">
-
-![Python](https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Go](https://img.shields.io/badge/Go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white)
-![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-025E8C?style=for-the-badge&logo=postgresql&logoColor=white)
-![Bash](https://img.shields.io/badge/Bash-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white)
-
-</div>
-</details>
-
-<details open>
-<summary><b>🗄️ Databases</b></summary>
-<br/>
-<div align="center">
-
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
-![Snowflake](https://img.shields.io/badge/Snowflake-%2329B5E8.svg?style=for-the-badge&logo=snowflake&logoColor=white)
-![Databricks](https://img.shields.io/badge/Databricks-%23FF3621.svg?style=for-the-badge&logo=databricks&logoColor=white)
-
-</div>
-</details>
-
-<details open>
-<summary><b>🛠️ DevOps, Backend & Tools</b></summary>
-<br/>
-<div align="center">
-
-![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Git](https://img.shields.io/badge/Git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
-![GitLab CI](https://img.shields.io/badge/GitLab%20CI-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)
-
-</div>
 </details>
 
 <details>
-<summary><b>🌐 This Site Is Built With</b></summary>
+<summary><b>Self-Updating Portfolio — Automated Data-Driven Profile</b></summary>
 <br/>
-<div align="center">
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![JavaScript](https://img.shields.io/badge/Vanilla%20JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white)
-![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
-![Lighthouse](https://img.shields.io/badge/Lighthouse-F44B21?style=for-the-badge&logo=lighthouse&logoColor=white)
+This very profile and website: a framework-free vanilla-JS site that regenerates its own datasets through scheduled Python pipelines and deploys behind automated quality gates.
 
-</div>
+| Aspect | Detail |
+| :--- | :--- |
+| **Stack** | Vanilla JS · Three.js · GSAP · Tailwind · Python (stdlib) · GitHub Actions · GitLab CI |
+| **Scale** | 8 auto-updated JSON datasets · 4 scheduled CI workflows |
+| **Performance** | Lighthouse mobile audits · zero build step |
+| **Security** | No client-side secrets · graceful API degradation to `N/A` |
+| **Impact** | A live, self-maintaining profile + portfolio |
+| **Repository** | [github.com/mrnamazbek/mrnamazbek](https://github.com/mrnamazbek/mrnamazbek) |
+
+Combines front-end engineering, Python automation, and CI/CD — pulling live signals (Google Trends, Wikimedia, DB-Engines, FX, weather) and gating every change with Playwright + Lighthouse.
+
 </details>
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## 🚀 Signature Projects
-
-<div align="center">
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### 🛡️ Fraud Detection (Master's Thesis)
-<i>ML on financial transaction data</i>
-
-**Focus:**
-```
-Imbalanced data → Features → Model → Eval
-```
-
-**Tech Stack:**
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/-scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
-![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-
-**Highlights:**
-✅ Graduate research project
-✅ Imbalanced-class techniques
-✅ Finance-grade evaluation
-
-[📂 **Explore Repository** →](https://github.com/mrnamazbek/fraud-detection-thesis)
-
-</td>
-<td width="50%" valign="top">
-
-### 🤖 Gmail + Drive AI Suite
-<i>AI inbox & file automation</i>
-
-**Flow:**
-```
-Apps Script → Gemini → Auto-actions
-```
-
-**Tech Stack:**
-![Apps Script](https://img.shields.io/badge/-Apps_Script-4285F4?style=flat-square&logo=google&logoColor=white)
-![Gemini](https://img.shields.io/badge/-Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)
-![JavaScript](https://img.shields.io/badge/-JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-
-**Highlights:**
-✅ Auto-categorize & clean inbox
-✅ Track job applications & deadlines
-✅ Daily AI briefings
-
-[📂 **Explore Repository** →](https://github.com/mrnamazbek/gmail-drive-ai-suite)
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### 🏭 EPAM Data Engineering
-<i>DWH / data-lake patterns</i>
-
-**Pipeline Flow:**
-```
-Sources → Kafka → Airflow → DWH
-```
-
-**Tech Stack:**
-![Kafka](https://img.shields.io/badge/-Kafka-000?style=flat-square&logo=apachekafka)
-![Airflow](https://img.shields.io/badge/-Airflow-017CEE?style=flat-square&logo=apacheairflow&logoColor=white)
-![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-
-**Highlights:**
-✅ ETL & ELT workflows
-✅ Modern DWH / lake patterns
-✅ Dockerized & reproducible
-
-[📂 **Explore Repository** →](https://github.com/mrnamazbek/EPAM-Data-Engineering)
-
-</td>
-<td width="50%" valign="top">
-
-### 📚 KBTU ML Assignments
-<i>Graduate ML portfolio</i>
-
-**Topics Covered:**
-```
-Regression · KNN · Random Forest · SVM
-Feature Engineering · Custom Transformers
-```
-
-**Tech Stack:**
-![scikit-learn](https://img.shields.io/badge/-Scikit_Learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
-![Jupyter](https://img.shields.io/badge/-Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
-![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
-
-**Highlights:**
-✅ Full code + documentation
-✅ Real-world datasets
-✅ Hands-on with TF & PyTorch
-
-[📂 **Explore Repository** →](https://github.com/mrnamazbek/KBTU_ML_Assignments)
-
-</td>
-</tr>
-</table>
-
-<sub>…and more — including <a href="https://github.com/mrnamazbek/ultimate_data_engineering_projects">ultimate_data_engineering_projects</a> · <a href="https://github.com/mrnamazbek?tab=repositories">browse all repos →</a></sub>
-
-</div>
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## ✍️ Technical Blog (with runnable demos)
-
-Three deep-dive posts — each paired with a **fully Dockerized, unit + smoke-tested demo**:
-
-| Post | Topic | Runnable Demo |
-|---|---|---|
-| **A** | [Postgres query optimization](blog/post-a-postgres-query-optimization.md) | [`demos/post-a-postgres/`](blog/demos/post-a-postgres) — Docker + pytest |
-| **B** | [ETL & AI feature pipelines](blog/post-b-etl-ai-feature-pipelines.md) | [`demos/post-b-feature-pipeline/`](blog/demos/post-b-feature-pipeline) — Docker + pytest |
-| **C** | [Python performance for data pipelines](blog/post-c-python-performance-data-pipelines.md) | [`demos/post-c-python-perf/`](blog/demos/post-c-python-perf) — Docker + pytest |
-
-A monthly **[Trends TL;DR](blog/trends-tldr-2026-02.md)** distills fresh data-engineering sources, and the
-[maintainer playbook](blog/CONTENT_MAINTAINERS_README.md) documents the AI-assisted regeneration workflow.
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## 🧪 Quality & Testing
-
-> Shipping a personal site like production: every change is gated.
-
-- **🎭 Playwright** — 5 specs: responsive smoke (320→1440px), **visual regression**, live-signals resilience, monthly-feature render, audience-pulse render
-- **🚦 Lighthouse** — automated mobile performance/accessibility audits
-- **🐍 pytest** — unit + smoke tests for all 3 blog demos (Docker integration)
-- **🔍 `validate_site_data.py`** — schema/sanity checks across the JSON datasets
-- **🤳 AI mobile review** — captures a mobile screenshot and asks an LLM to score the UI
-- **📋 [QA checklist](qa-checklist.md)** — manual sign-off for modals, overflow, contrast & focus
-
-<br/>
-
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## ⚙️ Run It Locally
-
-```bash
-# 1 · Clone
-git clone https://github.com/mrnamazbek/mrnamazbek.git
-cd mrnamazbek
-
-# 2 · Serve the static site — there is NO build step
-python -m http.server 4173
-#     → open http://127.0.0.1:4173
-
-# 3 · Install test tooling
-npm install
-npx playwright install --with-deps chromium
-
-# 4 · Run the end-to-end suite
-npm run test:e2e        # core specs
-npm run test:e2e:all    # everything, incl. visual regression
-
-# 5 · Regenerate the monthly AI feature — offline, no API key needed
-npm run feature:monthly:offline
-
-# 6 · Validate the datasets
-python scripts/validate_site_data.py
-```
 
 <details>
-<summary><b>📁 Repository structure</b></summary>
+<summary><b>Fraud Detection — Master's Thesis</b></summary>
+<br/>
 
-```
-mrnamazbek/
-├── index.html                 # Single-page site (sections, modals, canvases)
-├── assets/
-│   ├── logic.js               # Shaders, globe glue, scroll FX, core UI
-│   ├── developer-lab.js       # Docker gen · cost estimator · regex · tech radar
-│   ├── keywords-globe.js      # Accessible 3D keyword globe (Three.js)
-│   ├── ai-monthly-feature.js  # Monthly feature + live FX/weather widget
-│   ├── audience-pulse.js      # Weekly audience engagement viz
-│   ├── *.json                 # Versioned datasets (auto-updated by CI)
-│   └── styles.css · logos/
-├── scripts/                   # 5 stdlib-only Python pipelines
-├── tests/                     # 5 Playwright specs (e2e + visual regression)
-├── blog/                      # 3 posts + Dockerized, tested demos
-├── docs/                      # Automation runbooks
-├── .github/workflows/         # 4 scheduled GitHub Actions
-└── .gitlab-ci.yml             # Cloud-agent push
-```
+A machine-learning pipeline for detecting fraudulent financial transactions on highly imbalanced datasets.
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Stack** | Python · scikit-learn · PyTorch · pandas · Jupyter |
+| **Scale** | Financial transaction datasets |
+| **Performance** | Imbalanced-class handling with precision/recall-focused evaluation |
+| **Security** | Finance-grade evaluation methodology |
+| **Impact** | Graduate research at KBTU |
+| **Repository** | [github.com/mrnamazbek/fraud-detection-thesis](https://github.com/mrnamazbek/fraud-detection-thesis) |
+
+Applies modern ML techniques to a real-world, high-stakes domain where class imbalance and false-positive cost demand careful model selection and evaluation.
 
 </details>
 
+<details>
+<summary><b>EPAM Data Engineering — ETL/ELT & Warehouse Patterns</b></summary>
 <br/>
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+A hands-on data-engineering project covering modern DWH / data-lake patterns and orchestrated ETL/ELT workflows.
 
-## 🏆 Achievement Showcase
+| Aspect | Detail |
+| :--- | :--- |
+| **Stack** | Apache Kafka · Apache Airflow · Docker · SQL |
+| **Scale** | Multi-source ingestion into a unified warehouse |
+| **Performance** | Orchestrated, reproducible batch + streaming flows |
+| **Security** | Containerized, isolated, reproducible environments |
+| **Impact** | Applied modern data-platform engineering practices |
+| **Repository** | [github.com/mrnamazbek/EPAM-Data-Engineering](https://github.com/mrnamazbek/EPAM-Data-Engineering) |
+
+Demonstrates production-style orchestration, source integration, and the DWH/lake patterns used across enterprise data platforms.
+
+</details>
+
+<details>
+<summary><b>Gmail + Drive AI Suite — GenAI Automation</b></summary>
+<br/>
+
+An AI automation suite that auto-categorizes email, tracks job applications, detects deadlines, cleans the inbox, and delivers daily AI briefings.
+
+| Aspect | Detail |
+| :--- | :--- |
+| **Stack** | Google Apps Script · Gemini AI · JavaScript |
+| **Scale** | Inbox + Drive automation across an entire account |
+| **Performance** | Event-driven triggers and scheduled runs |
+| **Security** | Executes within the user's own Google account scope |
+| **Impact** | Practical, daily-use generative-AI productivity tooling |
+| **Repository** | [github.com/mrnamazbek/gmail-drive-ai-suite](https://github.com/mrnamazbek/gmail-drive-ai-suite) |
+
+Shows applied LLM integration and event-driven automation against real Google Workspace APIs.
+
+</details>
+
+---
+
+## Experience
+
+### Data Engineer · The National Bank of Kazakhstan (Digital Development Center)
+`Feb 2026 — Present · Almaty, Kazakhstan`
+
+Engineering secure, high-performance data flows for national-scale financial reporting and analytics.
+
+- Lead data-modeling initiatives for robust financial reporting and analytics.
+- Architect scalable data platforms enabling secure, fast, data-driven decisions.
+- Strengthen system resiliency, cold-data management, and strict data governance.
+
+![Data Modeling](https://img.shields.io/badge/-Data%20Modeling-5B21B6?style=flat-square)
+![Data Governance](https://img.shields.io/badge/-Data%20Governance-5B21B6?style=flat-square)
+![SQL](https://img.shields.io/badge/-SQL-5B21B6?style=flat-square)
+![Analytics](https://img.shields.io/badge/-Analytics-5B21B6?style=flat-square)
+
+### Middle Data Engineer · Freedom Insurance
+`Nov 2025 — Present · Almaty, Kazakhstan (Hybrid)`
+
+Owning ingestion, warehousing, and microservices for enterprise-wide data flow.
+
+- Design and implement robust data ingestion pipelines and ETL/ELT with **Apache Airflow**.
+- Optimized critical stored procedures and SQL workflows — **~78% faster** (9 min → 2 min) daily financial reporting.
+- Architect high-performance **MS SQL** data warehouses with complex T-SQL triggers and functions.
+- Build scalable **FastAPI** microservices, orchestrated with **Docker** and **Kubernetes**.
+- Implement **OpenMetadata** for governance and **Grafana/Superset** for logging and BI.
+
+![Airflow](https://img.shields.io/badge/-Airflow-6D28D9?style=flat-square)
+![MS SQL](https://img.shields.io/badge/-MS%20SQL-6D28D9?style=flat-square)
+![FastAPI](https://img.shields.io/badge/-FastAPI-6D28D9?style=flat-square)
+![Kubernetes](https://img.shields.io/badge/-Kubernetes-6D28D9?style=flat-square)
+![OpenMetadata](https://img.shields.io/badge/-OpenMetadata-6D28D9?style=flat-square)
+
+### Middle Data Engineer · Bank CenterCredit
+`Jan 2025 — Nov 2025 · Almaty, Kazakhstan`
+
+Built and automated the analytical data backbone integrating multiple enterprise sources.
+
+- Designed automated ETL/ELT pipelines (**Apache Airflow**) integrating **Greenplum, PostgreSQL, Oracle** into a unified Data Lake.
+- Implemented normalization, deduplication, and consolidation for high data quality and lineage reliability.
+- Optimized SQL architectures (Views / Materialized Views) and built API gateways for microservices.
+- Delivered real-time ML/LLM integrations and BI dashboards (**Power BI, QlikSense**).
+
+![ETL/ELT](https://img.shields.io/badge/-ETL%2FELT-4F46E5?style=flat-square)
+![Greenplum](https://img.shields.io/badge/-Greenplum-4F46E5?style=flat-square)
+![Data Lake](https://img.shields.io/badge/-Data%20Lake-4F46E5?style=flat-square)
+![Power BI](https://img.shields.io/badge/-Power%20BI-4F46E5?style=flat-square)
+
+### Junior Database Engineer · Alma Telecommunications Kazakhstan
+`Jun 2024 — Jan 2025 · Almaty, Kazakhstan`
+
+Optimized and administered Oracle databases for high-availability telecom services.
+
+- Developed and optimized complex **PL/SQL** procedures for efficiency and speed.
+- Administered Oracle databases ensuring security, integrity, and availability.
+- Performed root-cause analysis on bottlenecks, reducing query latency.
+
+![PL/SQL](https://img.shields.io/badge/-PL%2FSQL-4338CA?style=flat-square)
+![Oracle](https://img.shields.io/badge/-Oracle-4338CA?style=flat-square)
+![DWH](https://img.shields.io/badge/-Data%20Warehousing-4338CA?style=flat-square)
+
+### Junior Data Engineer · The National Bank of Kazakhstan
+`Jun 2023 — Dec 2023 · Almaty, Kazakhstan`
+
+Contributed to the corporate data-warehouse migration and ETL engineering.
+
+- Migrated and developed the corporate DWH on **Vertica** (projections, segmentation) and Oracle PL/SQL.
+- Engineered ETL/ELT with CDC, incremental loading, and data-quality controls.
+- Optimized SQL with window functions and CTEs for faster reporting.
+
+![Vertica](https://img.shields.io/badge/-Vertica-3730A3?style=flat-square)
+![CDC](https://img.shields.io/badge/-CDC-3730A3?style=flat-square)
+![SQL Optimization](https://img.shields.io/badge/-SQL%20Optimization-3730A3?style=flat-square)
+
+---
+
+## Achievements
 
 <div align="center">
 
-<img src="https://github-profile-trophy.vercel.app/?username=mrnamazbek&theme=algolia&no-frame=true&no-bg=true&margin-w=4&row=1&column=8" width="100%" />
+| Recognition | Details |
+| :--- | :--- |
+| **MSc GPA 3.88** | Computer Science & Data Analytics, KBTU (2025 — Present) |
+| **~78% Pipeline Speedup** | Cut a daily financial-reporting job from 9 min → 2 min at Freedom Insurance |
+| **4+ Enterprise Data Platforms** | Delivered across banking, insurance & telecom (NBK · Freedom · CenterCredit · Alma) |
+| **HackerRank Certified** | Software Engineer · SQL (Advanced) |
+| **Self-Updating Portfolio** | Fully automated profile + site with CI/CD and Playwright/Lighthouse gates |
 
 </div>
 
-<br/>
+---
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+## Certifications
 
-## 📊 GitHub Analytics
+**Google**
+
+![Google AI Fundamentals](https://img.shields.io/badge/Google%20AI%20Fundamentals-0D1117?style=for-the-badge&logo=google&logoColor=8B5CF6)
+![Google Cloud Big Data & ML](https://img.shields.io/badge/GCP%20Big%20Data%20%26%20ML%20Fundamentals-0D1117?style=for-the-badge&logo=googlecloud&logoColor=8B5CF6)
+
+**Anthropic**
+
+![Claude 101](https://img.shields.io/badge/Claude%20101-0D1117?style=for-the-badge&logo=anthropic&logoColor=A78BFA)
+
+**Red Hat**
+
+![RHCSA](https://img.shields.io/badge/RHCSA-0D1117?style=for-the-badge&logo=redhat&logoColor=6366F1)
+![RHCSA II](https://img.shields.io/badge/RHCSA%20II-0D1117?style=for-the-badge&logo=redhat&logoColor=6366F1)
+
+**IBM**
+
+![Python for Data Science](https://img.shields.io/badge/Python%20for%20Data%20Science-0D1117?style=for-the-badge&logo=ibm&logoColor=6366F1)
+![Docker Essentials](https://img.shields.io/badge/Docker%20Essentials-0D1117?style=for-the-badge&logo=ibm&logoColor=6366F1)
+
+**HackerRank**
+
+![Software Engineer](https://img.shields.io/badge/Software%20Engineer-0D1117?style=for-the-badge&logo=hackerrank&logoColor=7C3AED)
+![SQL Advanced](https://img.shields.io/badge/SQL%20(Advanced)-0D1117?style=for-the-badge&logo=hackerrank&logoColor=7C3AED)
+
+**Additional**
+
+![Freedom Holding](https://img.shields.io/badge/Data%20Engineering%20%C2%B7%20Freedom%20Holding-0D1117?style=for-the-badge&logoColor=8B5CF6)
+![UC Davis](https://img.shields.io/badge/SQL%20for%20Data%20Science%20%C2%B7%20UC%20Davis-0D1117?style=for-the-badge&logoColor=8B5CF6)
+
+---
+
+## Coding Profiles
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=mrnamazbek&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true&bg_color=0D1117&title_color=00F7F7&icon_color=00F7F7" />
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mrnamazbek&layout=compact&theme=tokyonight&hide_border=true&langs_count=8&bg_color=0D1117&title_color=00F7F7" />
-
-<br/>
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=mrnamazbek&theme=tokyonight&hide_border=true&background=0D1117&ring=00F7F7&fire=00F7F7&currStreakLabel=00F7F7" />
-
-<br/>
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=mrnamazbek&theme=react-dark&hide_border=true&area=true&bg_color=0D1117&color=00F7F7&line=00F7F7&point=FFFFFF" width="95%"/>
+[![HackerRank](https://img.shields.io/badge/HackerRank-0D1117?style=for-the-badge&logo=hackerrank&logoColor=8B5CF6)](https://www.hackerrank.com/profile/mrnamazbek)
+[![LeetCode](https://img.shields.io/badge/LeetCode-0D1117?style=for-the-badge&logo=leetcode&logoColor=8B5CF6)](https://leetcode.com/u/mrnamazbek/)
+[![GeeksforGeeks](https://img.shields.io/badge/GeeksforGeeks-0D1117?style=for-the-badge&logo=geeksforgeeks&logoColor=8B5CF6)](https://www.geeksforgeeks.org/user/mrnamazbek/)
+[![CodeChef](https://img.shields.io/badge/CodeChef-0D1117?style=for-the-badge&logo=codechef&logoColor=8B5CF6)](https://www.codechef.com/users/mrnamazbek)
 
 </div>
 
-<br/>
+---
 
-<!-- Glowing Divider -->
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-
-## 🤝 Connect With Me
+## GitHub Analytics
 
 <div align="center">
 
-[![Live Site](https://img.shields.io/badge/🌐_Portfolio-mrnamazbek.github.io-00F7F7?style=for-the-badge&labelColor=0D1117)](https://mrnamazbek.github.io/mrnamazbek/)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/namazbek-bekzhanov/)
-[![Email](https://img.shields.io/badge/Gmail-Contact_Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:namazbekzhan@gmail.com)
-[![Instagram](https://img.shields.io/badge/Instagram-Follow-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/namazbekzhan)
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=mrnamazbek&show_icons=true&include_all_commits=true&count_private=true&hide_border=true&title_color=A78BFA&icon_color=8B5CF6&text_color=C9D1D9&bg_color=0D1117" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mrnamazbek&layout=compact&langs_count=10&hide_border=true&title_color=A78BFA&text_color=C9D1D9&bg_color=0D1117" />
 
 <br/>
 
-### 💭 Quote of the Moment
-<img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight" />
-
-<br/>
-
-<img src="https://komarev.com/ghpvc/?username=mrnamazbek&label=Profile%20Views&color=00F7F7&style=flat" alt="Profile views" />
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=mrnamazbek&hide_border=true&background=0D1117&stroke=30363D&ring=A78BFA&fire=8B5CF6&currStreakLabel=A78BFA&sideLabels=C9D1D9&dates=8B949E&currStreakNum=C9D1D9&sideNums=C9D1D9" />
 
 </div>
 
-<sub align="center">Engineer of my own destiny. Built different. Automating greatness. ⚡</sub>
+---
 
-<br/><br/>
+## GitHub Trophies
 
-<!-- Wave Footer -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,3,5,6&height=120&section=footer" />
+<div align="center">
+
+<img src="https://github-profile-trophy.vercel.app/?username=mrnamazbek&theme=onedark&no-frame=true&no-bg=true&margin-w=4&row=1&column=8" width="100%" />
+
+</div>
+
+---
+
+## Contribution Activity
+
+<div align="center">
+
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=mrnamazbek&hide_border=true&bg_color=0D1117&color=A78BFA&line=8B5CF6&point=C4B5FD&area=true&area_color=8B5CF6&title_color=A78BFA" width="100%" />
+
+</div>
+
+---
+
+## Contribution Snake
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/snake.svg" />
+  <img alt="Contribution snake" src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/snake.svg" />
+</picture>
+
+</div>
+
+---
+
+## Current Focus
+
+```yaml
+current_focus:
+  learning:
+    - Streaming systems & change data capture (Kafka, Flink, Debezium)
+    - Advanced MLOps, feature stores & model serving
+  building:
+    - National-scale financial-reporting data platforms
+    - This self-updating, automated portfolio (vanilla JS + Python + CI/CD)
+  exploring:
+    - LLM-assisted data pipelines & autonomous agents
+    - Lakehouse architectures (Iceberg, ClickHouse)
+  open_to:
+    - Senior / Lead Data Engineering
+    - Platform & Backend Engineering
+    - ML / Data Platform collaborations
+```
+
+---
+
+## Connect
+
+<div align="center">
+
+[![Gmail](https://img.shields.io/badge/Gmail-7C3AED?style=for-the-badge&logo=gmail&logoColor=white&labelColor=0D1117)](mailto:namazbekzhan@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-2563EB?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0D1117)](https://www.linkedin.com/in/namazbek-bekzhanov/)
+[![GitHub](https://img.shields.io/badge/GitHub-6366F1?style=for-the-badge&logo=github&logoColor=white&labelColor=0D1117)](https://github.com/mrnamazbek)
+[![Portfolio](https://img.shields.io/badge/Portfolio-8B5CF6?style=for-the-badge&logo=githubpages&logoColor=white&labelColor=0D1117)](https://mrnamazbek.github.io/mrnamazbek/)
+
+</div>
+
+---
+
+<div align="center">
+
+<i>Engineering reliable data platforms that turn raw signals into trusted decisions.</i>
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=7C3AED&height=120&section=footer" />
+
+</div>
