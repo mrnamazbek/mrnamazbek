@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-05-25",
+  "as_of": "2026-06-08",
   "window_weeks": 24,
-  "generated_at": "2026-06-08T09:10:57.168565+00:00",
-  "status": "fallback_existing",
+  "generated_at": "2026-06-15T10:42:19.125846+00:00",
+  "status": "ok",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
     "name": "Wikimedia Pageviews API",
@@ -18,14 +18,6 @@
       "article": "ChatGPT",
       "color": "#22d3ee",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 739517
-        },
-        {
-          "week": "2025-12-22",
-          "views": 589663
-        },
         {
           "week": "2025-12-29",
           "views": 610128
@@ -113,6 +105,14 @@
         {
           "week": "2026-05-25",
           "views": 701773
+        },
+        {
+          "week": "2026-06-01",
+          "views": 512421
+        },
+        {
+          "week": "2026-06-08",
+          "views": 684385
         }
       ]
     },
@@ -122,14 +122,6 @@
       "article": "Claude_(language_model)",
       "color": "#60a5fa",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 17553
-        },
-        {
-          "week": "2025-12-22",
-          "views": 14760
-        },
         {
           "week": "2025-12-29",
           "views": 15808
@@ -217,6 +209,14 @@
         {
           "week": "2026-05-25",
           "views": 52527
+        },
+        {
+          "week": "2026-06-01",
+          "views": 51605
+        },
+        {
+          "week": "2026-06-08",
+          "views": 60808
         }
       ]
     },
@@ -226,14 +226,6 @@
       "article": "Gemini_(chatbot)",
       "color": "#a78bfa",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 1550
-        },
-        {
-          "week": "2025-12-22",
-          "views": 1364
-        },
         {
           "week": "2025-12-29",
           "views": 1400
@@ -321,6 +313,14 @@
         {
           "week": "2026-05-25",
           "views": 1240
+        },
+        {
+          "week": "2026-06-01",
+          "views": 1462
+        },
+        {
+          "week": "2026-06-08",
+          "views": 1218
         }
       ]
     },
@@ -330,14 +330,6 @@
       "article": "Microsoft_Copilot",
       "color": "#34d399",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 11637
-        },
-        {
-          "week": "2025-12-22",
-          "views": 7871
-        },
         {
           "week": "2025-12-29",
           "views": 8269
@@ -425,6 +417,14 @@
         {
           "week": "2026-05-25",
           "views": 12957
+        },
+        {
+          "week": "2026-06-01",
+          "views": 16115
+        },
+        {
+          "week": "2026-06-08",
+          "views": 16534
         }
       ]
     },
@@ -434,14 +434,6 @@
       "article": "Perplexity_AI",
       "color": "#f59e0b",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 29011
-        },
-        {
-          "week": "2025-12-22",
-          "views": 25587
-        },
         {
           "week": "2025-12-29",
           "views": 31976
@@ -529,6 +521,14 @@
         {
           "week": "2026-05-25",
           "views": 19162
+        },
+        {
+          "week": "2026-06-01",
+          "views": 20485
+        },
+        {
+          "week": "2026-06-08",
+          "views": 21621
         }
       ]
     },
@@ -538,14 +538,6 @@
       "article": "DeepSeek",
       "color": "#f472b6",
       "points": [
-        {
-          "week": "2025-12-15",
-          "views": 19683
-        },
-        {
-          "week": "2025-12-22",
-          "views": 17072
-        },
         {
           "week": "2025-12-29",
           "views": 19155
@@ -633,6 +625,14 @@
         {
           "week": "2026-05-25",
           "views": 15200
+        },
+        {
+          "week": "2026-06-01",
+          "views": 15877
+        },
+        {
+          "week": "2026-06-08",
+          "views": 15509
         }
       ]
     }
@@ -641,40 +641,33 @@
     {
       "id": "chatgpt",
       "label": "ChatGPT",
-      "views": 701773
+      "views": 684385
     },
     {
       "id": "claude",
       "label": "Claude",
-      "views": 52527
+      "views": 60808
     },
     {
       "id": "perplexity",
       "label": "Perplexity",
-      "views": 19162
-    },
-    {
-      "id": "deepseek",
-      "label": "DeepSeek",
-      "views": 15200
+      "views": 21621
     },
     {
       "id": "copilot",
       "label": "Copilot",
-      "views": 12957
+      "views": 16534
+    },
+    {
+      "id": "deepseek",
+      "label": "DeepSeek",
+      "views": 15509
     },
     {
       "id": "gemini",
       "label": "Gemini",
-      "views": 1240
+      "views": 1218
     }
   ],
-  "errors": [
-    "ChatGPT: HTTP Error 429: Too Many Requests",
-    "Claude: HTTP Error 429: Too Many Requests",
-    "Gemini: HTTP Error 429: Too Many Requests",
-    "Copilot: HTTP Error 429: Too Many Requests",
-    "Perplexity: HTTP Error 429: Too Many Requests",
-    "DeepSeek: HTTP Error 429: Too Many Requests"
-  ]
+  "errors": []
 }
