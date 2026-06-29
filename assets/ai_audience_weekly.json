@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-06-15",
+  "as_of": "2026-06-22",
   "window_weeks": 24,
-  "generated_at": "2026-06-22T10:20:40.561948+00:00",
-  "status": "ok",
+  "generated_at": "2026-06-29T09:14:06.518384+00:00",
+  "status": "partial",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
     "name": "Wikimedia Pageviews API",
@@ -18,10 +18,6 @@
       "article": "ChatGPT",
       "color": "#22d3ee",
       "points": [
-        {
-          "week": "2026-01-05",
-          "views": 709852
-        },
         {
           "week": "2026-01-12",
           "views": 722765
@@ -113,6 +109,10 @@
         {
           "week": "2026-06-15",
           "views": 695974
+        },
+        {
+          "week": "2026-06-22",
+          "views": 653016
         }
       ]
     },
@@ -123,100 +123,100 @@
       "color": "#60a5fa",
       "points": [
         {
-          "week": "2026-01-05",
-          "views": 21221
-        },
-        {
           "week": "2026-01-12",
-          "views": 27153
+          "views": 0
         },
         {
           "week": "2026-01-19",
-          "views": 30693
+          "views": 0
         },
         {
           "week": "2026-01-26",
-          "views": 36236
+          "views": 0
         },
         {
           "week": "2026-02-02",
-          "views": 65555
+          "views": 0
         },
         {
           "week": "2026-02-09",
-          "views": 67756
+          "views": 0
         },
         {
           "week": "2026-02-16",
-          "views": 65951
+          "views": 0
         },
         {
           "week": "2026-02-23",
-          "views": 111012
+          "views": 0
         },
         {
           "week": "2026-03-02",
-          "views": 97278
+          "views": 0
         },
         {
           "week": "2026-03-09",
-          "views": 71360
+          "views": 0
         },
         {
           "week": "2026-03-16",
-          "views": 65360
+          "views": 0
         },
         {
           "week": "2026-03-23",
-          "views": 62961
+          "views": 0
         },
         {
           "week": "2026-03-30",
-          "views": 56794
+          "views": 0
         },
         {
           "week": "2026-04-06",
-          "views": 67134
+          "views": 0
         },
         {
           "week": "2026-04-13",
-          "views": 66080
+          "views": 0
         },
         {
           "week": "2026-04-20",
-          "views": 61624
+          "views": 0
         },
         {
           "week": "2026-04-27",
-          "views": 55303
+          "views": 0
         },
         {
           "week": "2026-05-04",
-          "views": 57703
+          "views": 0
         },
         {
           "week": "2026-05-11",
-          "views": 53998
+          "views": 0
         },
         {
           "week": "2026-05-18",
-          "views": 51656
+          "views": 0
         },
         {
           "week": "2026-05-25",
-          "views": 52527
+          "views": 0
         },
         {
           "week": "2026-06-01",
-          "views": 51605
+          "views": 0
         },
         {
           "week": "2026-06-08",
-          "views": 60808
+          "views": 0
         },
         {
           "week": "2026-06-15",
-          "views": 45956
+          "views": 0
+        },
+        {
+          "week": "2026-06-22",
+          "views": 0
         }
       ]
     },
@@ -226,10 +226,6 @@
       "article": "Gemini_(chatbot)",
       "color": "#a78bfa",
       "points": [
-        {
-          "week": "2026-01-05",
-          "views": 1557
-        },
         {
           "week": "2026-01-12",
           "views": 1728
@@ -321,6 +317,10 @@
         {
           "week": "2026-06-15",
           "views": 1332
+        },
+        {
+          "week": "2026-06-22",
+          "views": 1180
         }
       ]
     },
@@ -330,10 +330,6 @@
       "article": "Microsoft_Copilot",
       "color": "#34d399",
       "points": [
-        {
-          "week": "2026-01-05",
-          "views": 12008
-        },
         {
           "week": "2026-01-12",
           "views": 12185
@@ -425,6 +421,10 @@
         {
           "week": "2026-06-15",
           "views": 13809
+        },
+        {
+          "week": "2026-06-22",
+          "views": 13303
         }
       ]
     },
@@ -434,10 +434,6 @@
       "article": "Perplexity_AI",
       "color": "#f59e0b",
       "points": [
-        {
-          "week": "2026-01-05",
-          "views": 26435
-        },
         {
           "week": "2026-01-12",
           "views": 27489
@@ -529,6 +525,10 @@
         {
           "week": "2026-06-15",
           "views": 21580
+        },
+        {
+          "week": "2026-06-22",
+          "views": 17330
         }
       ]
     },
@@ -538,10 +538,6 @@
       "article": "DeepSeek",
       "color": "#f472b6",
       "points": [
-        {
-          "week": "2026-01-05",
-          "views": 17323
-        },
         {
           "week": "2026-01-12",
           "views": 18237
@@ -633,6 +629,10 @@
         {
           "week": "2026-06-15",
           "views": 15685
+        },
+        {
+          "week": "2026-06-22",
+          "views": 14693
         }
       ]
     }
@@ -641,33 +641,35 @@
     {
       "id": "chatgpt",
       "label": "ChatGPT",
-      "views": 695974
-    },
-    {
-      "id": "claude",
-      "label": "Claude",
-      "views": 45956
+      "views": 653016
     },
     {
       "id": "perplexity",
       "label": "Perplexity",
-      "views": 21580
+      "views": 17330
     },
     {
       "id": "deepseek",
       "label": "DeepSeek",
-      "views": 15685
+      "views": 14693
     },
     {
       "id": "copilot",
       "label": "Copilot",
-      "views": 13809
+      "views": 13303
     },
     {
       "id": "gemini",
       "label": "Gemini",
-      "views": 1332
+      "views": 1180
+    },
+    {
+      "id": "claude",
+      "label": "Claude",
+      "views": 0
     }
   ],
-  "errors": []
+  "errors": [
+    "Claude: HTTP Error 404: Not Found"
+  ]
 }
