@@ -122,5 +122,33 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-07-ai-automation",
+    "month": "2026-07",
+    "title": "Match-Day Automation Pack: Turn Live Sports Spikes into Reliable Ops Signals",
+    "trend_keyword": "AI automation",
+    "description": "A portfolio-ready feature that helps teams prepare for predictable traffic spikes driven by live events. Using the trend keyword as a proxy for a sudden attention surge, this feature guides an engineer or PM through estimating extra support/ops time, selecting a lightweight mitig",
+    "why_now": "In July 2026 (KZ), match-related searches spike around kickoff and key moments. Even if your product is not sports-focused, these bursts mirror real-world demand surges (push notifications, social sharing, streaming, checkout). Packaging a repeatable “spike playbook” as a product",
+    "mobile_review_notes": "Keep the estimator as a single-screen flow: one slider + two computed outputs. Use large tap targets and show results in plain language (e.g., “~24 hours saved this month”). Ensure the default value is conservative. Avoid jargon; provide sh",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-07-02T07:34:10.460046+00:00"
+    },
+    "widget": {
+      "type": "impact_estimator",
+      "heading": "Spike Readiness Impact Estimator",
+      "description": "Estimate how much engineering/ops time you can save per month by implementing a repeatable traffic-spike playbook (caching, rate limiting, queue backpressure, and on-call runbooks) for event-driven surges.",
+      "config": {
+        "input_label": "Expected spike events per month",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "default": 6,
+        "baseline_hours": 120.0,
+        "efficiency_factor": 0.35
+      }
+    }
   }
 ]

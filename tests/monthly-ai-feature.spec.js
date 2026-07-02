@@ -14,16 +14,27 @@ test('AI monthly feature renders and works on mobile', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
 
   await expect(page.locator('#ai-monthly-lab')).toBeVisible();
-  await expect(page.locator('#ai-monthly-feature-root')).toContainText("eGov KZ Task Automator: One-Click Document Checklist + Status Tracker");
+  await expect(page.locator('#ai-monthly-feature-root')).toContainText("Match-Day Automation Pack: Turn Live Sports Spikes into Reliable Ops Signals");
 
   const card = page.locator('#ai-monthly-feature-root .ai-feature');
   await expect(card).toBeVisible();
-  await expect(card).toHaveAttribute('data-widget-type', "roadmap_planner");
+  await expect(card).toHaveAttribute('data-widget-type', "impact_estimator");
 
-  const checks = page.locator('#ai-monthly-feature-root [data-roadmap-step]');
-  await expect(checks.first()).toBeVisible();
-  await checks.first().check();
-  await expect(page.locator('#ai-roadmap-meta')).toContainText('complete');
+  const slider = page.locator('#ai-impact-slider');
+  await expect(slider).toBeVisible();
+  const sliderMeta = await slider.evaluate((el) => {
+    return {
+      min: Number(el.getAttribute('min') || 0),
+      max: Number(el.getAttribute('max') || 100)
+    };
+  });
+  const target = Math.max(sliderMeta.min, Math.min(sliderMeta.max, sliderMeta.max - 1));
+  await slider.evaluate((el, val) => {
+    el.value = String(val);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }, target);
+  await expect(page.locator('#ai-impact-stats')).toContainText('Saved Hours / Month');
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     const delta = document.documentElement.scrollWidth - window.innerWidth;
