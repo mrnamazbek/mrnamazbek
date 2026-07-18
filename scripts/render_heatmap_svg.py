@@ -21,7 +21,7 @@ BOX = 11
 GAP = 3
 CELL = BOX + GAP
 MARGIN_LEFT = 28
-MARGIN_TOP = 34
+MARGIN_TOP = 48
 MARGIN_BOTTOM = 46
 MARGIN_RIGHT = 20
 MONTHS = [
@@ -74,12 +74,12 @@ def render(payload):
 
     title = escape(f"{payload['username']}@github ~ contributions")
     parts.append(
-        f'<text x="{MARGIN_LEFT}" y="18" fill="{ACCENT}" font-size="13" font-weight="600">$ {title}</text>'
+        f'<text x="{MARGIN_LEFT}" y="16" fill="{ACCENT}" font-size="13" font-weight="600">$ {title}</text>'
     )
 
     for col, label in month_labels.items():
         x = MARGIN_LEFT + col * CELL
-        parts.append(f'<text x="{x}" y="{MARGIN_TOP - 8}" fill="{MUTED}" font-size="10">{label}</text>')
+        parts.append(f'<text x="{x}" y="{MARGIN_TOP - 16}" fill="{MUTED}" font-size="10">{label}</text>')
 
     for c in cells:
         x = MARGIN_LEFT + c["col"] * CELL
