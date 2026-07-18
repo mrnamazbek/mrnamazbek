@@ -1,4 +1,4 @@
-name: Generate Contribution Snake
+name: Generate Profile Art (Snake + Contribution Heatmap + Info Card)
 
 on:
   schedule:
@@ -16,6 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch live contribution data
+        run: python scripts/fetch_contributions.py
+
+      - name: Render contribution heatmap SVG
+        run: python scripts/render_heatmap_svg.py
+
+      - name: Render neofetch-style info card SVG
+        run: python scripts/make_info_card.py
+
       - name: Generate snake SVGs
         uses: Platane/snk@v3
         id: snake

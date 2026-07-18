@@ -1,0 +1,7 @@
+# Only needed to run prep_photo.py / make_ascii_svg.py locally when you
+# change your profile photo. Not used by any CI workflow — intentionally
+# kept out of the daily automation, which stays stdlib-only.
+pillow==11.1.0
+numpy==2.2.3
+opencv-python==4.11.0.86
+rembg==2.0.65

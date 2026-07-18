@@ -46,6 +46,9 @@ __pycache__/
 .venv/
 *.egg-info/
 
+# Local build output for profile-art scripts (published to the `output` branch by CI)
+dist/
+
 # Generated demo data files (created at runtime)
 blog/demos/post-a-postgres/sales.csv
 blog/demos/post-b-feature-pipeline/events.csv
