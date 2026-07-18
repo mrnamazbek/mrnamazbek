@@ -128,11 +128,16 @@ if __name__ == "__main__":
 <!-- Glowing Divider -->
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
-## 🖥️ `$ ./neofetch.sh`
+## 🖥️ `$ whoami --ascii`
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/info-card.svg" alt="Neofetch-style info card" />
+<table>
+<tr>
+<td valign="top"><img src="assets/avatar-ascii.svg" width="370" alt="ASCII-art self-portrait" /></td>
+<td valign="top"><img src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/info-card.svg" width="490" alt="Neofetch-style info card" /></td>
+</tr>
+</table>
 
 </div>
 

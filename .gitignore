@@ -39,6 +39,10 @@ node_modules/
 artifacts/
 assets/avatart.jpeg
 assets/avatar.jpeg
+# Recognizable intermediate photo (background removed, not yet abstracted to ASCII).
+# Only the final avatar-ascii.svg is meant to be public — keep the photographic
+# version local so re-runs of make_ascii_svg.py don't need the source photo again.
+assets/avatar-prepped.png
 
 # Python
 __pycache__/

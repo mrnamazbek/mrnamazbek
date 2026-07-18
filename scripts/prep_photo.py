@@ -32,10 +32,16 @@ def boost_contrast(img: Image.Image) -> Image.Image:
 
 def composite_on_white(img: Image.Image) -> Image.Image:
     if img.mode != "RGBA":
-        return img.convert("L")
-    bg = Image.new("RGB", img.size, (255, 255, 255))
-    bg.paste(img, mask=img.split()[3])
-    return bg.convert("L")
+        gray = img.convert("L")
+    else:
+        bg = Image.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.split()[3])
+        gray = bg.convert("L")
+
+    # rembg leaves a soft, semi-transparent edge (and sometimes a faint drop
+    # shadow) around the subject, so near-white pixels aren't quite 255.
+    # That reads as background noise once downsampled to an ASCII grid.
+    return gray.point(lambda p: 255 if p >= 244 else p)
 
 
 def main():
