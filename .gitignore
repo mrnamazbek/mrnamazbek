@@ -50,6 +50,9 @@ __pycache__/
 .venv/
 *.egg-info/
 
+# Vercel
+.vercel/
+
 # Local build output for profile-art scripts (published to the `output` branch by CI)
 dist/
 
