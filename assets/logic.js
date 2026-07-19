@@ -828,6 +828,46 @@ function initScrollAnimations() {
         });
     });
 
+    // Arsenal icon badges: scaleY wipe-in as each card enters view
+    const arsenalIcons = gsap.utils.toArray('.arsenal-icon-badge');
+    arsenalIcons.forEach((badge) => {
+        gsap.set(badge, { transformOrigin: '50% 100%' });
+        gsap.from(badge, {
+            scrollTrigger: {
+                trigger: badge,
+                start: "top 90%",
+                toggleActions: "play none none none",
+                once: true
+            },
+            scaleY: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            immediateRender: false
+        });
+    });
+
+    // Tech-chip stagger within each Arsenal card
+    const arsenalCards = gsap.utils.toArray('[data-arsenal-card]');
+    arsenalCards.forEach((card) => {
+        const chips = card.querySelectorAll('.tech-chip');
+        if (!chips.length) return;
+        gsap.from(chips, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+                toggleActions: "play none none none",
+                once: true
+            },
+            opacity: 0,
+            y: 10,
+            duration: 0.4,
+            stagger: 0.04,
+            delay: 0.15,
+            ease: "power1.out",
+            immediateRender: false
+        });
+    });
+
     // Hero intro: masked line reveal + cascading badge/subtitle/CTA
     gsap.timeline({ delay: 0.3 })
         .from("#about .hero-badge", { y: 16, opacity: 0, duration: 0.6, ease: "power2.out" })
@@ -836,25 +876,11 @@ function initScrollAnimations() {
         }, "-=0.35")
         .from("#about .hero-subtitle", { y: 18, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.55")
         .from("#about .hero-cta-row", { y: 14, opacity: 0, duration: 0.6, ease: "power2.out" }, "-=0.45")
-        .from("#hero-card", { y: 24, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
-
-    // Section heading reveal
-    const sectionHeadings = gsap.utils.toArray('.site-section > h2, .site-section > h3, footer#contact h2');
-    sectionHeadings.forEach((heading) => {
-        gsap.from(heading, {
-            scrollTrigger: {
-                trigger: heading,
-                start: "top 88%",
-                toggleActions: "play none none none",
-                once: true
-            },
-            y: 24,
-            opacity: 0,
-            duration: 0.7,
-            ease: "power2.out",
-            immediateRender: false
-        });
-    });
+        .from("#hero-card", {
+            clipPath: "inset(100% 0% 0% 0%)", opacity: 0, duration: 0.9, ease: "power3.inOut"
+        }, "-=0.6");
+    // Section heading + intro-paragraph reveal now handled by the wipe-block
+    // text reveal in scroll-fx.js (initTextWipeReveal).
 
     // Journey section reveal
     const journeyCards = gsap.utils.toArray('#journey .journey-card, #journey .edu-card, #journey .journey-insight');
@@ -1475,10 +1501,25 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     const moonIcon = document.getElementById('theme-icon-moon');
     const sunIcon = document.getElementById('theme-icon-sun');
-    if (moonIcon && sunIcon) {
+    if (!moonIcon || !sunIcon) return;
+
+    const showIcon = theme === 'light' ? sunIcon : moonIcon;
+    const hideIcon = theme === 'light' ? moonIcon : sunIcon;
+
+    if (typeof gsap === 'undefined' || document.body.classList.contains('low-power') || prefersReducedMotion()) {
         moonIcon.classList.toggle('hidden', theme === 'light');
         sunIcon.classList.toggle('hidden', theme === 'dark');
+        return;
     }
+
+    hideIcon.classList.remove('hidden');
+    gsap.killTweensOf([moonIcon, sunIcon]);
+    gsap.set(showIcon, { opacity: 0, rotate: -90, scale: 0.6 });
+    gsap.to(hideIcon, { opacity: 0, rotate: 90, scale: 0.6, duration: 0.3, ease: 'power2.in' });
+    gsap.to(showIcon, {
+        opacity: 1, rotate: 0, scale: 1, duration: 0.35, ease: 'power2.out', delay: 0.05,
+        onComplete: () => hideIcon.classList.add('hidden')
+    });
 }
 
 function initThemeToggle() {

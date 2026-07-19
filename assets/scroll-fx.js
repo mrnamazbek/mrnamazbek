@@ -217,6 +217,90 @@ function initCardSpotlight() {
     });
 }
 
+// === Wipe-block text reveal ===
+// Adapted from a text-reveal component in the pack (line-split + a solid block
+// that wipes across each line, revealing the text as it passes) built here
+// without the paid SplitText plugin: words are wrapped and grouped into lines
+// by measured offsetTop, since the site only loads GSAP core + ScrollTrigger.
+function splitIntoLines(container) {
+    if (!container || container.children.length > 0) return null;
+    const text = container.textContent;
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return null;
+
+    container.textContent = '';
+    const wordSpans = words.map((word) => {
+        const span = document.createElement('span');
+        span.className = 'split-word';
+        span.textContent = word;
+        container.appendChild(span);
+        container.appendChild(document.createTextNode(' '));
+        return span;
+    });
+
+    const lineMap = new Map();
+    wordSpans.forEach((span) => {
+        const top = span.offsetTop;
+        if (!lineMap.has(top)) lineMap.set(top, []);
+        lineMap.get(top).push(span);
+    });
+
+    container.textContent = '';
+    const lineEls = [];
+    lineMap.forEach((group) => {
+        const wrap = document.createElement('span');
+        wrap.className = 'text-line-wrap';
+        group.forEach((span, idx) => {
+            wrap.appendChild(span);
+            if (idx < group.length - 1) wrap.appendChild(document.createTextNode(' '));
+        });
+        const block = document.createElement('span');
+        block.className = 'text-line-block';
+        wrap.appendChild(block);
+        container.appendChild(wrap);
+        lineEls.push({ wrap, block, words: group });
+    });
+
+    return lineEls;
+}
+
+function animateTextLines(lineEls, opts) {
+    const { blockColor, stagger, duration, delay } = opts;
+    lineEls.forEach(({ block, words }, i) => {
+        block.style.background = blockColor;
+        const tl = gsap.timeline({ delay: delay + i * stagger });
+        tl.set(block, { scaleX: 0, transformOrigin: 'left center' })
+            .to(block, { scaleX: 1, duration: duration * 0.5, ease: 'power2.inOut' })
+            .set(words, { opacity: 1 })
+            .set(block, { transformOrigin: 'right center' })
+            .to(block, { scaleX: 0, duration: duration * 0.5, ease: 'power2.inOut' });
+    });
+}
+
+function initTextWipeReveal() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    const headings = document.querySelectorAll('.site-section > h2, .site-section > h3, footer#contact h2');
+    const paragraphs = document.querySelectorAll('.site-section p.text-gray-400.text-lg');
+
+    const targets = [
+        ...Array.from(headings).map((el) => ({ el, blockColor: 'rgba(59, 130, 246, 0.9)' })),
+        ...Array.from(paragraphs).map((el) => ({ el, blockColor: 'rgba(34, 211, 238, 0.85)' }))
+    ];
+
+    targets.forEach(({ el, blockColor }) => {
+        const lineEls = splitIntoLines(el);
+        if (!lineEls || !lineEls.length) return;
+
+        ScrollTrigger.create({
+            trigger: el,
+            start: 'top 88%',
+            once: true,
+            onEnter: () => animateTextLines(lineEls, { blockColor, stagger: 0.08, duration: 0.55, delay: 0 })
+        });
+    });
+}
+
 function boot() {
     if (document.body.classList.contains('low-power')) return;
     if (document.body.classList.contains('compact-mobile')) return;
@@ -225,6 +309,7 @@ function boot() {
     try { initConnectorThread(); } catch (e) { /* decorative only */ }
     try { initContactDotGrid(); } catch (e) { /* decorative only */ }
     try { initCardSpotlight(); } catch (e) { /* decorative only */ }
+    try { initTextWipeReveal(); } catch (e) { /* decorative only */ }
 }
 
 if (document.readyState === 'loading') {
