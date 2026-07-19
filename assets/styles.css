@@ -91,6 +91,40 @@
             will-change: transform;
         }
 
+        .theme-icon-stack {
+            position: relative;
+            display: inline-flex;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .theme-icon-stack svg {
+            position: absolute;
+            inset: 0;
+        }
+
+        /* Wipe-block text reveal (split into lines by initTextWipeReveal) */
+        .text-line-wrap {
+            position: relative;
+            display: block;
+            overflow: hidden;
+        }
+
+        .text-line-block {
+            position: absolute;
+            inset: -2% -1%;
+            background: var(--reveal-block-color, rgba(34, 211, 238, 0.85));
+            pointer-events: none;
+            transform: scaleX(0);
+            transform-origin: left center;
+            will-change: transform;
+        }
+
+        .split-word {
+            display: inline-block;
+            opacity: 0;
+        }
+
         .tap-target {
             min-width: 44px;
             min-height: 44px;
@@ -1466,6 +1500,14 @@
 
             [data-arsenal-card]::after,
             #projects-grid .glass-card::after {
+                display: none;
+            }
+
+            .split-word {
+                opacity: 1 !important;
+            }
+
+            .text-line-block {
                 display: none;
             }
         }
