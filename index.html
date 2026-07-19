@@ -1284,6 +1284,18 @@
                             class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-red-500/10 hover:bg-red-500/20 text-red-300 transition text-xs font-mono">Clear</button>
                     </div>
                 </div>
+                <div class="flex items-center gap-2 flex-wrap mb-4">
+                    <button id="dag-validate" type="button"
+                        class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">✓
+                        Validate</button>
+                    <button id="dag-export" type="button"
+                        class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">⤓
+                        Export as Airflow DAG</button>
+                    <button id="dag-random" type="button"
+                        class="ui-button min-h-[44px] px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono">🎲
+                        Surprise Me</button>
+                    <span id="dag-status" class="dag-status" role="status" aria-live="polite"></span>
+                </div>
                 <div id="dag-canvas-container" class="dag-canvas-container">
                     <svg id="dag-svg" class="dag-svg">
                         <defs>
@@ -1316,6 +1328,32 @@
                 </div>
             </div>
         </section>
+
+        <div id="dag-export-modal" class="vl-modal hidden" aria-hidden="true">
+            <div class="vl-modal__backdrop" data-close="1"></div>
+            <div class="vl-modal__panel" role="dialog" aria-modal="true" aria-labelledby="dag-export-modal-title"
+                tabindex="-1">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h4 id="dag-export-modal-title" class="text-2xl font-bold font-display">Export as Airflow DAG
+                        </h4>
+                        <div class="text-gray-400 mt-1 text-sm">Generated from your current pipeline graph</div>
+                    </div>
+                    <button type="button"
+                        class="ui-button px-3 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                        aria-label="Close dialog" data-close="1">Close</button>
+                </div>
+                <pre class="dag-export-code mt-4"><code id="dag-export-code"></code></pre>
+                <div class="flex flex-wrap gap-3 mt-4">
+                    <button id="dag-export-copy" type="button"
+                        class="ui-button px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition">Copy
+                        code</button>
+                    <button type="button"
+                        class="ui-button px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5 transition"
+                        data-close="1">Close</button>
+                </div>
+            </div>
+        </div>
 
         <section id="vertical-library" class="site-section space-y-6 library-shell" aria-label="Books library">
             <div class="flex flex-wrap items-end justify-between gap-6">
