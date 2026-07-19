@@ -81,6 +81,16 @@
             font-size: var(--ui-font-body-lg);
         }
 
+        .hero-line-mask {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-line-inner {
+            display: block;
+            will-change: transform;
+        }
+
         .tap-target {
             min-width: 44px;
             min-height: 44px;
@@ -268,6 +278,84 @@
 
         .tech-chip:hover {
             background: var(--ui-surface-hover);
+        }
+
+        /* Scroll-scrubbed connector thread weaving behind section content */
+        .connector-thread {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: visible;
+        }
+
+        .connector-thread path {
+            fill: none;
+            stroke: url(#connector-thread-gradient);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            opacity: 0.32;
+            vector-effect: non-scaling-stroke;
+        }
+
+        body.low-power .connector-thread,
+        body.compact-mobile .connector-thread {
+            display: none;
+        }
+
+        /* Contact section: contained interactive dot-grid accent */
+        .contact-fx {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.55;
+            -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 72%);
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 72%);
+        }
+
+        .contact-fx canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        body.low-power .contact-fx,
+        body.compact-mobile .contact-fx {
+            display: none;
+        }
+
+        /* Cursor-spotlight hover glow for Arsenal + Project cards */
+        [data-arsenal-card],
+        #projects-grid .glass-card {
+            --spot-x: 50%;
+            --spot-y: 50%;
+        }
+
+        [data-arsenal-card]::after,
+        #projects-grid .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            border-radius: inherit;
+            background: radial-gradient(480px circle at var(--spot-x) var(--spot-y), rgba(0, 212, 255, 0.14), transparent 62%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        [data-arsenal-card]:hover::after,
+        #projects-grid .glass-card:hover::after {
+            opacity: 1;
+        }
+
+        .glass-card[data-arsenal-card]:hover,
+        #projects-grid .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 44px rgba(0, 180, 255, 0.16);
         }
 
         /* Reusable utility classes */
@@ -1370,6 +1458,16 @@
             .vl-cover img {
                 transition: none;
             }
+
+            .connector-thread,
+            .contact-fx {
+                display: none;
+            }
+
+            [data-arsenal-card]::after,
+            #projects-grid .glass-card::after {
+                display: none;
+            }
         }
 
         body.low-power .journey-item,
@@ -1886,6 +1984,14 @@
             background: rgba(0, 0, 0, 0.04);
             border-color: rgba(0, 0, 0, 0.1);
             color: #1a1a1a;
+        }
+
+        [data-theme="light"] .connector-thread path {
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .contact-fx {
+            opacity: 0.35;
         }
 
         [data-theme="light"] .tech-chip:hover {

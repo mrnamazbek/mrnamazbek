@@ -828,9 +828,32 @@ function initScrollAnimations() {
         });
     });
 
-    // Hero text animation
-    gsap.from("#about h1, #about p", {
-        y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power2.out", delay: 0.5
+    // Hero intro: masked line reveal + cascading badge/subtitle/CTA
+    gsap.timeline({ delay: 0.3 })
+        .from("#about .hero-badge", { y: 16, opacity: 0, duration: 0.6, ease: "power2.out" })
+        .from("#about .hero-line-inner", {
+            yPercent: 115, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.15
+        }, "-=0.35")
+        .from("#about .hero-subtitle", { y: 18, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.55")
+        .from("#about .hero-cta-row", { y: 14, opacity: 0, duration: 0.6, ease: "power2.out" }, "-=0.45")
+        .from("#hero-card", { y: 24, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
+
+    // Section heading reveal
+    const sectionHeadings = gsap.utils.toArray('.site-section > h2, .site-section > h3, footer#contact h2');
+    sectionHeadings.forEach((heading) => {
+        gsap.from(heading, {
+            scrollTrigger: {
+                trigger: heading,
+                start: "top 88%",
+                toggleActions: "play none none none",
+                once: true
+            },
+            y: 24,
+            opacity: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            immediateRender: false
+        });
     });
 
     // Journey section reveal

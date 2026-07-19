@@ -97,14 +97,15 @@
             <div
                 class="flex-1 space-y-8 glass-card p-8 md:bg-transparent md:backdrop-blur-none md:border-none md:shadow-none">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    class="hero-badge inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                     <span class="text-xs font-medium text-cyan-200">Open to Work</span>
                 </div>
 
                 <h1
                     class="hero-title font-display font-bold leading-tight transparent-text bg-clip-text bg-gradient-to-r from-white via-blue-100 to-cyan-300 text-transparent">
-                    Building Resilient <br> Data Systems.
+                    <span class="hero-line-mask"><span class="hero-line-inner">Building Resilient</span></span>
+                    <span class="hero-line-mask"><span class="hero-line-inner">Data Systems.</span></span>
                 </h1>
 
                 <p class="hero-subtitle text-gray-300 max-w-lg leading-relaxed">
@@ -112,7 +113,7 @@
                     high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+                <div class="hero-cta-row flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                     <a href="#projects"
                         class="ui-button min-h-[44px] px-6 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition transform text-center">View
                         Projects</a>
@@ -1374,7 +1375,8 @@
         </section>
 
         <!-- FOOTER -->
-        <footer id="contact" class="text-center py-20">
+        <footer id="contact" class="contact-footer text-center py-20 relative isolate overflow-hidden">
+            <div id="contact-fx" class="contact-fx" aria-hidden="true"></div>
             <h2 class="text-3xl font-bold mb-6">Let's build something scalable.</h2>
             <div class="flex justify-center gap-6 mb-6">
                 <a href="mailto:namazbekzhan@gmail.com"
@@ -1429,6 +1431,7 @@
 
     <!-- LOGIC (ES modules - deferred by default) -->
     <script type="module" src="assets/logic.js"></script>
+    <script type="module" src="assets/scroll-fx.js"></script>
     <script type="module" src="assets/developer-lab.js"></script>
     <script type="module" src="assets/ai-monthly-feature.js"></script>
     <script src="assets/audience-pulse.js"></script>
