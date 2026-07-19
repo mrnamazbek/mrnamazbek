@@ -1732,6 +1732,71 @@ function initDagVisualizer() {
     let dragNode = null;
     let dragOffset = { x: 0, y: 0 };
     let nodeIdCounter = 1;
+    let flowRafId = null;
+    let saveTimer = null;
+
+    // Tool library: devicon logos where a real one exists (rendered via
+    // foreignObject since devicon is a font-icon set, not raw SVG paths),
+    // unicode symbol/letter fallback for concepts and tools devicon doesn't cover.
+    const tools = {
+        source: [
+            { label: 'Kafka', icon: 'apachekafka-original', iconType: 'devicon' },
+            { label: 'Kinesis', icon: '≈', iconType: 'symbol' },
+            { label: 'Pub/Sub', icon: '◎', iconType: 'symbol' },
+            { label: 'Event Hubs', icon: '⎈', iconType: 'symbol' },
+            { label: 'RabbitMQ', icon: 'rabbitmq-original', iconType: 'devicon' },
+            { label: 'API', icon: 'A', iconType: 'letter' },
+            { label: 'S3', icon: 'amazonwebservices-plain-wordmark', iconType: 'devicon' },
+            { label: 'GCS', icon: 'googlecloud-plain', iconType: 'devicon' },
+            { label: 'Azure Blob', icon: 'azure-plain', iconType: 'devicon' },
+            { label: 'MySQL', icon: 'mysql-plain', iconType: 'devicon' },
+            { label: 'SQL Server', icon: 'microsoftsqlserver-plain', iconType: 'devicon' },
+            { label: 'MongoDB', icon: 'mongodb-plain', iconType: 'devicon' },
+            { label: 'Redis', icon: 'redis-plain', iconType: 'devicon' },
+            { label: 'Logs', icon: '📄', iconType: 'symbol' },
+            { label: 'CDC', icon: '⏱', iconType: 'symbol' },
+            { label: 'Files', icon: '📁', iconType: 'symbol' },
+            { label: 'FTP/SFTP', icon: '⇄', iconType: 'symbol' },
+            { label: 'Sensor', icon: '📡', iconType: 'symbol' },
+            { label: 'ClickHouse', icon: 'clickhouse-plain', iconType: 'devicon' },
+            { label: 'IoT', icon: '🔗', iconType: 'symbol' }
+        ],
+        transform: [
+            { label: 'Spark', icon: 'apachespark-original', iconType: 'devicon' },
+            { label: 'ETL', icon: 'E', iconType: 'letter' },
+            { label: 'Cleanse', icon: 'C', iconType: 'letter' },
+            { label: 'Validate', icon: 'V', iconType: 'letter' },
+            { label: 'Enrich', icon: 'N', iconType: 'letter' },
+            { label: 'Join', icon: 'J', iconType: 'letter' },
+            { label: 'Filter', icon: 'F', iconType: 'letter' },
+            { label: 'Sort', icon: '⇅', iconType: 'symbol' },
+            { label: 'Group', icon: 'G', iconType: 'letter' },
+            { label: 'Window', icon: 'W', iconType: 'letter' },
+            { label: 'dbt', icon: 'dbt-plain', iconType: 'devicon' },
+            { label: 'Airflow', icon: 'apacheairflow-plain', iconType: 'devicon' }
+        ],
+        destination: [
+            { label: 'Postgres', icon: 'postgresql-plain', iconType: 'devicon' },
+            { label: 'Snowflake', icon: 'snowflake-plain', iconType: 'devicon' },
+            { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
+            { label: 'Redshift', icon: '▲', iconType: 'symbol' },
+            { label: 'Databricks', icon: 'databricks-plain', iconType: 'devicon' },
+            { label: 'Delta Lake', icon: 'Δ', iconType: 'symbol' },
+            { label: 'DWH', icon: 'D', iconType: 'letter' },
+            { label: 'Lake', icon: 'L', iconType: 'letter' },
+            { label: 'BI', icon: '📊', iconType: 'symbol' },
+            { label: 'Power BI', icon: '🟨', iconType: 'symbol' },
+            { label: 'Tableau', icon: '✶', iconType: 'symbol' },
+            { label: 'Looker', icon: '◔', iconType: 'symbol' },
+            { label: 'API', icon: '🔌', iconType: 'symbol' },
+            { label: 'Cache', icon: '⚡', iconType: 'symbol' },
+            { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
+            { label: 'ClickHouse', icon: 'clickhouse-plain', iconType: 'devicon' },
+            { label: 'DuckDB', icon: '🦆', iconType: 'symbol' },
+            { label: 'Elasticsearch', icon: 'elasticsearch-plain', iconType: 'devicon' },
+            { label: 'Grafana', icon: 'grafana-original', iconType: 'devicon' }
+        ]
+    };
 
     function getCanvasSize() {
         const viewBox = svg.viewBox && svg.viewBox.baseVal;
@@ -1776,10 +1841,10 @@ function initDagVisualizer() {
         const lowerY = Math.max(80, Math.min(height - 80, Math.round(height * 0.67)));
 
         nodes = [
-            { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: '⬡', iconType: 'symbol' },
-            { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'S', iconType: 'letter' },
+            { id: 1, x: 80, y: 225, type: 'source', label: 'Kafka', icon: 'apachekafka-original', iconType: 'devicon' },
+            { id: 2, x: 280, y: 150, type: 'transform', label: 'Spark', icon: 'apachespark-original', iconType: 'devicon' },
             { id: 3, x: 280, y: 300, type: 'transform', label: 'Cleanse', icon: 'C', iconType: 'letter' },
-            { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: '🐘', iconType: 'symbol' }
+            { id: 4, x: 480, y: 225, type: 'destination', label: 'Postgres', icon: 'postgresql-plain', iconType: 'devicon' }
         ];
         nodes[0].x = leftX;
         nodes[0].y = centerY;
@@ -1838,68 +1903,6 @@ function initDagVisualizer() {
 
     function createNode(type, x, y) {
         const id = nodeIdCounter++;
-
-        // Expanded tool library with icons/symbols
-        const tools = {
-            source: [
-                { label: 'Kafka', icon: '⬡', iconType: 'symbol' },
-                { label: 'Kinesis', icon: '≈', iconType: 'symbol' },
-                { label: 'Pub/Sub', icon: '◎', iconType: 'symbol' },
-                { label: 'Event Hubs', icon: '⎈', iconType: 'symbol' },
-                { label: 'RabbitMQ', icon: '🐇', iconType: 'symbol' },
-                { label: 'API', icon: 'A', iconType: 'letter' },
-                { label: 'S3', icon: '☁', iconType: 'symbol' },
-                { label: 'GCS', icon: '☁', iconType: 'symbol' },
-                { label: 'Azure Blob', icon: '⬢', iconType: 'symbol' },
-                { label: 'MySQL', icon: '🐬', iconType: 'symbol' },
-                { label: 'SQL Server', icon: '🟦', iconType: 'symbol' },
-                { label: 'MongoDB', icon: '🍃', iconType: 'symbol' },
-                { label: 'Redis', icon: '🟥', iconType: 'symbol' },
-                { label: 'Logs', icon: '📄', iconType: 'symbol' },
-                { label: 'CDC', icon: '⏱', iconType: 'symbol' },
-                { label: 'Files', icon: '📁', iconType: 'symbol' },
-                { label: 'FTP/SFTP', icon: '⇄', iconType: 'symbol' },
-                { label: 'Sensor', icon: '📡', iconType: 'symbol' },
-                { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
-                { label: 'IoT', icon: '🔗', iconType: 'symbol' }
-            ],
-            transform: [
-                { label: 'Spark', icon: 'S', iconType: 'letter' },
-                { label: 'ETL', icon: 'E', iconType: 'letter' },
-                { label: 'Cleanse', icon: 'C', iconType: 'letter' },
-                { label: 'Validate', icon: 'V', iconType: 'letter' },
-                { label: 'Enrich', icon: 'N', iconType: 'letter' },
-                { label: 'Join', icon: 'J', iconType: 'letter' },
-                { label: 'Filter', icon: 'F', iconType: 'letter' },
-                { label: 'Sort', icon: '⇅', iconType: 'symbol' },
-                { label: 'Group', icon: 'G', iconType: 'letter' },
-                { label: 'Window', icon: 'W', iconType: 'letter' },
-                { label: 'dbt', icon: '△', iconType: 'symbol' },
-                { label: 'Airflow', icon: '⟲', iconType: 'symbol' }
-            ],
-            destination: [
-                { label: 'Postgres', icon: '🐘', iconType: 'symbol' },
-                { label: 'Snowflake', icon: '❄', iconType: 'symbol' },
-                { label: 'BigQuery', icon: '🔍', iconType: 'symbol' },
-                { label: 'Redshift', icon: '▲', iconType: 'symbol' },
-                { label: 'Databricks', icon: '🧱', iconType: 'symbol' },
-                { label: 'Delta Lake', icon: 'Δ', iconType: 'symbol' },
-                { label: 'DWH', icon: 'D', iconType: 'letter' },
-                { label: 'Lake', icon: 'L', iconType: 'letter' },
-                { label: 'BI', icon: '📊', iconType: 'symbol' },
-                { label: 'Power BI', icon: '🟨', iconType: 'symbol' },
-                { label: 'Tableau', icon: '✶', iconType: 'symbol' },
-                { label: 'Looker', icon: '◔', iconType: 'symbol' },
-                { label: 'API', icon: '🔌', iconType: 'symbol' },
-                { label: 'Cache', icon: '⚡', iconType: 'symbol' },
-                { label: 'MinIO', icon: '🪣', iconType: 'symbol' },
-                { label: 'ClickHouse', icon: '⚡', iconType: 'symbol' },
-                { label: 'DuckDB', icon: '🦆', iconType: 'symbol' },
-                { label: 'Elasticsearch', icon: '🧲', iconType: 'symbol' },
-                { label: 'Grafana', icon: '📈', iconType: 'symbol' }
-            ]
-        };
-
         const typeTools = tools[type];
         const idx = Math.floor(Math.random() * typeTools.length);
         const tool = typeTools[idx];
@@ -1973,18 +1976,27 @@ function initDagVisualizer() {
             shape.classList.add('dag-node-shape');
             g.appendChild(shape);
 
-            // Icon
-            const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            icon.textContent = node.icon;
-            icon.setAttribute('y', -2);
-            icon.classList.add('dag-node-icon');
-            // Adjust font size for emoji vs letter icons
-            if (node.iconType === 'symbol') {
-                icon.setAttribute('font-size', '16');
+            // Icon: a real devicon logo (via foreignObject, since devicon is a
+            // font-icon set) where one exists, otherwise the symbol/letter fallback.
+            if (node.iconType === 'devicon') {
+                const fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+                fo.setAttribute('x', -11);
+                fo.setAttribute('y', -21);
+                fo.setAttribute('width', 22);
+                fo.setAttribute('height', 22);
+                fo.classList.add('dag-node-icon-fo');
+                const i = document.createElement('i');
+                i.className = `devicon-${node.icon} colored`;
+                fo.appendChild(i);
+                g.appendChild(fo);
             } else {
-                icon.setAttribute('font-size', '14');
+                const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                icon.textContent = node.icon;
+                icon.setAttribute('y', -2);
+                icon.classList.add('dag-node-icon');
+                icon.setAttribute('font-size', node.iconType === 'symbol' ? '16' : '14');
+                g.appendChild(icon);
             }
-            g.appendChild(icon);
 
             // Label
             const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -2020,6 +2032,8 @@ function initDagVisualizer() {
             });
             edgesGroup.appendChild(path);
         });
+
+        scheduleSave();
     }
 
     function calculateEdgePath(from, to) {
@@ -2126,7 +2140,294 @@ function initDagVisualizer() {
         window.addEventListener('resize', syncCanvasViewport);
     }
 
+    // === Persistence: remember the visitor's own pipeline across reloads ===
+    const DAG_STORAGE_KEY = 'pipeline-architect-state-v1';
+
+    function saveState() {
+        try {
+            localStorage.setItem(DAG_STORAGE_KEY, JSON.stringify({ nodes, edges, nodeIdCounter }));
+        } catch (e) { /* storage unavailable/full — decorative persistence only */ }
+    }
+
+    function scheduleSave() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(saveState, 400);
+    }
+
+    function loadState() {
+        try {
+            const raw = localStorage.getItem(DAG_STORAGE_KEY);
+            if (!raw) return false;
+            const data = JSON.parse(raw);
+            if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges) || !data.nodes.length) return false;
+            nodes = data.nodes;
+            edges = data.edges;
+            nodeIdCounter = data.nodeIdCounter || (Math.max(0, ...nodes.map((n) => n.id)) + 1);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // === Status toast for validation / random-pipeline feedback ===
+    const statusEl = document.getElementById('dag-status');
+    let statusTimer = null;
+
+    function showDagStatus(message, kind) {
+        if (!statusEl) return;
+        statusEl.textContent = message;
+        statusEl.className = `dag-status visible ${kind || 'info'}`;
+        clearTimeout(statusTimer);
+        statusTimer = setTimeout(() => statusEl.classList.remove('visible'), 6000);
+    }
+
+    // === Validate: cycle + orphan-node detection ===
+    function validatePipeline() {
+        if (!nodes.length) {
+            showDagStatus('Add a few nodes to build a pipeline first.', 'info');
+            return;
+        }
+
+        const hasIncoming = new Set(edges.map((e) => e.to));
+        const hasOutgoing = new Set(edges.map((e) => e.from));
+        const issues = [];
+
+        nodes.forEach((n) => {
+            if (n.type === 'source' && !hasOutgoing.has(n.id)) issues.push(`"${n.label}" (source) has no outgoing connection`);
+            else if (n.type === 'destination' && !hasIncoming.has(n.id)) issues.push(`"${n.label}" (destination) has no incoming connection`);
+            else if (n.type === 'transform' && !hasIncoming.has(n.id) && !hasOutgoing.has(n.id)) issues.push(`"${n.label}" (transform) is disconnected`);
+        });
+
+        const adjacency = new Map();
+        nodes.forEach((n) => adjacency.set(n.id, []));
+        edges.forEach((e) => { if (adjacency.has(e.from)) adjacency.get(e.from).push(e.to); });
+        const visiting = new Set();
+        const visited = new Set();
+        let hasCycle = false;
+        function dfs(id) {
+            if (hasCycle) return;
+            visiting.add(id);
+            for (const next of adjacency.get(id) || []) {
+                if (visiting.has(next)) { hasCycle = true; return; }
+                if (!visited.has(next)) dfs(next);
+            }
+            visiting.delete(id);
+            visited.add(id);
+        }
+        nodes.forEach((n) => { if (!visited.has(n.id)) dfs(n.id); });
+        if (hasCycle) issues.unshift('Cycle detected — a pipeline should flow in one direction');
+
+        if (issues.length) {
+            const extra = issues.length > 1 ? ` (+${issues.length - 1} more)` : '';
+            showDagStatus(`⚠ ${issues[0]}${extra}`, 'warn');
+        } else {
+            const counts = ['source', 'transform', 'destination'].map((t) => nodes.filter((n) => n.type === t).length);
+            showDagStatus(`✓ Valid pipeline — ${counts[0]} source(s) → ${counts[1]} transform(s) → ${counts[2]} destination(s)`, 'ok');
+        }
+    }
+
+    // === Export as an Airflow DAG skeleton ===
+    function slugify(label, id) {
+        const base = String(label).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'node';
+        return `${base}_${id}`;
+    }
+
+    function exportAsAirflowDag() {
+        if (!nodes.length) return '# Add a few nodes to your pipeline first, then export.\n';
+
+        const lines = [
+            'from airflow import DAG',
+            'from airflow.operators.python import PythonOperator',
+            'from datetime import datetime',
+            '',
+            'with DAG(',
+            '    dag_id="generated_pipeline",',
+            '    start_date=datetime(2026, 1, 1),',
+            '    schedule_interval="@daily",',
+            '    catchup=False,',
+            ') as dag:',
+            ''
+        ];
+
+        nodes.forEach((n) => {
+            const varName = slugify(n.label, n.id);
+            lines.push(`    # ${n.type}: ${n.label}`);
+            lines.push(`    ${varName} = PythonOperator(task_id="${varName}", python_callable=lambda: None)`);
+            lines.push('');
+        });
+
+        if (edges.length) {
+            lines.push('    # Dependencies');
+            edges.forEach((e) => {
+                const fromNode = nodes.find((n) => n.id === e.from);
+                const toNode = nodes.find((n) => n.id === e.to);
+                if (!fromNode || !toNode) return;
+                lines.push(`    ${slugify(fromNode.label, fromNode.id)} >> ${slugify(toNode.label, toNode.id)}`);
+            });
+        }
+
+        return lines.join('\n') + '\n';
+    }
+
+    const exportModal = document.getElementById('dag-export-modal');
+    const exportCodeEl = document.getElementById('dag-export-code');
+    const exportBtn = document.getElementById('dag-export');
+    const exportCopyBtn = document.getElementById('dag-export-copy');
+    if (exportModal && exportCodeEl && exportBtn) {
+        const exportPanel = exportModal.querySelector('.vl-modal__panel');
+        let releaseExportTrap = null;
+
+        function openExportModal() {
+            exportCodeEl.textContent = exportAsAirflowDag();
+            exportModal.classList.remove('hidden');
+            exportModal.setAttribute('aria-hidden', 'false');
+            exportModal._lastFocus = document.activeElement;
+            lockBodyScroll();
+            if (releaseExportTrap) releaseExportTrap();
+            releaseExportTrap = createFocusTrap(exportPanel, closeExportModal);
+            window.setTimeout(() => exportPanel.focus(), 0);
+        }
+
+        function closeExportModal() {
+            exportModal.classList.add('hidden');
+            exportModal.setAttribute('aria-hidden', 'true');
+            if (releaseExportTrap) { releaseExportTrap(); releaseExportTrap = null; }
+            unlockBodyScroll();
+            const last = exportModal._lastFocus && exportModal._lastFocus.focus ? exportModal._lastFocus : exportBtn;
+            try { last.focus(); } catch (e) { /* ignore */ }
+        }
+
+        exportBtn.addEventListener('click', openExportModal);
+        exportModal.addEventListener('click', (e) => {
+            if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === '1') closeExportModal();
+        });
+        if (exportCopyBtn) {
+            exportCopyBtn.addEventListener('click', async () => {
+                const original = exportCopyBtn.textContent;
+                try {
+                    await navigator.clipboard.writeText(exportCodeEl.textContent);
+                    exportCopyBtn.textContent = 'Copied!';
+                } catch (e) {
+                    exportCopyBtn.textContent = 'Select & copy manually';
+                }
+                setTimeout(() => { exportCopyBtn.textContent = original; }, 1800);
+            });
+        }
+    }
+
+    // === Surprise Me: generate a random, always-valid sample pipeline ===
+    function generateRandomPipeline() {
+        const { width, height } = getCanvasSize();
+        const sourceCount = 1 + Math.floor(Math.random() * 2);
+        const transformCount = 1 + Math.floor(Math.random() * 3);
+        const destCount = 1 + Math.floor(Math.random() * 2);
+
+        nodes = [];
+        edges = [];
+        nodeIdCounter = 1;
+
+        const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+        const makeColumn = (type, count, xFrac) => {
+            const x = Math.max(80, Math.min(width - 80, Math.round(width * xFrac)));
+            const typeTools = tools[type];
+            const ids = [];
+            for (let i = 0; i < count; i++) {
+                const y = Math.round(height * ((i + 1) / (count + 1)));
+                const id = nodeIdCounter++;
+                const tool = typeTools[Math.floor(Math.random() * typeTools.length)];
+                const node = { id, x, y, type, label: tool.label, icon: tool.icon, iconType: tool.iconType };
+                clampNodeToCanvas(node);
+                nodes.push(node);
+                ids.push(id);
+            }
+            return ids;
+        };
+
+        const sourceIds = makeColumn('source', sourceCount, 0.16);
+        const transformIds = makeColumn('transform', transformCount, 0.5);
+        const destIds = makeColumn('destination', destCount, 0.84);
+
+        sourceIds.forEach((sId) => {
+            const pick = Math.min(transformIds.length, 1 + Math.floor(Math.random() * 2));
+            shuffle(transformIds).slice(0, pick).forEach((tId) => edges.push({ from: sId, to: tId }));
+        });
+        transformIds.forEach((tId) => {
+            const pick = Math.min(destIds.length, 1 + Math.floor(Math.random() * 2));
+            shuffle(destIds).slice(0, pick).forEach((dId) => edges.push({ from: tId, to: dId }));
+            if (!edges.some((e) => e.to === tId)) {
+                edges.push({ from: sourceIds[Math.floor(Math.random() * sourceIds.length)], to: tId });
+            }
+        });
+
+        render();
+        showDagStatus('🎲 New random pipeline generated!', 'ok');
+    }
+
+    const validateBtn = document.getElementById('dag-validate');
+    const randomBtn = document.getElementById('dag-random');
+    if (validateBtn) validateBtn.addEventListener('click', validatePipeline);
+    if (randomBtn) randomBtn.addEventListener('click', generateRandomPipeline);
+
+    // === Keyboard shortcuts: Delete selected node, Escape cancels connect mode ===
+    document.addEventListener('keydown', (e) => {
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+
+        if (e.key === 'Escape' && mode === 'connect' && connectSource) {
+            connectSource = null;
+            selectedNode = null;
+            render();
+        } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedNode && mode === 'select') {
+            e.preventDefault();
+            deleteNode(selectedNode);
+            selectedNode = null;
+        }
+    });
+
+    // === Animated data-flow particles travelling along each edge ===
+    const flowGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    flowGroup.setAttribute('id', 'dag-flow');
+    flowGroup.style.pointerEvents = 'none';
+    svg.insertBefore(flowGroup, nodesGroup);
+
+    function tickFlow() {
+        flowRafId = requestAnimationFrame(tickFlow);
+        if (document.body.classList.contains('low-power') || prefersReducedMotion()) return;
+
+        const paths = edgesGroup.querySelectorAll('.dag-edge');
+        while (flowGroup.children.length < paths.length) {
+            const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            c.setAttribute('r', '3.5');
+            c.classList.add('dag-flow-particle');
+            c.dataset.t = String(Math.random());
+            flowGroup.appendChild(c);
+        }
+        while (flowGroup.children.length > paths.length) {
+            flowGroup.removeChild(flowGroup.lastChild);
+        }
+
+        Array.from(flowGroup.children).forEach((circle, i) => {
+            const path = paths[i];
+            if (!path) return;
+            const len = path.getTotalLength();
+            if (!len) return;
+            let t = parseFloat(circle.dataset.t || '0');
+            t = (t + 0.0035) % 1;
+            circle.dataset.t = String(t);
+            const pt = path.getPointAtLength(t * len);
+            circle.setAttribute('cx', String(pt.x));
+            circle.setAttribute('cy', String(pt.y));
+        });
+    }
+
     // Initialize
     setMode('select');
-    initSamplePipeline();
+    if (!loadState()) {
+        initSamplePipeline();
+    } else {
+        nodes.forEach(clampNodeToCanvas);
+        render();
+    }
+    tickFlow();
 }

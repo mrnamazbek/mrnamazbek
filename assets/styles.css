@@ -1510,6 +1510,10 @@
             .text-line-block {
                 display: none;
             }
+
+            .dag-flow-particle {
+                display: none;
+            }
         }
 
         body.low-power .journey-item,
@@ -2465,6 +2469,78 @@
             pointer-events: none;
         }
 
+        .dag-node-icon-fo {
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .dag-node-icon-fo i {
+            display: block;
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            line-height: 1;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .dag-flow-particle {
+            fill: #67e8f9;
+            filter: url(#dag-glow);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .dag-status {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid transparent;
+            opacity: 0;
+            transform: translateY(-2px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .dag-status.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dag-status.ok {
+            color: #6ee7b7;
+            background: rgba(52, 211, 153, 0.1);
+            border-color: rgba(52, 211, 153, 0.3);
+        }
+
+        .dag-status.warn {
+            color: #fcd34d;
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .dag-status.info {
+            color: #93c5fd;
+            background: rgba(147, 197, 253, 0.1);
+            border-color: rgba(147, 197, 253, 0.3);
+        }
+
+        .dag-export-code {
+            max-height: 46vh;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .dag-export-code code {
+            font-family: 'Fira Code', ui-monospace, monospace;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
         [data-theme="light"] .dag-canvas-container {
             background: rgba(255, 255, 255, 0.5);
             border-color: rgba(0, 0, 0, 0.1);
@@ -2503,6 +2579,19 @@
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(0, 0, 0, 0.1);
             color: #1a1a1a;
+        }
+
+        [data-theme="light"] .dag-node-icon-fo i {
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        [data-theme="light"] .dag-export-code {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .dag-export-code code {
+            color: rgba(0, 0, 0, 0.82);
         }
 
         /* === AI MONTHLY FEATURE === */
