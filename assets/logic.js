@@ -809,8 +809,12 @@ function initScrollAnimations() {
     if (document.body.classList.contains('compact-mobile')) return;
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate only section cards (exclude nav)
-    const cards = gsap.utils.toArray('section:not(#journey) .glass-card, #projects-grid .glass-card');
+    // Animate only section cards (exclude nav). Arsenal/Projects cards get their
+    // own alternating scale reveal below; #hero-card gets a clip-path entrance
+    // in the hero timeline further down — excluded here so they don't get a
+    // second, competing opacity tween from this generic pass.
+    const cards = gsap.utils.toArray('section:not(#journey) .glass-card, #projects-grid .glass-card')
+        .filter((card) => card.id !== 'hero-card' && !card.hasAttribute('data-arsenal-card') && !card.closest('#projects-grid'));
     cards.forEach((card, i) => {
         gsap.from(card, {
             scrollTrigger: {
@@ -827,6 +831,49 @@ function initScrollAnimations() {
             immediateRender: false
         });
     });
+
+    // Arsenal + Project cards: alternating scale-in reveal (adapted from the
+    // pack's "ConnectedGrid" scroll reference) instead of a plain fade — cards
+    // scale up from whichever horizontal half of the grid they sit in.
+    // Projects are injected asynchronously, so a MutationObserver picks up
+    // cards added after this initial pass (including via "Load more").
+    const revealGridCard = (card, centerX) => {
+        if (card._connectedGridDone) return;
+        card._connectedGridDone = true;
+        const rect = card.getBoundingClientRect();
+        const isLeft = (rect.left + rect.width / 2) < centerX;
+        gsap.set(card, { transformOrigin: `${isLeft ? 0 : 100}% 50%` });
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 88%",
+                toggleActions: "play none none none",
+                once: true
+            },
+            scale: 0.86,
+            opacity: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            immediateRender: false
+        });
+    };
+
+    const revealGrid = (container, cardSelector) => {
+        if (!container) return;
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        container.querySelectorAll(cardSelector).forEach((card) => revealGridCard(card, centerX));
+    };
+
+    const arsenalGrid = document.querySelector('#arsenal .grid');
+    revealGrid(arsenalGrid, '[data-arsenal-card]');
+
+    const projectsGrid = document.getElementById('projects-grid');
+    if (projectsGrid) {
+        revealGrid(projectsGrid, '.glass-card');
+        const projectsObserver = new MutationObserver(() => revealGrid(projectsGrid, '.glass-card'));
+        projectsObserver.observe(projectsGrid, { childList: true });
+    }
 
     // Arsenal icon badges: scaleY wipe-in as each card enters view
     const arsenalIcons = gsap.utils.toArray('.arsenal-icon-badge');
