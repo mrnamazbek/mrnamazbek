@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-07-20",
+  "as_of": "2026-07-27",
   "window_weeks": 24,
-  "generated_at": "2026-07-27T07:59:53.749781+00:00",
-  "status": "partial",
+  "generated_at": "2026-08-03T07:55:29.695284+00:00",
+  "status": "ok",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
     "name": "Wikimedia Pageviews API",
@@ -18,10 +18,6 @@
       "article": "ChatGPT",
       "color": "#22d3ee",
       "points": [
-        {
-          "week": "2026-02-09",
-          "views": 524192
-        },
         {
           "week": "2026-02-16",
           "views": 560805
@@ -113,6 +109,10 @@
         {
           "week": "2026-07-20",
           "views": 842684
+        },
+        {
+          "week": "2026-07-27",
+          "views": 534042
         }
       ]
     },
@@ -123,100 +123,100 @@
       "color": "#60a5fa",
       "points": [
         {
-          "week": "2026-02-09",
-          "views": 0
-        },
-        {
           "week": "2026-02-16",
-          "views": 0
+          "views": 65951
         },
         {
           "week": "2026-02-23",
-          "views": 0
+          "views": 111012
         },
         {
           "week": "2026-03-02",
-          "views": 0
+          "views": 97278
         },
         {
           "week": "2026-03-09",
-          "views": 0
+          "views": 71360
         },
         {
           "week": "2026-03-16",
-          "views": 0
+          "views": 65360
         },
         {
           "week": "2026-03-23",
-          "views": 0
+          "views": 62961
         },
         {
           "week": "2026-03-30",
-          "views": 0
+          "views": 56794
         },
         {
           "week": "2026-04-06",
-          "views": 0
+          "views": 67134
         },
         {
           "week": "2026-04-13",
-          "views": 0
+          "views": 66080
         },
         {
           "week": "2026-04-20",
-          "views": 0
+          "views": 61624
         },
         {
           "week": "2026-04-27",
-          "views": 0
+          "views": 55303
         },
         {
           "week": "2026-05-04",
-          "views": 0
+          "views": 57703
         },
         {
           "week": "2026-05-11",
-          "views": 0
+          "views": 53998
         },
         {
           "week": "2026-05-18",
-          "views": 0
+          "views": 51656
         },
         {
           "week": "2026-05-25",
-          "views": 0
+          "views": 52527
         },
         {
           "week": "2026-06-01",
-          "views": 0
+          "views": 51605
         },
         {
           "week": "2026-06-08",
-          "views": 0
+          "views": 60808
         },
         {
           "week": "2026-06-15",
-          "views": 0
+          "views": 45956
         },
         {
           "week": "2026-06-22",
-          "views": 0
+          "views": 12785
         },
         {
           "week": "2026-06-29",
-          "views": 0
+          "views": 6583
         },
         {
           "week": "2026-07-06",
-          "views": 0
+          "views": 5891
         },
         {
           "week": "2026-07-13",
-          "views": 0
+          "views": 5679
         },
         {
           "week": "2026-07-20",
-          "views": 0
+          "views": 5518
+        },
+        {
+          "week": "2026-07-27",
+          "views": 5679
         }
       ]
     },
@@ -226,10 +226,6 @@
       "article": "Gemini_(chatbot)",
       "color": "#a78bfa",
       "points": [
-        {
-          "week": "2026-02-09",
-          "views": 1434
-        },
         {
           "week": "2026-02-16",
           "views": 1508
@@ -321,6 +317,10 @@
         {
           "week": "2026-07-20",
           "views": 1154
+        },
+        {
+          "week": "2026-07-27",
+          "views": 1759
         }
       ]
     },
@@ -330,10 +330,6 @@
       "article": "Microsoft_Copilot",
       "color": "#34d399",
       "points": [
-        {
-          "week": "2026-02-09",
-          "views": 12612
-        },
         {
           "week": "2026-02-16",
           "views": 12905
@@ -425,6 +421,10 @@
         {
           "week": "2026-07-20",
           "views": 11322
+        },
+        {
+          "week": "2026-07-27",
+          "views": 10734
         }
       ]
     },
@@ -434,10 +434,6 @@
       "article": "Perplexity_AI",
       "color": "#f59e0b",
       "points": [
-        {
-          "week": "2026-02-09",
-          "views": 24800
-        },
         {
           "week": "2026-02-16",
           "views": 27847
@@ -529,6 +525,10 @@
         {
           "week": "2026-07-20",
           "views": 14705
+        },
+        {
+          "week": "2026-07-27",
+          "views": 14487
         }
       ]
     },
@@ -538,10 +538,6 @@
       "article": "DeepSeek",
       "color": "#f472b6",
       "points": [
-        {
-          "week": "2026-02-09",
-          "views": 16272
-        },
         {
           "week": "2026-02-16",
           "views": 17674
@@ -633,6 +629,10 @@
         {
           "week": "2026-07-20",
           "views": 14267
+        },
+        {
+          "week": "2026-07-27",
+          "views": 13458
         }
       ]
     }
@@ -641,35 +641,33 @@
     {
       "id": "chatgpt",
       "label": "ChatGPT",
-      "views": 842684
+      "views": 534042
     },
     {
       "id": "perplexity",
       "label": "Perplexity",
-      "views": 14705
+      "views": 14487
     },
     {
       "id": "deepseek",
       "label": "DeepSeek",
-      "views": 14267
+      "views": 13458
     },
     {
       "id": "copilot",
       "label": "Copilot",
-      "views": 11322
-    },
-    {
-      "id": "gemini",
-      "label": "Gemini",
-      "views": 1154
+      "views": 10734
     },
     {
       "id": "claude",
       "label": "Claude",
-      "views": 0
+      "views": 5679
+    },
+    {
+      "id": "gemini",
+      "label": "Gemini",
+      "views": 1759
     }
   ],
-  "errors": [
-    "Claude: HTTP Error 404: Not Found"
-  ]
+  "errors": []
 }
