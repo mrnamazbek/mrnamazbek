@@ -25,6 +25,7 @@ jobs:
       - name: Generate Engineering Metrics
         uses: lowlighter/metrics@latest
         with:
+          use_prebuilt_image: yes
           token: ${{ secrets.METRICS_TOKEN }}
           filename: github-metrics.svg
           output_action: commit
@@ -35,11 +36,7 @@ jobs:
           base: header, activity, community, repositories, metadata
           base_indepth: yes
           config_timezone: Asia/Almaty
-          config_order: base.header, isocalendar, languages, habits, lines
-          
-          # 3D Isometric Calendar
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: full-year
+          config_order: base.header, languages, habits, lines
           
           # Languages
           plugin_languages: yes
