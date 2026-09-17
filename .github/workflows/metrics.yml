@@ -1,0 +1,75 @@
+name: Metrics
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/metrics.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: metrics
+  cancel-in-progress: true
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Generate Engineering Metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: github-metrics.svg
+          output_action: commit
+          committer_branch: metrics
+          committer_message: "chore: update github-metrics.svg [skip ci]"
+          
+          # Base layout
+          base: header, activity, community, repositories, metadata
+          base_indepth: yes
+          config_timezone: Asia/Almaty
+          config_order: base.header, isocalendar, languages, habits, lines, achievements
+          
+          # 3D Isometric Calendar
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          
+          # Languages
+          plugin_languages: yes
+          plugin_languages_analysis_timeout: 30
+          plugin_languages_categories: markup, programming, data
+          plugin_languages_colors: github
+          plugin_languages_limit: 8
+          plugin_languages_recent_categories: markup, programming
+          plugin_languages_recent_days: 30
+          plugin_languages_recent_load: 400
+          plugin_languages_sections: most-used
+          plugin_languages_threshold: 0%
+          plugin_languages_details: bytes-size, percentage
+          
+          # Coding Habits
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_days: 30
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_habits_trim: yes
+          
+          # Lines of Code
+          plugin_lines: yes
+          plugin_lines_history_limit: 2
+          plugin_lines_repositories_limit: 4
+
+          # Achievements
+          plugin_achievements: yes
+          plugin_achievements_threshold: C
+          plugin_achievements_secrets: yes
+          plugin_achievements_display: compact
+          plugin_achievements_limit: 8
