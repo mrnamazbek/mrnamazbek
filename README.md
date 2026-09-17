@@ -481,7 +481,7 @@ Extract  Stream  Orchestrate Load
 ## 🧩 Competitive Programming & Problem Solving
 
 <p align="center">
-  <a href="https://leetcode.com/namazbekzhan/">
+  <a href="https://leetcode.com/u/namazbekzhan/">
     <img src="https://leetcard.jacoblin.cool/namazbekzhan?theme=dark&font=Jetbrains%20Mono" alt="LeetCode" height="150" />
   </a>
   <a href="https://codeforces.com/profile/MrTHRASHER">
