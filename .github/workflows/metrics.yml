@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.METRICS_TOKEN }}
           filename: github-metrics.svg
           output_action: commit
-          committer_branch: metrics
+          committer_branch: output
           committer_message: "chore: update github-metrics.svg [skip ci]"
           
           # Base layout

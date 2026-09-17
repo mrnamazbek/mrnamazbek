@@ -51,24 +51,24 @@ from datetime import datetime
 @dataclass
 class Engineer:
     """Data-driven professional focused on scalable solutions."""
-    
+
     name: str = "Namazbek Bekzhanov"
     role: str = "Middle Data Engineer & ML Enthusiast"
     location: str = "Almaty, Kazakhstan 🇰🇿"
     company: str = "National Bank of Kazakhstan (Digital Dev Center)"
-    
+
     education: Dict[str, str] = None
     languages: List[str] = None
     stack: Dict[str, List[str]] = None
-    
+
     def __post_init__(self):
         self.education = {
             "🎓 Current": "MSc in Data Science @ KBTU (2025-2027)",
             "🎓 Completed": "BSc in Computer Science @ SDU (2021-2025)"
         }
-        
+
         self.languages = ["Python", "Go", "Java", "SQL", "Bash"]
-        
+
         self.stack = {
             "big_data": ["Spark", "Hadoop", "Airflow", "Kafka"],
             "ml_ai": ["Scikit-Learn", "TensorFlow", "PyTorch", "Keras"],
@@ -76,7 +76,7 @@ class Engineer:
             "devops": ["Docker", "Git", "Linux", "CI/CD"],
             "frameworks": ["FastAPI", "Pandas", "NumPy"]
         }
-    
+
     def current_mission(self) -> List[str]:
         """My daily engineering adventures."""
         return [
@@ -86,7 +86,7 @@ class Engineer:
             "⚡ Optimizing database performance & queries",
             "⚽ Leading teammates to victory on & off the field"
         ]
-    
+
     def get_expertise_matrix(self) -> Dict[str, int]:
         """Skill proficiency levels (out of 10)."""
         return {
@@ -98,24 +98,24 @@ class Engineer:
             "Cloud Architecture": 7,
             "Football Strategy": 10  # ⚽
         }
-    
+
     def philosophy(self) -> str:
         return "Code is poetry. Data tells stories. I write both."
 
 
 def main():
     me = Engineer()
-    
+
     print(f"\n{'='*60}")
     print(f"👋 Hello, World! I'm {me.name}")
     print(f"📍 Based in {me.location}")
     print(f"💼 {me.role} @ {me.company}")
     print(f"{'='*60}\n")
-    
+
     print("🎯 CURRENT MISSION:")
     for mission in me.current_mission():
         print(f"   {mission}")
-    
+
     print(f"\n💡 PHILOSOPHY: {me.philosophy()}\n")
 
 
@@ -149,7 +149,7 @@ if __name__ == "__main__":
 ## 🏆 Achievement Showcase
 
 <div align="center">
-  
+
 <!-- Trophies -->
 <img src="https://github-profile-trophy.vercel.app/?username=mrnamazbek&theme=algolia&no-frame=true&no-bg=false&margin-w=4&row=1&column=8" width="100%" />
 
@@ -171,30 +171,30 @@ graph TD;
     C[Databases] --> B
     D[Kafka] --> B
     end
-    
+
     subgraph PROCESSING
     B --> E[Transform]
     E --> F[Cleanse]
     F --> G[Validate]
     end
-    
+
     subgraph STORAGE
     G --> H[PostgreSQL]
     G --> I[Oracle]
     G --> J[S3/HDFS]
     end
-    
+
     subgraph ML_PIPELINE
     K[Sklearn] --> L[FastAPI]
     M[TensorFlow] --> L
     N[PyTorch] --> L
     end
-    
+
     subgraph DEPLOYMENT
     L --> O[Docker]
     O --> P[Kubernetes]
     end
-    
+
     subgraph MONITORING
     P --> Q[Grafana]
     P --> R[Prometheus]
@@ -318,14 +318,14 @@ Kafka → Spark → HDFS
 Stream  Process Store
 ```
 
-**Tech Stack:**  
+**Tech Stack:**
 ![Spark](https://img.shields.io/badge/-Spark-E25A1C?style=flat-square&logo=apachespark&logoColor=white)
 ![Hadoop](https://img.shields.io/badge/-Hadoop-66CCFF?style=flat-square&logo=apachehadoop&logoColor=black)
 ![Kafka](https://img.shields.io/badge/-Kafka-000?style=flat-square&logo=apachekafka)
 
-**Impact:**  
-✅ Processed 10M+ records/day  
-✅ Real-time analytics dashboard  
+**Impact:**
+✅ Processed 10M+ records/day
+✅ Real-time analytics dashboard
 ✅ 95% data quality score
 
 [📂 **Explore Repository** →](https://github.com/mrnamazbek/Big-Data-Final)
@@ -343,14 +343,14 @@ Data Lake → Feature Engineering
   FastAPI ← ML Model (Collaborative)
 ```
 
-**Tech Stack:**  
+**Tech Stack:**
 ![FastAPI](https://img.shields.io/badge/-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![ML](https://img.shields.io/badge/-ML-FF6F00?style=flat-square)
 
-**Impact:**  
-✅ 85% recommendation accuracy  
-✅ <100ms API response time  
+**Impact:**
+✅ 85% recommendation accuracy
+✅ <100ms API response time
 ✅ 1M+ songs indexed
 
 [📂 **Explore Repository** →](https://github.com/mrnamazbek/Music-Station)
@@ -370,14 +370,14 @@ Sources → Kafka → Airflow → DWH
 Extract  Stream  Orchestrate Load
 ```
 
-**Tech Stack:**  
+**Tech Stack:**
 ![Kafka](https://img.shields.io/badge/-Kafka-000?style=flat-square&logo=apachekafka)
 ![Airflow](https://img.shields.io/badge/-Airflow-017CEE?style=flat-square&logo=apacheairflow&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-**Impact:**  
-✅ 24/7 automated workflows  
-✅ 99.9% uptime SLA  
+**Impact:**
+✅ 24/7 automated workflows
+✅ 99.9% uptime SLA
 ✅ Multi-source integration
 
 [📂 **Explore Repository** →](https://github.com/mrnamazbek/EPAM-Data-Engineering)
@@ -395,14 +395,14 @@ Extract  Stream  Orchestrate Load
 - Feature Engineering, Custom Transformers
 ```
 
-**Tech Stack:**  
+**Tech Stack:**
 ![Scikit-Learn](https://img.shields.io/badge/-Scikit_Learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/-Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
 
-**Impact:**  
-✅ 6 complete assignments  
-✅ Full code + documentation  
+**Impact:**
+✅ 6 complete assignments
+✅ Full code + documentation
 ✅ Real-world datasets
 
 [📂 **Explore Repository** →](https://github.com/mrnamazbek/KBTU_ML_Assignments)
@@ -440,7 +440,7 @@ Extract  Stream  Orchestrate Load
 ## ⚡ Engineering Metrics & Activity
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/metrics/github-metrics.svg" alt="Engineering Metrics Infographic" />
+  <img src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/github-metrics.svg" alt="Engineering Metrics Infographic" />
 </p>
 
 <br/>
@@ -481,8 +481,8 @@ Extract  Stream  Orchestrate Load
 ## 🧩 Competitive Programming & Problem Solving
 
 <p align="center">
-  <a href="https://leetcode.com/Marbik/">
-    <img src="https://leetcard.jacoblin.cool/Marbik?theme=dark&font=Fira%20Code" alt="LeetCode" height="150" />
+  <a href="https://leetcode.com/namazbekzhan/">
+    <img src="https://leetcard.jacoblin.cool/namazbekzhan?theme=dark&font=Jetbrains%20Mono" alt="LeetCode" height="150" />
   </a>
   <a href="https://codeforces.com/profile/MrTHRASHER">
     <img src="https://codeforces-readme-stats.vercel.app/api/card?username=MrTHRASHER&theme=dark" alt="Codeforces" height="150" />
@@ -511,7 +511,7 @@ Extract  Stream  Orchestrate Load
 
 <br/>
 
-**Profile Views** 👁️  
+**Profile Views** 👁️
 <img src="https://komarev.com/ghpvc/?username=mrnamazbek&label=Visitors&color=0e75b6&style=flat" alt="Profile views" />
 
 </div>
