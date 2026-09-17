@@ -454,6 +454,19 @@ Extract  Stream  Orchestrate Load
 <!-- Glowing Divider -->
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
+## ⚽ GitFut Player Card
+
+<p align="center">
+  <a href="https://gitfut.com/mrnamazbek?country=kz">
+    <img src="https://gitfut.com/mrnamazbek.png?country=kz" alt="Namazbek Bekzhanov GitFut Card" width="300" />
+  </a>
+</p>
+
+<br/>
+
+<!-- Glowing Divider -->
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+
 ## 🧩 Competitive Programming & Problem Solving
 
 <p align="center">
