@@ -425,16 +425,11 @@ Extract  Stream  Orchestrate Load
   <img src="https://raw.githubusercontent.com/mrnamazbek/mrnamazbek/output/contrib-heatmap.svg" width="100%" alt="Live self-hosted contribution heatmap" />
 </div>
 
-<table>
-<tr>
-<td width="50%" align="center">
-
-<br/><br/>
-
-**📉 Contribution Activity**
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=mrnamazbek&theme=react-dark&hide_border=true&area=true&bg_color=0D1117&color=00F7F7&line=00F7F7&point=FFFFFF" width="95%"/>
-
+<div align="center">
+  <br/><br/>
+  <b>📉 Contribution Activity</b>
+  <br/><br/>
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=mrnamazbek&theme=react-dark&hide_border=true&area=true&bg_color=0D1117&color=00F7F7&line=00F7F7&point=FFFFFF" width="95%"/>
 </div>
 
 <br/>
@@ -453,6 +448,22 @@ Extract  Stream  Orchestrate Load
 </picture>
 
 </div>
+
+<br/>
+
+<!-- Glowing Divider -->
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+
+## 🧩 Competitive Programming & Problem Solving
+
+<p align="center">
+  <a href="https://leetcode.com/Marbik/">
+    <img src="https://leetcard.jacoblin.cool/Marbik?theme=dark&font=Fira%20Code" alt="LeetCode" height="150" />
+  </a>
+  <a href="https://codeforces.com/profile/MrTHRASHER">
+    <img src="https://codeforces-readme-stats.vercel.app/api/card?username=MrTHRASHER&theme=dark" alt="Codeforces" height="150" />
+  </a>
+</p>
 
 <br/>
 
