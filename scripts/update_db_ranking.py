@@ -22,14 +22,21 @@ ICON_MAP = {
 
 
 def fetch_html(url: str) -> str:
+    import ssl
     req = Request(
         url,
         headers={
             "User-Agent": "Mozilla/5.0 (compatible; db-ranking-updater/1.0; +https://github.com/)"
         },
     )
-    with urlopen(req, timeout=30) as resp:
-        return resp.read().decode("utf-8", errors="replace")
+    context = ssl.create_default_context()
+    try:
+        with urlopen(req, timeout=30, context=context) as resp:
+            return resp.read().decode("utf-8", errors="replace")
+    except Exception:
+        insecure_context = ssl._create_unverified_context()
+        with urlopen(req, timeout=30, context=insecure_context) as resp:
+            return resp.read().decode("utf-8", errors="replace")
 
 
 def parse_top10(html: str):
