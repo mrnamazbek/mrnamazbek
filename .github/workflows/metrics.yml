@@ -19,8 +19,8 @@ concurrency:
 
 jobs:
   github-metrics:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Generate Engineering Metrics
         uses: lowlighter/metrics@latest
