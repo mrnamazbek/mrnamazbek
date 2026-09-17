@@ -36,7 +36,7 @@ jobs:
           base: header, activity, community, repositories, metadata
           base_indepth: yes
           config_timezone: Asia/Almaty
-          config_order: base.header, languages, habits, lines
+          config_order: base.header, languages, notable, followup
           
           # Languages
           plugin_languages: yes
@@ -44,22 +44,15 @@ jobs:
           plugin_languages_categories: markup, programming, data
           plugin_languages_colors: github
           plugin_languages_limit: 8
-          plugin_languages_recent_categories: markup, programming
-          plugin_languages_recent_days: 30
-          plugin_languages_recent_load: 400
           plugin_languages_sections: most-used
           plugin_languages_threshold: 0%
           plugin_languages_details: bytes-size, percentage
           
-          # Coding Habits
-          plugin_habits: yes
-          plugin_habits_from: 200
-          plugin_habits_days: 30
-          plugin_habits_facts: yes
-          plugin_habits_charts: yes
-          plugin_habits_trim: yes
+          # Notable contributions
+          plugin_notable: yes
+          plugin_notable_types: commit, pull_request
+          plugin_notable_from: all
           
-          # Lines of Code
-          plugin_lines: yes
-          plugin_lines_history_limit: 2
-          plugin_lines_repositories_limit: 4
+          # Issues and Pull Requests follow-up
+          plugin_followup: yes
+          plugin_followup_sections: user, repositories
