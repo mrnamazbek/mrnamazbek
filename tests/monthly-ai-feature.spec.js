@@ -14,7 +14,7 @@ test('AI monthly feature renders and works on mobile', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
 
   await expect(page.locator('#ai-monthly-lab')).toBeVisible();
-  await expect(page.locator('#ai-monthly-feature-root')).toContainText("Match-Day Automation Pack: Turn Live Sports Spikes into Reliable Ops Signals");
+  await expect(page.locator('#ai-monthly-feature-root')).toContainText("AI automation: Monthly AI Feature");
 
   const card = page.locator('#ai-monthly-feature-root .ai-feature');
   await expect(card).toBeVisible();

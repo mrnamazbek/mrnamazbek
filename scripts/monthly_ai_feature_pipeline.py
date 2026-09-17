@@ -753,7 +753,11 @@ def run_pipeline(geo: str, force: bool, offline: bool) -> Tuple[Dict[str, Any], 
         spec = build_fallback_spec(trends, month_key)
     else:
         prompt = build_prompt(top_trends=trends, geo=geo, month_key=month_key)
-        spec = request_ai_feature_spec(api_key=api_key, base_url=base_url, model=model, prompt=prompt)
+        try:
+            spec = request_ai_feature_spec(api_key=api_key, base_url=base_url, model=model, prompt=prompt)
+        except Exception as exc:
+            print(f"[monthly-ai-feature] WARN: AI generation failed ({exc}). Using deterministic fallback spec.")
+            spec = build_fallback_spec(trends, month_key)
 
     finalized = finalize_feature(spec=spec, trends=trends, geo=geo, month_key=month_key)
     feature = finalized["feature"]

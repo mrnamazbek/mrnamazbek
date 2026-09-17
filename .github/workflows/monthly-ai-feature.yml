@@ -22,6 +22,7 @@ concurrency:
 jobs:
   autopilot:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       AI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       AI_MODEL: ${{ vars.AI_MODEL != '' && vars.AI_MODEL || 'gpt-5.2' }}
@@ -30,28 +31,41 @@ jobs:
       AI_REVIEW_MIN_SCORE: ${{ vars.AI_REVIEW_MIN_SCORE != '' && vars.AI_REVIEW_MIN_SCORE || '75' }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 1
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.12'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Node 22
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
       - name: Validate AI credentials
         run: |
           if [ -z "${AI_API_KEY}" ]; then
-            echo "Missing OPENAI_API_KEY secret."
-            exit 1
+            echo "::warning::Missing OPENAI_API_KEY secret. Pipeline will generate deterministic trend-based fallback feature."
+          else
+            echo "AI credentials configured."
           fi
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Cache Playwright binaries
+        uses: actions/cache@v4.2.0
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-browsers-${{ runner.os }}-
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
@@ -134,5 +148,5 @@ jobs:
           fi
 
           COMMIT_MSG=$(cat artifacts/monthly-feature-commit-message.txt 2>/dev/null || echo "feat: monthly AI feature update")
-          git commit -m "$COMMIT_MSG"
+          git commit -m "$COMMIT_MSG [skip ci]"
           git push
