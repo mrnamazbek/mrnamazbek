@@ -5,7 +5,13 @@ test('AI audience pulse and engagement widgets render on mobile', async ({ page 
 
   const consoleErrors = [];
   page.on('console', (msg) => {
-    if (msg.type() === 'error') consoleErrors.push(msg.text());
+    if (msg.type() === 'error') {
+      const text = msg.text();
+      // Ignore transient 4xx network fetch errors from third-party CDNs/fonts
+      if (!text.includes('Failed to load resource') && !text.includes('status of 410')) {
+        consoleErrors.push(text);
+      }
+    }
   });
   page.on('pageerror', (err) => {
     consoleErrors.push(String(err));

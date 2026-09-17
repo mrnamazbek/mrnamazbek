@@ -16,30 +16,49 @@ concurrency:
 jobs:
   update-audience:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    timeout-minutes: 15
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.12'
 
       - name: Update weekly AI audience dataset
         run: python scripts/update_ai_audience_weekly.py
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Install JS dependencies
-        run: npm install
+      - name: Clean install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browser binaries
+        uses: actions/cache@v4.2.0
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright browser
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
 
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
       - name: Run audience and engagement smoke test
+        env:
+          CI: 'true'
         run: npx playwright test tests/ai-audience-engagement.spec.js
 
       - name: Commit and push dataset updates
@@ -51,5 +70,5 @@ jobs:
             echo "No dataset changes to commit"
             exit 0
           fi
-          git commit -m "chore: update weekly AI audience pulse dataset"
+          git commit -m "chore: update weekly AI audience pulse dataset [skip ci]"
           git push
