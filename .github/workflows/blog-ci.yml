@@ -228,7 +228,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright smoke tests
-        run: npx playwright test tests/responsive-smoke.spec.js
+        run: npx playwright test tests/responsive-smoke.spec.js tests/career-focus.spec.js
 
       - name: Upload Playwright report
         if: always()
