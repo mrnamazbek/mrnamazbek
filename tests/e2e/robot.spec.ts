@@ -1,10 +1,78 @@
-import { createHash } from "node:crypto";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // Headless CI has no physical GPU; explicitly enable Chromium's software renderer.
 test.use({ launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } });
 
-test("the actual robot loads locally, follows the pointer, and can be paused", async ({ page }) => {
+// Measure the rendered green body, excluding the animated face and dark backdrop.
+// A changed texture or one antialiased pixel cannot masquerade as cursor tracking.
+async function bodyCenter(page: Page, canvas: Locator) {
+  const screenshot = (await canvas.screenshot()).toString("base64");
+  return page.evaluate(async (png) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${png}`;
+    await image.decode();
+    const sample = document.createElement("canvas");
+    sample.width = image.width;
+    sample.height = image.height;
+    const context = sample.getContext("2d")!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(0, 0, sample.width, sample.height);
+    let count = 0;
+    let sum = 0;
+    for (let y = Math.floor(sample.height * 0.35); y < sample.height * 0.9; y++) {
+      for (let x = 0; x < sample.width; x++) {
+        const index = (y * sample.width + x) * 4;
+        const red = data[index];
+        const green = data[index + 1];
+        const blue = data[index + 2];
+        if (green > 70 && green > red * 1.45 && green > blue * 1.25) {
+          count++;
+          sum += x;
+        }
+      }
+    }
+    if (count < 400) throw new Error("The rendered robot body is missing");
+    return sum / count / sample.width;
+  }, screenshot);
+}
+
+for (const width of [1440, 2560]) {
+  test(`cursor tracking moves the robot geometry at ${width}px and returns to the same pose`, async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "Pause robot animation" })).toBeVisible({ timeout: 45_000 });
+    // Isolate model motion from the separate decorative card tilt.
+    await page.locator(".data-sculpture").evaluate(stage => {
+      const depth = stage.parentElement!.parentElement!;
+      depth.style.setProperty("transform", "none", "important");
+      depth.style.setProperty("transition", "none", "important");
+    });
+    const canvas = page.locator(".data-sculpture canvas");
+    await expect(canvas).toHaveCSS("opacity", "1");
+    const bounds = (await canvas.boundingBox())!;
+    const left = { x: bounds.x + bounds.width * 0.1, y: bounds.y + bounds.height * 0.5 };
+    const right = { x: bounds.x + bounds.width * 0.9, y: left.y };
+    await page.mouse.move(left.x, left.y);
+    // Wait for the spring to settle, then compare substantial silhouette movement.
+    await expect(async () => {
+      const first = await bodyCenter(page, canvas);
+      expect(Math.abs(await bodyCenter(page, canvas) - first)).toBeLessThan(0.002);
+    }).toPass();
+    const leftCenter = await bodyCenter(page, canvas);
+    await page.mouse.move(right.x, right.y);
+    await expect.poll(async () => Math.abs(await bodyCenter(page, canvas) - leftCenter)).toBeGreaterThan(0.008);
+    await page.mouse.move(left.x, left.y);
+    await expect.poll(async () => Math.abs(await bodyCenter(page, canvas) - leftCenter)).toBeLessThan(0.003);
+    await page.getByRole("button", { name: "Pause robot animation" }).click();
+    const pausedCenter = await bodyCenter(page, canvas);
+    await page.mouse.move(right.x, right.y);
+    expect(Math.abs(await bodyCenter(page, canvas) - pausedCenter)).toBeLessThan(0.002);
+  });
+}
+
+test("the actual robot loads locally, supports playback controls, and respects motion preferences", async ({ page }) => {
   test.setTimeout(90_000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -20,17 +88,8 @@ test("the actual robot loads locally, follows the pointer, and can be paused", a
   expect(Number(await canvas.getAttribute("width"))).toBeGreaterThan(200);
   expect(sceneRequests.some(url => url.endsWith("ddcnb-robot.splinecode"))).toBe(true);
   expect(sceneRequests.every(url => new URL(url).hostname === "127.0.0.1")).toBe(true);
-  const digest = async () => createHash("sha256").update(await canvas.screenshot()).digest("hex");
-  await page.mouse.move(20, 180);
-  let previous = await digest();
-  await page.mouse.move(650, 700);
-  await expect.poll(digest, { timeout: 10_000 }).not.toBe(previous);
   await pause.click();
   await expect(page.getByRole("button", { name: "Resume robot animation" })).toHaveAttribute("aria-pressed", "true");
-  await page.mouse.move(20, 180);
-  previous = await digest();
-  await page.mouse.move(650, 700);
-  expect(await digest()).toBe(previous);
   await page.setViewportSize({ width: 1200, height: 900 });
   await expect(canvas).toBeVisible();
   await page.getByRole("button", { name: "Resume robot animation" }).click();

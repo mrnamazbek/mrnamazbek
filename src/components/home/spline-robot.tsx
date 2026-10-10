@@ -8,7 +8,7 @@ import styles from "./spline-robot.module.css";
 
 const SCENE = "/assets/3d/ddcnb-robot.splinecode";
 
-/** The actual exported DDCNB scene, rendered locally with bounded head motion.
+/** The actual exported DDCNB scene, rendered locally with bounded cursor tracking.
  * Manual rendering avoids the export's obsolete timeline and unrelated events.
  */
 export function SplineRobot() {
@@ -77,24 +77,33 @@ export function SplineRobot() {
         if (light) { light.position.x = -250; light.position.z = 550; light.intensity = 40; }
         scene.findObjectByName("logo_ddc")?.hide();
         const head = scene.findObjectByName("Head");
-        const base = head ? { x: head.rotation.x, y: head.rotation.y } : null;
+        const headBase = head ? { x: head.rotation.x, y: head.rotation.y } : null;
+        const robotBase = robot ? { x: robot.rotation.x, y: robot.rotation.y, z: robot.rotation.z } : null;
         const target = { x: 0, y: 0 };
         const current = { x: 0, y: 0 };
         const draw = () => {
           frame = 0;
-          if (!canMove() || !head || !base) return;
-          current.x += (target.x - current.x) * 0.12;
-          current.y += (target.y - current.y) * 0.12;
-          head.rotation.x = base.x + current.x;
-          head.rotation.y = base.y + current.y;
+          if (!canMove() || (!head && !robot)) return;
+          current.x += (target.x - current.x) * 0.14;
+          current.y += (target.y - current.y) * 0.14;
+          if (head && headBase) {
+            head.rotation.x = headBase.x + current.y * 0.28;
+            head.rotation.y = headBase.y + current.x * 0.62;
+          }
+          if (robot && robotBase) {
+            robot.rotation.x = robotBase.x + current.y * 0.035;
+            robot.rotation.y = robotBase.y + current.x * 0.28;
+            robot.rotation.z = robotBase.z - current.x * 0.045;
+          }
           scene.requestRender();
           if (Math.abs(target.x - current.x) + Math.abs(target.y - current.y) > 0.0005) frame = requestAnimationFrame(draw);
         };
         const wake = () => { if (!frame && canMove()) frame = requestAnimationFrame(draw); };
         const onPointer = (event: PointerEvent) => {
           if (event.pointerType !== "mouse" || !canMove()) return;
-          target.y = Math.max(-0.38, Math.min(0.38, (event.clientX / window.innerWidth - 0.5) * 0.7));
-          target.x = Math.max(-0.14, Math.min(0.14, (event.clientY / window.innerHeight - 0.5) * 0.24));
+          const rect = stage!.getBoundingClientRect();
+          target.x = Math.max(-1, Math.min(1, (event.clientX - rect.left - rect.width / 2) / (rect.width * 0.65)));
+          target.y = Math.max(-1, Math.min(1, (event.clientY - rect.top - rect.height / 2) / (rect.height * 0.65)));
           wake();
         };
         const reset = () => { target.x = 0; target.y = 0; wake(); };

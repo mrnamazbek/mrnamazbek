@@ -17,3 +17,9 @@
 @media (max-width: 1000px) { .controls { bottom: 55px; } .credit { bottom: 26px; } }
 @media (max-width: 650px) { .controls { bottom: 32px; font-size: 7px; } .credit { bottom: -4px; font-size: 7px; } }
 @media (prefers-reduced-motion: reduce) { .canvas, .poster { transition: none; } }
+/* Reflect capability changes immediately, even before React handles the media event. */
+@media (prefers-reduced-motion: reduce), (max-width: 767px), (pointer: coarse) {
+  .ready .canvas { opacity: 0; }
+  .ready .stage .poster { opacity: 1; }
+  .controls button { display: none; }
+}
