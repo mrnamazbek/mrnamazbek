@@ -1,10 +1,117 @@
-import { createHash } from "node:crypto";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // Headless CI has no physical GPU; explicitly enable Chromium's software renderer.
 test.use({ launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } });
 
-test("the actual robot loads locally, follows the pointer, and can be paused", async ({ page }) => {
+// Measure the rendered green body, excluding the animated face and dark backdrop.
+// A changed texture or one antialiased pixel cannot masquerade as cursor tracking.
+async function bodySilhouette(page: Page, canvas: Locator) {
+  const screenshot = (await canvas.screenshot()).toString("base64");
+  return page.evaluate(async (png) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${png}`;
+    await image.decode();
+    const sample = document.createElement("canvas");
+    sample.width = image.width;
+    sample.height = image.height;
+    const context = sample.getContext("2d")!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(0, 0, sample.width, sample.height);
+    const pixels: number[] = [];
+    for (let y = Math.floor(sample.height * 0.35); y < sample.height * 0.9; y++) {
+      for (let x = 0; x < sample.width; x++) {
+        const index = (y * sample.width + x) * 4;
+        const red = data[index];
+        const green = data[index + 1];
+        const blue = data[index + 2];
+        if (green > 70 && green > red * 1.45 && green > blue * 1.25) {
+          pixels.push(y * sample.width + x);
+        }
+      }
+    }
+    if (pixels.length < 400) throw new Error("The rendered robot body is missing");
+    return pixels;
+  }, screenshot);
+}
+
+function silhouetteChange(first: number[], second: number[]) {
+  const original = new Set(first);
+  const overlap = second.filter(pixel => original.has(pixel)).length;
+  const union = first.length + second.length - overlap;
+  return (union - overlap) / union;
+}
+
+async function settleMotion(page: Page) {
+  // Let browser animation frames advance; screenshots can repeat an old GPU frame.
+  await page.evaluate(() => new Promise<void>(resolve => {
+    let frames = 60;
+    const next = () => {
+      if (--frames) requestAnimationFrame(next);
+      else resolve();
+    };
+    requestAnimationFrame(next);
+  }));
+}
+
+for (const width of [1440, 2560]) {
+  test(`cursor tracking moves the robot geometry at ${width}px and returns to the same pose`, async ({ page }) => {
+    // Software GPU captures can each take several seconds on shared CI machines.
+    test.setTimeout(180_000);
+    await page.setViewportSize({ width, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "Pause robot animation" })).toBeVisible({ timeout: 45_000 });
+    // Isolate model motion from the separate decorative card tilt.
+    await page.locator(".data-sculpture").evaluate(stage => {
+      const depth = stage.parentElement!.parentElement!;
+      depth.style.setProperty("transform", "none", "important");
+      depth.style.setProperty("transition", "none", "important");
+    });
+    const canvas = page.locator(".data-sculpture canvas");
+    await expect(canvas).toHaveCSS("opacity", "1");
+    const bounds = (await canvas.boundingBox())!;
+    const left = { x: bounds.x + bounds.width * 0.1, y: bounds.y + bounds.height * 0.5 };
+    const right = { x: bounds.x + bounds.width * 0.9, y: left.y };
+    let neutralBody: number[] = [];
+    // The runtime can be ready before its first shader-heavy frame is composited.
+    await expect(async () => {
+      const first = await bodySilhouette(page, canvas);
+      neutralBody = await bodySilhouette(page, canvas);
+      expect(silhouetteChange(first, neutralBody)).toBeLessThan(0.001);
+    }).toPass({ timeout: 45_000 });
+    await page.mouse.move(left.x, left.y);
+    await settleMotion(page);
+    // A stable initial frame is not proof that the first pointer event has rendered.
+    await expect.poll(async () => silhouetteChange(neutralBody, await bodySilhouette(page, canvas)), { timeout: 30_000 }).toBeGreaterThan(0.05);
+    // Wait for the spring to settle, then compare substantial silhouette movement.
+    await expect(async () => {
+      const first = await bodySilhouette(page, canvas);
+      const second = await bodySilhouette(page, canvas);
+      expect(silhouetteChange(first, second)).toBeLessThan(0.001);
+    }).toPass({ timeout: 30_000 });
+    const leftBody = await bodySilhouette(page, canvas);
+    await page.mouse.move(right.x, right.y);
+    await settleMotion(page);
+    // Opposite turns can keep a nearly symmetric body's centroid close together.
+    // Require a substantial silhouette change instead of a renderer-specific offset.
+    let turnChange = 0;
+    await expect.poll(async () => {
+      turnChange = silhouetteChange(leftBody, await bodySilhouette(page, canvas));
+      return turnChange;
+    }, { timeout: 30_000 }).toBeGreaterThan(0.05);
+    await page.mouse.move(left.x, left.y);
+    await settleMotion(page);
+    // Temporal antialiasing can slightly change the edge pixels after a turn.
+    // The restored pose must still match closely and undo at least 75% of the change.
+    await expect.poll(async () => silhouetteChange(leftBody, await bodySilhouette(page, canvas)), { timeout: 30_000 }).toBeLessThan(Math.min(0.02, turnChange * 0.25));
+    await page.getByRole("button", { name: "Pause robot animation" }).click();
+    const pausedBody = await bodySilhouette(page, canvas);
+    await page.mouse.move(right.x, right.y);
+    expect(silhouetteChange(pausedBody, await bodySilhouette(page, canvas))).toBeLessThan(0.01);
+  });
+}
+
+test("the actual robot loads locally, supports playback controls, and respects motion preferences", async ({ page }) => {
   test.setTimeout(90_000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -20,17 +127,8 @@ test("the actual robot loads locally, follows the pointer, and can be paused", a
   expect(Number(await canvas.getAttribute("width"))).toBeGreaterThan(200);
   expect(sceneRequests.some(url => url.endsWith("ddcnb-robot.splinecode"))).toBe(true);
   expect(sceneRequests.every(url => new URL(url).hostname === "127.0.0.1")).toBe(true);
-  const digest = async () => createHash("sha256").update(await canvas.screenshot()).digest("hex");
-  await page.mouse.move(20, 180);
-  let previous = await digest();
-  await page.mouse.move(650, 700);
-  await expect.poll(digest, { timeout: 10_000 }).not.toBe(previous);
   await pause.click();
   await expect(page.getByRole("button", { name: "Resume robot animation" })).toHaveAttribute("aria-pressed", "true");
-  await page.mouse.move(20, 180);
-  previous = await digest();
-  await page.mouse.move(650, 700);
-  expect(await digest()).toBe(previous);
   await page.setViewportSize({ width: 1200, height: 900 });
   await expect(canvas).toBeVisible();
   await page.getByRole("button", { name: "Resume robot animation" }).click();

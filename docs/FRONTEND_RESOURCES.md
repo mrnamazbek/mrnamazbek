@@ -63,9 +63,13 @@ The later robot enhancement reuses the owner's actual
 export from DDCNB. `assets/3d/ddcnb-robot.splinecode` has the same Git blob hash
 `4d5b65151cb6acc1418271ec9f1ce78fee80b6b5` as that source; it is not a replacement model.
 The portfolio changes its framing and lighting at runtime, hides the separate DDC
-brand object, and uses the supported head transform API for restrained pointer
-tracking. Manual rendering disables the export's unrelated events and obsolete
-timeline, without overriding the browser console or removing Spline attribution.
+brand object, and uses the supported head and body transforms for pointer
+tracking. Coordinates are relative to the robot's stage, so movement remains
+visible on wide screens: the head turns toward the cursor while the body turns
+and leans gently. Exported interaction is disabled to bypass unrelated events and
+the obsolete timeline. Automatic rendering finishes pending GPU and antialiasing
+frames, then idles; pause and visibility controls still stop playback. Spline
+attribution remains visible.
 
 `@splinetool/runtime` is pinned at `2.0.75`. It and the 1.3 MB scene load only after
 the visible desktop hero can run WebGL and motion. Geometry WASM decoders are
