@@ -71,11 +71,20 @@ export function SocialProfileLink({
     }
   };
 
+  const focusPreview = useCallback(() => {
+    dismissed.current = false;
+    // Settle the focused link's native scroll before positioning a preview.
+    // An unfinished smooth focus scroll can otherwise move the next hovered
+    // social link away from the pointer during its opening delay.
+    anchor.current?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+    show();
+  }, [show]);
+
   useEffect(() => {
     // A visitor can tab to the server-rendered link before hydration attaches events.
-    if (document.activeElement === anchor.current) show();
+    if (document.activeElement === anchor.current) focusPreview();
     return clearTimer;
-  }, [clearTimer, show]);
+  }, [clearTimer, focusPreview]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -180,10 +189,7 @@ export function SocialProfileLink({
           touchStart.current = event.pointerType === "touch" ? open : null;
         }}
         onPointerCancel={() => { touchStart.current = null; }}
-        onFocus={() => {
-          dismissed.current = false;
-          show();
-        }}
+        onFocus={focusPreview}
         onBlur={() => {
           dismissed.current = false;
           close();

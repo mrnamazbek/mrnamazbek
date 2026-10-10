@@ -48,15 +48,26 @@ test("keyboard focus previews a profile without trapping focus or breaking Enter
   await destination.close();
 });
 
-test("moving between focused and hovered profiles shows only one preview", async ({ page }) => {
-  await page.goto("/contact");
-  const links = page.getByRole("main");
-  await links.getByRole("link", { name: "LinkedIn", exact: true }).focus();
-  await expect(page.getByRole("tooltip", { name: "LinkedIn profile preview" })).toBeVisible();
-  await links.getByRole("link", { name: "GitHub", exact: true }).hover();
-  await expect(page.getByRole("tooltip", { name: "GitHub profile preview" })).toBeVisible();
-  await expect(page.getByRole("tooltip")).toHaveCount(1);
-});
+for (const reducedMotion of ["reduce", "no-preference"] as const) {
+  test(`moving between focused and hovered profiles shows only one preview (${reducedMotion})`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto("/contact");
+    const links = page.getByRole("main");
+    const focused = links.getByRole("link", { name: "LinkedIn", exact: true });
+    await focused.focus();
+    await expect(page.getByRole("tooltip", { name: "LinkedIn profile preview" })).toBeVisible();
+    await links.getByRole("link", { name: "GitHub", exact: true }).hover();
+    const preview = page.getByRole("tooltip", { name: "GitHub profile preview" });
+    await expect(preview).toBeVisible();
+    // An unfinished focus scroll previously moved the hovered link out from
+    // under the pointer and closed its preview after the opening delay.
+    await page.waitForTimeout(250);
+    await expect(preview).toBeVisible();
+    await expect(page.getByRole("tooltip")).toHaveCount(1);
+    await expect(focused).toBeFocused();
+  });
+}
 
 test("touch previews fit a narrow viewport, dismiss outside, and open on a second tap", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, viewport: { width: 320, height: 700 }, hasTouch: true, isMobile: true, reducedMotion: "reduce" });

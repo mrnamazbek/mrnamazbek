@@ -23,7 +23,9 @@ export function SplineRobot() {
     const stage = stageRef.current;
     const canvas = canvasRef.current;
     if (!stage || !canvas) return;
-    const capable = window.matchMedia("(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+    const desktop = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const capable = () => desktop.matches && !motion.matches;
     let disposed = false;
     let loaded = false;
     let inView = false;
@@ -31,7 +33,7 @@ export function SplineRobot() {
     let idle = 0;
     let cleanupScene: (() => void) | undefined;
     let app: Application | null = null;
-    const canMove = () => inView && !document.hidden && capable.matches && !pausedRef.current;
+    const canMove = () => inView && !document.hidden && capable() && !pausedRef.current;
     const disposeApp = () => {
       const instance = app;
       app = null;
@@ -40,7 +42,7 @@ export function SplineRobot() {
     const controller = new AbortController();
 
     async function load() {
-      if (loaded || disposed || !inView || document.hidden || !capable.matches) return;
+      if (loaded || disposed || !inView || document.hidden || !capable()) return;
       loaded = true;
       const probe = document.createElement("canvas");
       const context = probe.getContext("webgl2");
@@ -124,7 +126,7 @@ export function SplineRobot() {
         playbackRef.current = visibilityChange;
         window.addEventListener("pointermove", onPointer, { passive: true });
         document.documentElement.addEventListener("pointerleave", reset);
-        setReady(capable.matches);
+        setReady(capable());
         visibilityChange();
         cleanupScene = () => {
           resizeObserver.disconnect();
@@ -138,13 +140,13 @@ export function SplineRobot() {
       }
     }
     const scheduleLoad = () => {
-      if (loaded || disposed || !inView || document.hidden || !capable.matches) return;
+      if (loaded || disposed || !inView || document.hidden || !capable()) return;
       if (idle) window.cancelIdleCallback(idle);
       if ("requestIdleCallback" in window) idle = window.requestIdleCallback(() => void load(), { timeout: 1800 });
       else void load();
     };
     const mediaChange = () => {
-      setReady(Boolean(playbackRef.current) && capable.matches);
+      setReady(Boolean(playbackRef.current) && capable());
       playbackRef.current?.();
       scheduleLoad();
     };
@@ -154,7 +156,8 @@ export function SplineRobot() {
       playbackRef.current?.();
       scheduleLoad();
     }, { threshold: 0.1 });
-    capable.addEventListener("change", mediaChange);
+    desktop.addEventListener("change", mediaChange);
+    motion.addEventListener("change", mediaChange);
     document.addEventListener("visibilitychange", visibilityChange);
     observer.observe(stage);
     return () => {
@@ -164,7 +167,8 @@ export function SplineRobot() {
       if (idle) window.cancelIdleCallback(idle);
       cancelAnimationFrame(frame);
       cleanupScene?.();
-      capable.removeEventListener("change", mediaChange);
+      desktop.removeEventListener("change", mediaChange);
+      motion.removeEventListener("change", mediaChange);
       document.removeEventListener("visibilitychange", visibilityChange);
       disposeApp();
       playbackRef.current = null;
