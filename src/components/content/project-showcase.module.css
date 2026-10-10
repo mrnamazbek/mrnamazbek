@@ -1,0 +1,368 @@
+.showcase {
+  margin-block: 10px 88px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.heading h2 {
+  margin-top: 12px;
+  font-size: clamp(26px, 3.3vw, 42px);
+  line-height: 1.14;
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+
+.indexLink {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.explorer {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.index {
+  min-width: 0;
+  padding: 32px;
+}
+
+.instruction {
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.tabs {
+  border-top: 1px solid var(--line);
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 10px 28px 0;
+  min-height: 106px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  text-align: left;
+  transition: color 200ms ease, padding 300ms var(--ease);
+}
+
+.tab::before {
+  content: "";
+  position: absolute;
+  width: 3px;
+  inset: 22px auto 22px -16px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 300ms var(--ease);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--foreground);
+  padding-left: 8px;
+}
+
+.tab[aria-selected="true"]::before {
+  transform: scaleY(1);
+}
+
+.tab:focus-visible {
+  outline-offset: -3px;
+}
+
+.number {
+  color: var(--muted);
+  align-self: start;
+  margin-top: 6px;
+}
+
+.tabText {
+  flex: 1;
+  min-width: 0;
+}
+
+.tabTitle {
+  display: block;
+  font-size: clamp(19px, 2vw, 27px);
+  line-height: 1.16;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.tabLanguage {
+  display: block;
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.tabArrow {
+  color: var(--accent);
+  opacity: 0;
+  transform: translate(-5px, 5px);
+  transition: opacity 200ms ease, transform 300ms var(--ease);
+}
+
+.tab[aria-selected="true"] .tabArrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.preview {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+}
+
+.preview:focus-visible {
+  outline-offset: -4px;
+}
+
+.blueprint {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 50% 45%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%),
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: auto, 24px 24px, 24px 24px;
+}
+
+.blueprintHeader,
+.blueprintFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px 24px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1.6;
+  letter-spacing: 0.025em;
+  overflow-wrap: anywhere;
+}
+
+.blueprintFooter span:last-child {
+  flex-shrink: 0;
+}
+
+.blueprintDrawing {
+  position: relative;
+  flex: 1;
+  min-height: 200px;
+  isolation: isolate;
+  animation: drawing-enter 650ms var(--ease) both;
+}
+
+.tile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 130px;
+  height: 116px;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-raised) 96%, transparent);
+  transform: translate(-50%, -50%) rotate(-25deg) skew(8deg, 8deg);
+}
+
+.tile svg {
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+}
+
+.tileBack {
+  z-index: 1;
+  margin-left: -54px;
+  margin-top: -35px;
+  opacity: 0.6;
+}
+
+.tileMiddle {
+  z-index: 2;
+  margin-left: 0;
+  margin-top: 0;
+  opacity: 0.85;
+}
+
+.tileFront {
+  z-index: 3;
+  margin-left: 54px;
+  margin-top: 35px;
+}
+
+.blueprint[data-variant="1"] .tile {
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(20deg) skew(-5deg, -5deg);
+}
+
+.blueprint[data-variant="2"] .tile {
+  border-radius: 4px;
+  transform: translate(-50%, -50%) rotate(35deg) skew(-12deg, -12deg);
+}
+
+.blueprint[data-variant="3"] .tile {
+  border-radius: 24px 4px 24px 4px;
+  transform: translate(-50%, -50%) rotate(-12deg) skew(12deg, 12deg);
+}
+
+.orbit {
+  position: absolute;
+  width: 300px;
+  height: 170px;
+  left: 50%;
+  top: 50%;
+  border: 1px dashed var(--muted);
+  border-radius: 50%;
+  opacity: 0.3;
+  transform: translate(-50%, -50%) rotate(-28deg);
+}
+
+.axisX,
+.axisY {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  height: 1px;
+  background: var(--line);
+  transform: translate(-50%, -50%) rotate(-30deg);
+}
+
+.axisY {
+  transform: translate(-50%, -50%) rotate(30deg);
+}
+
+.point {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.pointOne {
+  left: 17%;
+  top: 24%;
+}
+
+.pointTwo {
+  right: 17%;
+  bottom: 24%;
+}
+
+.details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 28px 32px;
+  animation: details-enter 450ms var(--ease) both;
+}
+
+.details h3 {
+  margin-bottom: 14px;
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  max-width: 54ch;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.topics span {
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  padding-top: 24px;
+  margin-top: auto;
+}
+
+@keyframes drawing-enter {
+  from { opacity: 0.2; transform: scale(0.87) rotate(-6deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes details-enter {
+  from { opacity: 0.2; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .index { padding: 24px; }
+  .tab { gap: 12px; padding-block: 24px; }
+  .details { padding: 24px; }
+  .blueprintHeader, .blueprintFooter { padding-inline: 20px; }
+}
+
+@media (max-width: 650px) {
+  .showcase { margin-bottom: 60px; }
+  .heading { align-items: start; flex-direction: column; gap: 14px; }
+  .explorer { grid-template-columns: 1fr; }
+  .index { padding: 20px; }
+  .instruction { margin-bottom: 16px; }
+  .tab { padding-block: 18px; min-height: 84px; }
+  .tab::before { left: -12px; inset-block: 16px; }
+  .preview { border-left: 0; border-top: 1px solid var(--line); }
+  .blueprint { min-height: 290px; }
+  .blueprintHeader, .blueprintFooter { padding-inline: 16px; font-size: 8px; }
+  .details { padding: 24px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab, .tab::before, .tabArrow { transition: none; }
+  .blueprintDrawing, .details { animation: none; }
+}

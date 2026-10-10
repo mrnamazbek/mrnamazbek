@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/contact-form";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
 import { socialPlatforms } from "@/content/social-profiles";
 import { AmbientBackdrop } from "@/components/ui/scroll-story";
+import { MagneticLink } from "@/components/ui/magnetic-link";
 
 export const revalidate = 300;
 
@@ -31,10 +32,10 @@ export default async function ContactPage() {
       <section className="contact-layout">
         <AmbientBackdrop className="contact-info">
           <p className="eyebrow">DIRECT LINE</p>
-          <a className="contact-email" href={`mailto:${profile.email}`}>
-            {profile.email}
+          <MagneticLink className="contact-email" href={`mailto:${profile.email}`}>
+            <span>{profile.email}</span>
             <ArrowUpRight size={21} />
-          </a>
+          </MagneticLink>
           <p>
             {profile.location}
             <br />

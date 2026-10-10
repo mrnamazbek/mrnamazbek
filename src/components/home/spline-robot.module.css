@@ -1,0 +1,19 @@
+.companion { position: relative; isolation: isolate; }
+.stage { overflow: hidden; }
+.canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; pointer-events: none; filter: brightness(1.3); transition: opacity 450ms ease; }
+.ready .canvas { opacity: 1; }
+.poster { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity 350ms ease; }
+.poster img { grid-area: 1 / 1; width: auto; height: 87%; object-fit: contain; }
+.lightPoster { visibility: hidden; }
+:global(html[data-theme="light"]) .lightPoster { visibility: visible; }
+:global(html[data-theme="light"]) .darkPoster { visibility: hidden; }
+.orbit { position: absolute; inset: 24% 12% 19%; z-index: -1; border: 1px solid var(--line); border-radius: 50%; transform: rotate(-24deg); opacity: .6; }
+.orbit::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); left: 16%; top: 10%; }
+.controls { position: absolute; bottom: 88px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 8px; color: var(--muted); }
+.controls button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); cursor: pointer; font-size: 9px; }
+.controls button:hover, .controls button:focus-visible { border-color: var(--accent); color: var(--foreground); }
+.credit { position: absolute; right: 0; bottom: 52px; color: var(--muted); font-size: 8px; text-underline-offset: 3px; }
+.credit:hover, .credit:focus-visible { color: var(--accent); text-decoration: underline; }
+@media (max-width: 1000px) { .controls { bottom: 55px; } .credit { bottom: 26px; } }
+@media (max-width: 650px) { .controls { bottom: 32px; font-size: 7px; } .credit { bottom: -4px; font-size: 7px; } }
+@media (prefers-reduced-motion: reduce) { .canvas, .poster { transition: none; } }

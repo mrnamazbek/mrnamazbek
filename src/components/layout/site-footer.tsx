@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
+import { BackToTopLink } from "@/components/ui/magnetic-link";
 
 export function SiteFooter() {
   return (
@@ -24,7 +25,7 @@ export function SiteFooter() {
       <div className="footer-bottom">
         <span>© {new Date().getUTCFullYear()} Namazbek Bekzhanov</span>
         <span>Made with intent. Built to evolve.</span>
-        <a href="#top">Back to top ↑</a>
+        <BackToTopLink />
       </div>
     </footer>
   );

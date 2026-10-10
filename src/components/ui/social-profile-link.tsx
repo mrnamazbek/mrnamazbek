@@ -51,13 +51,17 @@ export function SocialProfileLink({
     setPosition(null);
   }, [clearTimer]);
 
+  const claimPreview = useCallback(() => {
+    document.dispatchEvent(new CustomEvent(PREVIEW_EVENT, { detail: id }));
+  }, [id]);
+
   const show = useCallback(() => {
     clearTimer();
     if (!dismissed.current) {
-      document.dispatchEvent(new CustomEvent(PREVIEW_EVENT, { detail: id }));
+      claimPreview();
       setOpen(true);
     }
-  }, [clearTimer, id]);
+  }, [clearTimer, claimPreview]);
 
   const leave = () => {
     clearTimer();
@@ -67,11 +71,20 @@ export function SocialProfileLink({
     }
   };
 
+  const focusPreview = useCallback(() => {
+    dismissed.current = false;
+    // Settle the focused link's native scroll before positioning a preview.
+    // An unfinished smooth focus scroll can otherwise move the next hovered
+    // social link away from the pointer during its opening delay.
+    anchor.current?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+    show();
+  }, [show]);
+
   useEffect(() => {
     // A visitor can tab to the server-rendered link before hydration attaches events.
-    if (document.activeElement === anchor.current) show();
+    if (document.activeElement === anchor.current) focusPreview();
     return clearTimer;
-  }, [clearTimer, show]);
+  }, [clearTimer, focusPreview]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -85,14 +98,44 @@ export function SocialProfileLink({
         return;
       }
       const preview = card.current.getBoundingClientRect();
+      const clampTop = (top: number) => Math.max(EDGE, Math.min(top, window.innerHeight - preview.height - EDGE));
+      const clampLeft = (left: number) => Math.max(EDGE, Math.min(left, window.innerWidth - preview.width - EDGE));
       const below = trigger.bottom + GAP;
       const above = trigger.top - preview.height - GAP;
       const preferred = below + preview.height <= window.innerHeight - EDGE ? below : above;
-      const top = Math.max(EDGE, Math.min(preferred, window.innerHeight - preview.height - EDGE));
-      const left = Math.max(EDGE, Math.min(
-        trigger.left + trigger.width / 2 - preview.width / 2,
-        window.innerWidth - preview.width - EDGE,
-      ));
+      const centeredLeft = clampLeft(trigger.left + trigger.width / 2 - preview.width / 2);
+      const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("a[data-social-profile]"))
+        .map((link) => link.getBoundingClientRect())
+        .filter((bounds) => bounds.width > 0 && bounds.height > 0 && bounds.bottom > 0 && bounds.top < window.innerHeight);
+      const candidates = [
+        { top: clampTop(preferred), left: centeredLeft },
+        { top: clampTop(preferred === below ? above : below), left: centeredLeft },
+      ];
+      const centeredTop = clampTop(trigger.top + trigger.height / 2 - preview.height / 2);
+      if (trigger.right + GAP + preview.width <= window.innerWidth - EDGE) {
+        candidates.push({ top: centeredTop, left: trigger.right + GAP });
+      }
+      if (trigger.left - GAP - preview.width >= EDGE) {
+        candidates.push({ top: centeredTop, left: trigger.left - GAP - preview.width });
+      }
+      // A preview must not cover another social trigger. On wider screens it
+      // can sit beside a vertical list; on narrow screens use the whole list
+      // as an obstacle rather than covering its neighboring links.
+      const group = Array.from(anchor.current.parentElement?.querySelectorAll<HTMLAnchorElement>("a[data-social-profile]") ?? [])
+        .map((link) => link.getBoundingClientRect());
+      if (group.length > 1) {
+        candidates.push(
+          { top: clampTop(Math.min(...group.map((bounds) => bounds.top)) - preview.height - GAP), left: centeredLeft },
+          { top: clampTop(Math.max(...group.map((bounds) => bounds.bottom)) + GAP), left: centeredLeft },
+        );
+      }
+      const overlapArea = (candidate: { top: number; left: number }) => links.reduce((area, bounds) => {
+        const width = Math.max(0, Math.min(candidate.left + preview.width, bounds.right) - Math.max(candidate.left, bounds.left));
+        const height = Math.max(0, Math.min(candidate.top + preview.height, bounds.bottom) - Math.max(candidate.top, bounds.top));
+        return area + width * height;
+      }, 0);
+      const best = candidates.reduce((current, candidate) => overlapArea(candidate) < overlapArea(current) ? candidate : current);
+      const { top, left } = best;
       setPosition((previous) => previous?.top === top && previous?.left === left
         ? previous : { top, left });
     };
@@ -165,6 +208,10 @@ export function SocialProfileLink({
           dismissed.current = false;
           setTouchPreview(false);
           clearTimer();
+          // Close an older focused preview before waiting to reveal this one.
+          // Otherwise a scroll can move that card over the newly hovered link,
+          // firing pointerleave and cancelling this link's opening timer.
+          claimPreview();
           timer.current = setTimeout(show, 140);
         }}
         onPointerLeave={leave}
@@ -172,10 +219,7 @@ export function SocialProfileLink({
           touchStart.current = event.pointerType === "touch" ? open : null;
         }}
         onPointerCancel={() => { touchStart.current = null; }}
-        onFocus={() => {
-          dismissed.current = false;
-          show();
-        }}
+        onFocus={focusPreview}
         onBlur={() => {
           dismissed.current = false;
           close();

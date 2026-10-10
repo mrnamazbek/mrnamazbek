@@ -1,0 +1,337 @@
+.capabilities {
+  --panel-wash: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 26px;
+}
+
+.topline p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.inventory {
+  font-family: var(--font-mono);
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
+}
+
+.panel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  transition: border-color 220ms, background-color 220ms;
+}
+
+.panel::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 10% 0%, var(--panel-wash), transparent 70%);
+  transition: opacity 220ms;
+}
+
+.panel::after {
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 1px;
+  width: 45%;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.panel:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+}
+
+.panel:focus-within::before {
+  opacity: 1;
+}
+
+.panel:focus-within::after {
+  animation: border-pass 700ms var(--ease) both;
+}
+
+.panel:focus-within .track::after {
+  animation: signal-pass 700ms var(--ease) both;
+}
+
+.summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-height: 103px;
+  padding: 23px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -5px;
+  border-radius: 12px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
+  border-radius: 10px;
+  color: var(--accent);
+  background: var(--panel-wash);
+  transition: transform 350ms var(--ease), border-color 220ms;
+}
+
+.heading {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.index {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.chevron {
+  flex: 0 0 18px;
+  color: var(--muted);
+  transition: transform 250ms var(--ease);
+}
+
+.panel[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.body {
+  position: relative;
+  padding: 0 23px 23px;
+}
+
+.panel[open] .body {
+  animation: tool-reveal 300ms var(--ease) both;
+}
+
+.circuit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 14px 0 20px;
+  border-bottom: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+
+.track {
+  position: absolute;
+  top: 27px;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: var(--line);
+}
+
+.track::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+}
+
+.node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 36%;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  transition: border-color 250ms;
+}
+
+.nodeDot {
+  flex: 0 0 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tools li {
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .panel:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  }
+
+  .panel:hover::before {
+    opacity: 1;
+  }
+
+  .panel:hover::after {
+    animation: border-pass 700ms var(--ease) both;
+  }
+
+  .panel:hover .icon {
+    transform: translateY(-2px) rotate(-3deg);
+    border-color: var(--accent);
+  }
+
+  .panel:hover .track::after {
+    animation: signal-pass 700ms var(--ease) both;
+  }
+
+  .panel:hover .node {
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  }
+}
+
+@media (min-width: 901px) {
+  .panel:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .panel:last-child:nth-child(odd) .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 32px;
+  }
+
+  .panel:last-child:nth-child(odd) .circuit {
+    margin: 0;
+    padding: 14px 0;
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .summary {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .body {
+    padding: 0 18px 18px;
+  }
+
+  .node {
+    padding: 7px 6px;
+    gap: 5px;
+    font-size: 8px;
+  }
+}
+
+@keyframes border-pass {
+  0% { opacity: 0; transform: translateX(-100%); }
+  20% { opacity: 0.7; }
+  100% { opacity: 0; transform: translateX(240%); }
+}
+
+@keyframes signal-pass {
+  0% { opacity: 0; transform: translateX(-100%); }
+  30% { opacity: 0.45; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes tool-reveal {
+  from { opacity: 0.5; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel::before,
+  .icon,
+  .chevron,
+  .node {
+    transition: none;
+  }
+
+  .panel::after,
+  .panel:hover::after,
+  .panel:focus-within::after,
+  .panel:hover .track::after,
+  .panel:focus-within .track::after,
+  .panel[open] .body {
+    animation: none;
+  }
+
+  .panel:hover .icon {
+    transform: none;
+  }
+}

@@ -14,6 +14,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { CareerFocus } from "@/components/content/career-focus";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
 import { ScrollStory } from "@/components/ui/scroll-story";
+import { CapabilitiesPanel } from "@/components/content/capabilities-panel";
 
 export const revalidate = 300;
 
@@ -150,18 +151,7 @@ export default async function AboutPage() {
       <section className="content-section">
         <Reveal>
           <SectionHeading number="04" title="Tools of the trade" />
-          <div className="skills-grid">
-            {skills.map((group) => (
-              <article className="skill-group" key={group.id}>
-                <p className="eyebrow">{group.category}</p>
-                <div className="tag-list">
-                  {group.technologies.map((tool) => (
-                    <span key={tool}>{tool}</span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
+          <CapabilitiesPanel groups={skills} />
         </Reveal>
       </section>
       <section className="content-section">

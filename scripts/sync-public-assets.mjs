@@ -10,3 +10,11 @@ for (const entry of await readdir('assets', { withFileTypes: true })) {
     await cp(`assets/${entry.name}`, `public/assets/${entry.name}`, { recursive: true });
   }
 }
+
+// Spline geometry decoders are self-hosted so the robot needs no CDN requests.
+await mkdir('public/assets/3d/runtime', { recursive: true });
+for (const entry of await readdir('node_modules/@splinetool/runtime/build')) {
+  if (entry.endsWith('.wasm')) {
+    await cp(`node_modules/@splinetool/runtime/build/${entry}`, `public/assets/3d/runtime/${entry}`);
+  }
+}
