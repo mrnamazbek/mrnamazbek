@@ -64,6 +64,9 @@ export function SplineRobot() {
         });
         app = scene;
         await scene.start(bytes, { interactive: false });
+        // The runtime starts its render loop in the next task. Apply visibility
+        // and pause controls after that task so initialization cannot restart it.
+        await new Promise<void>(resolve => window.setTimeout(resolve, 0));
         if (disposed) { scene.dispose(); return; }
         scene.setBackgroundColor("transparent");
         const robot = scene.findObjectByName("Bot");
