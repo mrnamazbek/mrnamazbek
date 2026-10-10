@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { SocialProfileLink } from "@/components/ui/social-profile-link";
 
 export function SiteFooter() {
   return (
@@ -9,27 +10,15 @@ export function SiteFooter() {
           Keep building<span>.</span>
         </Link>
         <div className="footer-links">
-          <a
-            href="https://github.com/mrnamazbek"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <SocialProfileLink platform="github">
             GitHub <ArrowUpRight size={14} />
-          </a>
-          <a
-            href="https://linkedin.com/in/namazbek-bekzhanov"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </SocialProfileLink>
+          <SocialProfileLink platform="linkedin">
             LinkedIn <ArrowUpRight size={14} />
-          </a>
-          <a
-            href="https://t.me/tech_digest_kz"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </SocialProfileLink>
+          <SocialProfileLink platform="telegram">
             Telegram <ArrowUpRight size={14} />
-          </a>
+          </SocialProfileLink>
         </div>
       </div>
       <div className="footer-bottom">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SocialProfileLink } from "@/components/ui/social-profile-link";
 import { ArrowUpRight } from "lucide-react";
 import { getPosts, getTelegram } from "@/lib/content";
 import { PageHeading, SectionHeading } from "@/components/ui/page-heading";
@@ -65,14 +66,13 @@ export default async function WritingPage() {
           </h2>
           <p>I share shorter notes and useful links on my Telegram channel.</p>
         </div>
-        <a
+        <SocialProfileLink
+          platform="telegram"
           href={`https://t.me/${encodeURIComponent(telegram.channel)}`}
           className="button button-outline"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           Read on Telegram <ArrowUpRight size={18} />
-        </a>
+        </SocialProfileLink>
       </section>
     </>
   );

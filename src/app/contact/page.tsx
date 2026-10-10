@@ -3,6 +3,8 @@ import { ArrowUpRight } from "lucide-react";
 import { getProfile } from "@/lib/content";
 import { PageHeading } from "@/components/ui/page-heading";
 import { ContactForm } from "@/components/contact-form";
+import { SocialProfileLink } from "@/components/ui/social-profile-link";
+import { socialPlatforms } from "@/content/social-profiles";
 
 export const revalidate = 300;
 
@@ -38,12 +40,11 @@ export default async function ContactPage() {
             UTC +05:00
           </p>
           <div className="contact-socials">
-            {Object.entries(profile.links).map(([name, link]) => (
-              <a
+            {socialPlatforms.map((name) => (
+              <SocialProfileLink
                 key={name}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
+                platform={name}
+                href={profile.links[name]}
               >
                 {name === "telegram"
                   ? "Telegram channel"
@@ -51,7 +52,7 @@ export default async function ContactPage() {
                     ? "GitHub"
                     : "LinkedIn"}
                 <ArrowUpRight size={17} />
-              </a>
+              </SocialProfileLink>
             ))}
           </div>
           <details className="other-emails">

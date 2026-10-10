@@ -12,6 +12,7 @@ import {
 import { PageHeading, SectionHeading } from "@/components/ui/page-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { CareerFocus } from "@/components/content/career-focus";
+import { SocialProfileLink } from "@/components/ui/social-profile-link";
 
 export const revalidate = 300;
 
@@ -59,14 +60,13 @@ export default async function AboutPage() {
             >
               Download résumé <Download size={17} />
             </a>
-            <a
+            <SocialProfileLink
+              platform="linkedin"
               href={profile.links.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
               className="button button-outline"
             >
               LinkedIn <ArrowUpRight size={17} />
-            </a>
+            </SocialProfileLink>
           </div>
         </div>
         <div className="about-statement">
