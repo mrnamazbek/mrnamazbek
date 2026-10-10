@@ -1,3 +1,5 @@
+> Website application: Next.js + Supabase, deployed on Vercel. See [the architecture guide](docs/ARCHITECTURE.md) and [content/database guide](docs/DATA.md) for development and maintenance. This README also serves as the GitHub profile.
+
 <!-- Dynamic Gradient Wave Header -->
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,3,5,6&height=200&section=header&text=NAMAZBEK%20BEKZHANOV&fontSize=50&fontColor=fff&animation=fadeIn&fontAlignY=35&desc=Big%20Data%20%E2%80%A2%20Machine%20Learning%20%E2%80%A2%20Software%20Engineering&descSize=16&descAlignY=53" />
 

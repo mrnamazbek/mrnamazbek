@@ -11,6 +11,7 @@
     <meta property="og:title" content="Namazbek Bekzhanov | Data Engineer & Software Engineer">
     <meta property="og:description" content="Data pipelines, SQL, Python, and a Telegram channel about Big Data and Software Engineering.">
     <meta name="twitter:card" content="summary">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +34,7 @@
 
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="assets/telegram.css">
+    <link rel="stylesheet" href="assets/career.css">
 </head>
 
 <body class="antialiased selection:bg-cyan-500 selection:text-white">
@@ -62,6 +64,7 @@
             </div>
             <div class="space-x-6 hidden md:flex text-sm font-medium text-gray-300">
                 <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#career" class="hover:text-white transition">Work with me</a>
                 <a href="#arsenal" class="hover:text-white transition">Arsenal</a>
                 <a href="#journey" class="hover:text-white transition">Journey</a>
                 <a href="#ai-monthly-lab" class="hover:text-white transition">AI Lab</a>
@@ -172,6 +175,40 @@
                     class="ui-button min-h-[44px] flex-1 text-center px-4 py-2 rounded-xl border border-white/10 bg-white/5">Contact</a>
             </div>
         </div>
+
+        <!-- Career focus: static public work examples, independent of the private tracker. -->
+        <section id="career" class="site-section career-section" aria-labelledby="career-title">
+            <div class="career-intro">
+                <div><p class="career-kicker">DATA ENGINEERING / ANALYTICS / SQL</p>
+                <h2 id="career-title">A clear scope.<br>Reliable data.</h2>
+                <p>Python, SQL, PostgreSQL, dbt and Airflow are at the centre of my data work. Explore the examples below and let's discuss the problem, the expected outcome and the working schedule.</p></div>
+                <a class="ui-button career-contact" href="mailto:namazbekzhan@gmail.com?subject=Data%20project%20enquiry">Discuss a project ↗</a>
+            </div>
+            <div class="career-grid">
+                <article class="career-card">
+                    <p class="career-kicker">01 / SQL & DATABASES</p><h3>Explain the slow query.</h3>
+                    <p>A scoped review of query plans, expensive operations and candidate changes, with a reproducible measurement plan.</p>
+                    <div class="career-tags"><span id="career-sql">SQL</span><span id="career-postgresql">PostgreSQL</span><span id="career-oracle">Oracle</span><span id="career-pl-sql">PL/SQL</span><span id="career-vertica">Vertica</span><span id="career-greenplum">Greenplum</span></div>
+                    <a href="https://github.com/mrnamazbek/mrnamazbek/tree/main/blog/demos/post-a-postgres" target="_blank" rel="noopener noreferrer">Explore the public Postgres demo ↗</a>
+                    <p class="career-note">The demo illustrates Postgres query analysis. Oracle, Vertica and Greenplum are separate experience areas.</p>
+                </article>
+                <article class="career-card">
+                    <p class="career-kicker">02 / TRANSFORMATIONS & PIPELINES</p><h3>Make the pipeline easier to trust.</h3>
+                    <p>A defined ETL issue, dbt data-quality improvement or Airflow reliability review. Agree on inputs, checks and ownership before implementation.</p>
+                    <div class="career-tags"><span id="career-dbt">dbt</span><span id="career-airflow">Airflow</span><span id="career-etl">ETL</span><span id="career-elt">ELT</span><span id="career-data-warehouse">Data warehouse</span><span id="career-trino">Trino</span><span id="career-iceberg">Iceberg</span><span id="career-power-bi">Power BI</span></div>
+                    <a href="https://github.com/mrnamazbek/mrnamazbek/tree/main/blog/demos/post-b-feature-pipeline" target="_blank" rel="noopener noreferrer">Explore the public Python ETL demo ↗</a>
+                    <p class="career-note">A small Python ETL example; the listed tools describe my wider focus, rather than dependencies of this demo.</p>
+                </article>
+                <article class="career-card">
+                    <p class="career-kicker">03 / PYTHON PERFORMANCE</p><h3>Measure before changing.</h3>
+                    <p>Inspect a pipeline bottleneck, compare approaches and keep a repeatable example of the behaviour.</p>
+                    <div class="career-tags"><span id="career-python">Python</span><span>Data pipelines</span><span>Profiling</span></div>
+                    <a href="https://github.com/mrnamazbek/mrnamazbek/tree/main/blog/demos/post-c-python-perf" target="_blank" rel="noopener noreferrer">Explore the public performance demo ↗</a>
+                    <p class="career-note">Public learning examples. Client results and delivery estimates require an agreed scope.</p>
+                </article>
+            </div>
+            <div class="career-workspace"><div><strong>Job Hunter Agent</strong><p>My private workspace for targeted searches, application materials and next steps.</p></div><a class="ui-button" href="https://job-hunter-agent-taupe.vercel.app/#focus" target="_blank" rel="noopener noreferrer">Open private workspace ↗</a></div>
+        </section>
 
         <!-- TECHNOLOGY ARSENAL -->
         <section id="arsenal" class="site-section space-y-12">
@@ -1178,7 +1215,7 @@
         <section id="audience-pulse" class="site-section space-y-8" aria-label="AI audience pulse and engagement">
             <h2 class="text-3xl font-display font-bold mb-2">AI Audience Pulse</h2>
             <p class="text-gray-400 max-w-2xl">Weekly trend proxy based on Wikipedia pageviews for major AI platforms,
-                plus live site engagement counters.</p>
+                plus interactions saved in this browser.</p>
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <div id="ai-audience-root" class="glass-card p-6 rounded-2xl xl:col-span-2 audience-pulse-shell">
                     <div class="text-sm font-mono text-cyan-300">Loading weekly audience pulse...</div>

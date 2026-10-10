@@ -4,6 +4,10 @@ test('AI audience pulse and engagement widgets render on mobile', async ({ page 
   await page.setViewportSize({ width: 375, height: 812 });
 
   const consoleErrors = [];
+  const counterRequests = [];
+  page.on('request', request => {
+    if (request.url().includes('counterapi.dev')) counterRequests.push(request.url());
+  });
   page.on('console', (msg) => {
     if (msg.type() === 'error') {
       const text = msg.text();
@@ -38,7 +42,12 @@ test('AI audience pulse and engagement widgets render on mobile', async ({ page 
   await expect(likeBtn).toBeVisible();
   await likeBtn.click();
 
-  await expect(page.locator('#engagement-likes')).not.toBeEmpty();
+  await expect(page.locator('#engagement-likes')).toHaveText('1');
+  await expect(page.locator('#site-engagement-root')).toContainText('On this device');
+  await expect(page.locator('#engagement-status')).toHaveText('Like saved in this browser.');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#engagement-likes')).toHaveText('1');
+  expect(counterRequests).toEqual([]);
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     const delta = document.documentElement.scrollWidth - window.innerWidth;

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "1",
+    "title": "Google AI Fundamentals",
+    "issuer": "Google",
+    "issued": "Apr 2026",
+    "credentialId": "ZWLGE1YNC4TM",
+    "skills": []
+  },
+  {
+    "id": "2",
+    "title": "Certificate of completion: Claude 101",
+    "issuer": "Anthropic",
+    "issued": "Mar 2026",
+    "credentialId": "stz5kjzvohzj",
+    "skills": []
+  },
+  {
+    "id": "3",
+    "title": "Google Cloud Big Data and Machine Learning Fundamentals",
+    "issuer": "Google",
+    "issued": "Sep 2024",
+    "credentialId": "LM5GBC4KKBLT",
+    "skills": []
+  },
+  {
+    "id": "4",
+    "title": "Software Engineer",
+    "issuer": "HackerRank",
+    "issued": "Sep 2025",
+    "credentialId": "bd05e4f8a435",
+    "skills": [
+      "Software Engineering",
+      "REST APIs"
+    ]
+  },
+  {
+    "id": "5",
+    "title": "Data Engineering",
+    "issuer": "Freedom Holding Corp.",
+    "issued": "Oct 2024",
+    "credentialId": null,
+    "skills": [
+      "Python",
+      "Apache Airflow"
+    ]
+  },
+  {
+    "id": "6",
+    "title": "SQL (Advanced) Certificate",
+    "issuer": "HackerRank",
+    "issued": null,
+    "credentialId": "cba2aa129267",
+    "skills": [
+      "SQL",
+      "MySQL"
+    ]
+  },
+  {
+    "id": "7",
+    "title": "SQL for Data Science",
+    "issuer": "University of California, Davis",
+    "issued": null,
+    "credentialId": "GLYVDBVYEPH7",
+    "skills": [
+      "SQLite",
+      "Databases"
+    ]
+  },
+  {
+    "id": "8",
+    "title": "Python for Data Science",
+    "issuer": "IBM",
+    "issued": "Feb 2024",
+    "credentialId": null,
+    "skills": [
+      "Python",
+      "Docker"
+    ]
+  },
+  {
+    "id": "9",
+    "title": "Red Hat Certified System Administrator (RHCSA II)",
+    "issuer": "Red Hat",
+    "issued": "Nov 2023",
+    "credentialId": null,
+    "skills": [
+      "Docker",
+      "Linux Server"
+    ]
+  },
+  {
+    "id": "10",
+    "title": "Red Hat Certified System Administrator (RHCSA)",
+    "issuer": "Red Hat",
+    "issued": "Oct 2023",
+    "credentialId": null,
+    "skills": [
+      "RHEL",
+      "Linux SysAdmin"
+    ]
+  },
+  {
+    "id": "11",
+    "title": "Docker Essentials: A Developer Introduction",
+    "issuer": "IBM",
+    "issued": "Feb 2024",
+    "credentialId": null,
+    "skills": [
+      "Docker Swarm",
+      "Containerization"
+    ]
+  }
+]

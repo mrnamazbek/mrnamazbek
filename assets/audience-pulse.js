@@ -5,14 +5,10 @@
     var AUDIENCE_ROOT_ID = 'ai-audience-root';
     var ENGAGEMENT_ROOT_ID = 'site-engagement-root';
 
-    var COUNTER_BASE = 'https://api.counterapi.dev/v1';
-    var COUNTER_NAMESPACE = 'mrnamazbek-site';
-    var COUNTER_VIEWS_KEY = 'portfolio_views';
-    var COUNTER_LIKES_KEY = 'portfolio_likes';
-
-    var STORAGE_VIEWS = 'engagement.views.last';
-    var STORAGE_LIKES = 'engagement.likes.last';
-    var STORAGE_VIEW_DAY = 'engagement.view.day';
+    // Per-device interactions; global counters require a configured backend.
+    var STORAGE_VIEWS = 'engagement.local.views';
+    var STORAGE_LIKES = 'engagement.local.likes';
+    var STORAGE_VIEW_DAY = 'engagement.local.view.day';
 
     function escapeHtml(value) {
         return String(value || '')
@@ -279,22 +275,6 @@
         renderSelected();
     }
 
-    function parseCounterCount(payload) {
-        if (!payload || typeof payload !== 'object') return null;
-        var data = payload.data && typeof payload.data === 'object' ? payload.data : {};
-        var candidates = [data.up_count, data.count, payload.count, payload.up_count];
-        for (var i = 0; i < candidates.length; i++) {
-            var n = Number(candidates[i]);
-            if (Number.isFinite(n)) return n;
-        }
-        return null;
-    }
-
-    async function counterRequest(path) {
-        var url = COUNTER_BASE + '/' + COUNTER_NAMESPACE + '/' + path;
-        return fetchJson(url, 8000);
-    }
-
     function getIsoDay() {
         return new Date().toISOString().slice(0, 10);
     }
@@ -309,16 +289,16 @@
         root.innerHTML = [
             '<div class="engagement-card">',
             '  <div class="engagement-card__head">',
-            '    <div class="audience-pulse__eyebrow">Live Counters</div>',
+            '    <div class="audience-pulse__eyebrow">On this device</div>',
             '    <h4 class="audience-pulse__title">Site Engagement</h4>',
             '  </div>',
             '  <div class="engagement-card__grid">',
             '    <div class="engagement-metric">',
-            '      <div class="engagement-metric__label">Visitors</div>',
+            '      <div class="engagement-metric__label">Visits in this browser</div>',
             '      <div class="engagement-metric__value" id="engagement-views">-</div>',
             '    </div>',
             '    <div class="engagement-metric">',
-            '      <div class="engagement-metric__label">Likes</div>',
+            '      <div class="engagement-metric__label">Your likes</div>',
             '      <div class="engagement-metric__value" id="engagement-likes">-</div>',
             '    </div>',
             '  </div>',
@@ -326,12 +306,12 @@
             '    <span class="engagement-like-btn__icon" aria-hidden="true">+</span>',
             '    <span>Like this page</span>',
             '  </button>',
-            '  <div class="engagement-card__status" id="engagement-status">CounterAPI sync active.</div>',
+            '  <div class="engagement-card__status" id="engagement-status">Saved in this browser.</div>',
             '</div>'
         ].join('');
     }
 
-    async function initEngagement(root) {
+    function initEngagement(root) {
         renderEngagementShell(root);
 
         var viewsEl = root.querySelector('#engagement-views');
@@ -347,64 +327,22 @@
         var today = getIsoDay();
         var shouldIncrementView = sessionStorage.getItem(STORAGE_VIEW_DAY) !== today;
 
-        try {
-            var viewsPayload;
-            if (shouldIncrementView) {
-                viewsPayload = await counterRequest(COUNTER_VIEWS_KEY + '/up');
-                sessionStorage.setItem(STORAGE_VIEW_DAY, today);
-            } else {
-                viewsPayload = await counterRequest(COUNTER_VIEWS_KEY + '/');
-            }
-            var liveViews = parseCounterCount(viewsPayload);
-            if (Number.isFinite(liveViews)) {
-                viewsEl.textContent = compactNumber(liveViews);
-                localStorage.setItem(STORAGE_VIEWS, String(Math.round(liveViews)));
-            }
-        } catch (error) {
-            if (shouldIncrementView) {
-                localViews += 1;
-                localStorage.setItem(STORAGE_VIEWS, String(localViews));
-                sessionStorage.setItem(STORAGE_VIEW_DAY, today);
-                viewsEl.textContent = compactNumber(localViews);
-            }
-            statusEl.textContent = 'Live counter unavailable. Showing local fallback values.';
+        if (shouldIncrementView) {
+            localViews += 1;
+            localStorage.setItem(STORAGE_VIEWS, String(localViews));
+            sessionStorage.setItem(STORAGE_VIEW_DAY, today);
+            viewsEl.textContent = compactNumber(localViews);
         }
 
-        try {
-            var likesPayload = await counterRequest(COUNTER_LIKES_KEY + '/');
-            var liveLikes = parseCounterCount(likesPayload);
-            if (Number.isFinite(liveLikes)) {
-                likesEl.textContent = compactNumber(liveLikes);
-                localStorage.setItem(STORAGE_LIKES, String(Math.round(liveLikes)));
-            }
-        } catch (error2) {
-            statusEl.textContent = 'Live counter unavailable. Showing local fallback values.';
-        }
-
-        likeBtn.addEventListener('click', async function () {
-            likeBtn.disabled = true;
+        likeBtn.addEventListener('click', function () {
             likeBtn.classList.add('is-burst');
             window.setTimeout(function () {
                 likeBtn.classList.remove('is-burst');
             }, 380);
-
-            var current = readLocalNumber(STORAGE_LIKES, 0);
-            var nextLocal = current + 1;
+            var nextLocal = readLocalNumber(STORAGE_LIKES, 0) + 1;
             likesEl.textContent = compactNumber(nextLocal);
             localStorage.setItem(STORAGE_LIKES, String(nextLocal));
-
-            try {
-                var upPayload = await counterRequest(COUNTER_LIKES_KEY + '/up');
-                var liveLikes = parseCounterCount(upPayload);
-                if (Number.isFinite(liveLikes)) {
-                    likesEl.textContent = compactNumber(liveLikes);
-                    localStorage.setItem(STORAGE_LIKES, String(Math.round(liveLikes)));
-                }
-            } catch (error3) {
-                statusEl.textContent = 'Like saved locally. CounterAPI sync failed for this click.';
-            } finally {
-                likeBtn.disabled = false;
-            }
+            statusEl.textContent = 'Like saved in this browser.';
         });
     }
 

@@ -11,6 +11,10 @@ const fragmentShader = `
         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
         vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
         vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        vec2 gradient(float hash) {
+            float angle = hash * (6.28318530718 / 289.0);
+            return vec2(cos(angle), sin(angle));
+        }
         float snoise(vec2 v) {
             const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
             vec2 i  = floor(v + dot(v, C.yy) );
@@ -21,7 +25,7 @@ const fragmentShader = `
             vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
             vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
             m = m*m ;
-            return 42.0 * dot( m*m, vec3( dot(p.x,x0), dot(p.y,x12.xy), dot(p.z,x12.zw) ) );
+            return 42.0 * dot(m*m, vec3(dot(gradient(p.x), x0), dot(gradient(p.y), x12.xy), dot(gradient(p.z), x12.zw)));
         }
         void main() {
             vec2 uv = vUv;

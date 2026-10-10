@@ -52,6 +52,11 @@ __pycache__/
 
 # Vercel
 .vercel/
+.env*
+!.env.example
+.next/
+*.tsbuildinfo
+public/assets/
 
 # Local build output for profile-art scripts (published to the `output` branch by CI)
 dist/
@@ -62,3 +67,4 @@ blog/demos/post-b-feature-pipeline/events.csv
 blog/demos/post-b-feature-pipeline/feature_store.db
 blog/demos/post-c-python-perf/transactions.csv
 blog/demos/post-c-python-perf/chunk_*.csv
+.vercel

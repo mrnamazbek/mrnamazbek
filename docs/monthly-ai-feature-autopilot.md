@@ -1,58 +1,39 @@
-# Monthly AI Feature Autopilot
+# Scheduled public feeds
 
-## What is automated
-1. Fetch monthly trend signals from Google Trends (KZ by default).
-2. Build a feature brief and send it to AI (ChatGPT API or OpenAI-compatible endpoint).
-3. Generate/update:
-   - `assets/ai_monthly_feature.json`
-   - `assets/ai_feature_history.json`
-   - `tests/monthly-ai-feature.spec.js`
-4. Run Playwright responsive tests.
-5. Run Lighthouse mobile audit.
-6. Capture a mobile screenshot and ask AI to review UI quality.
-7. Commit and push changes from GitHub Actions.
+The Next.js site renders curated experiments in `/lab`, with source dates and methodology. Content generation is a repository maintenance task; the production frontend and API run in Next.js on Vercel.
 
-## Workflow
-- File: `.github/workflows/monthly-ai-feature.yml`
-- Schedule: day 2 of each month at 04:00 UTC
-- Manual run: `workflow_dispatch` with optional `force_regenerate=true`
+## Monthly experiments
 
-## GitLab schedule to push feature JSON to a cloud agent
-- File: `.gitlab-ci.yml`
-- Job: `monthly_ai_feature_to_cloud_agent`
-- Optional GitLab CI variables (required only if you want cloud-agent POST):
-  - `CLOUD_AGENT_URL`: endpoint of your cloud agent intake API
-  - `CLOUD_AGENT_TOKEN`: bearer token for that endpoint
-- The job regenerates `assets/ai_monthly_feature.json` and POSTs it to the cloud agent.
+`.github/workflows/monthly-ai-feature.yml` runs on day 2 at 04:00 UTC or manually with `force_regenerate`. It fetches trend signals, generates a structured experiment specification, validates and synchronizes `assets/ai_monthly_feature.json` and `assets/ai_feature_history.json` into `src/content/snapshots`, builds Next.js, runs the migrated browser suite, and publishes only those two snapshots to Supabase. It also produces a non-blocking Lighthouse report and commits the refreshed source snapshots.
 
-## Live FX + Weather widget
-- Rendered by `assets/ai-monthly-feature.js` into `#ai-live-signals-root`.
-- Rates source: ExchangeRate-API (`USD -> RUB, GBP, EUR`).
-- Weather source: Open-Meteo (`Almaty`, `Shymkent`, `Astana`).
-- On network/API errors, the widget degrades gracefully and shows `N/A` without breaking the page.
+The generator supports roadmap, capacity, and trade-off matrix widgets. Their React renderers live in `src/components/lab/experiments.tsx`. The generator still emits the original static-page test file for historical compatibility; active release tests live in `tests/e2e` and cover all supported widgets.
 
-## Additional Weekly Automation
-- File: `.github/workflows/weekly-ai-audience.yml`
-- Schedule: every Monday at 04:30 UTC
-- Updates `assets/ai_audience_weekly.json` from Wikimedia Pageviews API.
-- Runs `tests/ai-audience-engagement.spec.js`.
-- Commits and pushes dataset updates automatically.
+`OPENAI_API_KEY` enables model-assisted generation. Without it, the generator uses its deterministic trend-based fallback. Optional variables are `AI_MODEL`, `AI_BASE_URL`, and `GOOGLE_TRENDS_GEO`. The workflow does not send screenshots for a separate AI visual review.
 
-## Required GitHub Secrets
-- `OPENAI_API_KEY`: API key for model calls.
+## Other feeds
 
-## Optional GitHub Variables
-- `AI_MODEL` (default: `gpt-5.2`)
-- `AI_BASE_URL` (default: `https://api.openai.com/v1`)
-- `GOOGLE_TRENDS_GEO` (default: `KZ`)
-- `AI_REVIEW_MIN_SCORE` (default: `75`)
+| Workflow | Schedule | Published snapshot |
+| --- | --- | --- |
+| `weekly-ai-audience.yml` | Monday, 04:30 UTC | `audience` |
+| `update-db-ranking.yml` | Day 2, 03:15 UTC | `rankings` |
+| `telegram-feed.yml` | Every six hours, at minute 17 | `telegram` |
 
-## Local dry run (without AI API)
-```bash
-python scripts/monthly_ai_feature_pipeline.py --offline --force
-```
+The audience uses Wikimedia pageviews as a dated attention proxy, not active-user estimates. Telegram notes appear on `/writing` when the exported snapshot contains posts. Rankings show their saved source date. Currency and weather on `/lab` use the Next.js `/api/signals` endpoint separately from these snapshots.
 
-## Weekly audience dataset update (local)
-```bash
+## Database publication
+
+The repository secrets `SUPABASE_URL` and `SUPABASE_SECRET_KEY` enable feed publication. Workflows scope each write to their own snapshot keys; they never replace profile, experience, books, articles, or messages. Missing credentials leave local snapshots available and report that database publication is unconfigured. Failed configured uploads fail the publication step.
+
+Local commands:
+
+```sh
+npm run feature:monthly:offline
 python scripts/update_ai_audience_weekly.py
+npm run content:sync -- --only=audience
+# Explicit remote publication, after reviewing the selected generated feed:
+npm run content:sync:database -- --only=audience
 ```
+
+A normal `npm run build` validates and copies public snapshots locally without writing to Supabase. See [DATA.md](DATA.md) for contracts and editorial content. Scheduled GitHub workflows run from the repository's default branch.
+
+The optional `.gitlab-ci.yml` cloud-agent export is retained as a separate legacy maintenance integration. It does not host the website backend and is inactive unless configured in GitLab.

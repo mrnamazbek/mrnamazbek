@@ -1,0 +1,29 @@
+[
+  {
+    "id": "kbtu-masters",
+    "degree": "Master's degree — Computer Science and Data Analytics",
+    "institution": "Kazakh-British Technical University",
+    "period": "Sep 2025 — Present",
+    "description": "Focused on Big Data, Machine Learning, AI, Data Engineering & Analytics, and Software Engineering. Building deeper expertise in Python, ML libraries, and intelligent systems.",
+    "note": null,
+    "status": "current"
+  },
+  {
+    "id": "sdu-bachelors",
+    "degree": "Bachelor's degree — Information Systems",
+    "institution": "Suleyman Demirel University",
+    "period": "Sep 2021 — Jun 2025",
+    "description": "Focused on Software Engineering, Databases, and Computer Networks. Explored Big Data, Blockchain, Web Development, and Linux Administration; built strong foundations in algorithms, probability & statistics, and data engineering concepts.",
+    "note": "Off the clock: football fan — teamwork, strategy, and fast decisions under pressure.",
+    "status": "completed"
+  },
+  {
+    "id": "tum-ambition",
+    "degree": "Master's Degree — Data Engineering",
+    "institution": "Technical University of Munich (Germany)",
+    "period": "Future Goal",
+    "description": "Planning to pursue advanced expertise in Data Engineering, large-scale distributed systems, and modern data architectures at one of Europe's top technical universities.",
+    "note": null,
+    "status": "planned"
+  }
+]

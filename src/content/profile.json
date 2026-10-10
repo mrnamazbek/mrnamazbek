@@ -1,0 +1,22 @@
+{
+  "name": "Namazbek Bekzhanov",
+  "shortName": "Namazbek",
+  "role": "Data Engineer & Backend Developer",
+  "location": "Almaty, Kazakhstan",
+  "bio": "I craft high-performance pipelines, optimize SQL engines, and build reliable digital infrastructure.",
+  "headline": "Building resilient data systems.",
+  "availability": "Open to Work",
+  "careerStartedAt": "2023-02-01",
+  "resumeUrl": "/assets/Namazbek_s_Resume_INT.pdf",
+  "email": "namazbekzhan@gmail.com",
+  "secondaryEmail": "bekzhanovnnn@gmail.com",
+  "workEmail": "na_bekzhanov@kbtu.kz",
+  "links": {
+    "github": "https://github.com/mrnamazbek",
+    "linkedin": "https://linkedin.com/in/namazbek-bekzhanov",
+    "telegram": "https://t.me/tech_digest_kz"
+  },
+  "philosophy": "I treat data systems like banking systems: correctness first, fast second. That mindset turns pipelines into durable products — observable, testable, and trusted.",
+  "signatureUrl": "/assets/NBA_signature.png",
+  "avatarUrl": "/assets/avatar-ascii.svg"
+}

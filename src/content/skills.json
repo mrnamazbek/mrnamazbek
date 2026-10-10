@@ -1,0 +1,79 @@
+[
+  {
+    "id": "1",
+    "category": "Machine Learning & AI",
+    "technologies": [
+      "Scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "Keras",
+      "NumPy",
+      "Pandas"
+    ]
+  },
+  {
+    "id": "2",
+    "category": "Big Data",
+    "technologies": [
+      "Spark",
+      "Hadoop",
+      "Airflow",
+      "Kafka"
+    ]
+  },
+  {
+    "id": "3",
+    "category": "Cold Data",
+    "technologies": [
+      "Iceberg",
+      "S3",
+      "Trino",
+      "Debezium"
+    ]
+  },
+  {
+    "id": "4",
+    "category": "Languages",
+    "technologies": [
+      "Python",
+      "Go",
+      "Java",
+      "SQL",
+      "Bash"
+    ]
+  },
+  {
+    "id": "5",
+    "category": "Databases",
+    "technologies": [
+      "Postgres",
+      "Oracle",
+      "MySQL",
+      "MSSQL",
+      "Vertica",
+      "Sybase",
+      "Replica"
+    ]
+  },
+  {
+    "id": "6",
+    "category": "DevOps",
+    "technologies": [
+      "Docker",
+      "Git",
+      "Linux",
+      "FastAPI"
+    ]
+  },
+  {
+    "id": "7",
+    "category": "Environment",
+    "technologies": [
+      "PyCharm",
+      "DataGrip",
+      "DataSpell",
+      "DBeaver",
+      "Antigravity"
+    ]
+  }
+]
