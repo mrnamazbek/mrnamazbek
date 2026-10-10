@@ -10,6 +10,7 @@ for (const path of ["/", "/about", "/projects", "/writing", "/gallery", "/lab", 
   test(`essential accessibility checks for ${path}`, async ({ page }) => {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    if (path === "/lab") await expect(page.locator("#ai-live-signals-root").getByText("Loading currency and weather signals…", { exact: true })).toHaveCount(0, { timeout: 20_000 });
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
     expect(results.violations.map(({ id, impact, nodes }) => ({ id, impact, elements: nodes.map((node) => node.target) }))).toEqual([]);
   });
@@ -34,6 +35,8 @@ test("light palette keeps text and controls accessible", async ({ page }) => {
     await page.evaluate(() => Promise.all(document.getAnimations()
       .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
       .map((animation) => animation.finished.catch(() => {}))));
+    // Async weather rows must finish inserting before axe samples text/background colors.
+    if (path === "/lab") await expect(page.locator("#ai-live-signals-root").getByText("Loading currency and weather signals…", { exact: true })).toHaveCount(0, { timeout: 20_000 });
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
     expect(results.violations.map(({ id, impact, nodes }) => ({ id, impact, elements: nodes.map((node) => node.target) })), path).toEqual([]);
   }

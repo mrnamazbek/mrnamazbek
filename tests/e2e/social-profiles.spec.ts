@@ -56,8 +56,19 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     const links = page.getByRole("main");
     const focused = links.getByRole("link", { name: "LinkedIn", exact: true });
     await focused.focus();
-    await expect(page.getByRole("tooltip", { name: "LinkedIn profile preview" })).toBeVisible();
-    await links.getByRole("link", { name: "GitHub", exact: true }).hover();
+    const focusedPreview = page.getByRole("tooltip", { name: "LinkedIn profile preview" });
+    await expect(focusedPreview).toBeVisible();
+    const hovered = links.getByRole("link", { name: "GitHub", exact: true });
+    // The older preview must leave the adjacent trigger's hit area available.
+    // Otherwise hover has to scroll around the card and can lose its target.
+    const oldCard = await focusedPreview.boundingBox();
+    const nextLink = await hovered.boundingBox();
+    expect(oldCard).not.toBeNull();
+    expect(nextLink).not.toBeNull();
+    const overlapWidth = Math.max(0, Math.min(oldCard!.x + oldCard!.width, nextLink!.x + nextLink!.width) - Math.max(oldCard!.x, nextLink!.x));
+    const overlapHeight = Math.max(0, Math.min(oldCard!.y + oldCard!.height, nextLink!.y + nextLink!.height) - Math.max(oldCard!.y, nextLink!.y));
+    expect(overlapWidth * overlapHeight).toBe(0);
+    await hovered.hover();
     const preview = page.getByRole("tooltip", { name: "GitHub profile preview" });
     await expect(preview).toBeVisible();
     // An unfinished focus scroll previously moved the hovered link out from
