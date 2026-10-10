@@ -55,7 +55,8 @@ async function settleMotion(page: Page) {
 
 for (const width of [1440, 2560]) {
   test(`cursor tracking moves the robot geometry at ${width}px and returns to the same pose`, async ({ page }) => {
-    test.setTimeout(90_000);
+    // Software GPU captures can each take several seconds on shared CI machines.
+    test.setTimeout(180_000);
     await page.setViewportSize({ width, height: 1000 });
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
@@ -81,13 +82,13 @@ for (const width of [1440, 2560]) {
     await page.mouse.move(left.x, left.y);
     await settleMotion(page);
     // A stable initial frame is not proof that the first pointer event has rendered.
-    await expect.poll(async () => silhouetteChange(neutralBody, await bodySilhouette(page, canvas))).toBeGreaterThan(0.05);
+    await expect.poll(async () => silhouetteChange(neutralBody, await bodySilhouette(page, canvas)), { timeout: 30_000 }).toBeGreaterThan(0.05);
     // Wait for the spring to settle, then compare substantial silhouette movement.
     await expect(async () => {
       const first = await bodySilhouette(page, canvas);
       const second = await bodySilhouette(page, canvas);
       expect(silhouetteChange(first, second)).toBeLessThan(0.001);
-    }).toPass();
+    }).toPass({ timeout: 30_000 });
     const leftBody = await bodySilhouette(page, canvas);
     await page.mouse.move(right.x, right.y);
     await settleMotion(page);
@@ -97,12 +98,12 @@ for (const width of [1440, 2560]) {
     await expect.poll(async () => {
       turnChange = silhouetteChange(leftBody, await bodySilhouette(page, canvas));
       return turnChange;
-    }).toBeGreaterThan(0.05);
+    }, { timeout: 30_000 }).toBeGreaterThan(0.05);
     await page.mouse.move(left.x, left.y);
     await settleMotion(page);
     // Temporal antialiasing can slightly change the edge pixels after a turn.
     // The restored pose must still match closely and undo at least 75% of the change.
-    await expect.poll(async () => silhouetteChange(leftBody, await bodySilhouette(page, canvas))).toBeLessThan(Math.min(0.02, turnChange * 0.25));
+    await expect.poll(async () => silhouetteChange(leftBody, await bodySilhouette(page, canvas)), { timeout: 30_000 }).toBeLessThan(Math.min(0.02, turnChange * 0.25));
     await page.getByRole("button", { name: "Pause robot animation" }).click();
     const pausedBody = await bodySilhouette(page, canvas);
     await page.mouse.move(right.x, right.y);
