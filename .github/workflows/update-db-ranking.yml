@@ -33,11 +33,34 @@ jobs:
       - name: Update JSON
         run: python scripts/update_db_ranking.py
 
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install site dependencies
+        run: npm ci
+
+      - name: Synchronize validated ranking snapshot
+        run: npm run content:sync -- --only=rankings
+
+      - name: Publish validated ranking snapshot to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          if [ -n "${SUPABASE_URL}" ] && [ -n "${SUPABASE_SECRET_KEY}" ]; then
+            npm run content:sync:database -- --only=rankings
+          else
+            echo "Supabase feed publication is unconfigured; repository snapshot was updated."
+          fi
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/db_ranking.json
+          git add assets/db_ranking.json src/content/snapshots/db_ranking.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

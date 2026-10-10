@@ -78,18 +78,38 @@ jobs:
           fi
           python scripts/monthly_ai_feature_pipeline.py ${FORCE_FLAG}
 
-      - name: Run responsive and feature tests
-        run: npx playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js tests/ai-audience-engagement.spec.js
+      - name: Synchronize validated feed snapshots
+        run: npm run content:sync -- --only=monthlyFeature,featureHistory
+
+      - name: Build Next.js site with refreshed content
+        run: npm run build
+
+      - name: Run migrated site tests
+        run: npm run test:e2e
+
+      - name: Publish validated feature snapshots to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          if [ -n "${SUPABASE_URL}" ] && [ -n "${SUPABASE_SECRET_KEY}" ]; then
+            npm run content:sync:database -- --only=monthlyFeature,featureHistory
+          else
+            echo "Supabase feed publication is unconfigured; repository snapshots were updated."
+          fi
 
       - name: Lighthouse mobile audit
         run: |
           mkdir -p artifacts
-          python -m http.server 4173 >/tmp/http-server.log 2>&1 &
+          npm run start -- --hostname 127.0.0.1 --port 4173 >/tmp/next-server.log 2>&1 &
           SERVER_PID=$!
           trap "kill $SERVER_PID" EXIT
-          sleep 2
+          for CHECK in $(seq 1 30); do
+            if curl -fs http://127.0.0.1:4173/api/health >/dev/null; then break; fi
+            sleep 1
+          done
 
-          CHROME_PATH=$(find "${HOME}/.cache/ms-playwright" -type f -path "*/chrome-linux/chrome" | head -n 1)
+          CHROME_PATH=$(node -e "process.stdout.write(require('@playwright/test').chromium.executablePath())")
           if [ -z "${CHROME_PATH}" ]; then
             echo "Playwright Chromium not found, skipping Lighthouse."
             exit 0
@@ -141,7 +161,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/ai_monthly_feature.json assets/ai_feature_history.json tests/monthly-ai-feature.spec.js
+          git add assets/ai_monthly_feature.json assets/ai_feature_history.json tests/monthly-ai-feature.spec.js src/content/snapshots/ai_monthly_feature.json src/content/snapshots/ai_feature_history.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

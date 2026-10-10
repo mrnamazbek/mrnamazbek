@@ -1,0 +1,98 @@
+[
+  {
+    "id": "kleppmann-ddia",
+    "title": "Designing Data-Intensive Applications",
+    "author": "Martin Kleppmann",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9781449373320-L.jpg",
+    "isbn": "9781449373320",
+    "summary": "A practical guide to designing scalable, reliable, maintainable systems.",
+    "description": "A deep, practical tour of replication, partitioning, transactions, streams, and the real trade-offs behind modern data systems. It helps you reason about correctness, latency, throughput, and failure modes — the exact things that make pipelines trustworthy in production.",
+    "tags": [
+      "architecture",
+      "consistency",
+      "replication"
+    ],
+    "status": "reading",
+    "alt": "Cover — Designing Data-Intensive Applications"
+  },
+  {
+    "id": "reis-fundamentals-de",
+    "title": "Fundamentals of Data Engineering",
+    "author": "Joe Reis & Matt Housley",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9781098108304-L.jpg",
+    "isbn": "9781098108304",
+    "summary": "A modern overview of the data engineering lifecycle.",
+    "description": "Frames data engineering as a product discipline: quality, governance, observability, cost, and ownership. Strong for turning ad-hoc pipelines into reliable data products that teams can trust.",
+    "tags": [
+      "lifecycle",
+      "governance",
+      "quality"
+    ],
+    "status": "to-read",
+    "alt": "Cover — Fundamentals of Data Engineering"
+  },
+  {
+    "id": "martin-clean-code",
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg",
+    "isbn": "9780132350884",
+    "summary": "A handbook of agile software craftsmanship.",
+    "description": "Even in data engineering, unreadable code creates outages. This book pushes naming, structure, testing discipline, and refactoring habits that keep pipelines and services maintainable.",
+    "tags": [
+      "craftsmanship",
+      "refactoring",
+      "testing"
+    ],
+    "status": "completed",
+    "alt": "Cover — Clean Code"
+  },
+  {
+    "id": "martin-clean-coder",
+    "title": "The Clean Coder",
+    "author": "Robert C. Martin",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9780137081073-L.jpg",
+    "isbn": "9780137081073",
+    "summary": "Professionalism, habits, and decision-making under engineering pressure.",
+    "description": "A guide to professional engineering behavior: saying “no” when needed, communication, estimation, and building trust through consistent execution. Great for growing from \"good coder\" to dependable engineer.",
+    "tags": [
+      "career",
+      "habits",
+      "professionalism"
+    ],
+    "status": "to-read",
+    "alt": "Cover — The Clean Coder"
+  },
+  {
+    "id": "kimball-dw-toolkit",
+    "title": "The Data Warehouse Toolkit",
+    "author": "Ralph Kimball",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9781118530801-L.jpg",
+    "isbn": "9781118530801",
+    "summary": "The definitive guide to dimensional modeling.",
+    "description": "Explains facts, dimensions, slowly changing dimensions, and patterns that make analytics models understandable and scalable. Still extremely relevant for BI layers and data marts.",
+    "tags": [
+      "modeling",
+      "analytics",
+      "dimensional"
+    ],
+    "status": "to-read",
+    "alt": "Cover — The Data Warehouse Toolkit"
+  },
+  {
+    "id": "shapira-kafka",
+    "title": "Kafka: The Definitive Guide",
+    "author": "Gwen Shapira",
+    "coverUrl": "https://covers.openlibrary.org/b/isbn/9781491936160-L.jpg",
+    "isbn": "9781491936160",
+    "summary": "Real-time data and stream processing at scale.",
+    "description": "Covers Kafka architecture, delivery guarantees, and operational practices. Useful for building CDC pipelines, streaming ingestion, and event-driven integrations without fragile coupling.",
+    "tags": [
+      "streaming",
+      "events",
+      "kafka"
+    ],
+    "status": "to-read",
+    "alt": "Cover — Kafka: The Definitive Guide"
+  }
+]

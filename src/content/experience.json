@@ -1,0 +1,128 @@
+[
+  {
+    "id": "nbk",
+    "role": "Middle Data Engineer",
+    "organization": "The National Bank of Kazakhstan (Digital Development Center)",
+    "period": "May 2024 — Present",
+    "location": "Almaty, Kazakhstan",
+    "kind": "Full-time",
+    "highlights": [
+      "Built a Vertica MPP warehouse for financial reporting and cut analytical query latency.",
+      "Built ETL/ELT pipelines in Greenplum from six state systems (ESSP, GKB, ENPF, EIVK, KASE, NPK).",
+      "Orchestrate with Airflow and transform with dbt, with data quality checks and monitoring.",
+      "Designed a Data Lake on S3/MinIO with Apache Iceberg and Trino for cold data.",
+      "Enforce row-level security with Apache Ranger; observability with Zabbix and Grafana."
+    ],
+    "technologies": [
+      "Python",
+      "SQL",
+      "Airflow",
+      "dbt",
+      "Vertica",
+      "Trino",
+      "S3"
+    ],
+    "current": true
+  },
+  {
+    "id": "kbtu-ta",
+    "role": "Teaching Assistant (Cloud Computing & DevOps)",
+    "organization": "Kazakh-British Technical University",
+    "period": "Sep 2025 — Present",
+    "location": "Bostandıq District · On-site",
+    "kind": "Part-time",
+    "highlights": [
+      "Ran labs + supported lectures on cloud application development.",
+      "Guided deployments on GCP (App Engine, Cloud Functions, Cloud SQL).",
+      "Reviewed assignments and helped students debug containerized workloads."
+    ],
+    "technologies": [
+      "GCP",
+      "Docker",
+      "Python",
+      "Linux"
+    ],
+    "current": true
+  },
+  {
+    "id": "epam",
+    "role": "Data Software Engineering Trainee",
+    "organization": "EPAM Systems",
+    "period": "Sep 2024 — Present",
+    "location": "Remote",
+    "kind": "Internship",
+    "highlights": [
+      "Strengthened advanced SQL and data modeling through real-world exercises.",
+      "Studied modern DWH/lake patterns and ETL/ELT workflows.",
+      "Built analytics/visualization deliverables with cloud-aware practices."
+    ],
+    "technologies": [
+      "Python",
+      "SQL",
+      "Git",
+      "GitLab"
+    ],
+    "current": true
+  },
+  {
+    "id": "sdu-research",
+    "role": "Research Assistant (Computer Vision / ML)",
+    "organization": "SDU University, Kazakhstan",
+    "period": "Jun 2024 — Dec 2024",
+    "location": "Almaty, Kazakhstan · Remote",
+    "kind": "Part-time",
+    "highlights": [
+      "Prepared datasets (LabelImg) and trained YOLO detection models.",
+      "Improved model quality via structured experiments and metric-driven evaluation.",
+      "Optimized training/inference workflows with PyTorch + Scikit-learn."
+    ],
+    "technologies": [
+      "Python",
+      "PyTorch",
+      "CV/ML"
+    ],
+    "current": false
+  },
+  {
+    "id": "bcc",
+    "role": "Core Banking Systems (Colvir CBS) Support Engineer",
+    "organization": "Bank CenterCredit",
+    "period": "Oct 2023 — Apr 2024",
+    "location": "Almaty, Kazakhstan · On-site",
+    "kind": "Full-time",
+    "highlights": [
+      "Supported Colvir CBS on Oracle, including EOD batch processing and accounting closings.",
+      "Resolved incidents with Oracle SQL and PL/SQL; wrote data correction and validation scripts.",
+      "Built automated extraction pipelines and SQL views for live Power BI dashboards.",
+      "Worked in Jira, ServiceDesk and Confluence under enterprise SLAs."
+    ],
+    "technologies": [
+      "Oracle",
+      "PL/SQL",
+      "Power BI",
+      "Jira",
+      "Confluence"
+    ],
+    "current": false
+  },
+  {
+    "id": "alma",
+    "role": "Junior Database Engineer",
+    "organization": "Alma Telecommunications Kazakhstan",
+    "period": "Feb 2023 — Sep 2023",
+    "location": "Almaty, Kazakhstan · On-site",
+    "kind": "Full-time",
+    "highlights": [
+      "Built C# (.NET) background services for billing files and payment notifications.",
+      "Optimized PL/SQL procedures and triggers using execution plan analysis.",
+      "Administered Oracle databases: security, integrity checks, index maintenance."
+    ],
+    "technologies": [
+      "Oracle",
+      "C#",
+      ".NET",
+      "Linux"
+    ],
+    "current": false
+  }
+]

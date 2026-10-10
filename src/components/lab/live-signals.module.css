@@ -1,0 +1,119 @@
+.status {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+.rates {
+  margin-top: 25px;
+}
+.rates > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding: 19px 0;
+  gap: 20px;
+}
+.rates dt {
+  color: var(--muted);
+}
+.rates dd {
+  color: var(--accent);
+  font-size: 25px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.rates dd span {
+  color: var(--subtle);
+  font-size: 9px;
+  margin-left: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+.weather {
+  margin-top: 25px;
+}
+.weather > div {
+  padding: 19px 0;
+  border-bottom: 1px solid var(--line);
+}
+.weatherCity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+}
+.weatherCity svg {
+  color: var(--subtle);
+}
+.temperature {
+  color: var(--accent);
+  font-size: 35px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin-top: 12px;
+}
+.temperature span {
+  font-size: 20px;
+  margin-left: 3px;
+}
+.weather p {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 9px;
+}
+.weather p:last-child {
+  color: var(--subtle);
+  font-size: 8px;
+}
+.unavailable {
+  color: var(--muted);
+  font-size: 12px;
+  padding-top: 25px;
+}
+.resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+.resources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 12px 18px;
+  min-height: 48px;
+  font-size: 12px;
+  transition:
+    border-color 0.2s,
+    transform 0.2s var(--ease);
+}
+.resources a:hover {
+  border-color: var(--subtle);
+  transform: translateY(-2px);
+}
+.resources svg {
+  color: var(--muted);
+}
+@media (max-width: 650px) {
+  .resources {
+    gap: 10px;
+  }
+  .resources a {
+    font-size: 11px;
+    padding-inline: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resources a {
+    transition: none;
+  }
+  .resources a:hover {
+    transform: none;
+  }
+}

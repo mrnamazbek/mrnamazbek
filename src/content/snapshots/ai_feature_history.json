@@ -1,0 +1,182 @@
+[
+  {
+    "id": "2026-02-ai-automation",
+    "month": "2026-02",
+    "title": "News-to-Action Digest: Turn Trending “новости” Into Team-Ready Updates",
+    "trend_keyword": "AI automation",
+    "description": "Build a lightweight internal digest that converts high-volume news queries into actionable, non-political operational updates for product and engineering teams. The feature pulls headlines from approved sources, clusters duplicates, summarizes in plain English, and routes items i",
+    "why_now": "In KZ during 2026-02, “новости” is trending, signaling elevated demand for timely information. Teams often waste time scanning multiple feeds and still miss operationally relevant items. A structured digest with deduplication, summarization, and routing reduces context switching ",
+    "mobile_review_notes": "Ensure the digest cards are readable on small screens: 2-line title clamp, source + timestamp visible, and a single primary action (Assign/Save). Summaries should default to ~280 characters with “Read more” expansion. Provide offline-friend",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-02-18T11:32:38.254337+00:00"
+    },
+    "widget": {
+      "type": "impact_estimator",
+      "heading": "Time Saved by Automated News-to-Action Digest",
+      "description": "Estimate weekly hours saved by replacing manual scanning and ad-hoc sharing with an automated, deduplicated digest that routes actionable items to the right tool and owner.",
+      "config": {
+        "input_label": "Minutes per day currently spent per person on scanning/sharing news",
+        "min": 0,
+        "max": 90,
+        "step": 5,
+        "default": 25,
+        "baseline_hours": 80.0,
+        "efficiency_factor": 0.6
+      }
+    }
+  },
+  {
+    "id": "2026-05-turkish-airlines",
+    "month": "2026-05",
+    "title": "Rocket Launch Watch: A Developer-Friendly Space Events Digest",
+    "trend_keyword": "turkish airlines",
+    "description": "Build a monthly, portfolio-ready feature that turns trending interest in космонавтика (cosmonautics) into a practical product: a lightweight “Space Events Digest” that aggregates upcoming rocket launches, mission milestones, and livestream links, then summarizes them into a clean",
+    "why_now": "In KZ, interest in космонавтика spikes around launch windows and major mission news. May 2026 is a good time to ship a reliable, automated digest because users search for schedules, livestreams, and quick context—exactly the kind of information that benefits from structured data,",
+    "mobile_review_notes": "Ensure the weekly highlight card renders above the fold on 360px width. Use a single-column layout with 44px tap targets for “Watch”, “Add to calendar”, and “Share”. Keep summaries to 280 characters with an expandable “More” section. Cache ",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-05-02T06:08:13.729472+00:00"
+    },
+    "widget": {
+      "type": "roadmap_planner",
+      "heading": "Ship plan: Space Events Digest (4–6 weeks)",
+      "description": "A practical roadmap to implement an automated космонавтика digest: data sources, normalization, summarization, and a mobile-first feed with calendar export.",
+      "config": {
+        "steps": [
+          {
+            "name": "Source discovery & schema",
+            "detail": "Identify 2–3 reliable sources (official agency pages, launch schedule sites, RSS/Atom feeds). Define a normalized event schema: mission_name, provider, vehicle, window_start, window_end, location, liv",
+            "weeks": 0.8
+          },
+          {
+            "name": "Ingestion pipeline",
+            "detail": "Implement fetchers with retries, rate limiting, and HTML-to-structured extraction where needed. Store raw payloads for traceability. Schedule daily runs and emit structured events into a database.",
+            "weeks": 1.2
+          },
+          {
+            "name": "Deduplication & quality rules",
+            "detail": "Add canonicalization (time rounding, name normalization), fuzzy matching for mission names, and conflict resolution (prefer official sources). Flag uncertain fields and track provenance per attribute.",
+            "weeks": 0.9
+          },
+          {
+            "name": "Summaries & localization",
+            "detail": "Generate short, factual summaries from structured fields (not freeform scraping). Provide English UI copy and allow optional RU/KZ labels. Add guardrails: no speculation, include source links, and sho",
+            "weeks": 1.0
+          },
+          {
+            "name": "Mobile-first UI + calendar export",
+            "detail": "Build a feed with filters (This week / This month / By provider) and an event detail view. Add ICS export and deep links to livestreams. Implement caching and skeleton loading for slow networks.",
+            "weeks": 1.1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-06-ai-automation",
+    "month": "2026-06",
+    "title": "eGov KZ Task Automator: One-Click Document Checklist + Status Tracker",
+    "trend_keyword": "AI automation",
+    "description": "Build a lightweight web app that helps users and support teams prepare and track common eGov KZ requests (e.g., certificates, registrations) without storing sensitive data. The feature generates a step-by-step checklist, required document list, and a shareable progress link. It a",
+    "why_now": "In June 2026, “egov kz” is trending in Kazakhstan, signaling increased demand for digital public services. A practical productivity layer—checklists, status tracking, and standardized summaries—reduces repeated support questions and improves completion rates during peak usage per",
+    "mobile_review_notes": "Ensure the checklist is thumb-friendly with large tap targets and offline-first behavior (localStorage/IndexedDB). Avoid collecting personal identifiers; keep notes local-only by default. Provide clear disclaimers that the tool is not an of",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-06-02T08:39:20.470465+00:00"
+    },
+    "widget": {
+      "type": "roadmap_planner",
+      "heading": "4-Week Build Plan (Privacy-First)",
+      "description": "A practical roadmap to ship an MVP that improves completion rates for eGov-related tasks via checklists, progress tracking, and standardized summaries—without handling sensitive data.",
+      "config": {
+        "steps": [
+          {
+            "name": "Scope top 5 workflows + content model",
+            "detail": "Select the most common eGov KZ tasks for your audience, define required documents/steps per workflow, and design a JSON schema for checklists, prerequisites, and help text.",
+            "weeks": 0.8
+          },
+          {
+            "name": "MVP UI: checklist + progress + share link",
+            "detail": "Implement a mobile-first checklist with progress indicator, step details, and a shareable read-only link (no PII). Add local-only notes per step.",
+            "weeks": 1.2
+          },
+          {
+            "name": "Copy-ready request summary + templates",
+            "detail": "Generate a standardized summary (task, completed steps, missing docs, questions) with one-tap copy. Add templates for support teams to reduce back-and-forth.",
+            "weeks": 0.8
+          },
+          {
+            "name": "Reminders + offline-first hardening",
+            "detail": "Add optional reminders (calendar export or local notifications where supported), cache assets for offline use, and ensure graceful degradation on older mobile browsers.",
+            "weeks": 0.7
+          },
+          {
+            "name": "QA, accessibility, and analytics (privacy-safe)",
+            "detail": "Test on common KZ devices/browsers, add keyboard and screen-reader support, and implement privacy-safe event tracking (no user content, no identifiers).",
+            "weeks": 0.5
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-07-ai-automation",
+    "month": "2026-07",
+    "title": "Match-Day Automation Pack: Turn Live Sports Spikes into Reliable Ops Signals",
+    "trend_keyword": "AI automation",
+    "description": "A portfolio-ready feature that helps teams prepare for predictable traffic spikes driven by live events. Using the trend keyword as a proxy for a sudden attention surge, this feature guides an engineer or PM through estimating extra support/ops time, selecting a lightweight mitig",
+    "why_now": "In July 2026 (KZ), match-related searches spike around kickoff and key moments. Even if your product is not sports-focused, these bursts mirror real-world demand surges (push notifications, social sharing, streaming, checkout). Packaging a repeatable “spike playbook” as a product",
+    "mobile_review_notes": "Keep the estimator as a single-screen flow: one slider + two computed outputs. Use large tap targets and show results in plain language (e.g., “~24 hours saved this month”). Ensure the default value is conservative. Avoid jargon; provide sh",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-07-02T07:34:10.460046+00:00"
+    },
+    "widget": {
+      "type": "impact_estimator",
+      "heading": "Spike Readiness Impact Estimator",
+      "description": "Estimate how much engineering/ops time you can save per month by implementing a repeatable traffic-spike playbook (caching, rate limiting, queue backpressure, and on-call runbooks) for event-driven surges.",
+      "config": {
+        "input_label": "Expected spike events per month",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "default": 6,
+        "baseline_hours": 120.0,
+        "efficiency_factor": 0.35
+      }
+    }
+  },
+  {
+    "id": "2026-09-ai-automation",
+    "month": "2026-09",
+    "title": "AI automation: Monthly AI Feature",
+    "trend_keyword": "AI automation",
+    "description": "Automatically generated feature from current trend data.",
+    "why_now": "Trend data indicates high current interest, making it a useful candidate for quick product experiments.",
+    "mobile_review_notes": "Built with responsive layout and mobile-safe controls.",
+    "source": {
+      "type": "google_trends",
+      "geo": "KZ",
+      "captured_at": "2026-09-17T10:54:16.860724+00:00"
+    },
+    "widget": {
+      "type": "impact_estimator",
+      "heading": "AI automation: Capacity Estimator",
+      "description": "Estimate monthly engineering time unlocked by automation.",
+      "config": {
+        "input_label": "Automation coverage",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "default": 50,
+        "baseline_hours": 52.0,
+        "efficiency_factor": 0.6
+      }
+    }
+  }
+]

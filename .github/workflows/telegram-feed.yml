@@ -1,0 +1,49 @@
+name: Telegram feed
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Export latest channel posts
+        run: python scripts/update_telegram_feed.py --channel tech_digest_kz
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install site dependencies
+        run: npm ci
+      - name: Synchronize validated Telegram snapshot
+        run: npm run content:sync -- --only=telegram
+      - name: Publish validated Telegram snapshot to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          if [ -n "${SUPABASE_URL}" ] && [ -n "${SUPABASE_SECRET_KEY}" ]; then
+            npm run content:sync:database -- --only=telegram
+          else
+            echo "Supabase feed publication is unconfigured; repository snapshot was updated."
+          fi
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- assets/telegram_posts.json src/content/snapshots/telegram_posts.json; then
+            echo "No changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/telegram_posts.json src/content/snapshots/telegram_posts.json
+            git commit -m "chore(feed): update Telegram posts"
+            git push
+          fi

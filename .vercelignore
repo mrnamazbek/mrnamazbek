@@ -1,0 +1,17 @@
+.git/
+.claude/
+artifacts/
+playwright-report/
+test-results/
+tests/
+node_modules/
+.env*
+!.env.example
+assets/*.js
+assets/*.css
+assets/mock_repos.json
+assets/avatar.jpeg
+assets/avatart.jpeg
+assets/avatar-prepped.png
+index.html
+blog/demos/

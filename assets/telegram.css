@@ -1,0 +1,259 @@
+/* Telegram section. Uses site tokens (--ui-*) and respects reduced motion and the light theme. */
+
+.tg-hero {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+    gap: 2rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--ui-radius-card);
+    isolation: isolate;
+}
+
+.tg-copy {
+    min-width: 0;
+}
+
+/* Animated gradient border */
+.tg-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: conic-gradient(from var(--tg-angle, 0deg), #22d3ee, #6366f1, #a855f7, #22d3ee);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.7;
+    animation: tg-spin 8s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@property --tg-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@keyframes tg-spin {
+    to { --tg-angle: 360deg; }
+}
+
+.tg-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--ui-radius-pill);
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: #a5f3fc;
+    font: 500 0.75rem/1 "JetBrains Mono", ui-monospace, monospace;
+}
+
+.tg-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.7);
+    animation: tg-pulse 2s infinite;
+}
+
+@keyframes tg-pulse {
+    70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+
+.tg-title {
+    margin: 1rem 0 0.75rem;
+    font-size: clamp(1.75rem, 4.5vw, 3rem);
+    line-height: 1.1;
+    background: linear-gradient(90deg, #fff, #a5f3fc 60%, #c4b5fd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.tg-lead {
+    max-width: 38rem;
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.tg-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.tg-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0.7rem 1.4rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    color: #04121a;
+    background: linear-gradient(135deg, #22d3ee, #818cf8);
+    box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.6);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tg-cta:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 16px 40px -10px rgba(129, 140, 248, 0.7);
+}
+
+.tg-cta svg { width: 1.25rem; height: 1.25rem; }
+
+/* Orbit visual */
+.tg-orbit {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 240px;
+}
+
+.tg-ring {
+    position: absolute;
+    border: 1px dashed rgba(165, 243, 252, 0.25);
+    border-radius: 50%;
+    animation: tg-rotate 24s linear infinite;
+}
+
+.tg-ring:nth-child(1) { width: 220px; height: 220px; }
+.tg-ring:nth-child(2) { width: 150px; height: 150px; animation-direction: reverse; animation-duration: 16s; }
+
+.tg-ring::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 14px #22d3ee;
+}
+
+.tg-plane {
+    width: 84px;
+    height: 84px;
+    animation: tg-float 4s ease-in-out infinite;
+    filter: drop-shadow(0 12px 24px rgba(34, 211, 238, 0.45));
+}
+
+@keyframes tg-rotate { to { transform: rotate(360deg); } }
+@keyframes tg-float {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+/* Topic chips marquee */
+.tg-marquee {
+    overflow: hidden;
+    margin-top: 1.75rem;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.tg-marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 0.6rem;
+    animation: tg-marquee 28s linear infinite;
+}
+
+.tg-marquee:hover .tg-marquee-track { animation-play-state: paused; }
+@keyframes tg-marquee { to { transform: translateX(-50%); } }
+
+/* Feed */
+.tg-feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.1rem;
+}
+
+.tg-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: 18px;
+    border: 1px solid var(--ui-border);
+    background: var(--ui-surface);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: tg-rise 0.6s ease forwards;
+    animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+.tg-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(34, 211, 238, 0.45);
+    background: var(--ui-surface-hover);
+}
+
+@keyframes tg-rise { to { opacity: 1; transform: translateY(0); } }
+
+.tg-card-meta {
+    display: flex;
+    justify-content: space-between;
+    font: 400 0.7rem/1 "JetBrains Mono", ui-monospace, monospace;
+    color: #94a3b8;
+}
+
+.tg-card-text {
+    flex: 1;
+    color: #e2e8f0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: pre-line;
+}
+
+.tg-card-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #67e8f9;
+}
+
+.tg-card-link::after { content: " \2192"; transition: margin 0.2s; }
+.tg-card:hover .tg-card-link::after { margin-left: 4px; }
+
+.tg-card--topic .tg-card-icon {
+    font-size: 1.6rem;
+}
+
+[data-theme="light"] .tg-lead,
+[data-theme="light"] .tg-card-text { color: #334155; }
+[data-theme="light"] .tg-card-meta { color: #64748b; }
+[data-theme="light"] .tg-badge { color: #0e7490; }
+[data-theme="light"] .tg-card-link { color: #0e7490; }
+
+@media (max-width: 820px) {
+    .tg-hero { grid-template-columns: 1fr; }
+    .tg-orbit { min-height: 180px; order: -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tg-hero::before,
+    .tg-pulse,
+    .tg-ring,
+    .tg-plane,
+    .tg-marquee-track { animation: none; }
+    .tg-card { animation: none; opacity: 1; transform: none; }
+}

@@ -41,6 +41,9 @@ jobs:
       - name: Clean install dependencies
         run: npm ci
 
+      - name: Synchronize validated feed snapshots
+        run: npm run content:sync -- --only=audience
+
       - name: Cache Playwright browser binaries
         uses: actions/cache@v4.2.0
         id: playwright-cache
@@ -56,16 +59,30 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run audience and engagement smoke test
+      - name: Build Next.js site with refreshed audience content
+        run: npm run build
+
+      - name: Run migrated site tests
         env:
           CI: 'true'
-        run: npx playwright test tests/ai-audience-engagement.spec.js
+        run: npm run test:e2e
+
+      - name: Publish validated audience snapshot to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          if [ -n "${SUPABASE_URL}" ] && [ -n "${SUPABASE_SECRET_KEY}" ]; then
+            npm run content:sync:database -- --only=audience
+          else
+            echo "Supabase feed publication is unconfigured; repository snapshots were updated."
+          fi
 
       - name: Commit and push dataset updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/ai_audience_weekly.json
+          git add assets/ai_audience_weekly.json src/content/snapshots/ai_audience_weekly.json
           if git diff --cached --quiet; then
             echo "No dataset changes to commit"
             exit 0

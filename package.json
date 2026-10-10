@@ -1,16 +1,53 @@
 {
   "name": "mrnamazbek-site",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Portfolio site automation and monthly AI feature pipeline",
+  "description": "Namazbek Bekzhanov's Next.js portfolio, backed by Supabase and deployed on Vercel",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
-    "test:e2e": "playwright test tests/responsive-smoke.spec.js tests/monthly-ai-feature.spec.js tests/ai-audience-engagement.spec.js tests/career-focus.spec.js",
+    "dev": "next dev",
+    "build": "npm run content:sync && node scripts/sync-public-assets.mjs && next build",
+    "start": "next start",
+    "lint": "eslint src tests/e2e tests/unit next.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "node --conditions=react-server --import tsx --test tests/unit/*.test.ts",
+    "test:e2e": "playwright test",
     "test:e2e:all": "playwright test",
-    "feature:monthly": "python scripts/monthly_ai_feature_pipeline.py --force",
-    "feature:monthly:offline": "python scripts/monthly_ai_feature_pipeline.py --offline --force"
+    "feature:monthly": "python scripts/monthly_ai_feature_pipeline.py --force && npm run content:sync -- --only=monthlyFeature,featureHistory",
+    "feature:monthly:offline": "python scripts/monthly_ai_feature_pipeline.py --offline --force && npm run content:sync -- --only=monthlyFeature,featureHistory",
+    "check": "npm run lint && npm run typecheck && npm run test:unit",
+    "db:seed:generate": "node --conditions=react-server --import tsx scripts/generate-content-seed.ts",
+    "content:sync": "node --conditions=react-server --import tsx scripts/sync-content-snapshots.ts",
+    "content:sync:database": "npm run content:sync -- --database"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.117.3",
+    "lucide-react": "1.55.0",
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
+    "server-only": "0.0.1",
+    "three": "0.186.1",
+    "zod": "3.25.76"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.1",
-    "lighthouse": "^12.8.2"
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.58.2",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "25.3.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.186.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.0",
+    "lighthouse": "12.8.2",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vercel": "63.1.2"
   }
 }
