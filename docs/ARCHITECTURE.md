@@ -36,6 +36,8 @@ Public content is selected using the Supabase publishable key under database pol
 
 The design uses shared color, spacing, and typography tokens in `src/app/globals.css`. Theme preference persists locally. CSS and IntersectionObserver handle reveal effects. The desktop particle torus loads Three.js only when needed; mobile, reduced-motion, and unsupported WebGL visitors receive an SVG fallback. No browser needs a 3D scene to navigate or read content.
 
+Personal social links use `SocialProfileLink` for a small hover/focus preview. Touch visitors tap once to preview and again to open the original link. Escape or tapping outside dismisses it; cards stay inside the viewport and respect reduced motion. Saved public profile details live in `src/content/social-profiles.ts`; update that catalog and the published images in `assets/social` when a profile changes. The LinkedIn card uses the site's identity monogram. These are curated previews, without live follower counts, authenticated embeds, third-party scripts, or browser requests to social platforms. Profile links still work as ordinary links without JavaScript.
+
 The lab preserves the existing practical tools as isolated components. Regex work runs in a disposable worker with a timeout; generated Docker configuration and Airflow code download locally. Cost estimates are labeled illustrative and can be adjusted. External trend datasets show their capture dates and methodology.
 
 ## Development and deployment

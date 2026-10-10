@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { getProjects } from "@/lib/content";
 import { PageHeading } from "@/components/ui/page-heading";
 import { ProjectList } from "@/components/content/filterable-lists";
+import { SocialProfileLink } from "@/components/ui/social-profile-link";
 
 export const revalidate = 300;
 
@@ -23,14 +24,12 @@ export default async function ProjectsPage() {
           Public repositories, side projects, and experiments. A working
           collection of the things I’m curious enough to build.
         </p>
-        <a
-          href="https://github.com/mrnamazbek"
-          target="_blank"
-          rel="noopener noreferrer"
+        <SocialProfileLink
+          platform="github"
           className="text-link"
         >
           Follow the work on GitHub <ArrowUpRight size={17} />
-        </a>
+        </SocialProfileLink>
       </PageHeading>
       <ProjectList projects={projects} />
       <p className="source-note mono">
