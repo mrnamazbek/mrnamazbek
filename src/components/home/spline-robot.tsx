@@ -9,7 +9,7 @@ import styles from "./spline-robot.module.css";
 const SCENE = "/assets/3d/ddcnb-robot.splinecode";
 
 /** The actual exported DDCNB scene, rendered locally with bounded cursor tracking.
- * Manual rendering avoids the export's obsolete timeline and unrelated events.
+ * Disabling exported interaction avoids obsolete timelines and unrelated events.
  */
 export function SplineRobot() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -57,7 +57,7 @@ export function SplineRobot() {
         const bytes = await response.arrayBuffer();
         if (disposed) return;
         const scene = new Application(canvas!, {
-          renderMode: "manual",
+          renderMode: "auto",
           renderer: "webgl",
           htmlContentMode: "none",
           wasmPath: "/assets/3d/runtime/",

@@ -66,8 +66,10 @@ The portfolio changes its framing and lighting at runtime, hides the separate DD
 brand object, and uses the supported head and body transforms for pointer
 tracking. Coordinates are relative to the robot's stage, so movement remains
 visible on wide screens: the head turns toward the cursor while the body turns
-and leans gently. Manual rendering disables the export's unrelated events and obsolete
-timeline, without overriding the browser console or removing Spline attribution.
+and leans gently. Exported interaction is disabled to bypass unrelated events and
+the obsolete timeline. Automatic rendering finishes pending GPU and antialiasing
+frames, then idles; pause and visibility controls still stop playback. Spline
+attribution remains visible.
 
 `@splinetool/runtime` is pinned at `2.0.75`. It and the 1.3 MB scene load only after
 the visible desktop hero can run WebGL and motion. Geometry WASM decoders are

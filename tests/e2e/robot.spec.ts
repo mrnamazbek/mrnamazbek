@@ -41,6 +41,18 @@ function silhouetteChange(first: number[], second: number[]) {
   return (union - overlap) / union;
 }
 
+async function settleMotion(page: Page) {
+  // Let browser animation frames advance; screenshots can repeat an old GPU frame.
+  await page.evaluate(() => new Promise<void>(resolve => {
+    let frames = 60;
+    const next = () => {
+      if (--frames) requestAnimationFrame(next);
+      else resolve();
+    };
+    requestAnimationFrame(next);
+  }));
+}
+
 for (const width of [1440, 2560]) {
   test(`cursor tracking moves the robot geometry at ${width}px and returns to the same pose`, async ({ page }) => {
     test.setTimeout(90_000);
@@ -59,7 +71,17 @@ for (const width of [1440, 2560]) {
     const bounds = (await canvas.boundingBox())!;
     const left = { x: bounds.x + bounds.width * 0.1, y: bounds.y + bounds.height * 0.5 };
     const right = { x: bounds.x + bounds.width * 0.9, y: left.y };
+    let neutralBody: number[] = [];
+    // The runtime can be ready before its first shader-heavy frame is composited.
+    await expect(async () => {
+      const first = await bodySilhouette(page, canvas);
+      neutralBody = await bodySilhouette(page, canvas);
+      expect(silhouetteChange(first, neutralBody)).toBeLessThan(0.001);
+    }).toPass({ timeout: 45_000 });
     await page.mouse.move(left.x, left.y);
+    await settleMotion(page);
+    // A stable initial frame is not proof that the first pointer event has rendered.
+    await expect.poll(async () => silhouetteChange(neutralBody, await bodySilhouette(page, canvas))).toBeGreaterThan(0.05);
     // Wait for the spring to settle, then compare substantial silhouette movement.
     await expect(async () => {
       const first = await bodySilhouette(page, canvas);
@@ -68,6 +90,7 @@ for (const width of [1440, 2560]) {
     }).toPass();
     const leftBody = await bodySilhouette(page, canvas);
     await page.mouse.move(right.x, right.y);
+    await settleMotion(page);
     // Opposite turns can keep a nearly symmetric body's centroid close together.
     // Require a substantial silhouette change instead of a renderer-specific offset.
     let turnChange = 0;
@@ -76,6 +99,7 @@ for (const width of [1440, 2560]) {
       return turnChange;
     }).toBeGreaterThan(0.05);
     await page.mouse.move(left.x, left.y);
+    await settleMotion(page);
     // Temporal antialiasing can slightly change the edge pixels after a turn.
     // The restored pose must still match closely and undo at least 75% of the change.
     await expect.poll(async () => silhouetteChange(leftBody, await bodySilhouette(page, canvas))).toBeLessThan(Math.min(0.02, turnChange * 0.25));
