@@ -5,7 +5,7 @@ test.use({ launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-s
 
 // Measure the rendered green body, excluding the animated face and dark backdrop.
 // A changed texture or one antialiased pixel cannot masquerade as cursor tracking.
-async function bodyCenter(page: Page, canvas: Locator) {
+async function bodySilhouette(page: Page, canvas: Locator) {
   const screenshot = (await canvas.screenshot()).toString("base64");
   return page.evaluate(async (png) => {
     const image = new Image();
@@ -17,8 +17,7 @@ async function bodyCenter(page: Page, canvas: Locator) {
     const context = sample.getContext("2d")!;
     context.drawImage(image, 0, 0);
     const { data } = context.getImageData(0, 0, sample.width, sample.height);
-    let count = 0;
-    let sum = 0;
+    const pixels: number[] = [];
     for (let y = Math.floor(sample.height * 0.35); y < sample.height * 0.9; y++) {
       for (let x = 0; x < sample.width; x++) {
         const index = (y * sample.width + x) * 4;
@@ -26,14 +25,20 @@ async function bodyCenter(page: Page, canvas: Locator) {
         const green = data[index + 1];
         const blue = data[index + 2];
         if (green > 70 && green > red * 1.45 && green > blue * 1.25) {
-          count++;
-          sum += x;
+          pixels.push(y * sample.width + x);
         }
       }
     }
-    if (count < 400) throw new Error("The rendered robot body is missing");
-    return sum / count / sample.width;
+    if (pixels.length < 400) throw new Error("The rendered robot body is missing");
+    return pixels;
   }, screenshot);
+}
+
+function silhouetteChange(first: number[], second: number[]) {
+  const original = new Set(first);
+  const overlap = second.filter(pixel => original.has(pixel)).length;
+  const union = first.length + second.length - overlap;
+  return (union - overlap) / union;
 }
 
 for (const width of [1440, 2560]) {
@@ -57,18 +62,27 @@ for (const width of [1440, 2560]) {
     await page.mouse.move(left.x, left.y);
     // Wait for the spring to settle, then compare substantial silhouette movement.
     await expect(async () => {
-      const first = await bodyCenter(page, canvas);
-      expect(Math.abs(await bodyCenter(page, canvas) - first)).toBeLessThan(0.002);
+      const first = await bodySilhouette(page, canvas);
+      const second = await bodySilhouette(page, canvas);
+      expect(silhouetteChange(first, second)).toBeLessThan(0.001);
     }).toPass();
-    const leftCenter = await bodyCenter(page, canvas);
+    const leftBody = await bodySilhouette(page, canvas);
     await page.mouse.move(right.x, right.y);
-    await expect.poll(async () => Math.abs(await bodyCenter(page, canvas) - leftCenter)).toBeGreaterThan(0.008);
+    // Opposite turns can keep a nearly symmetric body's centroid close together.
+    // Require a substantial silhouette change instead of a renderer-specific offset.
+    let turnChange = 0;
+    await expect.poll(async () => {
+      turnChange = silhouetteChange(leftBody, await bodySilhouette(page, canvas));
+      return turnChange;
+    }).toBeGreaterThan(0.05);
     await page.mouse.move(left.x, left.y);
-    await expect.poll(async () => Math.abs(await bodyCenter(page, canvas) - leftCenter)).toBeLessThan(0.003);
+    // Temporal antialiasing can slightly change the edge pixels after a turn.
+    // The restored pose must still match closely and undo at least 75% of the change.
+    await expect.poll(async () => silhouetteChange(leftBody, await bodySilhouette(page, canvas))).toBeLessThan(Math.min(0.02, turnChange * 0.25));
     await page.getByRole("button", { name: "Pause robot animation" }).click();
-    const pausedCenter = await bodyCenter(page, canvas);
+    const pausedBody = await bodySilhouette(page, canvas);
     await page.mouse.move(right.x, right.y);
-    expect(Math.abs(await bodyCenter(page, canvas) - pausedCenter)).toBeLessThan(0.002);
+    expect(silhouetteChange(pausedBody, await bodySilhouette(page, canvas))).toBeLessThan(0.01);
   });
 }
 
