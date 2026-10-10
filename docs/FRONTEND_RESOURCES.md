@@ -4,8 +4,8 @@ The portfolio keeps its ink/green editorial identity and server-rendered content
 The October 2026 enhancement uses original React, CSS, Web Animations API, and
 native scrolling implementations informed by the user's supplied Awwwards pack.
 No demo photographs, fonts, proprietary bundles, GSAP, Lenis, or remote scripts
-from the pack are shipped. Existing Three.js remains dynamically loaded for the
-DDCNB-inspired data sculpture. This is a curated selection of techniques that fit
+from the pack are shipped. The DDCNB robot's Spline runtime is dynamically loaded
+for capable desktop visitors. This is a curated selection of techniques that fit
 the portfolio, not an import of every demo or library.
 
 Source pack: https://drive.google.com/drive/folders/1BPrOBFEt3pseDZYCK1vwZG3lC_db_DdQ
@@ -21,6 +21,9 @@ Source pack: https://drive.google.com/drive/folders/1BPrOBFEt3pseDZYCK1vwZG3lC_d
 | Page entrance | [Page Transitions 5](https://drive.google.com/drive/folders/1JRRsWv2nJ_8L0QaY2esh-oG49JPvSw05) | Brief contained SVG trace on Next template remount |
 | Career and education | [Scroll 71 / Sticky Cards](https://drive.google.com/drive/folders/1LgciGbjIEYaQUvZFi5OQY4I9bzqmBXqZ) | Bounded depth entrances and a decorative reading rail, using native page scrolling |
 | Contact backdrop | [Background 11 / PixelLiquidBg](https://drive.google.com/drive/folders/1MlDp7Wl9uhK82IqFSVau8OjmbdHmpJab) | Lightweight CSS pixel field and pointer-reactive orbits; no fluid shaders copied |
+| Selected-project explorer | Hover 1 / Mouse Scale Image Gallery and Grid 1 / Grid Layout Transition archives in the supplied pack | Editorial project tabs, changing layered blueprint, native repository links, arrow/Home/End keyboard controls |
+| Capabilities panels | Hover 21 and Mouse 3 (linked above) | Seven native disclosure panels with existing tools, circuit accents, local light, keyboard focus parity |
+| Contact and back-to-top actions | Mouse 2 / spring-following archive and Mouse 3 | Stable anchor hit areas with bounded inner movement, native links, focus highlight and a spring ring |
 
 Some archives contain an ISC package declaration with no author or standalone
 license notice; others have no license file. Those declarations were not treated
@@ -51,4 +54,29 @@ headlines, photos, and mobile navigation remain usable without JavaScript.
 Frequent pointer updates use refs and animation frames; viewport subscriptions
 are shared and passive. Components clean up animations, observers and listeners.
 The gallery uses locally hosted WebP derivatives and responsive lazy Next images.
-No animation dependencies were added.
+The CSS interactions do not add animation dependencies; the optional 3D robot uses Spline Runtime.
+
+## DDCNB robot
+
+The later robot enhancement reuses the owner's actual
+[`public/spline/scene.splinecode`](https://github.com/mrnamazbek/ddc-nbk-website/blob/develop/public/spline/scene.splinecode)
+export from DDCNB. `assets/3d/ddcnb-robot.splinecode` has the same Git blob hash
+`4d5b65151cb6acc1418271ec9f1ce78fee80b6b5` as that source; it is not a replacement model.
+The portfolio changes its framing and lighting at runtime, hides the separate DDC
+brand object, and uses the supported head transform API for restrained pointer
+tracking. Manual rendering disables the export's unrelated events and obsolete
+timeline, without overriding the browser console or removing Spline attribution.
+
+`@splinetool/runtime` is pinned at `2.0.75`. It and the 1.3 MB scene load only after
+the visible desktop hero can run WebGL and motion. Geometry WASM decoders are
+copied from the installed package by the normal asset-sync step and are fetched
+from the same origin when needed. CSP permits WASM compilation via
+`wasm-unsafe-eval`; JavaScript `unsafe-eval` and third-party connection origins
+remain disallowed. Image/media blob and data URLs permit the export's embedded textures; no media CDN is enabled. HTML content in the scene is disabled.
+
+The two small PNG posters are reviewed browser renders of this actual model,
+captured in the portfolio's dark and light themes. Mobile, reduced-motion,
+unsupported WebGL and load failures retain these posters. Pause stops interaction;
+hidden tabs and off-screen scenes stop rendering. Observers, events, animation
+frames, downloads and the runtime instance are cleaned up on navigation. The
+earlier original particle torus remains available as a separate reusable component.

@@ -14,7 +14,7 @@ import {
   getProjects,
   getSkills,
 } from "@/lib/content";
-import { DataSculpture } from "@/components/home/data-sculpture";
+import { SplineRobot } from "@/components/home/spline-robot";
 import { HeroArtFrame, HeroTitle, KineticTechnologyRail } from "@/components/home/hero-motion";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/page-heading";
@@ -71,10 +71,10 @@ export default async function HomePage() {
         </div>
         <div className="hero-art">
           <div className="art-topline mono">
-            <span>DATA IN MOTION</span>
+            <span>A CURIOUS COMPANION</span>
             <span>FIG. 001</span>
           </div>
-          <HeroArtFrame><DataSculpture /></HeroArtFrame>
+          <HeroArtFrame><SplineRobot /></HeroArtFrame>
           <div className="art-bottomline mono">
             <span>
               <span className="status-dot" /> FROM SIGNAL TO SYSTEM

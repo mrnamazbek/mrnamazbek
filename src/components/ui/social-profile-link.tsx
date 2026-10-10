@@ -51,13 +51,17 @@ export function SocialProfileLink({
     setPosition(null);
   }, [clearTimer]);
 
+  const claimPreview = useCallback(() => {
+    document.dispatchEvent(new CustomEvent(PREVIEW_EVENT, { detail: id }));
+  }, [id]);
+
   const show = useCallback(() => {
     clearTimer();
     if (!dismissed.current) {
-      document.dispatchEvent(new CustomEvent(PREVIEW_EVENT, { detail: id }));
+      claimPreview();
       setOpen(true);
     }
-  }, [clearTimer, id]);
+  }, [clearTimer, claimPreview]);
 
   const leave = () => {
     clearTimer();
@@ -165,6 +169,10 @@ export function SocialProfileLink({
           dismissed.current = false;
           setTouchPreview(false);
           clearTimer();
+          // Close an older focused preview before waiting to reveal this one.
+          // Otherwise a scroll can move that card over the newly hovered link,
+          // firing pointerleave and cancelling this link's opening timer.
+          claimPreview();
           timer.current = setTimeout(show, 140);
         }}
         onPointerLeave={leave}

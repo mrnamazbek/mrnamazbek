@@ -4,6 +4,7 @@ import { getProjects } from "@/lib/content";
 import { PageHeading } from "@/components/ui/page-heading";
 import { ProjectList } from "@/components/content/filterable-lists";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
+import { ProjectShowcase } from "@/components/content/project-showcase";
 
 export const revalidate = 300;
 
@@ -31,7 +32,10 @@ export default async function ProjectsPage() {
           Follow the work on GitHub <ArrowUpRight size={17} />
         </SocialProfileLink>
       </PageHeading>
-      <ProjectList projects={projects} />
+      <ProjectShowcase projects={projects.filter(project => project.featured).slice(0, 4)} />
+      <section id="repository-index" aria-label="Repository index">
+        <ProjectList projects={projects} />
+      </section>
       <p className="source-note mono">
         Repository metadata captured {projects[0]?.capturedAt ?? "from GitHub"}.
         Open a repository for its latest activity.

@@ -7,7 +7,10 @@ The portfolio's layout, CSS, components, and particle geometry were authored for
 - [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/main/src/ts-default/Animations/FadeContent/FadeContent.tsx): visual inspiration for the original IntersectionObserver/CSS reveal component. No React Bits source was copied. Its inspected repository license is MIT with the Commons Clause, Copyright © 2026 David Haz.
 - [21st.dev](https://21st.dev): navigation and hover microinteraction references. No marketplace component code was copied or vendored.
 
-Runtime dependencies are declared with exact versions in `package.json` and resolved in `package-lock.json`. Their original licenses remain in their installed packages. Icons use Lucide, 3D rendering uses Three.js, Markdown rendering uses React Markdown and remark-gfm, and the application uses Next.js, React, Supabase JS, and Zod. Existing public media, resume, article text, and feed snapshots come from the owner's original portfolio. Feed methodology and source dates remain visible in the site.
+- The later robot enhancement uses the owner's actual DDCNB `public/spline/scene.splinecode` export as `assets/3d/ddcnb-robot.splinecode`. It retains Spline attribution and does not copy DDCNB's console filters or watermark-removal code. The small theme-specific posters were captured from the rendered model. Runtime framing, lighting, and head motion are independently implemented.
+- The selected-project explorer, capabilities disclosures, magnetic email link and footer ring are original implementations informed by the supplied pack's Hover 1, Grid 1, Hover 21, Mouse 2 and Mouse 3 studies. No demo code, fonts or media are copied.
+
+Runtime dependencies are declared with exact versions in `package.json` and resolved in `package-lock.json`. Their original licenses remain in their installed packages. Icons use Lucide, 3D rendering uses Three.js and Spline Runtime (© 2026 Spline, Inc.), Markdown rendering uses React Markdown and remark-gfm, and the application uses Next.js, React, Supabase JS, and Zod. Spline geometry decoders are copied from the installed runtime package for same-origin serving. Existing public media, resume, article text, and feed snapshots come from the owner's original portfolio. Feed methodology and source dates remain visible in the site.
 
 
 # Third-party source-study notices

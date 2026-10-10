@@ -23,6 +23,7 @@
     "content:sync:database": "npm run content:sync -- --database"
   },
   "dependencies": {
+    "@splinetool/runtime": "2.0.75",
     "@supabase/supabase-js": "2.117.3",
     "lucide-react": "1.55.0",
     "next": "16.4.0",
