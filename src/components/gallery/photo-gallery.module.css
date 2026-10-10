@@ -1,0 +1,136 @@
+.gallery {
+  padding-block: 32px;
+  min-width: 0;
+  border-top: 1px solid var(--line);
+  overflow: clip;
+}
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.heading { min-width: 0; max-width: 620px; }
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font: 10px/1.6 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.eyebrow span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.heading h2 { margin-top: 14px; font-size: clamp(28px, 4.5vw, 52px); letter-spacing: -.055em; line-height: 1.08; font-weight: 500; }
+.intro { margin-top: 14px; max-width: 460px; font-size: 13px; color: var(--muted); line-height: 1.75; }
+.controls, .dialogControls { display: flex; gap: 8px; flex-shrink: 0; }
+.controls button, .dialogControls button, .close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--foreground);
+  background: var(--surface);
+  transition: color 180ms, background 180ms, border-color 180ms;
+}
+.controls button:not(:disabled):hover, .dialogControls button:hover, .close:hover { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.controls button:disabled { opacity: .35; cursor: default; }
+.rail {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: 20px;
+  padding: 35px 8px 26px;
+  scroll-padding-inline: 8px;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.filmstrip { display: flex; align-items: flex-start; gap: clamp(18px, 3vw, 42px); margin: 0; padding: 0; list-style: none; perspective: 1200px; }
+.card { flex: 0 0 clamp(245px, 31vw, 380px); min-width: 0; scroll-snap-align: center; scroll-snap-stop: always; }
+.figure { margin: 0; transform: translateY(12px) rotate(-2deg) rotateY(-6deg); transform-origin: 50% 85%; transition: transform 650ms var(--ease); }
+.card:nth-child(3n + 2) .figure { transform: translateY(-10px) rotate(2deg) rotateY(5deg); }
+.card:nth-child(3n) .figure { transform: translateY(6px) rotate(-1deg) rotateY(-3deg); }
+.card[data-gallery-active="true"] .figure, .card:focus-within .figure { transform: translateY(0) rotate(0); }
+.photoLink { display: block; border-radius: 2px; }
+.imageFrame { position: relative; aspect-ratio: 4 / 5; background: var(--surface-raised); overflow: hidden; border-radius: 2px; }
+.imageFrame img { object-fit: cover; transition: transform 800ms var(--ease); }
+.photoLink:hover .imageFrame img, .photoLink:focus-visible .imageFrame img { transform: scale(1.045); }
+.enlarge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #fff5;
+  border-radius: 50%;
+  color: #fff;
+  background: #101210aa;
+  opacity: .85;
+  transition: opacity 180ms, transform 250ms var(--ease);
+}
+.photoLink:hover .enlarge { opacity: 1; transform: scale(1.08); }
+.caption { display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 16px 1px 0; }
+.number { padding-top: 2px; color: var(--accent); font: 10px/1.7 var(--font-mono); }
+.caption h3 { font-size: 13px; line-height: 1.4; font-weight: 500; letter-spacing: -.01em; }
+.caption p { margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; }
+.hint { color: var(--muted); font: 10px/1.7 var(--font-mono); }
+.hint span { margin-inline: 8px; color: var(--accent); }
+.counter { flex-shrink: 0; color: var(--muted); font: 11px/1.7 var(--font-mono); }
+.counter span { color: var(--foreground); }
+.dialog {
+  position: fixed;
+  inset: 0;
+  width: min(1180px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--foreground);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.dialog::backdrop { background: #080a08e8; backdrop-filter: blur(10px); }
+.dialog[open] { animation: dialogReveal 300ms var(--ease) both; }
+.dialogContent { padding: 16px 20px 20px; }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 16px; }
+.dialogCounter { color: var(--muted); font: 11px/1.7 var(--font-mono); }
+.dialogImage { position: relative; height: min(68dvh, 720px); min-height: 150px; animation: imageReveal 350ms var(--ease) both; }
+.dialogFooter { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 20px; }
+.dialogFooter h3 { font-size: 17px; font-weight: 500; letter-spacing: -.025em; }
+.dialogFooter p { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+@keyframes dialogReveal { from { opacity: 0; transform: translateY(18px) scale(.975); } to { opacity: 1; transform: none; } }
+@keyframes imageReveal { from { opacity: .3; clip-path: inset(5% 8%); transform: scale(.97); } to { opacity: 1; clip-path: inset(0); transform: none; } }
+@media (max-width: 600px) {
+  .gallery { padding-block: 24px; }
+  .header { align-items: flex-start; gap: 12px; }
+  .heading h2 { max-width: 250px; font-size: 34px; }
+  .controls { gap: 5px; padding-top: 28px; }
+  .controls button { width: 38px; height: 38px; }
+  .card { flex-basis: min(78vw, 320px); }
+  .rail { margin-top: 8px; }
+  .dialogContent { padding: 12px; }
+  .dialogImage { height: 62dvh; }
+  .dialogFooter { align-items: flex-start; gap: 12px; }
+  .dialogFooter h3 { font-size: 15px; }
+  .dialogFooter p { font-size: 11px; }
+  .dialogControls { gap: 5px; }
+  .dialogControls button { width: 40px; height: 40px; }
+  .hint { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .figure, .imageFrame img, .enlarge, .controls button, .dialogControls button, .close { transition: none; }
+  .figure, .card:nth-child(3n + 2) .figure, .card:nth-child(3n) .figure { transform: none; }
+  .photoLink:hover .imageFrame img, .photoLink:focus-visible .imageFrame img, .photoLink:hover .enlarge { transform: none; }
+  .dialog[open], .dialogImage { animation: none; }
+}

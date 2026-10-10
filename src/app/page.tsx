@@ -15,10 +15,15 @@ import {
   getSkills,
 } from "@/lib/content";
 import { DataSculpture } from "@/components/home/data-sculpture";
+import { HeroArtFrame, HeroTitle, KineticTechnologyRail } from "@/components/home/hero-motion";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/page-heading";
 import { ProjectCard } from "@/components/content/project-card";
 import { PostCard } from "@/components/content/post-card";
+import { InteractiveCard } from "@/components/ui/interactive-card";
+import { PhotoGallery } from "@/components/gallery/photo-gallery";
+import { galleryPhotos } from "@/content/gallery";
+import { AmbientBackdrop } from "@/components/ui/scroll-story";
 
 export const revalidate = 300;
 
@@ -44,19 +49,7 @@ export default async function HomePage() {
             {profile.availability} <span className="eyebrow-divider">/</span>{" "}
             DATA ENGINEER & BUILDER
           </p>
-          <h1 aria-label="I make data work.">
-            <span className="hero-line">
-              <span>I make data</span>
-            </span>
-            <span className="hero-line hero-accent">
-              <span>
-                work.
-                <span className="hero-title-period" aria-hidden="true">
-                  ↗
-                </span>
-              </span>
-            </span>
-          </h1>
+          <HeroTitle />
           <p className="hero-description">
             I’m {profile.shortName}. I turn complex data into
             <br className="desktop-break" /> reliable systems — and good ideas
@@ -81,7 +74,7 @@ export default async function HomePage() {
             <span>DATA IN MOTION</span>
             <span>FIG. 001</span>
           </div>
-          <DataSculpture />
+          <HeroArtFrame><DataSculpture /></HeroArtFrame>
           <div className="art-bottomline mono">
             <span>
               <span className="status-dot" /> FROM SIGNAL TO SYSTEM
@@ -101,22 +94,7 @@ export default async function HomePage() {
           </a>
         </div>
       </section>
-      <div className="technology-strip" aria-label="Core technologies">
-        {[
-          "Python",
-          "SQL",
-          "Apache Airflow",
-          "dbt",
-          "Apache Iceberg",
-          "Trino",
-          "Docker",
-        ].map((technology, index) => (
-          <span key={technology}>
-            {technology}
-            {index < 6 && <i aria-hidden="true">✳</i>}
-          </span>
-        ))}
-      </div>
+      <KineticTechnologyRail />
       <section className="content-section" id="selected-work">
         <Reveal>
           <SectionHeading number="01" title="Selected work">
@@ -183,7 +161,7 @@ export default async function HomePage() {
         </Reveal>
       </section>
       <section className="discovery-grid content-section">
-        <Reveal className="discovery-card">
+        <Reveal><InteractiveCard className="discovery-card">
           <p className="eyebrow">04 / PLAY & EXPERIMENT</p>
           <h2>
             A small lab.
@@ -202,8 +180,8 @@ export default async function HomePage() {
             strokeWidth={1}
             aria-hidden="true"
           />
-        </Reveal>
-        <Reveal className="discovery-card discovery-card-library" delay={80}>
+        </InteractiveCard></Reveal>
+        <Reveal delay={80}><InteractiveCard className="discovery-card discovery-card-library">
           <p className="eyebrow">05 / THE BOOKSHELF</p>
           <h2>
             Ideas worth
@@ -223,10 +201,14 @@ export default async function HomePage() {
             strokeWidth={1}
             aria-hidden="true"
           />
-        </Reveal>
+        </InteractiveCard></Reveal>
+      </section>
+      <section className="home-gallery content-section">
+        <PhotoGallery photos={galleryPhotos} title="More than the work." intro="A few portraits from my personal archive. Another way to get to know the person behind the projects." />
+        <Link href="/gallery" className="text-link">Explore the gallery <ArrowUpRight size={17} /></Link>
       </section>
       <section className="contact-banner">
-        <Reveal>
+        <AmbientBackdrop><Reveal>
           <p className="eyebrow">
             <span className="status-dot" /> GOOD WORK STARTS WITH A CONVERSATION
           </p>
@@ -238,7 +220,7 @@ export default async function HomePage() {
           <Link href="/contact" className="button button-primary">
             Get in touch <ArrowUpRight size={19} />
           </Link>
-        </Reveal>
+        </Reveal></AmbientBackdrop>
       </section>
     </>
   );

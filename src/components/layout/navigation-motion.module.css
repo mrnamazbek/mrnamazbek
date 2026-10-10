@@ -1,0 +1,176 @@
+/* Original CSS treatment inspired by Awwwards pack Navigation Menus / 4.
+   The supplied demo uses GSAP for masked character stagger and panel reveal.
+   Source: https://drive.google.com/drive/folders/105k6padohAWD-5oJgMrW-zFwmUyOJSpI */
+.header .desktopLink {
+  position: relative;
+  padding-inline: 12px;
+}
+
+.desktopLink::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  inset-inline: 12px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 260ms var(--ease);
+}
+
+.desktopLink:hover::after,
+.desktopLink:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.labelWindow {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.labelLine,
+.labelClone {
+  display: block;
+  transition: transform 340ms var(--ease);
+}
+
+.labelClone {
+  position: absolute;
+  inset: 0;
+  color: var(--foreground);
+  transform: translateY(110%);
+}
+
+.desktopLink:hover .labelLine,
+.desktopLink:focus-visible .labelLine {
+  transform: translateY(-110%);
+}
+
+.desktopLink:hover .labelClone,
+.desktopLink:focus-visible .labelClone {
+  transform: translateY(0);
+}
+
+.drawer {
+  max-height: calc(100svh - 94px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: panel-enter 340ms var(--ease);
+}
+
+.mobileLabel {
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.character {
+  display: inline-block;
+  animation: character-enter 420ms var(--ease) both;
+  animation-delay: calc(var(--row) * 35ms + var(--character) * 13ms);
+}
+
+.number {
+  min-width: 18px;
+  transition: color 180ms ease;
+}
+
+.header .mobileLink[aria-current="page"] .number,
+.header .mobileLink:hover .number,
+.header .mobileLink:focus-visible .number {
+  color: var(--accent);
+}
+
+.mobileLink:focus-visible .character {
+  animation: none;
+}
+
+.mobileLink svg {
+  transition: transform 240ms var(--ease), color 240ms ease;
+}
+
+.header .mobileLink:hover svg,
+.header .mobileLink:focus-visible svg {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+.fallback {
+  display: none;
+}
+
+@keyframes panel-enter {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
+}
+
+@keyframes character-enter {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 1150px) {
+  .header .desktopLink { padding-inline: 9px; }
+  .desktopLink::after { inset-inline: 9px; }
+}
+
+@media (max-width: 1020px) {
+  .header .desktop { display: none; }
+  .header .toggle { display: inline-flex; }
+  .header .drawer {
+    display: block;
+    width: calc(100% - 72px);
+    margin-inline: auto;
+    padding: 15px 0 25px;
+    border-bottom: 1px solid var(--line);
+  }
+  .header .mobileLink {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 17px 5px;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 24px;
+  }
+  .header .number { color: var(--subtle); font-size: 9px; }
+  .mobileLink svg { margin-left: auto; color: var(--subtle); }
+  .fallback {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    width: calc(100% - 72px);
+    margin-inline: auto;
+    padding-block: 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 650px) {
+  .header .drawer,
+  .fallback { width: calc(100% - 40px); }
+  .drawer { max-height: calc(100svh - 78px); }
+  .header .mobileLink { font-size: 22px; padding-block: 14px; }
+}
+
+@media (hover: none) {
+  .desktopLink:hover .labelLine,
+  .desktopLink:hover .labelClone,
+  .mobileLink:hover svg { transform: none; }
+  .desktopLink:hover .labelClone { transform: translateY(110%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .character { animation: none; }
+  .labelLine,
+  .labelClone,
+  .desktopLink::after,
+  .mobileLink svg { transition: none; }
+  .desktopLink:hover .labelLine,
+  .desktopLink:focus-visible .labelLine { transform: none; }
+  .labelClone { display: none; }
+  .mobileLink:hover svg,
+  .mobileLink:focus-visible svg { transform: none; }
+}

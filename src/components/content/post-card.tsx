@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Post } from "@/types/content";
+import { InteractiveCard } from "@/components/ui/interactive-card";
 
 export type PostSummary = Pick<
   Post,
@@ -14,7 +15,7 @@ export function PostCard({
   index?: number;
 }) {
   return (
-    <article className="post-card">
+    <InteractiveCard className="post-card" variant="row" tilt={false}>
       <span className="post-number mono">
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -45,6 +46,6 @@ export function PostCard({
         </div>
       </div>
       <ArrowUpRight className="card-arrow" size={23} />
-    </article>
+    </InteractiveCard>
   );
 }

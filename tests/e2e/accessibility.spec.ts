@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-for (const path of ["/", "/about", "/projects", "/writing", "/lab", "/library", "/contact"]) {
+for (const path of ["/", "/about", "/projects", "/writing", "/gallery", "/lab", "/library", "/contact"]) {
   test(`essential accessibility checks for ${path}`, async ({ page }) => {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -27,7 +27,7 @@ test("mobile navigation exposes accessible controls", async ({ page }) => {
 test("light palette keeps text and controls accessible", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /switch to light/i }).click();
-  for (const path of ["/", "/lab", "/library", "/contact"]) {
+  for (const path of ["/", "/gallery", "/lab", "/library", "/contact"]) {
     await page.goto(path);
     await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");

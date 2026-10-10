@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import styles from "./navigation-motion.module.css";
 
 const navigation = [
   { href: "/about", label: "About" },
   { href: "/projects", label: "Projects" },
   { href: "/writing", label: "Writing" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/lab", label: "Lab" },
   { href: "/library", label: "Library" },
 ];
@@ -45,20 +47,6 @@ export function SiteHeader() {
         setOpen(false);
         toggleRef.current?.focus();
       }
-      if (event.key === "Tab") {
-        const links = Array.from(
-          drawerRef.current?.querySelectorAll<HTMLElement>("a, button") ?? [],
-        );
-        const first = links[0];
-        const last = links[links.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          toggleRef.current?.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          toggleRef.current?.focus();
-        }
-      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
@@ -76,7 +64,7 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${styles.header}`}>
       <div className="header-inner">
         <Link
           href="/"
@@ -93,15 +81,18 @@ export function SiteHeader() {
             BEKZHANOV
           </span>
         </Link>
-        <nav className="desktop-navigation" aria-label="Main navigation">
+        <nav className={`desktop-navigation ${styles.desktop}`} aria-label="Main navigation">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={pathname.startsWith(item.href) ? "page" : undefined}
-              className={pathname.startsWith(item.href) ? "active" : ""}
+              className={`${styles.desktopLink} ${pathname.startsWith(item.href) ? "active" : ""}`}
             >
-              {item.label}
+              <span className={styles.labelWindow}>
+                <span className={styles.labelLine}>{item.label}</span>
+                <span className={styles.labelClone} aria-hidden="true">{item.label}</span>
+              </span>
             </Link>
           ))}
         </nav>
@@ -119,7 +110,7 @@ export function SiteHeader() {
           <button
             ref={toggleRef}
             type="button"
-            className="icon-button mobile-menu-toggle"
+            className={`icon-button mobile-menu-toggle ${styles.toggle}`}
             aria-expanded={open}
             aria-controls="mobile-navigation"
             aria-label={open ? "Close navigation" : "Open navigation"}
@@ -133,30 +124,53 @@ export function SiteHeader() {
         <div
           id="mobile-navigation"
           ref={drawerRef}
-          className="mobile-navigation"
+          className={`mobile-navigation ${styles.drawer}`}
         >
           <nav aria-label="Mobile navigation">
             {navigation.map((item, index) => (
               <Link
                 href={item.href}
                 key={item.href}
+                aria-label={item.label}
+                className={styles.mobileLink}
+                style={{ "--row": index } as CSSProperties}
                 aria-current={
                   pathname.startsWith(item.href) ? "page" : undefined
                 }
                 onClick={() => setOpen(false)}
               >
-                <span className="mono">0{index + 1}</span>
-                {item.label}
+                <span className={`mono ${styles.number}`} aria-hidden="true">0{index + 1}</span>
+                <span className={styles.mobileLabel} aria-hidden="true">
+                  {Array.from(item.label).map((character, characterIndex) => (
+                    <span
+                      className={styles.character}
+                      style={{ "--character": characterIndex } as CSSProperties}
+                      key={characterIndex}
+                    >{character}</span>
+                  ))}
+                </span>
                 <ArrowUpRight size={19} />
               </Link>
             ))}
-            <Link href="/contact" onClick={() => setOpen(false)}>
-              <span className="mono">06</span>Contact
+            <Link href="/contact" aria-label="Contact" className={styles.mobileLink} style={{ "--row": navigation.length } as CSSProperties} onClick={() => setOpen(false)}>
+              <span className={`mono ${styles.number}`} aria-hidden="true">0{navigation.length + 1}</span>
+              <span className={styles.mobileLabel} aria-hidden="true">
+                {Array.from("Contact").map((character, characterIndex) => (
+                  <span className={styles.character} style={{ "--character": characterIndex } as CSSProperties} key={characterIndex}>{character}</span>
+                ))}
+              </span>
               <ArrowUpRight size={19} />
             </Link>
           </nav>
         </div>
       )}
+      <noscript>
+        <nav className={styles.fallback} aria-label="Navigation without JavaScript">
+          {[...navigation, { href: "/contact", label: "Contact" }].map((item) => (
+            <Link key={item.href} href={item.href}>{item.label}</Link>
+          ))}
+        </nav>
+      </noscript>
     </header>
   );
 }

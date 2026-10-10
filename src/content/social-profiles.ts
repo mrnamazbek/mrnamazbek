@@ -32,8 +32,7 @@ export const socialProfiles: Record<SocialPlatform, SocialProfile> = {
     handle: "namazbek-bekzhanov",
     headline: "Software Engineer · Data Engineer · Python Developer",
     description: "Digital Development Center · National Bank of Kazakhstan. Kazakhstan-British Technical University.",
-    // LinkedIn has no anonymous image endpoint; use the site's identity monogram.
-    avatar: null,
+    avatar: "/assets/gallery/portrait-formal.webp",
     tags: ["Data engineering", "Python", "SQL"],
     location: "Almaty, Kazakhstan",
   },
