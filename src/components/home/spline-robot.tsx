@@ -64,7 +64,7 @@ export function SplineRobot() {
         });
         app = scene;
         await scene.start(bytes, { interactive: false });
-        if (disposed) return;
+        if (disposed) { scene.dispose(); return; }
         scene.setBackgroundColor("transparent");
         const robot = scene.findObjectByName("Bot");
         if (robot) {
