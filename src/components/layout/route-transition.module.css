@@ -1,0 +1,44 @@
+.route { position: relative; }
+
+.trace {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  pointer-events: none;
+  overflow: visible;
+  animation: trace-fade 640ms ease both;
+}
+
+.trace path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 1;
+  animation: trace-draw 540ms var(--ease) both;
+}
+
+.content {
+  animation: page-enter 440ms var(--ease);
+}
+
+@keyframes trace-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes trace-fade {
+  0%, 70% { opacity: 0.65; }
+  100% { opacity: 0; }
+}
+
+@keyframes page-enter {
+  from { clip-path: inset(0 0 1% 0); }
+  to { clip-path: inset(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trace { display: none; }
+  .content { animation: none; }
+}

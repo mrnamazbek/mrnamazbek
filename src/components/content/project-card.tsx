@@ -1,5 +1,6 @@
 import { ArrowUpRight, Code2, Database, GitBranch } from "lucide-react";
 import type { Project } from "@/types/content";
+import { InteractiveCard } from "@/components/ui/interactive-card";
 
 export function ProjectCard({
   project,
@@ -12,7 +13,7 @@ export function ProjectCard({
 }) {
   const title = project.name.replaceAll("_", " ").replaceAll("-", " ");
   return (
-    <article
+    <InteractiveCard
       className={`project-card ${visual ? "project-card-featured" : ""}`}
     >
       {visual && (
@@ -75,6 +76,6 @@ export function ProjectCard({
           {project.stars > 0 && <span>★ {project.stars}</span>}
         </div>
       </div>
-    </article>
+    </InteractiveCard>
   );
 }

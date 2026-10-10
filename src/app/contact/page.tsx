@@ -5,6 +5,7 @@ import { PageHeading } from "@/components/ui/page-heading";
 import { ContactForm } from "@/components/contact-form";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
 import { socialPlatforms } from "@/content/social-profiles";
+import { AmbientBackdrop } from "@/components/ui/scroll-story";
 
 export const revalidate = 300;
 
@@ -28,7 +29,7 @@ export default async function ContactPage() {
         </p>
       </PageHeading>
       <section className="contact-layout">
-        <div className="contact-info">
+        <AmbientBackdrop className="contact-info">
           <p className="eyebrow">DIRECT LINE</p>
           <a className="contact-email" href={`mailto:${profile.email}`}>
             {profile.email}
@@ -66,7 +67,7 @@ export default async function ContactPage() {
             <span className="status-dot" />
             <span>{profile.availability}</span>
           </div>
-        </div>
+        </AmbientBackdrop>
         <ContactForm email={profile.email} />
       </section>
     </>

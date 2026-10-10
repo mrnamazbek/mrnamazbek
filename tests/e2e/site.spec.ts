@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const pages = ["/", "/about", "/projects", "/writing", "/lab", "/library", "/contact"];
+const pages = ["/", "/about", "/projects", "/writing", "/gallery", "/lab", "/library", "/contact"];
 
 function recordRuntimeErrors(page: Page, allowUnavailableWebGL = false) {
   const errors: string[] = [];

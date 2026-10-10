@@ -1,0 +1,165 @@
+.title {
+  text-wrap: nowrap;
+}
+
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  perspective: 1400px;
+}
+
+.word {
+  display: inline-flex;
+  white-space: nowrap;
+  perspective: 1400px;
+}
+
+.character {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.arrow {
+  transform: translateY(-0.02em);
+  transition: transform 550ms var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .title:hover .arrow {
+    transform: translate(0.1em, -0.12em);
+  }
+}
+
+.artFrame {
+  position: relative;
+  width: 100%;
+  perspective: 1000px;
+  isolation: isolate;
+}
+
+.artDepth {
+  position: relative;
+  transform: translate(var(--hero-shift-x, 0px), var(--hero-shift-y, 0px))
+    rotateX(var(--hero-rotate-x, 0deg)) rotateY(var(--hero-rotate-y, 0deg));
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.graticule {
+  position: absolute;
+  inset: 12% 6% 16%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse, #000 10%, transparent 70%);
+}
+
+.shutters {
+  position: absolute;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shutters > span {
+  display: block;
+  background: var(--background);
+  opacity: 0;
+  transform-origin: 50% 0;
+}
+
+.shutters > span:nth-child(n + 4) {
+  transform-origin: 50% 100%;
+}
+
+.technologyRail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  gap: 15px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.technologyRail li {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.technologyLabel {
+  display: inline-block;
+  white-space: pre;
+  transition: color 250ms;
+}
+
+.technologyLabel:hover {
+  color: var(--accent);
+}
+
+.technologyRail i {
+  font-style: normal;
+  font-size: 13px;
+  color: var(--subtle);
+}
+
+.accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1000px) {
+  .technologyRail li {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 760px) {
+  .technologyRail i {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .technologyRail {
+    gap: 11px 24px;
+    justify-content: flex-start;
+    padding-block: 23px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .artDepth,
+  .technologyLabel {
+    transition: none;
+  }
+  .artDepth {
+    transform: none;
+  }
+}

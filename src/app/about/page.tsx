@@ -13,6 +13,7 @@ import { PageHeading, SectionHeading } from "@/components/ui/page-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { CareerFocus } from "@/components/content/career-focus";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
+import { ScrollStory } from "@/components/ui/scroll-story";
 
 export const revalidate = 300;
 
@@ -45,8 +46,8 @@ export default async function AboutPage() {
       </PageHeading>
       <section className="about-introduction">
         <div className="about-identity">
-          <div className="identity-monogram" aria-hidden="true">
-            nb<span>.</span>
+          <div className="identity-portrait">
+            <Image src="/assets/gallery/portrait-blue.webp" alt="Namazbek Bekzhanov" fill sizes="(max-width: 650px) calc(100vw - 40px), 440px" loading="eager" />
           </div>
           <p className="eyebrow">
             <MapPin size={14} />
@@ -94,7 +95,7 @@ export default async function AboutPage() {
       <section className="content-section">
         <Reveal>
           <SectionHeading number="02" title="The journey so far" />
-          <div className="timeline">
+          <ScrollStory className="timeline" rail>
             {experience.map((role) => (
               <article className="timeline-item" key={role.id}>
                 <div className="timeline-date mono">
@@ -124,13 +125,13 @@ export default async function AboutPage() {
                 </div>
               </article>
             ))}
-          </div>
+          </ScrollStory>
         </Reveal>
       </section>
       <section className="content-section">
         <Reveal>
           <SectionHeading number="03" title="Always a student" />
-          <div className="education-grid">
+          <ScrollStory className="education-grid">
             {education.map((item) => (
               <article className="education-card" key={item.id}>
                 <div className="card-topline">
@@ -143,7 +144,7 @@ export default async function AboutPage() {
                 {item.note && <p className="education-note">{item.note}</p>}
               </article>
             ))}
-          </div>
+          </ScrollStory>
         </Reveal>
       </section>
       <section className="content-section">

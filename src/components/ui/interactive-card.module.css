@@ -1,0 +1,118 @@
+.card {
+  --card-x: 50%;
+  --card-y: 50%;
+  --card-rotate-x: 0deg;
+  --card-rotate-y: 0deg;
+  position: relative;
+  isolation: isolate;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    340px circle at var(--card-x) var(--card-y),
+    color-mix(in srgb, var(--accent) 7%, transparent),
+    transparent 72%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms var(--ease);
+}
+
+.card:focus-within {
+  border-color: var(--accent);
+}
+
+.card:focus-within::before {
+  opacity: 1;
+}
+
+.card:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.surface {
+  transition:
+    border-color 220ms var(--ease),
+    transform 350ms var(--ease),
+    box-shadow 220ms var(--ease);
+}
+
+.surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid color-mix(in srgb, var(--accent) 65%, transparent);
+  border-radius: inherit;
+  mask-image: radial-gradient(
+    240px circle at var(--card-x) var(--card-y),
+    #000,
+    transparent 75%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms var(--ease);
+}
+
+.row:focus-within {
+  border-color: var(--accent);
+}
+
+.card:focus-within :global(.card-arrow),
+.card:focus-within :global(.text-link) svg {
+  color: var(--accent);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card[data-pointer-active="true"]::before,
+  .surface[data-pointer-active="true"]::after {
+    opacity: 1;
+  }
+
+  .surface[data-pointer-active="true"] {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+    box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .surface[data-card-tilt="true"][data-pointer-active="true"] {
+    transform: perspective(1100px) rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y)) translateY(-2px);
+  }
+
+  .surface:global(.project-card):hover {
+    transform: none;
+  }
+
+  .surface:global(.project-card)[data-card-tilt="true"][data-pointer-active="true"] {
+    transform: perspective(1100px) rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y)) translateY(-2px);
+  }
+
+  .card:is([data-pointer-active="true"], :focus-within) :global(.card-arrow),
+  .card:is([data-pointer-active="true"], :focus-within) :global(.text-link) svg {
+    color: var(--accent);
+    transform: translate(3px, -3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .card,
+  .surface:global(.project-card):hover,
+  .card :global(.card-arrow),
+  .card:global(.project-card):hover :global(.card-arrow),
+  .card:global(.post-card):hover :global(.card-arrow),
+  .card :global(.text-link) svg,
+  .card :global(.text-link):hover svg {
+    transform: none;
+    transition: none;
+  }
+
+  .card::before,
+  .card::after {
+    transition: none;
+  }
+}

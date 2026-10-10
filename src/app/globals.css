@@ -963,6 +963,20 @@ img {
   padding: 20px 0 70px;
   border-bottom: 1px solid var(--line);
 }
+.identity-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 4.3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 25px;
+  background: var(--surface);
+}
+.identity-portrait img { object-fit: cover; object-position: 50% 35%; }
+.gallery-afterword { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; padding: 50px 0 70px; }
+.home-gallery > .text-link { margin-top: 22px; }
+.discovery-grid .discovery-card { height: 100%; }
 .identity-monogram {
   width: 100%;
   height: 290px;
