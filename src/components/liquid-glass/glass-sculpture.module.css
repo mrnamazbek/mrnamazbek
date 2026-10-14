@@ -1,0 +1,88 @@
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 300px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: inherit;
+  background: linear-gradient(145deg, #e5f4f4, #f3edf9 50%, #d8eafb);
+}
+
+.canvas,
+.fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.canvas {
+  opacity: 0;
+}
+
+.stage[data-renderer="webgl"] .canvas {
+  opacity: 1;
+}
+
+.stage[data-renderer="webgl"] .fallback {
+  visibility: hidden;
+}
+
+.eyebrow {
+  position: absolute;
+  top: 25px;
+  left: 28px;
+  margin: 0;
+  color: #4c5077;
+  font: 600 10px/1.4 var(--font-geist-mono, monospace);
+  letter-spacing: 0.14em;
+}
+
+.caption {
+  position: absolute;
+  left: 28px;
+  bottom: 27px;
+  margin: 0;
+  color: #424667;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.control {
+  position: absolute;
+  bottom: 17px;
+  right: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: #353a63;
+  background: rgb(255 255 255 / 72%);
+  border: 1px solid rgb(255 255 255 / 94%);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgb(79 75 125 / 8%);
+}
+
+.control:hover {
+  background: #fff;
+}
+
+.control:focus-visible {
+  outline: 3px solid #6168ab;
+  outline-offset: 4px;
+}
+
+.control svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 600px) {
+  .stage { min-height: 280px; }
+  .eyebrow { top: 20px; left: 22px; }
+  .caption { left: 22px; bottom: 22px; }
+}
