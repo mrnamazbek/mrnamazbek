@@ -1,7 +1,6 @@
-export type DotEffect = "magnetic" | "flow" | "ripple";
+export type DotEffect = "ripple";
 
 type DotFrame = {
-  effect: DotEffect;
   elapsed: number;
   pointer: { x: number; y: number; active: boolean };
   lightTheme: boolean;
@@ -27,64 +26,33 @@ const VERTEX_SHADER = `
   uniform vec2 uPointer;
   uniform float uPointerActive;
   uniform float uTime;
-  uniform float uMode;
   uniform float uDpr;
-  uniform float uSpacing;
   uniform vec4 uWakes[8];
   varying float vAlpha;
-
-  mat2 turn(float angle) {
-    float s = sin(angle);
-    float c = cos(angle);
-    return mat2(c, s, -s, c);
-  }
 
   void main() {
     vec2 point = aDot.xy;
     float seed = aDot.z;
-    float energy = 0.0;
-
-    if (uMode < 0.5) {
-      vec2 toward = uPointer - point;
-      float distanceToPointer = length(toward);
-      float influence = exp(-dot(toward, toward) / 34000.0) * uPointerActive;
-      point += toward / max(distanceToPointer, 1.0)
-        * min(distanceToPointer * 0.38, 54.0) * influence;
-      energy = influence;
-    } else if (uMode < 1.5) {
-      float angle = sin(point.y * 0.008 + uTime * 0.27) * 1.3
-        + cos(point.x * 0.005 - uTime * 0.19) * 0.65;
-      vec2 drift = vec2(cos(angle), sin(angle)) * 26.0;
-      vec2 scatter = vec2(sin(seed * 41.7), cos(seed * 29.3)) * uSpacing * 0.28;
-      point += drift + scatter;
-
-      vec2 fromPointer = point - uPointer;
-      float influence = exp(-dot(fromPointer, fromPointer) / 50000.0) * uPointerActive;
-      point = uPointer + turn(influence * 0.9) * fromPointer;
-      point += fromPointer / max(length(fromPointer), 1.0) * influence * 15.0;
-      energy = influence * 0.92;
-    } else {
-      vec2 displacement = vec2(0.0);
-      float wakeEnergy = 0.0;
-      for (int i = 0; i < 8; i++) {
-        vec4 wake = uWakes[i];
-        float age = max(uTime - wake.z, 0.0);
-        vec2 fromWake = point - wake.xy;
-        float distanceToWake = length(fromWake);
-        float radius = 24.0 + age * 112.0;
-        float width = 23.0 + age * 5.0;
-        float ringDistance = (distanceToWake - radius) / width;
-        float ring = exp(-ringDistance * ringDistance) * exp(-age * 1.55) * wake.w;
-        displacement += fromWake / max(distanceToWake, 1.0) * ring * 15.0;
-        wakeEnergy += ring;
-      }
-      float displacementLength = length(displacement);
-      point += displacement * min(1.0, 48.0 / max(displacementLength, 1.0));
-
-      vec2 fromPointer = point - uPointer;
-      float pointerGlow = exp(-dot(fromPointer, fromPointer) / 15000.0) * uPointerActive;
-      energy = min(wakeEnergy * 0.72 + pointerGlow * 0.45, 1.0);
+    vec2 displacement = vec2(0.0);
+    float wakeEnergy = 0.0;
+    for (int i = 0; i < 8; i++) {
+      vec4 wake = uWakes[i];
+      float age = max(uTime - wake.z, 0.0);
+      vec2 fromWake = point - wake.xy;
+      float distanceToWake = length(fromWake);
+      float radius = 24.0 + age * 112.0;
+      float width = 23.0 + age * 5.0;
+      float ringDistance = (distanceToWake - radius) / width;
+      float ring = exp(-ringDistance * ringDistance) * exp(-age * 1.55) * wake.w;
+      displacement += fromWake / max(distanceToWake, 1.0) * ring * 15.0;
+      wakeEnergy += ring;
     }
+    float displacementLength = length(displacement);
+    point += displacement * min(1.0, 48.0 / max(displacementLength, 1.0));
+
+    vec2 fromPointer = point - uPointer;
+    float pointerGlow = exp(-dot(fromPointer, fromPointer) / 15000.0) * uPointerActive;
+    float energy = min(wakeEnergy * 0.72 + pointerGlow * 0.45, 1.0);
 
     vec2 clip = point / uResolution * 2.0 - 1.0;
     gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
@@ -174,9 +142,7 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
     pointer: gl.getUniformLocation(program, "uPointer"),
     active: gl.getUniformLocation(program, "uPointerActive"),
     time: gl.getUniformLocation(program, "uTime"),
-    mode: gl.getUniformLocation(program, "uMode"),
     dpr: gl.getUniformLocation(program, "uDpr"),
-    spacing: gl.getUniformLocation(program, "uSpacing"),
     wakes: gl.getUniformLocation(program, "uWakes[0]"),
     color: gl.getUniformLocation(program, "uColor"),
     themeOpacity: gl.getUniformLocation(program, "uThemeOpacity"),
@@ -193,7 +159,6 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
   let lastWakeX = 0;
   let lastWakeY = 0;
   let wasActive = false;
-  let lastEffect: DotEffect = "magnetic";
   let lastElapsed = 0;
   let width = 1;
   let height = 1;
@@ -229,7 +194,7 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
     if (canvas.height !== pixelHeight) canvas.height = pixelHeight;
     gl.viewport(0, 0, pixelWidth, pixelHeight);
 
-    // The extra edge rows keep drifting dots inside the viewport. Raising the
+    // The extra edge rows keep displaced dots inside the viewport. Raising the
     // spacing on very large displays caps both vertex work and buffer memory.
     spacing = Math.max(30, Math.sqrt((width * height) / 3_600));
     let columns = Math.ceil(width / spacing) + 3;
@@ -248,7 +213,7 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
         const offset = (row * columns + column) * 3;
         vertices[offset] = startX + column * spacing;
         vertices[offset + 1] = startY + row * spacing;
-        // Deterministic scatter survives resize without random frame flicker.
+        // Deterministic size variation avoids random frame flicker.
         const hash = Math.sin(column * 127.1 + row * 311.7) * 43_758.5453;
         vertices[offset + 2] = hash - Math.floor(hash);
       }
@@ -257,36 +222,33 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
   }
 
-  function render({ effect, elapsed, pointer, lightTheme }: DotFrame) {
+  function render({ elapsed, pointer, lightTheme }: DotFrame) {
     if (disposed || gl.isContextLost()) return;
     const time = Math.max(0, finite(elapsed, 0));
     const pointerX = finite(pointer.x, width * 0.5);
     const pointerY = finite(pointer.y, height * 0.5);
-    if (effect !== lastEffect || time < lastElapsed) clearWakes();
+    if (time < lastElapsed) clearWakes();
 
-    if (effect === "ripple") {
-      for (let index = 0; index < WAKE_COUNT; index++) {
-        const offset = index * 4;
-        if (time - wakes[offset + 2] > WAKE_LIFETIME) wakes[offset + 3] = 0;
-      }
-      if (pointer.active) {
-        const movement = Math.hypot(pointerX - lastWakeX, pointerY - lastWakeY);
-        const moved = movement >= 14 && (time - lastWakeTime >= 0.035 || movement >= 36);
-        if (!wasActive || moved) {
-          const offset = wakeIndex * 4;
-          wakes[offset] = pointerX;
-          wakes[offset + 1] = pointerY;
-          wakes[offset + 2] = time;
-          wakes[offset + 3] = wasActive ? Math.min(1.3, 0.5 + movement / 65) : 0.9;
-          wakeIndex = (wakeIndex + 1) % WAKE_COUNT;
-          lastWakeX = pointerX;
-          lastWakeY = pointerY;
-          lastWakeTime = time;
-        }
+    for (let index = 0; index < WAKE_COUNT; index++) {
+      const offset = index * 4;
+      if (time - wakes[offset + 2] > WAKE_LIFETIME) wakes[offset + 3] = 0;
+    }
+    if (pointer.active) {
+      const movement = Math.hypot(pointerX - lastWakeX, pointerY - lastWakeY);
+      const moved = movement >= 14 && (time - lastWakeTime >= 0.035 || movement >= 36);
+      if (!wasActive || moved) {
+        const offset = wakeIndex * 4;
+        wakes[offset] = pointerX;
+        wakes[offset + 1] = pointerY;
+        wakes[offset + 2] = time;
+        wakes[offset + 3] = wasActive ? Math.min(1.3, 0.5 + movement / 65) : 0.9;
+        wakeIndex = (wakeIndex + 1) % WAKE_COUNT;
+        lastWakeX = pointerX;
+        lastWakeY = pointerY;
+        lastWakeTime = time;
       }
     }
     wasActive = pointer.active;
-    lastEffect = effect;
     lastElapsed = time;
 
     gl.useProgram(program);
@@ -294,9 +256,7 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
     gl.uniform2f(uniforms.pointer, pointerX, pointerY);
     gl.uniform1f(uniforms.active, pointer.active ? 1 : 0);
     gl.uniform1f(uniforms.time, time);
-    gl.uniform1f(uniforms.mode, effect === "magnetic" ? 0 : effect === "flow" ? 1 : 2);
     gl.uniform1f(uniforms.dpr, pixelRatio);
-    gl.uniform1f(uniforms.spacing, spacing);
     gl.uniform4fv(uniforms.wakes, wakes);
     if (lightTheme) gl.uniform3f(uniforms.color, 58 / 255, 92 / 255, 27 / 255);
     else gl.uniform3f(uniforms.color, 208 / 255, 236 / 255, 147 / 255);

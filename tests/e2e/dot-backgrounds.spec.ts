@@ -3,7 +3,6 @@ import { expect, test, type Page } from "@playwright/test";
 // Exercise the real point shaders even on CI machines without a physical GPU.
 test.use({ launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } });
 
-const effects = ["Magnetic dots", "Flow dots", "Ripple dots"] as const;
 const canvasId = "dot-background-canvas";
 
 function runtimeErrors(page: Page) {
@@ -13,15 +12,6 @@ function runtimeErrors(page: Page) {
     if (message.type() === "error") errors.push(message.text());
   });
   return errors;
-}
-
-async function openControls(page: Page) {
-  const choices = page.getByRole("group", { name: "Choose a background", exact: true });
-  if (!await choices.isVisible()) {
-    await page.getByRole("button", { name: "Background effects", exact: true }).click();
-  }
-  await expect(choices).toBeVisible();
-  return choices;
 }
 
 async function advanceFrames(page: Page, count = 45) {
@@ -39,8 +29,7 @@ type GutterPixels = { near: number[]; far: number[] };
 
 async function gutterPixels(page: Page): Promise<GutterPixels> {
   // At 1920px the 1280px site content leaves these two gutters empty. The
-  // samples exclude headings, cards, the open control panel below 400px,
-  // and the robot entirely.
+  // samples exclude headings, cards, playback controls, and the robot entirely.
   const screenshot = await page.screenshot({ clip: { x: 20, y: 120, width: 1880, height: 280 }, scale: "css" });
   return page.evaluate(async png => {
     const image = new Image();
@@ -85,8 +74,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
 });
 
-for (const effect of effects) {
-  test(`${effect} visibly responds near the cursor and its pause freezes actual pixels`, async ({ page }) => {
+test("Ripple dots visibly respond near the cursor and pause freezes actual pixels", async ({ page }) => {
     test.setTimeout(120_000);
     const errors = runtimeErrors(page);
     await page.goto("/about");
@@ -94,9 +82,8 @@ for (const effect of effects) {
     await expect(canvas).toHaveAttribute("data-renderer", "webgl", { timeout: 30_000 });
     await expect(canvas).toHaveAttribute("data-state", "running");
     await expect(page.getByTestId("dot-background")).toHaveCSS("pointer-events", "none");
-    const choices = await openControls(page);
-    await choices.getByRole("radio", { name: effect, exact: true }).check();
-    await expect(choices.getByRole("radio", { name: effect, exact: true })).toBeChecked();
+    await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+    await expect(page.getByRole("radio")).toHaveCount(0);
 
     await page.mouse.move(1200, 800);
     await advanceFrames(page);
@@ -109,7 +96,7 @@ for (const effect of effects) {
       const moved = await gutterPixels(page);
       const nearbyChange = changedFraction(baseline.near, moved.near);
       const distantChange = changedFraction(baseline.far, moved.far);
-      // Autonomous flow may move distant dots too. The cursor must create a
+      // Lingering ripples may move distant dots too. The cursor must create a
       // stronger local change, affecting at least 200 physical sample pixels.
       expect(nearbyChange).toBeGreaterThan(0.003);
       expect(nearbyChange).toBeGreaterThan(distantChange * 1.1 + 0.0005);
@@ -138,39 +125,49 @@ for (const effect of effects) {
     await page.mouse.move(300, 600);
     await expect.poll(async () => changedFraction(frozen.near, (await gutterPixels(page)).near), { timeout: 20_000 }).toBeGreaterThan(0.002);
     expect(errors).toEqual([]);
-  });
-}
+});
 
-test("exactly three background choices support keyboard selection and persist across navigation and reload", async ({ page }) => {
+test("the single Ripple background supports keyboard playback and saves pause across navigation and reload", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.goto("/about");
-  const trigger = page.getByRole("button", { name: "Background effects", exact: true });
-  await trigger.focus();
-  await page.keyboard.press("Enter");
-  const choices = page.getByRole("group", { name: "Choose a background", exact: true });
-  await expect(choices).toBeVisible();
-  await expect(choices.getByRole("radio")).toHaveCount(3);
-  await expect(choices.getByRole("radio", { name: "Magnetic dots", exact: true })).toBeChecked();
-  const magnetic = choices.getByRole("radio", { name: "Magnetic dots", exact: true });
-  await page.keyboard.press("Tab");
-  await expect(magnetic).toBeFocused();
-  await page.keyboard.press("ArrowRight");
-  await expect(choices.getByRole("radio", { name: "Flow dots", exact: true })).toBeChecked();
-  await page.keyboard.press("ArrowRight");
-  await expect(choices.getByRole("radio", { name: "Ripple dots", exact: true })).toBeChecked();
-  await page.keyboard.press("Escape");
-  await expect(choices).toHaveCount(0);
-  await expect(trigger).toBeFocused();
-  await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await page.keyboard.press("Enter");
-  await expect(choices.getByRole("radio", { name: "Ripple dots", exact: true })).toBeChecked();
+  const canvas = page.getByTestId(canvasId);
+  await expect(canvas).toHaveAttribute("data-state", "running", { timeout: 30_000 });
+  await expect(page.getByRole("radio")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Background effects", exact: true })).toHaveCount(0);
+  await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+  await pressPlayback(page, "Pause background animation");
+  await expect(canvas).toHaveAttribute("data-state", "paused");
+  await expect(page.getByRole("button", { name: "Resume background animation", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Projects", exact: true }).click();
   await expect(page).toHaveURL(/\/projects$/);
-  await expect(page.getByTestId(canvasId)).toHaveCount(1);
-  await expect((await openControls(page)).getByRole("radio", { name: "Ripple dots", exact: true })).toBeChecked();
+  await expect(canvas).toHaveCount(1);
+  await expect(canvas).toHaveAttribute("data-state", "paused");
+  await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
   await page.reload();
-  await expect((await openControls(page)).getByRole("radio", { name: "Ripple dots", exact: true })).toBeChecked();
-  await expect(page.getByTestId(canvasId)).toHaveAttribute("data-state", "running", { timeout: 30_000 });
+  await expect(canvas).toHaveAttribute("data-state", "paused", { timeout: 30_000 });
+  const resume = page.getByRole("button", { name: "Resume background animation", exact: true });
+  await expect(resume).toHaveAttribute("aria-pressed", "true");
+  await resume.focus();
+  await page.keyboard.press("Space");
+  await expect(canvas).toHaveAttribute("data-state", "running");
+  expect(await page.evaluate(() => localStorage.getItem("nb-dot-background"))).toBe("ripple:playing");
+  await expect(page.getByRole("radio")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("older saved backgrounds become Ripple while preserving playback preference", async ({ page }) => {
+  const errors = runtimeErrors(page);
+  await page.goto("/about");
+  for (const preference of ["magnetic:paused", "flow:playing"]) {
+    await page.evaluate(value => localStorage.setItem("nb-dot-background", value), preference);
+    await page.reload();
+    const wasPaused = preference.endsWith(":paused");
+    await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+    await expect(page.getByTestId(canvasId)).toHaveAttribute("data-state", wasPaused ? "paused" : "running", { timeout: 30_000 });
+    await expect(page.getByRole("radio")).toHaveCount(0);
+    await pressPlayback(page, wasPaused ? "Resume background animation" : "Pause background animation");
+    expect(await page.evaluate(() => localStorage.getItem("nb-dot-background"))).toBe(wasPaused ? "ripple:playing" : "ripple:paused");
+  }
   expect(errors).toEqual([]);
 });
 
@@ -192,10 +189,9 @@ for (const scenario of [{ width: 375, motion: "no-preference" as const }, { widt
     });
     await page.goto("/about");
     await expect(page.getByTestId(canvasId)).toHaveAttribute("data-state", "static");
-    const choices = await openControls(page);
-    await expect(choices.getByRole("radio")).toHaveCount(3);
-    await choices.getByRole("radio", { name: "Flow dots", exact: true }).check();
-    await expect(choices.getByRole("radio", { name: "Flow dots", exact: true })).toBeChecked();
+    await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+    await expect(page.getByRole("radio")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Pause background animation", exact: true })).toBeDisabled();
     expect(await page.evaluate(() => (window as unknown as { __dotGpuAttempts: number }).__dotGpuAttempts)).toBe(0);
     const dimensions = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
     expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport + 1);
@@ -204,7 +200,7 @@ for (const scenario of [{ width: 375, motion: "no-preference" as const }, { widt
   });
 }
 
-test("unavailable WebGL keeps the static background, choices, and navigation usable", async ({ page }) => {
+test("unavailable WebGL keeps the static Ripple background and navigation usable", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
@@ -217,26 +213,28 @@ test("unavailable WebGL keeps the static background, choices, and navigation usa
   });
   await page.goto("/about");
   await expect(page.getByTestId(canvasId)).toHaveAttribute("data-state", "unavailable", { timeout: 30_000 });
-  await (await openControls(page)).getByRole("radio", { name: "Ripple dots", exact: true }).check();
-  await expect(page.getByRole("radio", { name: "Ripple dots", exact: true })).toBeChecked();
+  await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+  await expect(page.getByRole("radio")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Pause background animation", exact: true })).toBeDisabled();
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Projects", exact: true }).click();
   await expect(page).toHaveURL(/\/projects$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test("changing motion preference stops and reactivates the shader without changing its selection", async ({ page }) => {
+test("changing motion preference stops and reactivates the Ripple shader", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.goto("/about");
   const canvas = page.getByTestId(canvasId);
   await expect(canvas).toHaveAttribute("data-state", "running", { timeout: 30_000 });
-  await (await openControls(page)).getByRole("radio", { name: "Flow dots", exact: true }).check();
+  await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(canvas).toHaveAttribute("data-state", "static");
-  await expect(page.getByRole("radio", { name: "Flow dots", exact: true })).toBeChecked();
+  await expect(page.getByRole("button", { name: "Pause background animation", exact: true })).toBeDisabled();
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(canvas).toHaveAttribute("data-state", "running", { timeout: 30_000 });
-  await expect(page.getByRole("radio", { name: "Flow dots", exact: true })).toBeChecked();
+  await expect(page.getByTestId("dot-background")).toHaveAttribute("data-effect", "ripple");
+  await expect(page.getByRole("button", { name: "Pause background animation", exact: true })).toBeEnabled();
   await expect(canvas).toHaveCount(1);
   expect(errors).toEqual([]);
 });
@@ -249,14 +247,12 @@ test("background and robot playback controls operate independently", async ({ pa
   await expect(canvas).toHaveAttribute("data-state", "running", { timeout: 30_000 });
   const pauseRobot = page.getByRole("button", { name: "Pause robot animation", exact: true });
   await expect(pauseRobot).toBeVisible({ timeout: 45_000 });
-  await openControls(page);
   await pressPlayback(page, "Pause background animation");
   await expect(canvas).toHaveAttribute("data-state", "paused");
   await expect(pauseRobot).toHaveAttribute("aria-pressed", "false");
   await pauseRobot.click();
   const resumeRobot = page.getByRole("button", { name: "Resume robot animation", exact: true });
   await expect(resumeRobot).toHaveAttribute("aria-pressed", "true");
-  await openControls(page);
   await pressPlayback(page, "Resume background animation");
   await expect(canvas).toHaveAttribute("data-state", "running");
   await expect(resumeRobot).toHaveAttribute("aria-pressed", "true");

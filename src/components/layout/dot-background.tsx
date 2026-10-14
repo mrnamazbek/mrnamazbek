@@ -1,26 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { ChevronUp, CircleDot, Pause, Play } from "lucide-react";
-import type { DotEffect, DotRenderer } from "@/lib/visual-effects/dot-shader";
+import { CircleDot, Pause, Play } from "lucide-react";
+import type { DotRenderer } from "@/lib/visual-effects/dot-shader";
 import styles from "./dot-background.module.css";
 
-const effects: { id: DotEffect; label: string; description: string }[] = [
-  { id: "magnetic", label: "Magnetic dots", description: "A quiet grid bends toward your cursor." },
-  { id: "flow", label: "Flow dots", description: "Soft streams curl around your movement." },
-  { id: "ripple", label: "Ripple dots", description: "Your cursor leaves little waves behind." },
-];
 const preferenceKey = "nb-dot-background";
 const preferenceEvent = "nb-dot-background-change";
 const capableQuery = "(min-width: 768px) and (hover: hover) and (pointer: fine)";
 const reducedQuery = "(prefers-reduced-motion: reduce)";
-const defaultPreference = "magnetic:playing";
+const defaultPreference = "ripple:playing";
 let sessionPreference = defaultPreference;
 
 function readPreference() {
   try {
     const stored = localStorage.getItem(preferenceKey);
-    if (/^(magnetic|flow|ripple):(playing|paused)$/.test(stored ?? "")) return stored!;
+    // Preserve playback preferences saved by the earlier background selector.
+    if (/^[a-z]+:(playing|paused)$/.test(stored ?? "")) {
+      return stored!.endsWith(":paused") ? "ripple:paused" : defaultPreference;
+    }
   } catch { /* The selection also works when storage is unavailable. */ }
   return sessionPreference;
 }
@@ -34,8 +32,8 @@ function subscribePreference(listener: () => void) {
   };
 }
 
-function writePreference(effect: DotEffect, paused: boolean) {
-  sessionPreference = `${effect}:${paused ? "paused" : "playing"}`;
+function writePreference(paused: boolean) {
+  sessionPreference = `ripple:${paused ? "paused" : "playing"}`;
   try { localStorage.setItem(preferenceKey, sessionPreference); } catch { /* Keep the session selection. */ }
   window.dispatchEvent(new Event(preferenceEvent));
 }
@@ -76,11 +74,11 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     const target = { x: innerWidth / 2, y: innerHeight / 2, active: false };
     const pointer = { ...target };
 
-    const allowed = () => capable.matches && !reduced.matches;
+    // Read the current media state even while a browser's change event is queued.
+    const allowed = readMotionCapability;
     const paused = () => preference.endsWith(":paused");
     const canRun = () => !disposed && !failed && allowed() && !paused() && !document.hidden;
     const draw = () => renderer?.render({
-      effect: preference.split(":")[0] as DotEffect,
       elapsed,
       pointer,
       lightTheme: document.documentElement.dataset.theme === "light",
@@ -107,7 +105,10 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     };
     const tick = (now: number) => {
       animationFrame = 0;
-      if (!canRun()) return;
+      if (!canRun()) {
+        reconcile();
+        return;
+      }
       if (now - lastDraw >= 1000 / 30) {
         elapsed += lastClock === null ? 0 : Math.min((now - lastClock) / 1000, 0.1);
         lastClock = now;
@@ -161,10 +162,7 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       }
     };
     const updatePreference = () => {
-      const next = readPreference();
-      const changedEffect = next.split(":")[0] !== preference.split(":")[0];
-      preference = next;
-      if (changedEffect) draw();
+      preference = readPreference();
       reconcile();
     };
     const onPointer = (event: PointerEvent) => {
@@ -229,60 +227,20 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 export function DotBackground() {
   const preference = useSyncExternalStore(subscribePreference, readPreference, () => defaultPreference);
   const capable = useSyncExternalStore(subscribeMotionCapability, readMotionCapability, () => false);
-  const effect = preference.split(":")[0] as DotEffect;
   const paused = preference.endsWith(":paused");
-  const [open, setOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const controlsRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
   const unavailable = useDotRenderer(canvasRef);
-  const selected = effects.find((item) => item.id === effect)!;
-
-  useEffect(() => {
-    if (!open) return;
-    const closeOnOutside = (event: PointerEvent) => {
-      if (!controlsRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    };
-    window.addEventListener("pointerdown", closeOnOutside, { passive: true });
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      window.removeEventListener("pointerdown", closeOnOutside);
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [open]);
 
   return <>
-    <div className={styles.layer} data-testid="dot-background" data-effect={effect} aria-hidden="true">
+    <div className={styles.layer} data-testid="dot-background" data-effect="ripple" aria-hidden="true">
       <div className={styles.fallback} />
       <canvas ref={canvasRef} className={styles.canvas} data-testid="dot-background-canvas" data-renderer="static" data-state="static" />
     </div>
-    <div ref={controlsRef} className={styles.controls}>
-      <button ref={triggerRef} type="button" className={styles.trigger} aria-label="Background effects" aria-expanded={open} aria-controls="background-effects-panel" onClick={() => setOpen((value) => !value)}>
-        <CircleDot size={15} /><span>Background <span className={styles.current}>{selected.label.replace(" dots", "")}</span></span><ChevronUp size={13} className={open ? styles.expanded : undefined} />
+    <div className={styles.controls}>
+      <button type="button" className={styles.trigger} disabled={!capable || unavailable} aria-pressed={paused} aria-label={paused ? "Resume background animation" : "Pause background animation"} onClick={() => writePreference(!paused)}>
+        <CircleDot size={15} /><span>Ripple background</span>
+        <span className={styles.playback}>{!capable || unavailable ? "Static" : paused ? <><Play size={12} /> Play</> : <><Pause size={12} /> Pause</>}</span>
       </button>
-      {open && <div id="background-effects-panel" className={styles.panel}>
-        <fieldset>
-          <legend>Choose a background</legend>
-          <p className={styles.intro}>Three small ways to follow your curiosity.</p>
-          {effects.map((item, index) => <label className={styles.option} key={item.id}>
-            <input type="radio" name="dot-background" aria-label={item.label} value={item.id} checked={effect === item.id} onChange={() => writePreference(item.id, paused)} />
-            <span className={styles.number} aria-hidden="true">0{index + 1}</span>
-            <span><strong>{item.label}</strong><span>{item.description}</span></span>
-          </label>)}
-        </fieldset>
-        <div className={styles.panelFooter}>
-          <span>{!capable || unavailable ? "Static dots on this device" : "Move your cursor to explore"}</span>
-          <button type="button" disabled={!capable || unavailable} aria-pressed={paused} aria-label={paused ? "Resume background animation" : "Pause background animation"} onClick={() => writePreference(effect, !paused)}>
-            {paused ? <Play size={13} /> : <Pause size={13} />}{paused ? "Play" : "Pause"}
-          </button>
-        </div>
-      </div>}
     </div>
   </>;
 }
