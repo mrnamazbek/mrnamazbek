@@ -61,7 +61,11 @@ for (const width of [1440, 2560]) {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.goto("/");
     await expect(page.getByRole("button", { name: "Pause robot animation" })).toBeVisible({ timeout: 45_000 });
-    // Isolate model motion from the separate decorative card tilt.
+    // Isolate model motion from card tilt and green dots behind the transparent
+    // robot canvas. Coexistence is exercised separately in dot-backgrounds.spec.
+    await page.getByTestId("dot-background").evaluate(layer => {
+      layer.style.setProperty("visibility", "hidden", "important");
+    });
     await page.locator(".data-sculpture").evaluate(stage => {
       const depth = stage.parentElement!.parentElement!;
       depth.style.setProperty("transform", "none", "important");
