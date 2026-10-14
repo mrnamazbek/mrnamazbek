@@ -1,6 +1,6 @@
 # Frontend resource studies and adaptations
 
-The portfolio keeps its ink/green editorial identity and server-rendered content.
+The Classic portfolio keeps its ink/green editorial identity and server-rendered content.
 The October 2026 enhancement uses original React, CSS, Web Animations API, and
 native scrolling implementations informed by the user's supplied Awwwards pack.
 No demo photographs, fonts, proprietary bundles, GSAP, or remote scripts
@@ -89,10 +89,10 @@ earlier original particle torus remains available as a separate reusable compone
 
 ## Cursor-responsive ripple background
 
-An original ripple point shader runs throughout the site: cursor movement emits
+An original ripple point shader runs throughout the Classic edition: cursor movement emits
 small circular waves through the dot grid. The bottom-left Ripple background
 control pauses it independently of the robot and remembers playback preferences
-across pages and reloads. This is the site's only background effect.
+across pages and reloads. This is the Classic edition's only background effect.
 
 The supplied pack was inspected again through its Background Animations folder:
 
@@ -141,3 +141,34 @@ settled, then retains the last drawn grid without scheduling further frames.
 Pause, tab visibility, motion preferences, resize and theme changes still update
 the same persistent canvas. A browser regression check counts actual WebGL draw
 calls across idle and renewed cursor movement.
+
+## Liquid Glass second edition
+
+The 14 October 2026 second edition lives at `/v2` alongside the Classic portfolio.
+Both editions use the same validated content repository, approved local photos,
+contact endpoint, and Lab tools. Its light/night palettes are independent of the
+Classic theme. Classic retains the sole Ripple background and DDCNB robot.
+
+[Liqui Design](https://github.com/leefanv/liqui-design/tree/fae9f2de55d8a049d77bbaed80f46fa68ae92508)
+was inspected at the linked revision. Exact MIT-licensed
+`@liqui-design/glass` **0.5.0** supplies actual SVG displacement refraction for
+navigation and collection filter controls. Most content uses original frosted
+surfaces for readability; browser and reduced-transparency fallbacks retain
+usable solid or frosted controls. Apple’s
+[Materials guidance](https://developer.apple.com/design/human-interface-guidelines/materials)
+and [Meet Liquid Glass](https://developer.apple.com/videos/play/wwdc2025/219/)
+informed the separation between the control and content layers.
+
+The hero sculpture uses original Three.js geometry, locally painted studio
+lighting, and `MeshPhysicalMaterial`; no downloaded models, HDRs, or textures are
+introduced. It follows cursor movement on capable desktops, draws only while
+needed, and keeps a static fallback elsewhere. Project artwork and perspective
+book objects are original CSS. Gallery images keep the existing native dialog
+and keyboard behavior. Existing Lenis **1.3.26** continues as the optional desktop
+scrolling enhancement.
+
+[LIQUID_GLASS_RESEARCH.md](LIQUID_GLASS_RESEARCH.md) collects current primary
+references, actually used resources, study-only animation/3D options, licenses,
+and per-model glTF limitations. No gallery artwork, paid example, or unlicensed
+3D asset was imported. The kernel’s MIT notice is retained in
+`THIRD_PARTY_NOTICES.md` and the installed package.

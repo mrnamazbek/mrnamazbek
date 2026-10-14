@@ -19,11 +19,16 @@ const subscribeTheme = (listener: () => void) => {
   return () => window.removeEventListener("nb-theme-change", listener);
 };
 const readTheme = () => document.documentElement.dataset.theme ?? "dark";
+const subscribeHydration = () => () => {};
+const clientHydrated = () => true;
+const serverHydrated = () => false;
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => "dark");
+  // A new route group's header can paint before its client module hydrates.
+  const hydrated = useSyncExternalStore(subscribeHydration, clientHydrated, serverHydrated);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -99,6 +104,7 @@ export function SiteHeader() {
         <div className="header-actions">
           <button
             className="icon-button theme-button"
+            disabled={!hydrated}
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           >
@@ -110,6 +116,7 @@ export function SiteHeader() {
           <button
             ref={toggleRef}
             type="button"
+            disabled={!hydrated}
             className={`icon-button mobile-menu-toggle ${styles.toggle}`}
             aria-expanded={open}
             aria-controls="mobile-navigation"

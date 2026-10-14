@@ -1,0 +1,121 @@
+.surface {
+  position: relative;
+  border: 1px solid var(--lg-line, rgba(255, 255, 255, 0.8));
+  border-radius: 30px;
+  background: var(--lg-solid-surface, #f6f8fc);
+  box-shadow: var(--lg-shadow, 0 12px 32px rgba(38, 62, 112, 0.08)),
+    inset 0 1px 1px rgba(255, 255, 255, 0.75);
+  color: var(--lg-text, #162038);
+}
+
+@supports (backdrop-filter: blur(12px)) {
+  .surface {
+    background: var(--lg-surface, rgba(255, 255, 255, 0.68));
+    backdrop-filter: blur(18px) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  }
+}
+
+.surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 1px var(--lg-rim, rgba(255, 255, 255, 0.96)),
+    inset 0 -1px 1px var(--lg-rim-low, rgba(129, 159, 197, 0.12));
+}
+
+.optical {
+  --lq-text: var(--lg-text);
+  --lq-tint: var(--lg-optical-tint, rgba(245, 249, 255, 0.82));
+  --lq-tint-deep: var(--lg-optical-tint-deep, rgba(245, 249, 255, 0.68));
+  --lq-rim-hi: var(--lg-rim, rgba(255, 255, 255, 0.96));
+  --lq-rim-lo: var(--lg-rim-low, rgba(129, 159, 197, 0.16));
+  --lq-clear-wash: var(--lg-solid-surface);
+  --lq-clear-wash-deep: var(--lg-solid-surface);
+  background: transparent;
+  border-radius: 40px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.lens {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.optical .lens:global(.liqui-glass--clear) {
+  --lq-clear-wash: var(--lg-solid-surface);
+  --lq-clear-wash-deep: var(--lg-solid-surface);
+}
+
+.content {
+  display: contents;
+}
+
+.content > * {
+  position: relative;
+  z-index: 3;
+}
+
+@supports (corner-shape: squircle) {
+  .optical {
+    corner-shape: squircle;
+  }
+}
+
+/* V2 appearance is independent of the classic page's HTML theme. */
+:global([data-glass-theme="light"]) .optical :global(.liqui-glass__specular--light) {
+  display: block;
+}
+
+:global([data-glass-theme="light"]) .optical :global(.liqui-glass__specular--dark) {
+  display: none;
+}
+
+:global([data-glass-theme="dark"]) .optical :global(.liqui-glass__specular--light) {
+  display: none;
+}
+
+:global([data-glass-theme="dark"]) .optical :global(.liqui-glass__specular--dark) {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .optical :global(.liqui-glass__refract--fade),
+  .optical :global(.liqui-glass__specular--fade) {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .surface {
+    background: var(--lg-solid-surface, Canvas) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .optical :global(.liqui-glass__backdrop),
+  .optical :global(.liqui-glass__refract),
+  .optical :global(.liqui-glass__tint),
+  .optical :global(.liqui-glass__specular),
+  .optical :global(.liqui-glass__shine) {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .surface {
+    color: CanvasText;
+    background: Canvas !important;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+
+  .surface::before {
+    display: none;
+  }
+}

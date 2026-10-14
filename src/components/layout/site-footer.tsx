@@ -25,6 +25,8 @@ export function SiteFooter() {
       <div className="footer-bottom">
         <span>© {new Date().getUTCFullYear()} Namazbek Bekzhanov</span>
         <span>Made with intent. Built to evolve.</span>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- Editions reset document-scoped theme and rendering state. */}
+        <a href="/v2">Liquid Glass edition <ArrowUpRight size={12} /></a>
         <BackToTopLink />
       </div>
     </footer>

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import {
   getMonthlyFeature,
@@ -14,13 +13,7 @@ import { LiveSignals } from "@/components/lab/live-signals";
 import { EngineeringResources } from "@/components/lab/engineering-resources";
 import { ConnectionPool } from "@/components/lab/connection-pool";
 
-export const metadata: Metadata = {
-  title: "Lab",
-  description:
-    "Interactive tools and experiments: regex, Docker Compose, capacity planning, world clocks, and a data pipeline builder.",
-};
-export const revalidate = 300;
-export default async function LabPage() {
+export async function LabContent() {
   const [monthlyFeature, featureHistory, audience, rankings] =
     await Promise.all([
       getMonthlyFeature(),
