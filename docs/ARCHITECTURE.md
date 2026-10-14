@@ -6,7 +6,10 @@ The live site is one Next.js App Router application on Vercel, with PostgreSQL i
 
 | Directory | Responsibility |
 | --- | --- |
-| `src/app` | Pages, route metadata, errors, and API endpoints |
+| `src/app` | Shared document metadata, APIs, sitemap, and global error recovery |
+| `src/app/(classic)` | Classic pages and chrome at the original public URLs |
+| `src/app/v2` | Liquid Glass pages and their own layout/error boundaries at `/v2` |
+| `src/components/liquid-glass` | Scoped glass shell, optical surfaces, collections, and original 3D sculpture |
 | `src/components/layout` | Shared navigation and footer |
 | `src/components/ui` | Reusable visual primitives and motion |
 | `src/components/content`, `home`, `lab` | Feature-specific components and interactive tools |
@@ -18,7 +21,11 @@ The live site is one Next.js App Router application on Vercel, with PostgreSQL i
 | `supabase` | SQL migrations, seed, and database policy tests |
 | `tests/unit`, `tests/e2e` | Backend contracts and browser flows |
 
-Add a personal page as `src/app/<name>/page.tsx`, exporting its metadata and composing existing UI primitives. Add its link to `src/components/layout/site-header.tsx` and its URL to `src/app/sitemap.ts`. Read content through the repository rather than calling Supabase from a browser component. Keep browser interaction in a small component with `"use client"`.
+Add a Classic page as `src/app/(classic)/<name>/page.tsx`; the route group keeps its public URL at `/<name>` and supplies `ClassicFrame`. Add its navigation link to `src/components/layout/site-header.tsx` and its indexed URL to `src/app/sitemap.ts`. Add the glass counterpart as `src/app/v2/<name>/page.tsx`, using `GlassSurface` and a scoped CSS module, then link it in `src/components/liquid-glass/shell.tsx`. New pages should export metadata and compose existing feature components.
+
+The root layout supplies only the shared document and scroll enhancement. Keep edition-specific chrome inside the relevant layout. V2 currently uses canonical links to its Classic counterparts and `noindex, follow` while the designs coexist; do not add duplicate V2 URLs to the sitemap without deliberately changing that indexing policy. Edition-switch links are native anchors so each design starts with its own document; navigation inside an edition uses Next links.
+
+Read content through `src/lib/content` rather than calling Supabase from a browser component. Both editions share these readers, schemas, approved photos, and API routes. Keep browser interaction in a small component with `"use client"`; keep independent server reads parallel.
 
 For a new content type, define its TypeScript contract and Zod schema, add a separate SQL migration with Row Level Security, add its published-only repository reader, and supply a versioned fallback if appropriate. Do not rewrite an already-applied migration. New editorial records default to drafts; `position` controls collection order. Supabase's Table Editor is the current content editing interface.
 
@@ -34,9 +41,13 @@ Public content is selected using the Supabase publishable key under database pol
 
 ## Presentation
 
-The design uses shared color, spacing, and typography tokens in `src/app/globals.css`. Theme preference persists locally. CSS and IntersectionObserver handle reveal effects. The desktop hero loads the owner's DDCNB robot and Spline runtime only when needed; mobile, reduced-motion, unsupported WebGL and load failures receive small local posters of the same model. Manual pointer-driven rendering supports pause and stops off-screen or in hidden tabs. The original particle torus remains a separate reusable component. No browser needs a 3D scene to navigate or read content. Project exploration, native capabilities disclosures and magnetic actions live in separate typed components with scoped CSS.
+The Classic design uses shared color, spacing, and typography tokens in `src/app/globals.css`. Theme preference persists locally. CSS and IntersectionObserver handle reveal effects. The desktop hero loads the owner's DDCNB robot and Spline runtime only when needed; mobile, reduced-motion, unsupported WebGL and load failures receive small local posters of the same model. Manual pointer-driven rendering supports pause and stops off-screen or in hidden tabs. The original particle torus remains a separate reusable component. No browser needs a 3D scene to navigate or read content. Project exploration, native capabilities disclosures and magnetic actions live in separate typed components with scoped CSS.
 
-Personal social links use `SocialProfileLink` for a small hover/focus preview. Touch visitors tap once to preview and again to open the original link. Escape or tapping outside dismisses it; cards stay inside the viewport and respect reduced motion. Saved public profile details live in `src/content/social-profiles.ts`; update that catalog and the published images in `assets/social` when a profile changes. The LinkedIn card uses the site's identity monogram. These are curated previews, without live follower counts, authenticated embeds, third-party scripts, or browser requests to social platforms. Profile links still work as ordinary links without JavaScript.
+Personal social links use `SocialProfileLink` for a small hover/focus preview. Touch visitors tap once to preview and again to open the original link. Escape or tapping outside dismisses it; cards stay inside the viewport and respect reduced motion. Saved public profile details live in `src/content/social-profiles.ts`; update that catalog and the published images in `assets/social` when a profile changes. The LinkedIn card uses the approved formal portrait. These are curated previews, without live follower counts, authenticated embeds, third-party scripts, or browser requests to social platforms. Profile links still work as ordinary links without JavaScript.
+
+The Liquid Glass edition uses scoped `--lg-*`/`--v2-*` tokens, reusable `GlassSurface` primitives, and its own `nb-glass-theme` preference; Classic uses `nb-theme`. The pinned Liqui Design kernel enhances small navigation and filter controls with real refraction in Chromium. Readable frosted content panels and browser fallbacks retain the same hierarchy. Reduced transparency and forced colors use solid surfaces. The original Three.js glass sculpture imports its renderer only for eligible visible desktop visitors, bounds pixel and frame budgets, renders on demand, and disposes GPU resources and subscriptions on unmount. Mobile, reduced motion, and GPU failures retain an inline poster. Source studies, libraries actually shipped, and model candidates are documented in [LIQUID_GLASS_RESEARCH.md](LIQUID_GLASS_RESEARCH.md).
+
+`src/components/lab/lab-content.tsx` composes the same Lab data and tools for both editions. The contact form also remains shared: pending and failed submissions preserve the visitor’s message, confirmed success clears it, and controls remain disabled until hydration. Without JavaScript, the form offers a direct email link instead of a native GET submission.
 
 The lab preserves the existing practical tools as isolated components. Regex work runs in a disposable worker with a timeout; generated Docker configuration and Airflow code download locally. Cost estimates are labeled illustrative and can be adjusted. External trend datasets show their capture dates and methodology.
 
