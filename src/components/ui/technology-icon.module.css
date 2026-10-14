@@ -1,0 +1,16 @@
+.badge {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  background: #f5f6f1;
+}
+
+.image {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}

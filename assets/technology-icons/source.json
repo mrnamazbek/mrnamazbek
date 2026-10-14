@@ -1,0 +1,83 @@
+{
+  "repository": "https://github.com/homarr-labs/dashboard-icons",
+  "commit": "2ade7af6c86f0bf7de0b29cd62af99b3458b7af1",
+  "license": "Apache-2.0",
+  "licenseFile": "LICENSE.txt",
+  "copyright": "Copyright (c) 2024 Bjorn Lammers, Meier Lukas, Thomas Camlong and Homarr Labs",
+  "usage": "Brand marks identify existing portfolio technologies. Product names and trademarks belong to their respective owners; no endorsement is implied.",
+  "assets": [
+    {
+      "file": "apache-airflow.svg",
+      "sourcePath": "svg/apache-airflow.svg",
+      "sha256": "a8a656e6334b1436c486c4a22b70b9939b3137e400d8bc0813ae9d5ae77efa77",
+      "modified": false
+    },
+    {
+      "file": "apache-iceberg.svg",
+      "sourcePath": "svg/apache-iceberg.svg",
+      "sha256": "b5d63de581e571650934ad8915c50f77edaf8a243c22950b8a8a33d02cf9bb2b",
+      "modified": true,
+      "changes": "Removed editor export metadata; added viewBox 0 0 200 200 matching the original canvas. Artwork unchanged."
+    },
+    {
+      "file": "kafka.svg",
+      "sourcePath": "svg/kafka.svg",
+      "sha256": "950824dfb15cfd3c09e94ff2dc5f1ccb09cd837fcc6c24f62ecb852e56ba4bf0",
+      "modified": false
+    },
+    {
+      "file": "python.svg",
+      "sourcePath": "svg/python.svg",
+      "sha256": "38a2dbbae6c06ef6d2dcf9d02a11338505d0a0c7c3f2c376b8d86908d81cfbc5",
+      "modified": false
+    },
+    {
+      "file": "golang.svg",
+      "sourcePath": "svg/golang.svg",
+      "sha256": "33e31a3d049683755ceb07b4a6abe830b2ee02e6ffeee408fe705ef078d3849e",
+      "modified": false
+    },
+    {
+      "file": "postgresql.svg",
+      "sourcePath": "svg/postgresql.svg",
+      "sha256": "15392b515335ffd08a5a58cb9ed697772b4cf17f4a6af216900f2c774a951da2",
+      "modified": false
+    },
+    {
+      "file": "mysql.svg",
+      "sourcePath": "svg/mysql.svg",
+      "sha256": "0ea79a37711ab5450b20e99800366cd224f6abd5715af07e1bf97914d45a85d5",
+      "modified": false
+    },
+    {
+      "file": "docker.svg",
+      "sourcePath": "svg/docker.svg",
+      "sha256": "7de45e1ea203da32a040c257f47cd39a5711b3a200d27ec72dbccbc5efb1590b",
+      "modified": false
+    },
+    {
+      "file": "git.svg",
+      "sourcePath": "svg/git.svg",
+      "sha256": "85e3e8c8e95285f4f4007fb29e3adb1ea85a6c0390aa706389e5c1aa9e6ac31b",
+      "modified": false
+    },
+    {
+      "file": "tensorflow.svg",
+      "sourcePath": "svg/tensorflow.svg",
+      "sha256": "4e79f63108f6baba4fd02b00f1ce58cb9b9939413b6706f240f5caf1b2471b22",
+      "modified": false
+    },
+    {
+      "file": "pytorch.svg",
+      "sourcePath": "svg/pytorch.svg",
+      "sha256": "353edbc62a49fedc311faf543edf720ded2b1fffe8ba57b562aefc9172f2793c",
+      "modified": false
+    },
+    {
+      "file": "datagrip.svg",
+      "sourcePath": "svg/datagrip.svg",
+      "sha256": "4168a2b860bef4b3126439581ab79b4712add972feab7c99118052eba5def945",
+      "modified": false
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import { MonthlyExperiment, SystemConsole } from "@/components/lab/experiments";
 import { TechRadar } from "@/components/lab/tech-radar";
 import { LiveSignals } from "@/components/lab/live-signals";
 import { EngineeringResources } from "@/components/lab/engineering-resources";
+import { ConnectionPool } from "@/components/lab/connection-pool";
 
 export const metadata: Metadata = {
   title: "Lab",
@@ -47,6 +48,7 @@ export default async function LabPage() {
         </p>
       </PageHeading>
       <DeveloperTools />
+      <ConnectionPool />
       <TechRadar />
       <LiveSignals />
       <section className="content-section" id="experiments">
