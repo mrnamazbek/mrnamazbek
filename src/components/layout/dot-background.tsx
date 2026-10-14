@@ -87,6 +87,7 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       cancelAnimationFrame(animationFrame);
       animationFrame = 0;
       lastClock = null;
+      canvas.dataset.activity = "idle";
     };
     const fallback = () => {
       stop();
@@ -102,6 +103,7 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       const ratio = Math.min(devicePixelRatio || 1, 1.5, Math.sqrt(1_500_000 / (width * height)));
       renderer.resize(width, height, ratio);
       draw();
+      reconcile();
     };
     const tick = (now: number) => {
       animationFrame = 0;
@@ -109,14 +111,23 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         reconcile();
         return;
       }
-      if (now - lastDraw >= 1000 / 30) {
-        elapsed += lastClock === null ? 0 : Math.min((now - lastClock) / 1000, 0.1);
+      // One millisecond of tolerance avoids skipped frames at a 60Hz refresh.
+      if (now - lastDraw >= 1000 / 30 - 1) {
+        const delta = lastClock === null ? 1 / 30 : Math.min((now - lastClock) / 1000, 0.1);
+        elapsed += delta;
         lastClock = now;
         lastDraw = now;
-        pointer.x += (target.x - pointer.x) * 0.24;
-        pointer.y += (target.y - pointer.y) * 0.24;
+        // Match the original easing at 30fps, even after a slow or delayed frame.
+        const ease = 1 - Math.pow(0.76, delta * 30);
+        pointer.x += (target.x - pointer.x) * ease;
+        pointer.y += (target.y - pointer.y) * ease;
         pointer.active = target.active;
-        draw();
+        const evolving = draw();
+        const following = Math.hypot(target.x - pointer.x, target.y - pointer.y) > 0.2;
+        if (!evolving && !following) {
+          stop();
+          return;
+        }
       }
       animationFrame = requestAnimationFrame(tick);
     };
@@ -155,6 +166,7 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       if (!renderer) return;
       if (canRun()) {
         canvas.dataset.state = "running";
+        canvas.dataset.activity = "animating";
         if (!animationFrame) animationFrame = requestAnimationFrame(tick);
       } else {
         stop();
@@ -167,11 +179,20 @@ function useDotRenderer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     };
     const onPointer = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" || !canRun()) return;
+      // The first real sample belongs at the cursor, not at the parked center.
+      if (!target.active) {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+      }
       target.x = event.clientX;
       target.y = event.clientY;
       target.active = true;
+      reconcile();
     };
-    const leave = () => { target.active = false; };
+    const leave = () => {
+      target.active = false;
+      reconcile();
+    };
     const onCapability = () => {
       target.active = false;
       reconcile();

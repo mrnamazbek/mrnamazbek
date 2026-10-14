@@ -9,6 +9,7 @@ import {
   Workflow,
 } from "lucide-react";
 import type { SkillGroup } from "@/types/content";
+import { TechnologyIcon } from "@/components/ui/technology-icon";
 import styles from "./capabilities-panel.module.css";
 
 const categoryIcons = {
@@ -78,7 +79,10 @@ export function CapabilitiesPanel({ groups }: CapabilitiesPanelProps) {
                   aria-label={`${group.category} technologies`}
                 >
                   {group.technologies.map((tool) => (
-                    <li key={tool}>{tool}</li>
+                    <li key={tool}>
+                      <TechnologyIcon tool={tool} />
+                      <span>{tool}</span>
+                    </li>
                   ))}
                 </ul>
               </div>

@@ -3,8 +3,9 @@
 The portfolio keeps its ink/green editorial identity and server-rendered content.
 The October 2026 enhancement uses original React, CSS, Web Animations API, and
 native scrolling implementations informed by the user's supplied Awwwards pack.
-No demo photographs, fonts, proprietary bundles, GSAP, Lenis, or remote scripts
-from the pack are shipped. The DDCNB robot's Spline runtime is dynamically loaded
+No demo photographs, fonts, proprietary bundles, GSAP, or remote scripts
+from the pack are shipped. The later Lenis integration comes from its official
+MIT-licensed npm package. The DDCNB robot's Spline runtime is dynamically loaded
 for capable desktop visitors. This is a curated selection of techniques that fit
 the portfolio, not an import of every demo or library.
 
@@ -54,7 +55,8 @@ headlines, photos, and mobile navigation remain usable without JavaScript.
 Frequent pointer updates use refs and animation frames; viewport subscriptions
 are shared and passive. Components clean up animations, observers and listeners.
 The gallery uses locally hosted WebP derivatives and responsive lazy Next images.
-The CSS interactions do not add animation dependencies; the optional 3D robot uses Spline Runtime.
+The CSS interactions do not add animation dependencies; the optional 3D robot uses
+Spline Runtime and capable desktop wheel scrolling uses Lenis.
 
 ## DDCNB robot
 
@@ -121,3 +123,21 @@ on pause, hidden tabs, lost context, or unsupported input/motion settings.
 Reduced motion, touch/mobile, WebGL failure, and no JavaScript retain static CSS
 dots. The layer is decorative and cannot intercept links, forms, or scrolling;
 playback uses one native keyboard-accessible button.
+
+## Requested repository upgrades
+
+The four repositories below were inspected on 14 October 2026. Revisions are
+pinned here so later changes can be assessed against the actual source studies.
+
+| Repository and revision | Applied upgrade | Scope and provenance |
+| --- | --- | --- |
+| [Shaders](https://github.com/shader-effects-inc/shaders/tree/81fd4ece5d493ca6c424a2af41f0e2c361ec8258) | Ripple settles to zero GPU draws and resumes on new cursor input; first cursor sample starts at its actual position; frame-rate-independent easing and tolerant 30fps cap | Studied `packages/core/src/gpu/kit/host/pointer.ts` and `gpu/frame.ts`. Original adaptation of lifecycle techniques; no upstream source, WebGPU runtime, editor presets, telemetry, or dependency imported. Ripple remains the sole background. |
+| [Lenis](https://github.com/darkroomengineering/lenis/tree/bc152f90d7c9b04ef372718350e2f616f3c706b2) | Smooth desktop wheel scrolling | Exact official npm version `1.3.26`, dynamically loaded for eligible motion/input settings. Native touch, keyboard and anchors remain available; nested gallery, dialogs, editable controls and route/history transitions are handled separately. Keyboard/focus changes interrupt inertia so focused fields stay visible. Next.js 16's documented `data-scroll-behavior` attribute retains instant route transitions with native smooth anchors. |
+| [Anatomy](https://github.com/wheresryan22/anatomy/tree/e6600ffc4e8e6620eeb45bf49bcdbd5e4b84163f) | Interactive isometric connection-pool illustration in Lab | The drawing skill informs original SVG and layout. An explicitly illustrative bounded pool and queue explain capacity; they do not claim to show this site's production configuration. No kit code, textures, fonts, or graphics runtime is copied. |
+| [Dashboard Icons](https://github.com/homarr-labs/dashboard-icons/tree/2ade7af6c86f0bf7de0b29cd62af99b3458b7af1) | Local technology marks in capabilities disclosures | A small set of reviewed SVGs for tools actually listed in existing skills. Exact paths and revision are retained in `assets/technology-icons/source.json`; Apache-2.0 license retained alongside assets. Marks accompany text labels and do not imply endorsement. |
+
+The Ripple loop continues until its existing wakes expire and the cursor has
+settled, then retains the last drawn grid without scheduling further frames.
+Pause, tab visibility, motion preferences, resize and theme changes still update
+the same persistent canvas. A browser regression check counts actual WebGL draw
+calls across idle and renewed cursor movement.

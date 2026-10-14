@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { LegacyAnchorRedirect } from "@/components/layout/legacy-anchor-redirect";
 import { DotBackground } from "@/components/layout/dot-background";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,5 +16,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><body id="top"><DotBackground /><LegacyAnchorRedirect /><a className="skip-link" href="#main-content">Skip to content</a><SiteHeader /><main id="main-content" className="site-main">{children}</main><SiteFooter /></body></html>;
+  return <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning><body id="top"><SmoothScroll /><DotBackground /><LegacyAnchorRedirect /><a className="skip-link" href="#main-content">Skip to content</a><SiteHeader /><main id="main-content" className="site-main">{children}</main><SiteFooter /></body></html>;
 }

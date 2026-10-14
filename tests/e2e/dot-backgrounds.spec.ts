@@ -155,6 +155,37 @@ test("the single Ripple background supports keyboard playback and saves pause ac
   expect(errors).toEqual([]);
 });
 
+test("settled Ripple stops GPU draws and wakes immediately on new cursor movement", async ({ page }) => {
+  const errors = runtimeErrors(page);
+  await page.addInitScript(() => {
+    let draws = 0;
+    Object.defineProperty(window, "__rippleDraws", { get: () => draws });
+    const original = WebGLRenderingContext.prototype.drawArrays;
+    WebGLRenderingContext.prototype.drawArrays = function (...args) {
+      if ((this.canvas as HTMLCanvasElement).dataset.testid === "dot-background-canvas") draws++;
+      return Reflect.apply(original, this, args);
+    };
+  });
+  await page.goto("/about");
+  const canvas = page.getByTestId(canvasId);
+  await expect(canvas).toHaveAttribute("data-renderer", "webgl", { timeout: 30_000 });
+  await page.mouse.move(100, 350);
+  await expect(canvas).toHaveAttribute("data-activity", "animating");
+  await expect(canvas).toHaveAttribute("data-activity", "idle", { timeout: 20_000 });
+  const count = () => page.evaluate(() => (window as unknown as { __rippleDraws: number }).__rippleDraws);
+  const settled = await count();
+  expect(settled).toBeGreaterThan(20);
+  await advanceFrames(page, 30);
+  expect(await count()).toBe(settled);
+  await page.mouse.move(240, 390);
+  await expect(canvas).toHaveAttribute("data-activity", "animating");
+  await expect.poll(count).toBeGreaterThan(settled);
+  await pressPlayback(page, "Pause background animation");
+  await expect(canvas).toHaveAttribute("data-state", "paused");
+  await expect(canvas).toHaveAttribute("data-activity", "idle");
+  expect(errors).toEqual([]);
+});
+
 test("older saved backgrounds become Ripple while preserving playback preference", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.goto("/about");

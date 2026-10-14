@@ -8,7 +8,8 @@ type DotFrame = {
 
 export interface DotRenderer {
   resize(widthCss: number, heightCss: number, dpr: number): void;
-  render(frame: DotFrame): void;
+  /** Draw once and report whether ripple wakes still need animation. */
+  render(frame: DotFrame): boolean;
   dispose(): void;
 }
 
@@ -223,7 +224,7 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
   }
 
   function render({ elapsed, pointer, lightTheme }: DotFrame) {
-    if (disposed || gl.isContextLost()) return;
+    if (disposed || gl.isContextLost()) return false;
     const time = Math.max(0, finite(elapsed, 0));
     const pointerX = finite(pointer.x, width * 0.5);
     const pointerY = finite(pointer.y, height * 0.5);
@@ -263,6 +264,8 @@ export function createDotRenderer(canvas: HTMLCanvasElement): DotRenderer {
     gl.uniform1f(uniforms.themeOpacity, lightTheme ? 0.8 : 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.POINTS, 0, dotCount);
+    // A stationary glow is already drawn. Only a live wake needs another frame.
+    return wakes.some((value, index) => index % 4 === 3 && value > 0);
   }
 
   // A renderer is immediately drawable, even before the first ResizeObserver.
