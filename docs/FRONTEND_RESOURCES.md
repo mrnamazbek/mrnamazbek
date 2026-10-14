@@ -84,3 +84,40 @@ unsupported WebGL and load failures retain these posters. Pause stops interactio
 hidden tabs and off-screen scenes stop rendering. Observers, events, animation
 frames, downloads and the runtime instance are cleaned up on navigation. The
 earlier original particle torus remains available as a separate reusable component.
+
+## Cursor-responsive ripple background
+
+An original ripple point shader runs throughout the site: cursor movement emits
+small circular waves through the dot grid. The bottom-left Ripple background
+control pauses it independently of the robot and remembers playback preferences
+across pages and reloads. This is the site's only background effect.
+
+The supplied pack was inspected again through its Background Animations folder:
+
+- [Background 10](https://drive.google.com/drive/folders/1RJ-s_VLSQRcAIPaOW71owffncZntixmK),
+  `code.zip` / `files/script.js`: spring-returning dot grid, pointer-proximity
+  colors, and movement impulses. This informed the dot grid and local response.
+- [Background 11](https://drive.google.com/drive/folders/1MlDp7Wl9uhK82IqFSVau8OjmbdHmpJab),
+  `code.zip` / `PixelLiquidBg.tsx`: pointer-driven fluid, coarse sampling, bounded
+  simulation resolution, and palette changes. This informed bounded wake
+  rendering and theme palettes.
+- [Background 1](https://drive.google.com/drive/folders/1iserdV7rJZ3hSsDPX_XfaLWpQS-NbUNT),
+  `code.zip` / `files/script.js`: eased mouse uniforms and theme-colored WebGL
+  rendering. This informed cursor smoothing and theme integration.
+
+The main open-source study was the dot variant of
+[React Bits Ripple Grid](https://reactbits.dev/backgrounds/ripple-grid).
+Upstream source was studied at commit `496968c4117e21278f13917201b7d615bc5e7450`.
+[21st.dev Kinetic Dots](https://21st.dev/@isaiahbjork/components/shader-kinetic-dots)
+was a shader-lifecycle study. This is an original implementation of the general
+techniques, with no copied
+pack or upstream source, demo assets, fluid runtime, or added dependency.
+
+One persistent WebGL1 canvas draws at most
+4,000 point sprites at 30 frames per second, with a 1.5-million-pixel raster
+budget and at most eight ripple wakes. Coordinates use viewport CSS pixels so
+the cursor remains aligned on wide or high-density screens. It stops rendering
+on pause, hidden tabs, lost context, or unsupported input/motion settings.
+Reduced motion, touch/mobile, WebGL failure, and no JavaScript retain static CSS
+dots. The layer is decorative and cannot intercept links, forms, or scrolling;
+playback uses one native keyboard-accessible button.

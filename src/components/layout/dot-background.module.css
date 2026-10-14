@@ -1,0 +1,64 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.canvas,
+.fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas { opacity: 0; }
+.canvas[data-renderer="webgl"] { opacity: 1; }
+.fallback {
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--accent) 21%, transparent) 1px, transparent 1.3px);
+  background-size: 30px 30px;
+  background-position: 15px 15px;
+  mask-image: radial-gradient(ellipse at 55% 40%, black, #0005 70%, black);
+}
+.layer:has(.canvas[data-renderer="webgl"]) .fallback { opacity: 0; }
+
+.controls {
+  position: fixed;
+  z-index: 60;
+  left: max(20px, env(safe-area-inset-left));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.trigger {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--background) 96%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 5px 24px #0002;
+  backdrop-filter: blur(12px);
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 30px;
+  letter-spacing: 0.015em;
+}
+.trigger > svg:first-child { color: var(--accent); }
+.trigger:hover { border-color: var(--subtle); }
+.trigger:disabled { cursor: default; }
+.playback { display: inline-flex; align-items: center; gap: 6px; padding-left: 10px; border-left: 1px solid var(--line); color: var(--muted); }
+
+@media (max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .canvas[data-renderer="webgl"] { opacity: 0; }
+  .layer:has(.canvas[data-renderer="webgl"]) .fallback { opacity: 1; }
+}
+@media (max-width: 767px) {
+  .controls { left: max(14px, env(safe-area-inset-left)); bottom: max(14px, env(safe-area-inset-bottom)); }
+}
+@media (scripting: none) { .controls { display: none; } }
