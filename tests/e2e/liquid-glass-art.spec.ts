@@ -1,35 +1,29 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { PNG } from "pngjs";
 
 test.use({ launchOptions: { args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } });
 
 // Inspect the actual composited sculpture, not a transform or pointer uniform.
-async function glassPixels(page: Page, canvas: Locator) {
-  const screenshot = (await canvas.screenshot()).toString("base64");
-  return page.evaluate(async png => {
-    const image = new Image();
-    image.src = `data:image/png;base64,${png}`;
-    await image.decode();
-    const sample = document.createElement("canvas");
-    sample.width = 160;
-    sample.height = 160;
-    const context = sample.getContext("2d")!;
-    context.drawImage(image, 0, 0, 160, 160);
-    const { data } = context.getImageData(0, 0, 160, 160);
-    const pixels: number[] = [];
-    let visibleGlass = 0;
-    for (let y = 25; y < 135; y++) {
-      for (let x = 25; x < 135; x++) {
-        const offset = (y * 160 + x) * 4;
-        const red = data[offset];
-        const green = data[offset + 1];
-        const blue = data[offset + 2];
-        if (red + green + blue < 570 && blue > red * 1.04) visibleGlass++;
-        pixels.push((red << 16) | (green << 8) | blue);
-      }
+async function glassPixels(canvas: Locator) {
+  // Decode the actual composited PNG in the test process. Passing thousands of
+  // colors through the software-GPU browser added 11–12 seconds per CI capture.
+  const { width, height, data } = PNG.sync.read(await canvas.screenshot());
+  const pixels: number[] = [];
+  let visibleGlass = 0;
+  for (let y = 25; y < 135; y++) {
+    const sourceY = Math.min(height - 1, Math.floor((y + 0.5) * height / 160));
+    for (let x = 25; x < 135; x++) {
+      const sourceX = Math.min(width - 1, Math.floor((x + 0.5) * width / 160));
+      const offset = (sourceY * width + sourceX) * 4;
+      const red = data[offset];
+      const green = data[offset + 1];
+      const blue = data[offset + 2];
+      if (red + green + blue < 570 && blue > red * 1.04) visibleGlass++;
+      pixels.push((red << 16) | (green << 8) | blue);
     }
-    if (visibleGlass < 180) throw new Error("The glass sculpture has no visible optical silhouette");
-    return pixels;
-  }, screenshot);
+  }
+  if (visibleGlass < 180) throw new Error(`The glass sculpture has no visible optical silhouette (${visibleGlass} sampled pixels)`);
+  return pixels;
 }
 
 function difference(first: number[], second: number[]) {
@@ -58,7 +52,9 @@ async function settleMotion(page: Page) {
 
 for (const width of [1440, 2560]) {
   test(`glass renders visible local geometry and follows the cursor at ${width}px`, async ({ page }) => {
-    test.setTimeout(180_000);
+    // CI traces show individual composited software-GPU screenshots taking
+    // 17–19 seconds. Keep the strict pixel checks, with enough time for a pair.
+    test.setTimeout(360_000);
     await page.setViewportSize({ width, height: 1050 });
     await page.emulateMedia({ reducedMotion: "no-preference" });
     const errors: string[] = [];
@@ -75,24 +71,24 @@ for (const width of [1440, 2560]) {
     await settleMotion(page);
     let leftPixels: number[] = [];
     await expect(async () => {
-      const first = await glassPixels(page, canvas);
-      leftPixels = await glassPixels(page, canvas);
+      const first = await glassPixels(canvas);
+      leftPixels = await glassPixels(canvas);
       expect(difference(first, leftPixels)).toBeLessThan(0.002);
-    }).toPass({ timeout: 30_000 });
+    }).toPass({ timeout: 90_000 });
     await page.mouse.move(right.x, right.y);
     await settleMotion(page);
-    await expect.poll(async () => difference(leftPixels, await glassPixels(page, canvas)), { timeout: 30_000 }).toBeGreaterThan(0.035);
+    await expect.poll(async () => difference(leftPixels, await glassPixels(canvas)), { timeout: 90_000 }).toBeGreaterThan(0.035);
     await page.mouse.move(left.x, left.y);
     await settleMotion(page);
-    await expect.poll(async () => difference(leftPixels, await glassPixels(page, canvas)), { timeout: 30_000 }).toBeLessThan(0.004);
+    await expect.poll(async () => difference(leftPixels, await glassPixels(canvas)), { timeout: 90_000 }).toBeLessThan(0.004);
     const pause = page.getByRole("button", { name: "Pause glass motion" });
     await pause.focus();
     await page.keyboard.press("Enter");
     await expect(page.getByRole("button", { name: "Resume glass motion" })).toHaveAttribute("aria-pressed", "true");
-    const paused = await glassPixels(page, canvas);
+    const paused = await glassPixels(canvas);
     await page.mouse.move(right.x, right.y);
     await settleMotion(page);
-    expect(difference(paused, await glassPixels(page, canvas))).toBeLessThan(0.002);
+    expect(difference(paused, await glassPixels(canvas))).toBeLessThan(0.002);
     expect(errors).toEqual([]);
   });
 }
