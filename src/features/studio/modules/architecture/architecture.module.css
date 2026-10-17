@@ -1,0 +1,123 @@
+.flow {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding: 28px 0;
+  margin: 0;
+  position: relative;
+}
+.flow::before {
+  content: "";
+  position: absolute;
+  top: 90px;
+  height: 1px;
+  background: #5d9db44f;
+  left: 10%;
+  right: 10%;
+}
+.flow button {
+  position: relative;
+  width: 100%;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #10202a;
+}
+.flow button > span:first-child {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #7cb3cc66;
+  color: #bdeeff;
+  font: 12px var(--font-mono);
+  background: #163342;
+}
+.flow small {
+  color: #99e0c0;
+  font: 9px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.flow button[data-packet="true"] {
+  box-shadow: inset 0 -3px #99e0c0;
+}
+.detail {
+  min-height: 230px;
+}
+.illustration {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse, #204b5f50, transparent 70%);
+  border: 1px solid #80b3c72b;
+  border-radius: 10px;
+}
+.illustration svg {
+  width: 100%;
+  max-width: 410px;
+  height: 210px;
+  color: #bdeeff;
+}
+.score {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.score span {
+  display: inline-block;
+  height: 4px;
+  width: calc(var(--score) * 10px);
+  background: #8fd8e7;
+  border-radius: 4px;
+}
+.stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.stack article {
+  padding: 22px;
+  border-left: 2px solid #80b3c74f;
+  background: #14283466;
+}
+.stack h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 400;
+}
+.stack p {
+  margin: 0;
+}
+@media (max-width: 680px) {
+  .flow {
+    gap: 7px;
+  }
+  .flow button {
+    padding: 12px 4px;
+    font-size: 11px;
+  }
+  .flow small {
+    font-size: 7px;
+  }
+  .stack {
+    grid-template-columns: 1fr;
+  }
+  .score span {
+    display: none;
+  }
+}
+@media (forced-colors: active) {
+  .flow button[data-packet="true"] {
+    outline: 2px solid Highlight;
+  }
+  .stack article {
+    border-color: CanvasText;
+  }
+}
