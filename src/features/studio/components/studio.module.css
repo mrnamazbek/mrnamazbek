@@ -659,6 +659,7 @@
   margin-bottom: 14px;
 }
 .dialog {
+  margin: auto;
   border: 1px solid #87b7cb;
   background: #101d26;
   color: #edf5f5;
