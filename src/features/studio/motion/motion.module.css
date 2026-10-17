@@ -82,6 +82,8 @@
 }
 .heading {
   position: relative;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .semantic {
   display: inline;
@@ -102,7 +104,9 @@
 }
 .word {
   display: inline-block;
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transform: skewY(var(--heading-skew, 0deg));
   transition: transform 120ms ease-out;
 }

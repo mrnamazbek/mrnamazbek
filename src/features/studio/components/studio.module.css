@@ -12,6 +12,7 @@
   background: #0b0f12;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-wrap: anywhere;
   overflow: clip;
 }
 .studio :is(button, a, input, select, textarea, summary):focus-visible {
@@ -64,6 +65,7 @@
   padding: 25px 4vw;
   margin: auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
@@ -77,13 +79,19 @@
   letter-spacing: 0.14em;
   font-weight: 700;
   line-height: 1.7;
+  min-width: 0;
+  max-width: 100%;
+}
+.brand > span:last-child {
+  min-width: 0;
 }
 .mark {
   font-size: 24px;
   letter-spacing: -0.12em;
   border: 1px solid #a6d8eb50;
-  width: 43px;
-  height: 43px;
+  width: 1.8em;
+  height: 1.8em;
+  flex: none;
   display: grid;
   place-items: center;
   transform: rotate(-7deg);
@@ -91,6 +99,9 @@
 }
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
   gap: 28px;
   align-items: center;
   font-size: 12px;
@@ -134,12 +145,14 @@
   text-transform: uppercase;
   color: #a9c1cc;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
 .dot {
   width: 6px;
   height: 6px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: #99e0c0;
   box-shadow: 0 0 15px #99e0c055;
@@ -255,6 +268,7 @@
 }
 .cardTop {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
@@ -265,6 +279,9 @@
 }
 .badge {
   display: inline-flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
   gap: 8px;
   align-items: center;
   border: 1px solid #8ac3d332;
@@ -298,6 +315,7 @@
 .cardLinks {
   margin-top: auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -466,7 +484,7 @@
   font-family: var(--font-mono);
 }
 .terminalInput button {
-  white-space: nowrap;
+  white-space: normal;
 }
 .terminalOutput {
   display: block;
@@ -710,7 +728,7 @@
     position: absolute;
     left: 5vw;
     right: 5vw;
-    top: 80px;
+    top: calc(100% + 8px);
     flex-direction: column;
     align-items: stretch;
     padding: 22px;

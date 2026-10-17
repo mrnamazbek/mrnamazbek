@@ -260,13 +260,21 @@ export default function ArchitectureView({
       </div>
       <div className={styles.panel}>
         <h3>Make the tradeoff explicit</h3>
-        <div className={bench.scrollTable}>
+        <p id={`${base}-tradeoff-help`} className={styles.caption}>
+          Hypothetical scores from 0–5; higher means a stronger illustrative
+          fit. On a narrow screen, focus the table and use Left and Right arrow
+          keys to compare columns.
+        </p>
+        <div
+          className={bench.scrollTable}
+          role="region"
+          aria-label="Architecture tradeoff table"
+          aria-describedby={`${base}-tradeoff-help`}
+          tabIndex={0}
+          data-lenis-prevent
+        >
           <table className={styles.table}>
-            <caption>
-              Hypothetical tradeoffs · scores 0–5, higher means a stronger
-              illustrative fit for the stated criterion. These are not
-              benchmarks.
-            </caption>
+            <caption>Hypothetical tradeoffs</caption>
             <thead>
               <tr>
                 <th scope="col">Criterion</th>
