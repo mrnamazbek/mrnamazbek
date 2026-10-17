@@ -2,13 +2,29 @@ import type { Page } from "@playwright/test";
 
 const navigationReads = new Set(["/studio", "/studio/connect", "/", "/v2"]);
 
-export async function trapDemoRequests(page: Page): Promise<string[]> {
+export async function trapDemoRequests(
+  page: Page,
+  initialDocument?: string,
+): Promise<string[]> {
   const unexpected: string[] = [];
-  const origin = new URL(page.url()).origin;
+  const target = initialDocument ? new URL(initialDocument) : null;
+  const origin = target?.origin ?? new URL(page.url()).origin;
+  let initialReadPending = target !== null;
   await page.route("**/*", async (route) => {
     const request = route.request();
     const url = new URL(request.url());
     const localGet = request.method() === "GET" && url.origin === origin;
+    if (
+      initialReadPending &&
+      target &&
+      localGet &&
+      request.resourceType() === "document" &&
+      url.pathname === target.pathname &&
+      url.search === target.search
+    ) {
+      initialReadPending = false;
+      return route.continue();
+    }
     const frameworkRead =
       localGet &&
       request.headers().rsc === "1" &&

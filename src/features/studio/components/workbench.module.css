@@ -49,6 +49,17 @@
   margin: 20px 0;
   min-width: 0;
 }
+.field {
+  display: grid;
+  flex: 1 1 160px;
+  gap: 8px;
+  align-content: start;
+}
+.fieldError.fieldError {
+  color: #f6beb8;
+  font-size: 12px;
+  margin: 4px 0;
+}
 .fieldset legend {
   font-size: 11px;
   text-transform: uppercase;

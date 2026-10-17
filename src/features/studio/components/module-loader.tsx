@@ -17,6 +17,10 @@ function ModuleLoading() {
 }
 
 const views: Partial<Record<ModuleSlug, ComponentType<ModuleViewProps>>> = {
+  "form-workbench": dynamic(() => import("../modules/form-workbench/view"), {
+    ssr: false,
+    loading: ModuleLoading,
+  }),
   "locale-inspector": dynamic(
     () => import("../modules/locale-inspector/view"),
     {
