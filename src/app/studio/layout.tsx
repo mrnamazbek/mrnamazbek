@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getProfile } from "@/lib/content";
 import { StudioRuntime } from "@/features/studio/runtime/studio-runtime";
-import { SceneHost } from "@/features/studio/scene/scene-host";
 import { StudioShell } from "@/features/studio/components/studio-shell";
 export const metadata: Metadata = {
   title: "Founder’s Engineering Lab",
@@ -18,10 +17,7 @@ export default async function StudioLayout({
   const profile = await getProfile();
   return (
     <StudioRuntime>
-      <StudioShell profile={profile}>
-        <SceneHost />
-        {children}
-      </StudioShell>
+      <StudioShell profile={profile}>{children}</StudioShell>
     </StudioRuntime>
   );
 }
