@@ -68,6 +68,11 @@ test("deep header chapters preserve the actual canvas and native anchor destinat
     )
     .toBeLessThan(3);
   await expect(capabilities).toHaveAttribute("aria-current", "location");
+  await expect(page.locator("#studio-capabilities")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Open Policy Workflow", exact: true }),
+  ).toBeFocused();
   const openArchitecture = page.getByRole("link", {
     name: "Open Architecture Inspector",
     exact: true,

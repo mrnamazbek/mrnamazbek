@@ -47,11 +47,14 @@ export function StoryChapters(): React.JSX.Element {
     // Next can commit its hash scroll before this client story has mounted.
     // Only an explicit Studio chapter navigation gets this one-shot fallback.
     const chapter = navigation.take();
-    if (chapter)
-      document.getElementById(chapter)?.scrollIntoView({
+    if (chapter) {
+      const destination = document.getElementById(chapter);
+      destination?.scrollIntoView({
         block: "start",
         behavior: "instant",
       });
+      destination?.focus({ preventScroll: true });
+    }
     window.dispatchEvent(new Event("studio:story-ready"));
     return () => {
       navigation.cancel();
@@ -61,7 +64,7 @@ export function StoryChapters(): React.JSX.Element {
   }, [signals, navigation]);
   return (
     <div ref={root} data-studio-story>
-      <section id="studio-author" className={styles.hero}>
+      <section id="studio-author" className={styles.hero} tabIndex={-1}>
         <p className={styles.eyebrow}>
           <span className={styles.dot} /> NAMAZBEK BEKZHANOV · DATA ENGINEER &
           BACKEND DEVELOPER
@@ -92,7 +95,11 @@ export function StoryChapters(): React.JSX.Element {
           <span>SCROLL TO UNFOLD ↓</span>
         </div>
       </section>
-      <section id="studio-capabilities" className={styles.chapter}>
+      <section
+        id="studio-capabilities"
+        className={styles.chapter}
+        tabIndex={-1}
+      >
         <div className={styles.eyebrow}>
           02 / CAPABILITY MATRIX{" "}
           <span style={{ marginLeft: "auto" }}>
@@ -108,7 +115,11 @@ export function StoryChapters(): React.JSX.Element {
         </div>
         <CapabilityMatrix />
       </section>
-      <section id="studio-architecture" className={styles.chapter}>
+      <section
+        id="studio-architecture"
+        className={styles.chapter}
+        tabIndex={-1}
+      >
         <div className={styles.eyebrow}>03 / ARCHITECTURE & SCALE</div>
         <div className={styles.sectionHead}>
           <KineticHeading text="Make the invisible understandable." as="h2" />
@@ -201,7 +212,7 @@ export function StoryChapters(): React.JSX.Element {
           </div>
         </div>
       </section>
-      <section id="studio-ventures" className={styles.chapter}>
+      <section id="studio-ventures" className={styles.chapter} tabIndex={-1}>
         <div className={styles.eyebrow}>04 / VENTURE LAB</div>
         <div className={styles.sectionHead}>
           <KineticHeading text="What should exist next?" as="h2" />
