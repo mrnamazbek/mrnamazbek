@@ -1,0 +1,49 @@
+.host {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  background: radial-gradient(ellipse at 70% 33%, #15303966, transparent 50%);
+}
+.art {
+  position: absolute;
+  width: min(74vw, 1000px);
+  height: min(92vh, 1000px);
+  right: -7vw;
+  top: 4vh;
+  opacity: 0.85;
+}
+.art svg {
+  width: 100%;
+  height: 100%;
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+.retry {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  pointer-events: auto;
+  color: #bdeeff;
+  background: #12191e;
+  border: 1px solid #4b626b;
+  border-radius: 30px;
+  padding: 12px 18px;
+}
+@media (max-width: 767px) {
+  .art {
+    width: 125vw;
+    height: 75vh;
+    right: -40vw;
+    top: 15vh;
+    opacity: 0.36;
+  }
+}
+@media (forced-colors: active) {
+  .host {
+    display: none;
+  }
+}
