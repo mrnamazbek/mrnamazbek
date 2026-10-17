@@ -17,6 +17,13 @@ function ModuleLoading() {
 }
 
 const views: Partial<Record<ModuleSlug, ComponentType<ModuleViewProps>>> = {
+  "locale-inspector": dynamic(
+    () => import("../modules/locale-inspector/view"),
+    {
+      ssr: false,
+      loading: ModuleLoading,
+    },
+  ),
   "interface-lab": dynamic(() => import("../modules/interface-lab/view"), {
     ssr: false,
     loading: ModuleLoading,
