@@ -1,10 +1,124 @@
-import type { ModuleDefinition } from './types';
+import type { ModuleDefinition } from "./types";
 export const modules: readonly ModuleDefinition[] = [
- {slug:'policy-workflow',title:'Policy Workflow',summary:'Turn an input into a decision you can explain. Step through validation, policy and a reproducible receipt.',boundary:'Local simulation',featureIds:['F31'],initialSample:[{label:'Input',value:'240 LAB credits → hub-a'},{label:'Policy',value:'Education · within 1,000 credit limit'},{label:'Result',value:'Allowed · reproducible identifier'}]},
- {slug:'data-explorer',title:'Data Explorer',summary:'Find the signal in a small archive. Search, filter and inspect notes or fictional roles.',boundary:'Seeded demo',featureIds:['F33','F35'],initialSample:[{label:'Notes',value:'19 invented records · four categories'},{label:'Sample roles',value:'9 fictional records · no hiring claims'},{label:'Source',value:'Local fixtures · no requests'}]},
- {slug:'architecture',title:'Architecture Inspector',summary:'Follow a packet through a system. Inspect boundaries, compare tradeoffs and question the stack.',boundary:'Seeded demo',featureIds:['F13','F18','F23','F24','F25','F26','F27','F28','F30','F32'],initialSample:[{label:'Flow',value:'Source → Validate → Transform → Serve'},{label:'Comparison',value:'Batch / Stream / Hybrid'},{label:'Boundary',value:'Illustrative architecture; no jobs are running.'}]},
- {slug:'interface-lab',title:'Interface Lab',summary:'Interfaces are systems too. Explore accessible states, visual decisions and editable motion.',boundary:'Local simulation',featureIds:['F03','F04','F05','F19','F20','F21','F22','F34','F36','F38','F39','F40','F41','F42','F43','F45','F46'],initialSample:[{label:'Groups',value:'Appearance · Resilience · Motion'},{label:'Control',value:'Keyboard, touch and static alternatives'},{label:'Assets',value:'Owned procedural SVG illustrations'}]},
- {slug:'locale-inspector',title:'Locale Inspector',summary:'One idea, three languages. Inspect a consistent content contract and a safe missing-key fallback.',boundary:'Seeded demo',featureIds:['F01'],initialSample:[{label:'Languages',value:'English · Русский · Қазақша'},{label:'Scope',value:'Nested sample only; global page stays English'}]},
- {slug:'form-workbench',title:'Form Workbench',summary:'Make failure legible. Inspect validation and request boundaries with deliberate local states.',boundary:'Local simulation',featureIds:['F37','F48'],initialSample:[{label:'Boundary',value:'No request is sent.'},{label:'Fixture',value:'Fictional name, email and message'},{label:'Responses',value:'400 / 403 / 413 / 415 / 422 / 502 / 503 / 200'}]},
+  {
+    slug: "policy-workflow",
+    title: "Policy Workflow",
+    summary:
+      "Turn an input into a decision you can explain. Step through validation, policy and a reproducible receipt.",
+    boundary: "Local simulation",
+    featureIds: ["F31"],
+    initialSample: [
+      { label: "Input", value: "240 LAB credits → hub-a" },
+      { label: "Policy", value: "Education · within 1,000 credit limit" },
+      { label: "Result", value: "Allowed · reproducible identifier" },
+    ],
+  },
+  {
+    slug: "data-explorer",
+    title: "Data Explorer",
+    summary:
+      "Find the signal in a small archive. Search, filter and inspect notes or fictional roles.",
+    boundary: "Seeded demo",
+    featureIds: ["F33", "F35"],
+    initialSample: [
+      { label: "Notes", value: "19 invented records · four categories" },
+      {
+        label: "Sample roles",
+        value: "9 fictional records · no hiring claims",
+      },
+      { label: "Source", value: "Local fixtures · no requests" },
+    ],
+  },
+  {
+    slug: "architecture",
+    title: "Architecture Inspector",
+    summary:
+      "Follow a packet through a system. Inspect boundaries, compare tradeoffs and question the stack.",
+    boundary: "Seeded demo",
+    featureIds: [
+      "F13",
+      "F18",
+      "F23",
+      "F24",
+      "F25",
+      "F26",
+      "F27",
+      "F28",
+      "F30",
+      "F32",
+    ],
+    initialSample: [
+      { label: "Flow", value: "Source → Validate → Transform → Serve" },
+      { label: "Comparison", value: "Batch / Stream / Hybrid" },
+      {
+        label: "Boundary",
+        value: "Illustrative architecture; no jobs are running.",
+      },
+    ],
+  },
+  {
+    slug: "interface-lab",
+    title: "Interface Lab",
+    summary:
+      "Interfaces are systems too. Explore accessible states, visual decisions and editable motion.",
+    boundary: "Local simulation",
+    featureIds: [
+      "F03",
+      "F04",
+      "F05",
+      "F19",
+      "F20",
+      "F21",
+      "F22",
+      "F34",
+      "F36",
+      "F38",
+      "F39",
+      "F40",
+      "F41",
+      "F42",
+      "F43",
+      "F45",
+      "F46",
+    ],
+    initialSample: [
+      { label: "Groups", value: "Appearance · Resilience · Motion" },
+      { label: "Control", value: "Keyboard, touch and static alternatives" },
+      { label: "Assets", value: "Owned procedural SVG illustrations" },
+    ],
+  },
+  {
+    slug: "locale-inspector",
+    title: "Locale Inspector",
+    summary:
+      "One idea, three languages. Inspect a consistent content contract and a safe missing-key fallback.",
+    boundary: "Seeded demo",
+    featureIds: ["F01"],
+    initialSample: [
+      { label: "Languages", value: "English · Русский · Қазақша" },
+      {
+        label: "Scope",
+        value: "Nested sample only; global page stays English",
+      },
+    ],
+  },
+  {
+    slug: "form-workbench",
+    title: "Form Workbench",
+    summary:
+      "Make failure legible. Inspect validation and request boundaries with deliberate local states.",
+    boundary: "Local simulation",
+    featureIds: ["F37", "F48"],
+    initialSample: [
+      { label: "Boundary", value: "No request is sent." },
+      { label: "Fixture", value: "Fictional name, email and message" },
+      {
+        label: "Responses",
+        value: "400 / 403 / 413 / 415 / 422 / 502 / 503 / 200",
+      },
+    ],
+  },
 ];
-export function getModule(slug:string): ModuleDefinition | undefined {return modules.find(module=>module.slug===slug);}
+export function getModule(slug: string): ModuleDefinition | undefined {
+  return modules.find((module) => module.slug === slug);
+}

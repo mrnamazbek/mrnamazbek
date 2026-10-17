@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import type Lenis from "lenis";
+import { isStudioPath } from "@/features/studio/runtime/route-mode";
 import "lenis/dist/lenis.css";
 
 const desktopMotion = "(min-width: 768px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
@@ -14,6 +15,7 @@ export function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (isStudioPath(pathname)) return;
     const capability = window.matchMedia(desktopMotion);
     let lenis: Lenis | undefined;
     let frame = 0;
