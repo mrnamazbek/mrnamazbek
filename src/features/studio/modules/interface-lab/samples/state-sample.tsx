@@ -67,10 +67,7 @@ export function StateSample(): React.JSX.Element {
     });
   return (
     <>
-      <p>
-        Choose each state deliberately. Nothing completes on a timer, and retry
-        changes only this local example.
-      </p>
+      <p>Choose a state to inspect its feedback, then recover the sample.</p>
       <div className={styles.controls}>
         {(["ready", "loading", "empty", "error"] as const).map((item) => (
           <button
@@ -139,7 +136,7 @@ export function StateSample(): React.JSX.Element {
         </section>
         <section className={styles.panel}>
           <h3>Anonymous responsibility tree</h3>
-          <p>Illustrative roles, not a team directory.</p>
+          <p>Anonymous roles with a small responsibility hierarchy.</p>
           <ol className={lab.roleTree} aria-label="Anonymous role hierarchy">
             {roles.map((item, index) => (
               <li key={item.title} style={{ marginLeft: `${index * 16}px` }}>
@@ -178,9 +175,7 @@ export function StateSample(): React.JSX.Element {
         <div className={styles.panel}>
           <span className={styles.badge}>Example status / prototype</span>
           <h3>Provenance is part of the interface.</h3>
-          <p>
-            Owned fixture. No service, telemetry or certification is implied.
-          </p>
+          <p>A prototype state with an explicit source and next action.</p>
         </div>
         <div className={styles.panel}>
           <span className={styles.eyebrow}>INERT PRICE SAMPLE</span>
@@ -198,7 +193,7 @@ export function StateSample(): React.JSX.Element {
         >
           <p className={styles.eyebrow}>Anonymous role / local example</p>
           <p>{roles[role].description}</p>
-          <p>No person, organization or hiring claim is represented.</p>
+          <p>Inspect how this responsibility supports the surrounding roles.</p>
         </LocalDialog>
       ) : null}
     </>

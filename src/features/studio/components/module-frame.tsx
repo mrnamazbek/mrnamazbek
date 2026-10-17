@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ChapterLink } from "./chapter-link";
 import type { ModuleDefinition } from "../modules/types";
 import styles from "./studio.module.css";
 export function ModuleFrame({
@@ -10,13 +10,13 @@ export function ModuleFrame({
 }): React.JSX.Element {
   return (
     <article className={styles.modulePage}>
-      <Link
-        href="/studio#studio-capabilities"
+      <ChapterLink
+        chapter="studio-capabilities"
         aria-label="Back to the lab"
         className={styles.eyebrow}
       >
         ← Back to the lab
-      </Link>
+      </ChapterLink>
       <h1>{definition.title}</h1>
       <p className={styles.moduleIntro}>{definition.summary}</p>
       <span className={styles.badge}>
@@ -32,8 +32,7 @@ export function ModuleFrame({
       </dl>
       {children}
       <p className={styles.caption}>
-        A small, intentionally bounded experiment. All sample data is fictional.
-        No business service is connected.
+        Fictional sample data. Changes stay in this workbench.
       </p>
     </article>
   );

@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { trapDemoRequests } from "./helpers/studio-network";
 
+test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+});
+
 test("notes filter and local details support keyboard focus and reset", async ({
   page,
 }) => {
@@ -36,9 +40,19 @@ test("notes filter and local details support keyboard focus and reset", async ({
 
 test("role adapters clear old selections and offer an honest local retry", async ({
   page,
+  baseURL,
 }) => {
-  await page.goto("/studio/modules/data-explorer");
-  const calls = await trapDemoRequests(page);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  const target = new URL("/studio/modules/data-explorer", baseURL!).href;
+  const calls = await trapDemoRequests(page, target);
+  await page.goto(target);
+  expect(
+    await page.evaluate(
+      () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
+  ).toBe(true);
+  await expect(page.locator("canvas[data-studio-canvas]")).toHaveCount(0);
   await page.getByRole("button", { name: "Sample roles", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("9 sample roles");
   await expect(
@@ -62,4 +76,5 @@ test("role adapters clear old selections and offer an honest local retry", async
     fullPage: true,
   });
   expect(calls).toEqual([]);
+  expect(errors).toEqual([]);
 });

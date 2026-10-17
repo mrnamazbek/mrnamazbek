@@ -16,7 +16,7 @@ function ModuleLoading() {
   );
 }
 
-const views: Partial<Record<ModuleSlug, ComponentType<ModuleViewProps>>> = {
+const views: Record<ModuleSlug, ComponentType<ModuleViewProps>> = {
   "form-workbench": dynamic(() => import("../modules/form-workbench/view"), {
     ssr: false,
     loading: ModuleLoading,
@@ -74,26 +74,9 @@ export function ModuleLoader({
   definition,
 }: ModuleViewProps): React.JSX.Element {
   const View = views[definition.slug];
-  if (View)
-    return (
-      <ModuleBoundary key={definition.slug}>
-        <View definition={definition} />
-      </ModuleBoundary>
-    );
   return (
-    <section
-      className={styles.workbench}
-      aria-label={`${definition.title} enhancement`}
-    >
-      <span className={styles.eyebrow}>SERVER FIXTURE READY</span>
-      <h2>Read the example. Inspect its boundary.</h2>
-      <p>
-        The interactive enhancement is being built. The initial fixture above is
-        available without JavaScript.
-      </p>
-      <button type="button" disabled>
-        Preparing workbench
-      </button>
-    </section>
+    <ModuleBoundary key={definition.slug}>
+      <View definition={definition} />
+    </ModuleBoundary>
   );
 }

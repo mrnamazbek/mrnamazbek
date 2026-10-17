@@ -15,6 +15,21 @@ export function KineticHeading({
   const root = useRef<HTMLHeadingElement>(null);
   const velocity = useStudioVelocity();
   useEffect(() => {
+    const element = root.current;
+    if (!enabled || !element || element.dataset.kineticEntered === "true")
+      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        element.dataset.kineticEntered = "true";
+        observer.disconnect();
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [enabled]);
+  useEffect(() => {
     if (!enabled) return;
     const reset = () =>
       root.current?.style.setProperty("--heading-skew", "0deg");

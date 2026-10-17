@@ -22,6 +22,7 @@ import {
 } from "./signals";
 import { getSceneRouteMode } from "./route-mode";
 import { connectScrollBridge } from "./scroll-bridge";
+import { createChapterNavigation } from "./chapter-navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 export const studioMotionQuery =
@@ -41,6 +42,7 @@ const scrollKeys = new Set([
 const RuntimeContext = createContext<{
   signals: SceneSignals;
   velocity: MotionValue<number>;
+  chapterNavigation: ReturnType<typeof createChapterNavigation>;
 } | null>(null);
 
 export function useStudioSignals(): SceneSignals {
@@ -52,6 +54,12 @@ export function useStudioVelocity(): MotionValue<number> {
   const context = useContext(RuntimeContext);
   if (!context) throw new Error("Studio velocity requires StudioRuntime");
   return context.velocity;
+}
+
+export function useStudioChapterNavigation() {
+  const context = useContext(RuntimeContext);
+  if (!context) throw new Error("Studio navigation requires StudioRuntime");
+  return context.chapterNavigation;
 }
 
 function ScrollOwner() {
@@ -124,6 +132,7 @@ export function StudioRuntime({
   const [runtime] = useState(() => ({
     signals: createSceneSignals(),
     velocity: motionValue(0),
+    chapterNavigation: createChapterNavigation(),
   }));
   const root = useRef<HTMLDivElement>(null);
   const scrollOwner = useRef<LenisRef | null>(null);
@@ -151,6 +160,24 @@ export function StudioRuntime({
     };
   }, []);
   useEffect(() => {
+    const cancelPendingChapter = () => runtime.chapterNavigation.cancel();
+    const cancelOnLink = (event: MouseEvent) => {
+      if (
+        event.composedPath().some((node) => node instanceof HTMLAnchorElement)
+      )
+        cancelPendingChapter();
+    };
+    // Capture runs before Link's onNavigate can request the next chapter.
+    window.addEventListener("click", cancelOnLink, true);
+    window.addEventListener("popstate", cancelPendingChapter);
+    return () => {
+      cancelPendingChapter();
+      window.removeEventListener("click", cancelOnLink, true);
+      window.removeEventListener("popstate", cancelPendingChapter);
+    };
+  }, [runtime]);
+  useEffect(() => {
+    if (pathname !== "/studio") runtime.chapterNavigation.cancel();
     resetSceneSignals(runtime.signals, getSceneRouteMode(pathname));
     if (document.hidden) setScenePaused(runtime.signals, true);
     runtime.velocity.set(0);

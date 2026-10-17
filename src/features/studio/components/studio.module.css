@@ -104,6 +104,12 @@
 .nav a:hover {
   color: #fff;
 }
+.nav a[aria-current] {
+  color: #d9f4ff;
+  text-decoration: underline;
+  text-decoration-color: #99e0c0;
+  text-underline-offset: 8px;
+}
 .menu {
   display: none;
 }
@@ -326,6 +332,17 @@
   margin: 0;
   font-weight: 400;
 }
+.preview h3:focus-visible {
+  outline: 2px solid #bdeeff;
+  outline-offset: 6px;
+}
+.livePreview {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.livePreview > section {
+  background: #101b24;
+}
 .preview dl {
   margin: 0;
   display: grid;
@@ -422,6 +439,93 @@
   font-weight: 400;
   letter-spacing: -0.03em;
   margin: 12px 0;
+}
+.terminal > p {
+  color: #a9bec9;
+  font-size: 14px;
+}
+.terminalConsole {
+  margin-top: 26px;
+  border: 1px solid #73a9c044;
+  background: #071219;
+  border-radius: 9px;
+  padding: 22px;
+}
+.terminalInput {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 10px;
+}
+.terminalInput > span {
+  font: 12px var(--font-mono);
+  color: #99e0c0;
+  white-space: nowrap;
+}
+.terminalInput input {
+  font-family: var(--font-mono);
+}
+.terminalInput button {
+  white-space: nowrap;
+}
+.terminalOutput {
+  display: block;
+  min-height: 32px;
+  font: 12px/1.8 var(--font-mono);
+  color: #acd9e8;
+  margin-top: 18px;
+}
+.connectGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+}
+.contactFrame,
+.contactAside {
+  padding: 30px;
+  background: #10202af2;
+  border: 1px solid #7fb3c740;
+  border-radius: 12px;
+  min-width: 0;
+}
+.contactFrame h2,
+.contactAside h2 {
+  font-size: 29px;
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  margin: 18px 0;
+}
+.contactFrame > p,
+.contactAside p {
+  color: #a8c2cf;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.contactFrame :global(.contact-form) {
+  margin-top: 28px;
+}
+.contactFrame :global(.button-primary) {
+  background: #bdeeff;
+  color: #102128;
+}
+.contactAside {
+  align-self: start;
+  background: linear-gradient(145deg, #15313ee8, #0c171ff2);
+}
+.contactAside hr {
+  border: 0;
+  border-top: 1px solid #80b4c740;
+  margin: 28px 0;
+}
+.contactEmail {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #bdeeff;
+  display: inline-block;
+  padding: 12px 0;
+  overflow-wrap: anywhere;
 }
 .footer {
   position: relative;
@@ -574,6 +678,27 @@
   }
 }
 @media (max-width: 680px) {
+  .connectGrid {
+    grid-template-columns: 1fr;
+  }
+  .contactFrame,
+  .contactAside {
+    padding: 22px;
+  }
+  .terminalConsole {
+    padding: 16px;
+  }
+  .terminalInput {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .terminalInput input {
+    flex: 1 1 120px;
+    width: auto;
+  }
+  .terminalInput button {
+    width: 100%;
+  }
   .header {
     padding: 18px 6vw;
   }

@@ -214,14 +214,13 @@ export function MotionSample(): React.JSX.Element {
               ))}
             </div>
             <p>
-              Original vector shapes. No icon library request or inherited
-              animation file.
+              Three shapes built around a boundary, a decision and a connection.
             </p>
           </>
         ) : null}
         {sample === "cube" ? (
           <>
-            <h3>One CSS object. No extra renderer.</h3>
+            <h3>Six faces. A different perspective.</h3>
             <div className={lab.cubeScene} aria-label="Owned six-face CSS cube">
               <div className={lab.cube}>
                 {["INPUT", "CHECK", "MAP", "VIEW", "OWN", "RESET"].map(
@@ -231,10 +230,7 @@ export function MotionSample(): React.JSX.Element {
                 )}
               </div>
             </div>
-            <p>
-              Six local surfaces demonstrate depth while every control remains
-              ordinary DOM.
-            </p>
+            <p>Six surfaces make depth and orientation visible.</p>
           </>
         ) : null}
         {sample === "choice" ? (
@@ -263,8 +259,7 @@ export function MotionSample(): React.JSX.Element {
               }
             </p>
             <p className={styles.caption}>
-              A local three-choice composition. No people or assessment workflow
-              is represented.
+              Choose the value that best explains this interface.
             </p>
           </>
         ) : null}
@@ -286,8 +281,7 @@ export function MotionSample(): React.JSX.Element {
               ))}
             </div>
             <p className={styles.caption}>
-              Owned procedural SVGs. No event media or people appear in these
-              studies.
+              Open an owned study to inspect its lines, layers and spacing.
             </p>
           </>
         ) : null}
@@ -310,7 +304,7 @@ export function MotionSample(): React.JSX.Element {
             </div>
             <p>{milestones[milestone].description}</p>
             <p className={styles.caption}>
-              A sample sequence, not personal or organizational history.
+              An illustrative sequence for testing an idea.
             </p>
           </>
         ) : null}
@@ -342,8 +336,7 @@ export function MotionSample(): React.JSX.Element {
             </div>
             <p>{regions[region].description}</p>
             <p className={styles.caption}>
-              Invented outlines. No addresses, locations or geolocation are
-              used.
+              Select a pin to inspect an abstract boundary.
             </p>
           </>
         ) : null}
@@ -362,8 +355,7 @@ export function MotionSample(): React.JSX.Element {
         </LocalDialog>
       ) : null}
       <p className={bench.subtle}>
-        One selected sample mounts at a time. Static reading is always
-        available.
+        Choose another study to compare a different interaction.
       </p>
     </>
   );

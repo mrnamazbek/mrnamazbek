@@ -3,14 +3,25 @@ import { trapDemoRequests } from "./helpers/studio-network";
 
 test("fixed architecture is inspectable by keyboard with complete local comparisons", async ({
   page,
+  baseURL,
 }) => {
-  await page.goto("/studio/modules/architecture");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  const target = new URL("/studio/modules/architecture", baseURL!).href;
+  const calls = await trapDemoRequests(page, target);
+  await page.goto(target);
+  expect(
+    await page.evaluate(
+      () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
+  ).toBe(true);
+  await expect(page.locator("canvas[data-studio-canvas]")).toHaveCount(0);
   await expect(
     page.getByRole("heading", {
       name: "Follow the boundary, not the buzzword.",
     }),
   ).toBeVisible();
-  const calls = await trapDemoRequests(page);
   await page.getByRole("button", { name: "Select Validate stage" }).focus();
   await page.keyboard.press("Enter");
   await expect(
@@ -55,6 +66,7 @@ test("fixed architecture is inspectable by keyboard with complete local comparis
   );
   await expect(page.getByRole("status")).toContainText("source");
   expect(calls).toEqual([]);
+  expect(errors).toEqual([]);
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await page.screenshot({
     path: "output/playwright/studio-architecture.png",

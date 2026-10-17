@@ -1,4 +1,38 @@
 import { test, expect } from "@playwright/test";
+
+test("no JavaScript keeps preview controls disabled and workbench links usable", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.route("**/api/contact", (route) => route.abort());
+  await page.goto(new URL("/studio", baseURL!).href);
+  await expect(
+    page.getByRole("heading", {
+      name: "I engineer systems. I test what should exist next.",
+      exact: true,
+    }),
+  ).toBeVisible();
+  for (const chapter of [
+    "studio-author",
+    "studio-capabilities",
+    "studio-architecture",
+    "studio-ventures",
+  ])
+    await expect(page.locator(`#${chapter}`)).toBeVisible();
+  const previews = page.getByRole("button", { name: /^Preview / });
+  await expect(previews).toHaveCount(6);
+  for (const preview of await previews.all())
+    await expect(preview).toBeDisabled();
+  await page
+    .getByRole("link", { name: "Open Policy Workflow", exact: true })
+    .click();
+  await expect(
+    page.getByText("240 LAB credits → hub-a", { exact: true }),
+  ).toBeVisible();
+  await context.close();
+});
 test("four chapter flagship has six real module routes and private preview metadata", async ({
   page,
 }) => {

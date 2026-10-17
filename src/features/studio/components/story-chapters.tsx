@@ -3,17 +3,23 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useStudioSignals, studioMotionQuery } from "../runtime/studio-runtime";
+import {
+  useStudioSignals,
+  useStudioChapterNavigation,
+  studioMotionQuery,
+} from "../runtime/studio-runtime";
 import { setSceneProgress } from "../runtime/signals";
 import { studioHeading } from "../content/story";
 import { ventures } from "../content/ventures";
 import { CapabilityMatrix } from "./capability-matrix";
+import { ConnectTerminal } from "./connect-terminal";
 import { KineticHeading } from "../motion/kinetic-heading";
 import { MagneticAction } from "../motion/magnetic-action";
 import { TiltCard } from "../motion/tilt-card";
 import styles from "./studio.module.css";
 export function StoryChapters(): React.JSX.Element {
   const signals = useStudioSignals();
+  const navigation = useStudioChapterNavigation();
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const context = gsap.context(() => {
@@ -29,17 +35,32 @@ export function StoryChapters(): React.JSX.Element {
             window.dispatchEvent(new Event("studio:invalidate"));
           },
         });
-        return () => trigger.kill();
+        const resize = new ResizeObserver(() => trigger.refresh());
+        if (root.current) resize.observe(root.current);
+        return () => {
+          resize.disconnect();
+          trigger.kill();
+        };
       });
     }, root);
     ScrollTrigger.refresh();
+    // Next can commit its hash scroll before this client story has mounted.
+    // Only an explicit Studio chapter navigation gets this one-shot fallback.
+    const chapter = navigation.take();
+    if (chapter)
+      document.getElementById(chapter)?.scrollIntoView({
+        block: "start",
+        behavior: "instant",
+      });
+    window.dispatchEvent(new Event("studio:story-ready"));
     return () => {
+      navigation.cancel();
       context.revert();
       setSceneProgress(signals, 0);
     };
-  }, [signals]);
+  }, [signals, navigation]);
   return (
-    <div ref={root}>
+    <div ref={root} data-studio-story>
       <section id="studio-author" className={styles.hero}>
         <p className={styles.eyebrow}>
           <span className={styles.dot} /> NAMAZBEK BEKZHANOV · DATA ENGINEER &
@@ -212,27 +233,7 @@ export function StoryChapters(): React.JSX.Element {
             </TiltCard>
           ))}
         </div>
-        <div className={styles.terminal}>
-          <span className={styles.eyebrow}>
-            A CONVERSATION IS A GOOD FIRST COMMIT.
-          </span>
-          <h3>Build something that deserves to exist.</h3>
-          <p className={styles.caption}>
-            Cofound, explore an early backing conversation, or collaborate on a
-            practical problem.
-          </p>
-          <div className={styles.actions}>
-            {["cofound", "invest", "partner"].map((intent) => (
-              <Link
-                key={intent}
-                href={`/studio/connect?intent=${intent}`}
-                className={styles.action}
-              >
-                {intent[0].toUpperCase() + intent.slice(1)} ↗
-              </Link>
-            ))}
-          </div>
-        </div>
+        <ConnectTerminal />
         <p className={styles.caption} style={{ marginTop: 22 }}>
           Ecommerce remains an unbuilt hypothesis. No shop or pricing is offered
           here.

@@ -1,28 +1,25 @@
 import { test, expect } from "@playwright/test";
+import { trapDemoRequests } from "./helpers/studio-network";
+
+test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+});
 
 test("manual policy phases cancel without late output and reset identically", async ({
   page,
+  baseURL,
 }) => {
-  await page.goto("/studio/modules/policy-workflow");
-  const calls: string[] = [];
-  await page.route("**/*", async (route) => {
-    const request = route.request();
-    const url = new URL(request.url());
-    // Next's native-link RSC prefetch is framework navigation, not demo transport.
-    if (
-      request.method() === "GET" &&
-      request.headers().rsc === "1" &&
-      url.origin === new URL(page.url()).origin &&
-      ["/studio", "/studio/connect", "/", "/v2"].includes(url.pathname)
-    ) {
-      await route.continue();
-      return;
-    }
-    if (["fetch", "xhr"].includes(route.request().resourceType())) {
-      calls.push(route.request().url());
-      await route.abort();
-    } else await route.continue();
-  });
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  const target = new URL("/studio/modules/policy-workflow", baseURL!).href;
+  const calls = await trapDemoRequests(page, target);
+  await page.goto(target);
+  expect(
+    await page.evaluate(
+      () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
+  ).toBe(true);
+  await expect(page.locator("canvas[data-studio-canvas]")).toHaveCount(0);
   await expect(
     page.getByRole("heading", { name: "A decision, made inspectable." }),
   ).toBeVisible();
@@ -65,7 +62,7 @@ test("manual policy phases cancel without late output and reset identically", as
   await expect(page.locator("[data-policy-receipt]")).toContainText(
     "LAB-0100-A-EDUCATION",
   );
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await page.screenshot({
     path: "output/playwright/studio-policy.png",
     fullPage: true,
@@ -74,6 +71,7 @@ test("manual policy phases cancel without late output and reset identically", as
   await expect(credits).toHaveValue("240");
   await expect(page.locator("[data-policy-receipt]")).toHaveCount(0);
   expect(calls).toEqual([]);
+  expect(errors).toEqual([]);
 });
 
 test("the fixed scene paints behind workbench content", async ({ page }) => {

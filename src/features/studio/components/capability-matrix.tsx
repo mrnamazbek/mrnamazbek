@@ -1,12 +1,31 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { modules } from "../modules/registry";
 import { TiltCard } from "../motion/tilt-card";
+import type { ModuleSlug } from "../modules/types";
+import { ModuleLoader } from "./module-loader";
 import styles from "./studio.module.css";
+
+const subscribe = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
+
 export function CapabilityMatrix(): React.JSX.Element {
-  const [selected, setSelected] = useState<string | null>(null);
+  const ready = useSyncExternalStore(subscribe, clientReady, serverReady);
+  const [selected, setSelected] = useState<ModuleSlug | null>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
   const preview = modules.find((m) => m.slug === selected);
+  useEffect(() => {
+    if (!selected) return;
+    heading.current?.focus({ preventScroll: true });
+    heading.current?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [selected]);
+  const close = () => {
+    const previous = selected;
+    setSelected(null);
+    if (previous) document.getElementById(`preview-${previous}`)?.focus();
+  };
   return (
     <>
       <div className={styles.grid}>
@@ -139,6 +158,14 @@ export function CapabilityMatrix(): React.JSX.Element {
                 </Link>
                 <button
                   type="button"
+                  disabled={!ready}
+                  id={`preview-${module.slug}`}
+                  aria-controls={
+                    selected === module.slug
+                      ? "studio-selected-preview"
+                      : undefined
+                  }
+                  aria-expanded={selected === module.slug}
                   aria-label={`Preview ${module.title}`}
                   aria-pressed={selected === module.slug}
                   onClick={() =>
@@ -153,10 +180,17 @@ export function CapabilityMatrix(): React.JSX.Element {
         ))}
       </div>
       {preview ? (
-        <aside className={styles.preview} aria-live="polite">
+        <aside
+          className={styles.preview}
+          id="studio-selected-preview"
+          data-studio-preview
+          aria-label="Selected workbench preview"
+        >
           <div>
-            <span className={styles.eyebrow}>Fixture preview</span>
-            <h3>{preview.title}</h3>
+            <span className={styles.eyebrow}>Live workbench preview</span>
+            <h3 ref={heading} tabIndex={-1}>
+              {preview.title}
+            </h3>
           </div>
           <dl>
             {preview.initialSample.map((s) => (
@@ -166,9 +200,12 @@ export function CapabilityMatrix(): React.JSX.Element {
               </div>
             ))}
           </dl>
-          <button type="button" onClick={() => setSelected(null)}>
+          <button type="button" onClick={close}>
             Close preview
           </button>
+          <div className={styles.livePreview}>
+            <ModuleLoader definition={preview} />
+          </div>
         </aside>
       ) : null}
     </>

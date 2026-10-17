@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 test("poster precedes enhancement and reduced motion needs no canvas", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/studio");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("[data-scene-poster]")).toBeVisible();

@@ -30,7 +30,7 @@ export function NavigationSample(): React.JSX.Element {
     <>
       <p>
         Appearance controls affect only the sample below. Preferences stay in
-        memory. These controls make no accessibility certification claim.
+        memory.
       </p>
       <div className={lab.preferences}>
         <label>
@@ -215,8 +215,7 @@ export function NavigationSample(): React.JSX.Element {
         </motion.div>
       </div>
       <p className={styles.caption}>
-        Owned icon variants and an explicit palette choice. No random cohort,
-        external icon request or global theme change.
+        Compare outline and solid icons, then try a different palette.
       </p>
     </>
   );

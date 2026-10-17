@@ -108,6 +108,8 @@
 }
 .character {
   display: inline-block;
+}
+.heading[data-enhanced="true"][data-kinetic-entered="true"] .character {
   animation: enter 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: calc(var(--char-index) * 9ms);
 }
