@@ -44,6 +44,27 @@ test("three local language cards preserve global language and metadata", async (
   );
   await expect(sample).toContainText("Мысалды қарау");
   await expect(page.getByRole("status")).toContainText("title → English");
+  const fields = {
+    title: sample.getByRole("heading"),
+    description: sample.locator("p"),
+    action: sample.locator("dd"),
+  };
+  for (const missing of ["title", "description", "action"] as const) {
+    await page.getByLabel("Missing key fixture").selectOption(missing);
+    await expect(sample).toHaveAttribute("lang", "kk");
+    for (const key of ["title", "description", "action"] as const) {
+      expect(
+        await fields[key].evaluate((element) =>
+          element.closest("[lang]")?.getAttribute("lang"),
+        ),
+      ).toBe(key === missing ? "en" : "kk");
+    }
+  }
+  expect(
+    await sample
+      .locator("dt")
+      .evaluate((element) => element.closest("[lang]")?.getAttribute("lang")),
+  ).toBe("en");
   await page.getByRole("button", { name: "Reset demo", exact: true }).click();
   await expect(sample).toHaveAttribute("lang", "en");
   await expect(page.getByLabel("Missing key fixture")).toHaveValue("none");

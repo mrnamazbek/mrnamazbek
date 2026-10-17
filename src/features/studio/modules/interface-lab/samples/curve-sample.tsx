@@ -137,6 +137,7 @@ export function CurveSample(): React.JSX.Element {
                       : 0;
                 if (!dx && !dy) return;
                 event.preventDefault();
+                cancelDrag(drag, live, svg);
                 commit(
                   moveCurvePoint(live.current, index, {
                     x: live.current[index].x + dx,

@@ -86,12 +86,18 @@ export default function LocaleInspectorView({
           aria-label="Translated sample card"
         >
           <span className={styles.eyebrow}>Aa / {locale}</span>
-          <h3>{card.title}</h3>
-          <p>{card.description}</p>
+          <h3 lang={fallbackKeys.includes("title") ? "en" : locale}>
+            {card.title}
+          </h3>
+          <p lang={fallbackKeys.includes("description") ? "en" : locale}>
+            {card.description}
+          </p>
           <dl className={bench.facts}>
             <div>
-              <dt>Action label</dt>
-              <dd>{card.action}</dd>
+              <dt lang="en">Action label</dt>
+              <dd lang={fallbackKeys.includes("action") ? "en" : locale}>
+                {card.action}
+              </dd>
             </div>
           </dl>
         </section>

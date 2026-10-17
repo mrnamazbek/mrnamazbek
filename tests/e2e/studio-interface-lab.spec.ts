@@ -266,3 +266,31 @@ test("motion catalog has owned details, static pause and equivalent curve contro
   await expect(handle).toHaveAttribute("transform", "translate(60 60)");
   expect(calls).toEqual([]);
 });
+
+test("keyboard edits cancel a held curve drag before committing a new point", async ({
+  page,
+}) => {
+  await page.goto("/studio/modules/interface-lab");
+  await page
+    .getByRole("button", { name: "Motion & media", exact: true })
+    .click();
+  await page.getByLabel("Motion sample").selectOption("curve");
+  const editor = page.locator("[data-curve-editor]");
+  await editor.scrollIntoViewIfNeeded();
+  const box = await editor.boundingBox();
+  const handle = page.getByRole("button", {
+    name: "Curve point 2",
+    exact: true,
+  });
+  await page.mouse.move(box!.x + box!.width * 0.25, box!.y + box!.height * 0.1);
+  await page.mouse.down();
+  await page.mouse.move(box!.x + box!.width * 0.6, box!.y + box!.height * 0.6);
+  await expect(handle).toHaveAttribute("transform", "translate(60 60)");
+  await page.keyboard.press("ArrowRight");
+  await handle.dispatchEvent("pointercancel", { pointerId: 1 });
+  await page.evaluate(() => window.dispatchEvent(new Event("blur")));
+  await page.mouse.up();
+  await expect(page.getByLabel("Point 2 X")).toHaveValue("26");
+  await expect(page.getByLabel("Point 2 Y")).toHaveValue("10");
+  await expect(handle).toHaveAttribute("transform", "translate(26 10)");
+});
