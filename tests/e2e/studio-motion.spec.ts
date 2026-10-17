@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
 test.use({ reducedMotion: "no-preference" });
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/contact", (route) => route.abort());
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+});
 test("semantic heading, decorative cursor, stable action edges and tilt spotlight", async ({
   page,
 }) => {

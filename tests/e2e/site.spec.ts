@@ -1,5 +1,12 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/contact", (route) => route.fulfill({
+    status: 503,
+    json: { ok: false, error: "The message service is temporarily unavailable." },
+  }));
+});
+
 const pages = ["/", "/about", "/projects", "/writing", "/gallery", "/lab", "/library", "/contact"];
 
 function recordRuntimeErrors(page: Page, allowUnavailableWebGL = false) {
@@ -160,8 +167,7 @@ test("contact validation prevents invalid submissions and keeps a direct email o
   await expect(page.locator(".contact-email")).toHaveAttribute("href", /^mailto:/);
 });
 
-test("unconfigured contact API exposes the real email fallback", async ({ page }) => {
-  test.skip(Boolean(process.env.SUPABASE_URL && (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)), "A configured database is tested separately without adding live test messages.");
+test("intercepted unavailable contact response exposes the real email fallback", async ({ page }) => {
   await page.goto("/contact");
   await page.getByLabel("Your name").fill("Migration QA");
   await page.getByLabel("Email address", { exact: true }).fill("migration-qa@example.com");

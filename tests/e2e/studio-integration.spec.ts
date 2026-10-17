@@ -307,6 +307,8 @@ test("story progress follows geometry after a live preview expands", async ({
 test("a real contact draft survives in-place GPU recovery", async ({
   page,
 }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/studio/connect?intent=partner");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -321,11 +323,12 @@ test("a real contact draft survives in-place GPU recovery", async ({
   await page
     .getByLabel("What do you have in mind?", { exact: true })
     .fill("A local draft for visual recovery proof.");
-  await canvas.evaluate((element) =>
-    element.dispatchEvent(
-      new Event("webglcontextlost", { cancelable: true, bubbles: true }),
-    ),
-  );
+  await canvas.evaluate((element) => {
+    const context = (element as HTMLCanvasElement).getContext("webgl2");
+    const loss = context?.getExtension("WEBGL_lose_context");
+    if (!loss) throw new Error("Context-loss test requires WEBGL_lose_context");
+    loss.loseContext();
+  });
   await page.getByRole("button", { name: "Retry visual", exact: true }).click();
   await expect(canvas).toHaveCount(1);
   await expect(page.getByLabel("Your name", { exact: true })).toHaveValue(
@@ -337,4 +340,5 @@ test("a real contact draft survives in-place GPU recovery", async ({
   await expect(
     page.getByLabel("What do you have in mind?", { exact: true }),
   ).toHaveValue("A local draft for visual recovery proof.");
+  expect(errors).toEqual([]);
 });

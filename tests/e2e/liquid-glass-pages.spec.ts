@@ -1,6 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/contact", (route) => route.abort());
+});
+
 const glassRoot = '[data-portfolio-version="liquid-glass"]';
 const rootPages = ["/v2", "/v2/about", "/v2/contact", "/v2/lab"];
 const contactDetails = {
