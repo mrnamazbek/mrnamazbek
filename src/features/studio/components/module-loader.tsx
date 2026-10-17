@@ -17,6 +17,10 @@ function ModuleLoading() {
 }
 
 const views: Partial<Record<ModuleSlug, ComponentType<ModuleViewProps>>> = {
+  "interface-lab": dynamic(() => import("../modules/interface-lab/view"), {
+    ssr: false,
+    loading: ModuleLoading,
+  }),
   architecture: dynamic(() => import("../modules/architecture/view"), {
     ssr: false,
     loading: ModuleLoading,
