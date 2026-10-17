@@ -20,7 +20,8 @@
 }
 .canvas {
   position: absolute;
-  inset: 0;
+  inset: 0 -6% 0 38%;
+  mask-image: linear-gradient(90deg, transparent, #000 16%);
 }
 .retry {
   position: absolute;
@@ -46,4 +47,8 @@
   .host {
     display: none;
   }
+}
+
+.host[data-scene-ready="true"][data-scene-policy="interactive"] .art {
+  opacity: 0;
 }

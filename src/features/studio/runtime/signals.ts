@@ -22,3 +22,23 @@ export function resetSceneSignals(
     paused: false,
   });
 }
+
+/** Mutable signals are intentionally outside React render state. */
+export function setScenePaused(signals: SceneSignals, paused: boolean): void {
+  signals.paused = paused;
+}
+export function setScenePointer(
+  signals: SceneSignals,
+  x: number,
+  y: number,
+): void {
+  signals.pointerX = x;
+  signals.pointerY = y;
+}
+export function setSceneProgress(
+  signals: SceneSignals,
+  progress: number,
+): void {
+  signals.progress = progress;
+  signals.chapter = Math.min(3, Math.floor(progress * 4));
+}

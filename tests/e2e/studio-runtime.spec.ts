@@ -1,4 +1,4 @@
-const { test, expect } = require("@playwright/test");
+import { test, expect } from "@playwright/test";
 test.use({ reducedMotion: "no-preference" });
 test("Studio owns a persistent scene and returns to neutral on deep routes", async ({
   page,
@@ -31,8 +31,11 @@ test("native anchors and keyboard remain usable", async ({ page }) => {
     .getByRole("link", { name: "Explore the lab", exact: true })
     .click();
   await expect(page).toHaveURL(/#studio-capabilities$/);
+  await expect(
+    page.getByRole("heading", { name: "Less promise. More proof." }),
+  ).toBeInViewport();
   await page.keyboard.press("End");
   await expect(
-    page.getByRole("heading", { name: "What should exist next?" }),
+    page.getByRole("link", { name: "Classic portfolio", exact: true }),
   ).toBeInViewport();
 });

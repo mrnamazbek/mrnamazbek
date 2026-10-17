@@ -58,7 +58,8 @@ function ScrollOwner() {
     });
     const cancel = () => {
       // Stop pending wheel inertia at the browser's current position.
-      lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+      lenis.stop();
+      lenis.start();
       velocity.set(0);
     };
     const key = (event: KeyboardEvent) => {

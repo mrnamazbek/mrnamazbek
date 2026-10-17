@@ -2,6 +2,7 @@
 import dynamic from "next/dynamic";
 import { Component, useEffect, useRef, useState } from "react";
 import { useStudioSignals } from "../runtime/studio-runtime";
+import { setScenePaused, setScenePointer } from "../runtime/signals";
 import { getScenePolicy } from "./scene-policy";
 import { ScenePoster } from "./scene-poster";
 import styles from "./scene.module.css";
@@ -35,40 +36,35 @@ export function SceneHost(): React.JSX.Element {
       "(pointer: coarse)",
       "(forced-colors: active)",
     ].map((q) => matchMedia(q));
-    let webglAvailable = false;
-    try {
-      const probe = document.createElement("canvas");
-      const context = probe.getContext("webgl2");
-      webglAvailable = !!context;
-      context?.getExtension("WEBGL_lose_context")?.loseContext();
-    } catch {}
     const reconcile = () => {
       const next = getScenePolicy({
         reducedMotion: queries[0].matches,
         coarsePointer: queries[1].matches,
         forcedColors: queries[2].matches,
-        webglAvailable,
+        webglAvailable: true,
         hidden: document.hidden,
       });
-      signals.paused = next !== "interactive";
+      setScenePaused(signals, next !== "interactive");
       setPolicy(next);
       if (next === "interactive")
         window.dispatchEvent(new Event("studio:invalidate"));
     };
     const pointer = (event: PointerEvent) => {
       if (signals.paused) return;
-      signals.pointerX = (event.clientX / innerWidth) * 2 - 1;
-      signals.pointerY = (event.clientY / innerHeight) * 2 - 1;
+      setScenePointer(
+        signals,
+        (event.clientX / innerWidth) * 2 - 1,
+        (event.clientY / innerHeight) * 2 - 1,
+      );
       window.dispatchEvent(new Event("studio:invalidate"));
     };
     const lost = (event: Event) => {
       event.preventDefault();
-      signals.paused = true;
+      setScenePaused(signals, true);
       setFailed(true);
     };
     const leave = () => {
-      signals.pointerX = 0;
-      signals.pointerY = 0;
+      setScenePointer(signals, 0, 0);
       window.dispatchEvent(new Event("studio:invalidate"));
     };
     queries.forEach((q) => q.addEventListener("change", reconcile));
