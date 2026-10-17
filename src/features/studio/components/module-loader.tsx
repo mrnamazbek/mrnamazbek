@@ -17,6 +17,10 @@ function ModuleLoading() {
 }
 
 const views: Partial<Record<ModuleSlug, ComponentType<ModuleViewProps>>> = {
+  "data-explorer": dynamic(() => import("../modules/data-explorer/view"), {
+    ssr: false,
+    loading: ModuleLoading,
+  }),
   "policy-workflow": dynamic(() => import("../modules/policy-workflow/view"), {
     ssr: false,
     loading: ModuleLoading,
