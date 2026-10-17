@@ -28,7 +28,7 @@ export function SceneHost(): React.JSX.Element {
   const [policy, setPolicy] = useState<"poster" | "paused" | "interactive">(
     "poster",
   );
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<"load" | "context" | null>(null);
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     const queries = [
@@ -61,7 +61,7 @@ export function SceneHost(): React.JSX.Element {
     const lost = (event: Event) => {
       event.preventDefault();
       setScenePaused(signals, true);
-      setFailed(true);
+      setFailed("context");
     };
     const leave = () => {
       setScenePointer(signals, 0, 0);
@@ -83,33 +83,39 @@ export function SceneHost(): React.JSX.Element {
     };
   }, [signals, attempt]);
   return (
-    <div
-      ref={host}
-      className={styles.host}
-      data-scene-policy={failed ? "poster" : policy}
-    >
-      <div className={styles.art}>
-        <ScenePoster />
-      </div>
-      {policy !== "poster" && !failed ? (
-        <div className={styles.canvas}>
-          <SceneBoundary key={attempt} onError={() => setFailed(true)}>
-            <SceneCanvas signals={signals} />
-          </SceneBoundary>
+    <>
+      <div
+        ref={host}
+        className={styles.host}
+        data-scene-policy={failed ? "poster" : policy}
+      >
+        <div className={styles.art}>
+          <ScenePoster />
         </div>
-      ) : null}
+        {policy !== "poster" && !failed ? (
+          <div className={styles.canvas}>
+            <SceneBoundary key={attempt} onError={() => setFailed("load")}>
+              <SceneCanvas signals={signals} />
+            </SceneBoundary>
+          </div>
+        ) : null}
+      </div>
       {failed ? (
         <button
           type="button"
           className={styles.retry}
           onClick={() => {
-            setFailed(false);
+            if (failed === "load") {
+              window.location.reload();
+              return;
+            }
+            setFailed(null);
             setAttempt((n) => n + 1);
           }}
         >
-          Retry visual
+          {failed === "load" ? "Reload page to retry visual" : "Retry visual"}
         </button>
       ) : null}
-    </div>
+    </>
   );
 }

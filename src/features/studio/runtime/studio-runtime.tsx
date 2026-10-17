@@ -1,13 +1,25 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  Profiler,
+  useCallback,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { usePathname } from "next/navigation";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis, useLenis, type LenisRef } from "lenis/react";
 import { motionValue, type MotionValue } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { SceneSignals } from "../modules/types";
-import { createSceneSignals, resetSceneSignals } from "./signals";
+import {
+  createSceneSignals,
+  resetSceneSignals,
+  setScenePaused,
+} from "./signals";
 import { getSceneRouteMode } from "./route-mode";
 import { connectScrollBridge } from "./scroll-bridge";
 
@@ -85,12 +97,23 @@ function ScrollOwner() {
       window.removeEventListener("popstate", cancel);
       window.removeEventListener("hashchange", cancel);
       document.removeEventListener("focusin", cancel, true);
-      lenis.stop();
     };
   }, [lenis, velocity]);
   return null;
 }
 
+function attachProfiler(
+  element: HTMLDivElement,
+  snapshot: { commits: number },
+) {
+  const target = element as HTMLDivElement & {
+    __studioProfiler?: { commits: number };
+  };
+  target.__studioProfiler = snapshot;
+  return () => {
+    delete target.__studioProfiler;
+  };
+}
 export function StudioRuntime({
   children,
 }: {
@@ -103,6 +126,18 @@ export function StudioRuntime({
     velocity: motionValue(0),
   }));
   const root = useRef<HTMLDivElement>(null);
+  const scrollOwner = useRef<LenisRef | null>(null);
+  const bindScrollOwner = useCallback((instance: LenisRef | null) => {
+    // Ref detaches before ReactLenis' passive destroy. Stopping in the child
+    // effect cleanup would run after destroy and resurrect lenis-stopped.
+    if (!instance) scrollOwner.current?.lenis?.stop();
+    scrollOwner.current = instance;
+  }, []);
+  const profile = useRef({ commits: 0 });
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_STUDIO_PROFILE !== "1" || !root.current) return;
+    return attachProfiler(root.current, profile.current);
+  }, []);
 
   useEffect(() => {
     const query = window.matchMedia(studioMotionQuery);
@@ -117,40 +152,56 @@ export function StudioRuntime({
   }, []);
   useEffect(() => {
     resetSceneSignals(runtime.signals, getSceneRouteMode(pathname));
+    if (document.hidden) setScenePaused(runtime.signals, true);
     runtime.velocity.set(0);
     root.current?.setAttribute("data-scene-mode", runtime.signals.mode);
     window.dispatchEvent(new Event("studio:invalidate"));
   }, [pathname, runtime]);
 
+  const content = (
+    <div
+      ref={root}
+      data-studio-runtime
+      data-scene-mode={getSceneRouteMode(pathname)}
+    >
+      {enhanced ? (
+        <ReactLenis
+          ref={bindScrollOwner}
+          root
+          options={{
+            autoRaf: false,
+            lerp: 0.16,
+            smoothWheel: true,
+            syncTouch: false,
+            anchors: false,
+            allowNestedScroll: true,
+            stopInertiaOnNavigate: true,
+            respectReducedMotion: true,
+            prevent: (node) => node.matches(nativeRegions),
+            virtualScroll: ({ event }) =>
+              !event.shiftKey && !document.querySelector("dialog[open]"),
+          }}
+        >
+          <ScrollOwner />
+        </ReactLenis>
+      ) : null}
+      {children}
+    </div>
+  );
   return (
     <RuntimeContext value={runtime}>
-      <div
-        ref={root}
-        data-studio-runtime
-        data-scene-mode={getSceneRouteMode(pathname)}
-      >
-        {enhanced ? (
-          <ReactLenis
-            root
-            options={{
-              autoRaf: false,
-              lerp: 0.16,
-              smoothWheel: true,
-              syncTouch: false,
-              anchors: false,
-              allowNestedScroll: true,
-              stopInertiaOnNavigate: true,
-              respectReducedMotion: true,
-              prevent: (node) => node.matches(nativeRegions),
-              virtualScroll: ({ event }) =>
-                !event.shiftKey && !document.querySelector("dialog[open]"),
-            }}
-          >
-            <ScrollOwner />
-          </ReactLenis>
-        ) : null}
-        {children}
-      </div>
+      {process.env.NEXT_PUBLIC_STUDIO_PROFILE === "1" ? (
+        <Profiler
+          id="studio-interactions"
+          onRender={() => {
+            profile.current.commits++;
+          }}
+        >
+          {content}
+        </Profiler>
+      ) : (
+        content
+      )}
     </RuntimeContext>
   );
 }

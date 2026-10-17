@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import type { Profile } from "@/types/content";
 import { chapters } from "../content/story";
+import { CustomMagneticCursor } from "../motion/custom-magnetic-cursor";
 import styles from "./studio.module.css";
 export function StudioShell({
   children,
@@ -17,6 +18,7 @@ export function StudioShell({
   };
   return (
     <div className={styles.studio}>
+      <CustomMagneticCursor />
       <a href="#studio-main" className="skip-link">
         Skip to content
       </a>

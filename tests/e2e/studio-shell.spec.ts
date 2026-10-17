@@ -3,7 +3,7 @@ test("four chapter flagship has six real module routes and private preview metad
   page,
 }) => {
   await page.goto("/studio");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+  await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName(
     "I engineer systems. I test what should exist next.",
   );
   for (const id of [
@@ -86,4 +86,12 @@ test("preview stays out of sitemap and no-JS mobile menu stays native", async ({
     page.getByRole("link", { name: "Capabilities", exact: true }),
   ).toBeVisible();
   await context.close();
+});
+
+test("Classic and V2 remain independent and readable", async ({ page }) => {
+  for (const path of ["/", "/v2"]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator("[data-studio-runtime]")).toHaveCount(0);
+  }
 });

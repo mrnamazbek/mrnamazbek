@@ -5,8 +5,8 @@ import type { WebGLRenderer } from "three";
 import type { SceneSignals } from "../modules/types";
 import { EngineeringCore } from "./engineering-core";
 
-function resetCounters(gl: WebGLRenderer, snapshot: { frames: number }) {
-  snapshot.frames++;
+function resetCounters(gl: WebGLRenderer, pending: { current: boolean }) {
+  pending.current = true;
   gl.info.autoReset = false;
   gl.info.reset();
 }
@@ -22,6 +22,7 @@ function attachDiagnostics(
 }
 function Diagnostics({ signals }: { signals: SceneSignals }) {
   const { gl } = useThree();
+  const pending = useRef(false);
   const snapshot = useRef({
     frames: 0,
     drawCalls: 0,
@@ -32,12 +33,16 @@ function Diagnostics({ signals }: { signals: SceneSignals }) {
     progress: 0,
     passScope: "all-renderer-passes-since-frame-reset",
   });
-  useFrame(() => resetCounters(gl, snapshot.current), -100);
+  useFrame(() => resetCounters(gl, pending), -100);
   useEffect(() => {
     const target = gl.domElement;
     const removeSnapshot = attachDiagnostics(target, snapshot.current);
     const detach = addAfterEffect(() => {
+      // R3F global tail effects may run without rendering this root.
+      if (!pending.current) return;
+      pending.current = false;
       const value = snapshot.current;
+      value.frames++;
 
       value.drawCalls = gl.info.render.calls;
       value.triangles = gl.info.render.triangles;
@@ -67,7 +72,7 @@ export default function SceneCanvas({
       onCreated={({ gl }) =>
         gl.domElement.setAttribute("data-studio-canvas", "")
       }
-      frameloop="demand"
+      frameloop={signals.paused ? "never" : "demand"}
       dpr={[1, 1.5]}
       camera={{ position: [0, 0, 6], fov: 40 }}
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}

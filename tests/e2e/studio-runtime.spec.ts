@@ -39,3 +39,13 @@ test("native anchors and keyboard remain usable", async ({ page }) => {
     page.getByRole("link", { name: "Classic portfolio", exact: true }),
   ).toBeInViewport();
 });
+
+test("live static policy releases the Studio root scroll classes", async ({
+  page,
+}) => {
+  await page.goto("/studio/modules/policy-workflow");
+  await expect(page.locator("html")).toHaveClass(/\blenis\b/);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.waitForTimeout(500);
+  await expect(page.locator("html")).not.toHaveClass(/\blenis\b/);
+});

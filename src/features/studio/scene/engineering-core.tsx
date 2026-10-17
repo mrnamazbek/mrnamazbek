@@ -143,7 +143,7 @@ export function EngineeringCore({
 
   return (
     <group ref={root} position={[0, 0, 0]} rotation={[0.2, 0, -0.13]}>
-      <group rotation={[0.5, 0.1, -0.38]} scale={0.78}>
+      <group rotation={[0.5, 0.1, -0.38]} scale={0.66}>
         <pointLight
           ref={light}
           position={[2, 3, 3]}

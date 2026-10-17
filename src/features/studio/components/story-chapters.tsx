@@ -8,6 +8,9 @@ import { setSceneProgress } from "../runtime/signals";
 import { studioHeading } from "../content/story";
 import { ventures } from "../content/ventures";
 import { CapabilityMatrix } from "./capability-matrix";
+import { KineticHeading } from "../motion/kinetic-heading";
+import { MagneticAction } from "../motion/magnetic-action";
+import { TiltCard } from "../motion/tilt-card";
 import styles from "./studio.module.css";
 export function StoryChapters(): React.JSX.Element {
   const signals = useStudioSignals();
@@ -42,22 +45,26 @@ export function StoryChapters(): React.JSX.Element {
           <span className={styles.dot} /> NAMAZBEK BEKZHANOV · DATA ENGINEER &
           BACKEND DEVELOPER
         </p>
-        <h1>{studioHeading}</h1>
+        <KineticHeading text={studioHeading} as="h1" />
         <p className={styles.heroCopy}>
           I turn complex data and backend problems into systems people can
           trust. This is my working space for exploring ideas, making tradeoffs
           visible, and building what comes next.
         </p>
         <div className={styles.actions}>
-          <a
-            className={`${styles.action} ${styles.primary}`}
-            href="#studio-capabilities"
-          >
-            Explore the lab <span aria-hidden="true">↓</span>
-          </a>
-          <Link className={styles.action} href="/studio/connect">
-            Start a conversation <span aria-hidden="true">↗</span>
-          </Link>
+          <MagneticAction>
+            <a
+              className={`${styles.action} ${styles.primary}`}
+              href="#studio-capabilities"
+            >
+              Explore the lab <span aria-hidden="true">↓</span>
+            </a>
+          </MagneticAction>
+          <MagneticAction>
+            <Link className={styles.action} href="/studio/connect">
+              Start a conversation <span aria-hidden="true">↗</span>
+            </Link>
+          </MagneticAction>
         </div>
         <div className={styles.sideNote}>
           <span>01 — PERSONAL SYSTEMS / OPEN QUESTIONS</span>
@@ -72,11 +79,7 @@ export function StoryChapters(): React.JSX.Element {
           </span>
         </div>
         <div className={styles.sectionHead}>
-          <h2>
-            Less promise.
-            <br />
-            More proof.
-          </h2>
+          <KineticHeading text="Less promise. More proof." as="h2" />
           <p>
             Small, inspectable experiments. Real interactions, local fixtures,
             and a clear line between a prototype and a product.
@@ -87,11 +90,7 @@ export function StoryChapters(): React.JSX.Element {
       <section id="studio-architecture" className={styles.chapter}>
         <div className={styles.eyebrow}>03 / ARCHITECTURE & SCALE</div>
         <div className={styles.sectionHead}>
-          <h2>
-            Make the invisible
-            <br />
-            understandable.
-          </h2>
+          <KineticHeading text="Make the invisible understandable." as="h2" />
           <p>
             Every useful system is a set of choices. I care about what happens
             between the boxes.
@@ -184,11 +183,7 @@ export function StoryChapters(): React.JSX.Element {
       <section id="studio-ventures" className={styles.chapter}>
         <div className={styles.eyebrow}>04 / VENTURE LAB</div>
         <div className={styles.sectionHead}>
-          <h2>
-            What should
-            <br />
-            exist next?
-          </h2>
+          <KineticHeading text="What should exist next?" as="h2" />
           <p>
             Questions I am exploring. These are hypotheses to validate with
             people, before they become products.
@@ -196,26 +191,25 @@ export function StoryChapters(): React.JSX.Element {
         </div>
         <div className={styles.grid}>
           {ventures.map((v, i) => (
-            <article
-              key={v.title}
-              className={`${styles.card} ${styles.ventureCard}`}
-            >
-              <div className={styles.cardTop}>
-                <span>HYPOTHESIS 0{i + 1}</span>
-                <span className={styles.badge}>
-                  <span className={styles.dot} /> {v.status}
-                </span>
-              </div>
-              <h3>{v.title}</h3>
-              <p>{v.question}</p>
-              <div className={styles.next}>
-                <small>Next validation step</small>
-                {v.nextStep}
-                <p style={{ fontSize: 11, marginTop: 16, marginBottom: 0 }}>
-                  {v.boundary}
-                </p>
-              </div>
-            </article>
+            <TiltCard key={v.title}>
+              <article className={`${styles.card} ${styles.ventureCard}`}>
+                <div className={styles.cardTop}>
+                  <span>HYPOTHESIS 0{i + 1}</span>
+                  <span className={styles.badge}>
+                    <span className={styles.dot} /> {v.status}
+                  </span>
+                </div>
+                <h3>{v.title}</h3>
+                <p>{v.question}</p>
+                <div className={styles.next}>
+                  <small>Next validation step</small>
+                  {v.nextStep}
+                  <p style={{ fontSize: 11, marginTop: 16, marginBottom: 0 }}>
+                    {v.boundary}
+                  </p>
+                </div>
+              </article>
+            </TiltCard>
           ))}
         </div>
         <div className={styles.terminal}>
