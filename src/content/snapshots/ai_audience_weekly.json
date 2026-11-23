@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-10-05",
+  "as_of": "2026-10-12",
   "window_weeks": 24,
-  "generated_at": "2026-10-12T12:17:17.772501+00:00",
+  "generated_at": "2026-10-19T10:07:29.973032+00:00",
   "status": "ok",
   "methodology": "Weekly audience proxy based on en.wikipedia.org pageviews for each AI product article. This is not unique active users.",
   "source": {
@@ -18,10 +18,6 @@
       "article": "ChatGPT",
       "color": "#22d3ee",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 523693
-        },
         {
           "week": "2026-05-04",
           "views": 311333
@@ -113,6 +109,10 @@
         {
           "week": "2026-10-05",
           "views": 329668
+        },
+        {
+          "week": "2026-10-12",
+          "views": 273871
         }
       ]
     },
@@ -122,10 +122,6 @@
       "article": "Claude_(language_model)",
       "color": "#60a5fa",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 55303
-        },
         {
           "week": "2026-05-04",
           "views": 57703
@@ -217,6 +213,10 @@
         {
           "week": "2026-10-05",
           "views": 3502
+        },
+        {
+          "week": "2026-10-12",
+          "views": 2865
         }
       ]
     },
@@ -226,10 +226,6 @@
       "article": "Gemini_(chatbot)",
       "color": "#a78bfa",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 1167
-        },
         {
           "week": "2026-05-04",
           "views": 1159
@@ -321,6 +317,10 @@
         {
           "week": "2026-10-05",
           "views": 1215
+        },
+        {
+          "week": "2026-10-12",
+          "views": 916
         }
       ]
     },
@@ -330,10 +330,6 @@
       "article": "Microsoft_Copilot",
       "color": "#34d399",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 14622
-        },
         {
           "week": "2026-05-04",
           "views": 14430
@@ -425,6 +421,10 @@
         {
           "week": "2026-10-05",
           "views": 9254
+        },
+        {
+          "week": "2026-10-12",
+          "views": 7570
         }
       ]
     },
@@ -434,10 +434,6 @@
       "article": "Perplexity_AI",
       "color": "#f59e0b",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 20781
-        },
         {
           "week": "2026-05-04",
           "views": 21916
@@ -529,6 +525,10 @@
         {
           "week": "2026-10-05",
           "views": 15132
+        },
+        {
+          "week": "2026-10-12",
+          "views": 12525
         }
       ]
     },
@@ -538,10 +538,6 @@
       "article": "DeepSeek",
       "color": "#f472b6",
       "points": [
-        {
-          "week": "2026-04-27",
-          "views": 15854
-        },
         {
           "week": "2026-05-04",
           "views": 17526
@@ -633,6 +629,10 @@
         {
           "week": "2026-10-05",
           "views": 18174
+        },
+        {
+          "week": "2026-10-12",
+          "views": 19257
         }
       ]
     }
@@ -641,32 +641,32 @@
     {
       "id": "chatgpt",
       "label": "ChatGPT",
-      "views": 329668
+      "views": 273871
     },
     {
       "id": "deepseek",
       "label": "DeepSeek",
-      "views": 18174
+      "views": 19257
     },
     {
       "id": "perplexity",
       "label": "Perplexity",
-      "views": 15132
+      "views": 12525
     },
     {
       "id": "copilot",
       "label": "Copilot",
-      "views": 9254
+      "views": 7570
     },
     {
       "id": "claude",
       "label": "Claude",
-      "views": 3502
+      "views": 2865
     },
     {
       "id": "gemini",
       "label": "Gemini",
-      "views": 1215
+      "views": 916
     }
   ],
   "errors": []

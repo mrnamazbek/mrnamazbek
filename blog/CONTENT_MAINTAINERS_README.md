@@ -155,7 +155,7 @@ reading_time: "X min"
 ## Required GitHub secrets and variables
 
 None are required for the blog CI workflow.
-The `OPENAI_API_KEY` secret is only needed for the monthly-ai-feature autopilot workflow
+The `OPENAI_API_KEY` secret enables model-assisted monthly feature generation
 (see `docs/monthly-ai-feature-autopilot.md`).
 
 ## Demo dependencies versioning policy

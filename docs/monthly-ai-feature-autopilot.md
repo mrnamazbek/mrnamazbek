@@ -4,17 +4,16 @@ The Next.js site renders curated experiments in `/lab`, with source dates and me
 
 ## Monthly experiments
 
-`.github/workflows/monthly-ai-feature.yml` runs on day 2 at 04:00 UTC or manually with `force_regenerate`. It fetches trend signals, generates a structured experiment specification, validates and synchronizes `assets/ai_monthly_feature.json` and `assets/ai_feature_history.json` into `src/content/snapshots`, builds Next.js, runs the migrated browser suite, and publishes only those two snapshots to Supabase. It also produces a non-blocking Lighthouse report and commits the refreshed source snapshots.
+The monthly feature generator is run manually as a repository maintenance task. It fetches trend signals, generates a structured experiment specification, validates and synchronizes `assets/ai_monthly_feature.json` and `assets/ai_feature_history.json` into `src/content/snapshots`, and can publish those snapshots to Supabase after review.
 
 The generator supports roadmap, capacity, and trade-off matrix widgets. Their React renderers live in `src/components/lab/experiments.tsx`. The generator still emits the original static-page test file for historical compatibility; active release tests live in `tests/e2e` and cover all supported widgets.
 
-`OPENAI_API_KEY` enables model-assisted generation. Without it, the generator uses its deterministic trend-based fallback. Optional variables are `AI_MODEL`, `AI_BASE_URL`, and `GOOGLE_TRENDS_GEO`. The workflow does not send screenshots for a separate AI visual review.
+`OPENAI_API_KEY` enables model-assisted generation. Without it, the generator uses its deterministic trend-based fallback. Optional variables are `AI_MODEL`, `AI_BASE_URL`, and `GOOGLE_TRENDS_GEO`.
 
 ## Other feeds
 
 | Workflow | Schedule | Published snapshot |
 | --- | --- | --- |
-| `weekly-ai-audience.yml` | Monday, 04:30 UTC | `audience` |
 | `update-db-ranking.yml` | Day 2, 03:15 UTC | `rankings` |
 | `telegram-feed.yml` | Every six hours, at minute 17 | `telegram` |
 
@@ -34,6 +33,6 @@ npm run content:sync -- --only=audience
 npm run content:sync:database -- --only=audience
 ```
 
-A normal `npm run build` validates and copies public snapshots locally without writing to Supabase. See [DATA.md](DATA.md) for contracts and editorial content. Scheduled GitHub workflows run from the repository's default branch.
+A normal `npm run build` validates and copies public snapshots locally without writing to Supabase. See [DATA.md](DATA.md) for contracts and editorial content. The remaining scheduled GitHub workflows run from the repository's default branch.
 
 The optional `.gitlab-ci.yml` cloud-agent export is retained as a separate legacy maintenance integration. It does not host the website backend and is inactive unless configured in GitLab.
