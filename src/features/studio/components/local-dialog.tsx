@@ -29,10 +29,16 @@ export function LocalDialog({
   title,
   children,
   onClose,
+  className,
+  closeLabel = "Close detail",
+  closeOnBackdrop = false,
 }: {
   title: string;
   children: React.ReactNode;
   onClose: () => void;
+  className?: string;
+  closeLabel?: string;
+  closeOnBackdrop?: boolean;
 }): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -54,11 +60,16 @@ export function LocalDialog({
   return (
     <dialog
       ref={dialog}
-      className={styles.dialog}
+      className={className ?? styles.dialog}
       aria-labelledby={titleId}
       data-lenis-prevent
       tabIndex={-1}
       onKeyDown={trapDialogFocus}
+      onClick={closeOnBackdrop ? (event) => {
+        if (event.target !== event.currentTarget) return;
+        const { left, right, top, bottom } = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < left || event.clientX > right || event.clientY < top || event.clientY > bottom) onClose();
+      } : undefined}
       onCancel={(event) => {
         event.preventDefault();
         onClose();
@@ -67,7 +78,7 @@ export function LocalDialog({
       <div className={styles.controls}>
         <h3 id={titleId}>{title}</h3>
         <button type="button" onClick={onClose}>
-          Close detail
+          {closeLabel}
         </button>
       </div>
       {children}

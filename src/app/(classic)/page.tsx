@@ -11,35 +11,38 @@ import {
   getExperience,
   getPosts,
   getProfile,
-  getProjects,
   getSkills,
 } from "@/lib/content";
 import { SplineRobot } from "@/components/home/spline-robot";
 import { HeroArtFrame, HeroTitle, KineticTechnologyRail } from "@/components/home/hero-motion";
 import { Reveal } from "@/components/ui/reveal";
-import { SectionHeading } from "@/components/ui/page-heading";
-import { ProjectCard } from "@/components/content/project-card";
 import { PostCard } from "@/components/content/post-card";
 import { InteractiveCard } from "@/components/ui/interactive-card";
 import { PhotoGallery } from "@/components/gallery/photo-gallery";
 import { galleryPhotos } from "@/content/gallery";
-import { AmbientBackdrop } from "@/components/ui/scroll-story";
+import { ContactForm } from "@/components/contact-form";
+
+import { WorkIndex } from "@/features/engineering/work-index";
+import { ReelTrigger } from "@/features/engineering/reel";
+import { EngineeringPractice } from "@/features/engineering/practice";
+import { ReadinessCheck } from "@/features/engineering/readiness-check";
+import { engineeringWork } from "@/features/engineering/work";
+import engineeringStyles from "@/features/engineering/engineering.module.css";
 
 export const revalidate = 300;
 
 export default async function HomePage() {
-  const [profile, projects, posts, experience, skills] = await Promise.all([
+  const [profile, posts, experience, skills] = await Promise.all([
     getProfile(),
-    getProjects(),
     getPosts(),
     getExperience(),
     getSkills(),
   ]);
-  const featured = [
-    ...projects.filter((project) => project.featured),
-    ...projects.filter((project) => !project.featured),
-  ].slice(0, 2);
   const current = experience.find((role) => role.id === "nbk") ?? experience[0];
+  const buildLogs = posts.flatMap((post) => {
+    const work = engineeringWork.find((item) => item.log[0] === post.slug);
+    return work ? [{ post, work }] : [];
+  });
   return (
     <>
       <section className="home-hero">
@@ -47,13 +50,12 @@ export default async function HomePage() {
           <p className="eyebrow hero-eyebrow">
             <span className="status-dot" />
             {profile.availability} <span className="eyebrow-divider">/</span>{" "}
-            DATA ENGINEER & BUILDER
+            DATA / SOFTWARE / AI ENGINEERING
           </p>
           <HeroTitle />
           <p className="hero-description">
-            I’m {profile.shortName}. I turn complex data into
-            <br className="desktop-break" /> reliable systems — and good ideas
-            into things that work.
+            I’m {profile.shortName}. I build reliable data pipelines, useful
+            software, and AI workflows with clear inputs, outputs, and checks.
           </p>
           <div className="hero-actions">
             <Link href="/projects" className="button button-primary">
@@ -63,6 +65,13 @@ export default async function HomePage() {
               A little about me <ArrowRight size={17} />
             </Link>
           </div>
+          <ReelTrigger />
+          <nav className={engineeringStyles.shortcuts} aria-label="Homepage sections">
+            <a href="#selected-work">Selected work</a>
+            <a href="#engineering-practice">Capabilities</a>
+            <a href="#build-logs">Build logs</a>
+            <a href="#start-a-project">Start a project</a>
+          </nav>
           <div className="hero-location mono">
             <MapPin size={14} />
             {profile.location}
@@ -79,11 +88,11 @@ export default async function HomePage() {
             <span>
               <span className="status-dot" /> FROM SIGNAL TO SYSTEM
             </span>
-            <span>PYTHON / SQL / DBT</span>
+            <span>PYTHON / NEXT.JS / GEMINI</span>
           </div>
         </div>
         <div className="hero-bottom">
-          <span className="mono">BUILDING RESILIENT DATA SYSTEMS</span>
+          <span className="mono">PIPELINES · APPLICATIONS · AI WORKFLOWS</span>
           <a
             href="#selected-work"
             className="scroll-cue"
@@ -95,29 +104,12 @@ export default async function HomePage() {
         </div>
       </section>
       <KineticTechnologyRail />
-      <section className="content-section" id="selected-work">
-        <Reveal>
-          <SectionHeading number="01" title="Selected work">
-            <Link href="/projects" className="text-link">
-              All projects <ArrowUpRight size={17} />
-            </Link>
-          </SectionHeading>
-          <div className="project-grid">
-            {featured.map((project, index) => (
-              <ProjectCard
-                project={project}
-                key={project.id}
-                index={index}
-                visual
-              />
-            ))}
-          </div>
-        </Reveal>
-      </section>
+      <WorkIndex />
+      <EngineeringPractice />
+      <ReadinessCheck />
       <section className="content-section about-preview">
         <Reveal className="about-preview-grid">
           <div>
-            <p className="eyebrow">02 / THE PERSON BEHIND THE PIPELINES</p>
             <h2>
               Engineered with care.
               <br />
@@ -146,23 +138,28 @@ export default async function HomePage() {
           </div>
         </Reveal>
       </section>
-      <section className="content-section">
+      <section className={`content-section ${engineeringStyles.buildLogs}`} id="build-logs">
         <Reveal>
-          <SectionHeading number="03" title="Notes from the field">
+          <header className="section-heading">
+            <h2>Build logs</h2>
             <Link href="/writing" className="text-link">
               All writing <ArrowUpRight size={17} />
             </Link>
-          </SectionHeading>
+          </header>
           <div className="post-list">
-            {posts.slice(0, 3).map((post, index) => (
-              <PostCard post={post} index={index} key={post.slug} />
+            {buildLogs.map(({ post, work }, index) => (
+              <PostCard post={post} index={index} key={post.slug} related={(
+                <Link href={`/projects/${work.slug}`} className={`text-link ${engineeringStyles.buildLogCase}`}>
+                  Case study: {work.title} <ArrowUpRight size={15} aria-hidden="true" />
+                </Link>
+              )} />
             ))}
           </div>
         </Reveal>
       </section>
       <section className="discovery-grid content-section">
         <Reveal><InteractiveCard className="discovery-card">
-          <p className="eyebrow">04 / PLAY & EXPERIMENT</p>
+          <p className="eyebrow">PLAY & EXPERIMENT</p>
           <h2>
             A small lab.
             <br />A lot of curiosity.
@@ -182,7 +179,7 @@ export default async function HomePage() {
           />
         </InteractiveCard></Reveal>
         <Reveal delay={80}><InteractiveCard className="discovery-card discovery-card-library">
-          <p className="eyebrow">05 / THE BOOKSHELF</p>
+          <p className="eyebrow">THE BOOKSHELF</p>
           <h2>
             Ideas worth
             <br />
@@ -207,20 +204,15 @@ export default async function HomePage() {
         <PhotoGallery photos={galleryPhotos} title="More than the work." intro="A few portraits from my personal archive. Another way to get to know the person behind the projects." />
         <Link href="/gallery" className="text-link">Explore the gallery <ArrowUpRight size={17} /></Link>
       </section>
-      <section className="contact-banner">
-        <AmbientBackdrop><Reveal>
-          <p className="eyebrow">
-            <span className="status-dot" /> GOOD WORK STARTS WITH A CONVERSATION
-          </p>
-          <h2>
-            Let’s build
-            <br />
-            something that lasts<span>.</span>
-          </h2>
-          <Link href="/contact" className="button button-primary">
-            Get in touch <ArrowUpRight size={19} />
-          </Link>
-        </Reveal></AmbientBackdrop>
+      <section className={engineeringStyles.section} id="start-a-project" aria-labelledby="project-contact-heading">
+        <div className={engineeringStyles.contact}>
+          <div className={engineeringStyles.checkIntro}>
+            <h2 id="project-contact-heading">What are you building?</h2>
+            <p>Tell me about the system, the problem, or what you’d like to test.</p>
+            <a className="text-link" href={`mailto:${profile.email}`}>Email {profile.shortName} <ArrowUpRight size={17} aria-hidden="true" /></a>
+          </div>
+          <ContactForm email={profile.email} />
+        </div>
       </section>
     </>
   );

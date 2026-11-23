@@ -159,7 +159,7 @@ export function HeroArtFrame({ children }: { children: ReactNode }) {
   );
 }
 
-const technologies = ["Python", "SQL", "Apache Airflow", "dbt", "Apache Iceberg", "Trino", "Docker"];
+const technologies = ["Python", "SQL", "Apache Airflow", "dbt", "Apache Iceberg", "Trino", "PostgreSQL", "Next.js", "FastAPI", "Gemini", "Docker"];
 const scrambleAlphabet = "01/+_:<>";
 
 /** Source study: Codrops ScrollTextMotion's short scramble-to-original reveal.

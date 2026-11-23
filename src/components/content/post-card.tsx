@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import type { ReactNode } from "react";
 import type { Post } from "@/types/content";
 import { InteractiveCard } from "@/components/ui/interactive-card";
 
@@ -10,9 +11,11 @@ export type PostSummary = Pick<
 export function PostCard({
   post,
   index = 0,
+  related,
 }: {
   post: PostSummary;
   index?: number;
+  related?: ReactNode;
 }) {
   return (
     <InteractiveCard className="post-card" variant="row" tilt={false}>
@@ -44,6 +47,7 @@ export function PostCard({
             </span>
           ))}
         </div>
+        {related}
       </div>
       <ArrowUpRight className="card-arrow" size={23} />
     </InteractiveCard>

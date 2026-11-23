@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { getProjects } from "@/lib/content";
 import { PageHeading } from "@/components/ui/page-heading";
 import { ProjectList } from "@/components/content/filterable-lists";
 import { SocialProfileLink } from "@/components/ui/social-profile-link";
 import { ProjectShowcase } from "@/components/content/project-showcase";
+import { engineeringWork } from "@/features/engineering/work";
+import styles from "@/features/engineering/engineering.module.css";
 
 export const revalidate = 300;
 
@@ -25,6 +28,13 @@ export default async function ProjectsPage() {
           Public repositories, side projects, and experiments. A working
           collection of the things I’m curious enough to build.
         </p>
+        <nav className={styles.caseLinks} aria-label="Engineering case studies">
+          {engineeringWork.map((work) => (
+            <Link href={`/projects/${work.slug}`} className="text-link" key={work.slug}>
+              {work.title} <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          ))}
+        </nav>
         <SocialProfileLink
           platform="github"
           className="text-link"

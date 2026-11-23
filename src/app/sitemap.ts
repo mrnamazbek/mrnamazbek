@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { engineeringWork } from "@/features/engineering/work";
 import { getPosts } from "@/lib/content/repository";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -7,6 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPosts();
   return [
     ...routes.map((route) => ({ url: `${base}${route}`, priority: route ? 0.7 : 1 })),
+    ...engineeringWork.map(({ slug }) => ({ url: `${base}/projects/${slug}`, priority: 0.7 })),
     ...posts.map((post) => ({
       url: `${base}/writing/${post.slug}`,
       lastModified: new Date(post.date),
